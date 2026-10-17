@@ -1,6 +1,6 @@
 # Review Standard
 
-This standard gives the procedure for reviewers. A reviewer can be a person or an agent. The workflow states ("in review", "verifying") are in [workflow.md](./workflow.md). The format of findings and the order of sources in a conflict are in [feedback.md](./feedback.md).
+This standard gives the procedure for reviewers. A reviewer can be a person or an agent. The workflow states ("in review", "verifying") are in [issue-workflow-standard.md](./issue-workflow-standard.md). The format of findings and the order of sources in a conflict are in [feedback-loops-standard.md](./feedback-loops-standard.md).
 
 ## 1. Scope
 
@@ -35,16 +35,16 @@ This standard gives the procedure for reviewers. A reviewer can be a person or a
 
 3.4 Examine the change in this sequence:
 
-1. **Design**: the change fits the architecture. It obeys the dependency rules and the constraint table. A change to the structure has an ADR. A change to a contract has the reason in the issue and an updated contract document (phase 6 of [framework.md](./framework.md)).
+1. **Design**: the change fits the architecture. It obeys the dependency rules and the constraint table. A change to the structure has an ADR. A change to a contract has the reason in the issue and an updated contract document (phase 6 of [delivery-phases-overview.md](./delivery-phases-overview.md)).
 2. **Behaviour**: the change does what the acceptance asks. It does not change what "out of scope" names.
 3. **Security and data**: the change obeys the security and data requirements. External content is treated as data. No secret or machine detail is committed.
-4. **Tests**: the protected tests are not deleted or weakened (compare with the baseline, [testing.md](./testing.md)). Each new test can fail. The code that connects an acceptance scenario to the product does not make the scenario pass without the behaviour.
+4. **Tests**: the protected tests are not deleted or weakened (compare with the baseline, [testing-standard.md](./testing-standard.md)). Each new test can fail. The code that connects an acceptance scenario to the product does not make the scenario pass without the behaviour.
 5. **Complexity**: the code is as simple as the problem allows.
 6. **Names, comments, and documents**: the names are glossary terms. The documents that the issue names are updated.
 
 3.5 Do not report what a tool checks (format, lint, types). If a tool must check something that it does not check now, write a suggestion for a new check in the feedback log.
 
-3.6 Write each finding with a location, a problem, a failure scenario, a basis, and a severity ([feedback.md](./feedback.md), section 2.1).
+3.6 Write each finding with a location, a problem, a failure scenario, a basis, and a severity ([feedback-loops-standard.md](./feedback-loops-standard.md), section 2.1).
 
 3.7 Confirm each blocking finding. Reproduce the failure scenario, or show it in the code. Drop each finding that you cannot confirm, and write one line with the reason.
 
@@ -62,7 +62,7 @@ This standard gives the procedure for reviewers. A reviewer can be a person or a
 
 4.1 Do this task when the implementer does not agree with a finding.
 
-4.2 For a conflict between sources (spec, tests, checks, review), use the order in section 3 of [feedback.md](./feedback.md).
+4.2 For a conflict between sources (spec, tests, checks, review), use the order in section 3 of [feedback-loops-standard.md](./feedback-loops-standard.md).
 
 4.3 For a design point that no source settles, use this sequence. Stop at the first item that settles it:
 
@@ -79,13 +79,13 @@ This standard gives the procedure for reviewers. A reviewer can be a person or a
 
 5.1 Do this task in the cleanup story of each epic that produces code, and at the end of each milestone.
 
-5.2 Do the architecture review of the cleanup story (phase 5 of [framework.md](./framework.md)). Classify each finding as severe or not severe with the written criteria.
+5.2 Do the architecture review of the cleanup story (phase 5 of [delivery-phases-overview.md](./delivery-phases-overview.md)). Classify each finding as severe or not severe with the written criteria.
 
-5.3 Review the checks: the checks marked "not useful", the checks that never fire, and the rules that are often bypassed ([feedback.md](./feedback.md), section 4.3).
+5.3 Review the checks: the checks marked "not useful", the checks that never fire, and the rules that are often bypassed ([feedback-loops-standard.md](./feedback-loops-standard.md), section 4.3).
 
 5.4 Read the feedback log. For each problem that occurred again, propose a prevention: a check if a tool can detect it, else a short guide.
 
-5.5 Give the findings and the proposals to the planner. The planner makes the issues (Task 8 of [delivery-planning.md](./delivery-planning.md)).
+5.5 Give the findings and the proposals to the planner. The planner makes the issues (Task 8 of [planner-standard.md](./planner-standard.md)).
 
 **Completion criterion:** The architecture findings are classified. Each reviewed check has a decision. Each repeated problem has a proposal or a reason why there is none.
 
@@ -94,4 +94,4 @@ This standard gives the procedure for reviewers. A reviewer can be a person or a
 All pages were opened on 2026-10-14.
 
 - [Google engineering practices: code review](https://google.github.io/eng-practices/review/) and [what to look for in a code review](https://google.github.io/eng-practices/review/reviewer/looking-for.html): design first, then functionality, complexity, tests, naming, comments, style, and documentation; approve a change that improves the code, even if it is not perfect.
-- The sources of [feedback.md](./feedback.md): the format of findings, confirmation before change, and the order of sources.
+- The sources of [feedback-loops-standard.md](./feedback-loops-standard.md): the format of findings, confirmation before change, and the order of sources.

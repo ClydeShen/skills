@@ -1,6 +1,6 @@
 # Writing Standards
 
-This file sets how project documents are written: a single glossary, which documents follow ASD-STE100 (Simplified Technical English), how non-English documents can borrow its principles, how to write explanatory documents, and conventions for dates, evidence, and references. It is language-agnostic and fits any project. Which documents to prepare is in [document-map.md](./document-map.md).
+This file sets how project documents are written: a single glossary, which documents follow ASD-STE100 (Simplified Technical English), how non-English documents can borrow its principles, how to write explanatory documents, and conventions for dates, evidence, and references. It is language-agnostic and fits any project. Which documents to prepare is in [project-document-map.md](./project-document-map.md).
 
 ---
 
@@ -33,7 +33,7 @@ _Avoid_: purchase, booking (Booking is only a reserved time slot)
 - Add an entry when a concept appears in two or more documents, or becomes a type or module name in code.
 - When a concept has two names, or a word has two meanings, fix it at once: change the entry, then search all docs and code and replace each occurrence.
 - When the meaning of an entry changes, write an ADR with the reason.
-- Check term usage in each consistency review (phase 6 of [framework.md](./framework.md)). A small script can read each entry's `_Avoid_` list and report misused words in the docs.
+- Check term usage in each consistency review (phase 6 of [delivery-phases-overview.md](./delivery-phases-overview.md)). A small script can read each entry's `_Avoid_` list and report misused words in the docs.
 
 ---
 
@@ -113,6 +113,6 @@ For ADRs, the vision, architecture descriptions, research notes, the tech stack,
 
 ## 5. Evidence and confidence
 
-- **Mark each fact in research** with its confidence: [official], [official · summary only], [secondhand], [inference], [measured]. Template: [templates/research-note.md](./templates/research-note.md).
+- **Mark each fact in research** with its confidence: [official], [official · summary only], [secondhand], [inference], [measured]. Template: [templates/research-note-template.md](./templates/research-note-template.md).
 - **Look up version numbers, release dates, and tool capabilities** with a command or the official docs, and write the date. Never write them from memory.
-- **Give each important judgment** a confidence level and the dimensions that support it (four-dimension confidence, section 1 of [practices.md](./practices.md)).
+- **Give each important judgment** a confidence level and the dimensions that support it (four-dimension confidence, section 1 of [judgment-practices.md](./judgment-practices.md)).

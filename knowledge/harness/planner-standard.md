@@ -1,12 +1,12 @@
 # Delivery Planning Standard
 
-This standard gives the tasks of a planner: write issues and epics, set dependencies and parallel work, verify results, sync status, and report to the owner. It does not name a tool or a platform. The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). The states and the transitions of an issue are in [workflow.md](./workflow.md). The templates are [templates/story.md](./templates/story.md) and [templates/epic.md](./templates/epic.md).
+This standard gives the tasks of a planner: write issues and epics, set dependencies and parallel work, verify results, sync status, and report to the owner. It does not name a tool or a platform. The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). The states and the transitions of an issue are in [issue-workflow-standard.md](./issue-workflow-standard.md). The templates are [templates/story-template.md](./templates/story-template.md) and [templates/epic-template.md](./templates/epic-template.md).
 
 ## 1. Scope
 
 1.1 This standard applies to planners. A planner plans work for implementers. Planners and implementers can be people or agents. There can be many of each, and they can work in parallel.
 
-1.2 Planners and implementers communicate only through issues ([workflow.md](./workflow.md), section 1).
+1.2 Planners and implementers communicate only through issues ([issue-workflow-standard.md](./issue-workflow-standard.md), section 1).
 
 1.3 A planner does these tasks:
 
@@ -15,7 +15,7 @@ This standard gives the tasks of a planner: write issues and epics, set dependen
 - It sets dependencies, the suggested order, and the rules for parallel work.
 - It verifies the result of each issue and syncs the status.
 
-1.4 A planner does not change the product. It does not change source code, configuration, or data. Exception: a planner can write acceptance scenarios and acceptance tests in the protected test paths ([testing.md](./testing.md), section 2). They state the requirement; they are not product code.
+1.4 A planner does not change the product. It does not change source code, configuration, or data. Exception: a planner can write acceptance scenarios and acceptance tests in the protected test paths ([testing-standard.md](./testing-standard.md), section 2). They state the requirement; they are not product code.
 
 ## 2. Terms
 
@@ -29,9 +29,9 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 
 3.3 Use an established practice of the industry before you make a new one.
 
-3.4 Add a new table, column, automated check, tool, or system only if the problem needs it. Write the reason in the issue. A rule that implementers must follow is such a need: prefer an automated check (a linter rule, a structural test, a hook, a CI job) to an instruction in the issue or in AGENTS.md. An instruction can be skipped; a check cannot (core idea 3 in [framework.md](./framework.md)).
+3.4 Add a new table, column, automated check, tool, or system only if the problem needs it. Write the reason in the issue. A rule that implementers must follow is such a need: prefer an automated check (a linter rule, a structural test, a hook, a CI job) to an instruction in the issue or in AGENTS.md. An instruction can be skipped; a check cannot (core idea 3 in [delivery-phases-overview.md](./delivery-phases-overview.md)).
 
-3.5 Use the test strategy of the project ([testing.md](./testing.md), section 3) to decide where an issue needs a test.
+3.5 Use the test strategy of the project ([testing-standard.md](./testing-standard.md), section 3) to decide where an issue needs a test.
 
 3.6 Write the issue text in the documentation language of the project.
 
@@ -39,7 +39,7 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 
 3.8 If the owner corrects a rule, apply the correction to all open issues. If the planner keeps persistent notes, write the rule there.
 
-3.9 Give each judgment that you put in a plan a confidence level, and look up what can be looked up before you ask the owner ([practices.md](./practices.md), sections 1 and 3).
+3.9 Give each judgment that you put in a plan a confidence level, and look up what can be looked up before you ask the owner ([judgment-practices.md](./judgment-practices.md), sections 1 and 3).
 
 3.10 Put the limits before the work. Each issue states what the implementer may change (Scope, Files), what it must not change (Out of scope), and how each limit is checked. If no tool checks a limit, write it as an acceptance condition.
 
@@ -69,13 +69,13 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 
 4.4 Make each acceptance condition clear and complete. Use words such as "each", "all", and "no" when the scope is a full set.
 
-4.4.1 If the correctness of the change depends on a real boundary that tests replace with doubles (the network, the operating system or runtime, an external service, the deployment environment), add a live smoke test to the acceptance. If a live test is not possible in this environment, write "not live-verified" and the condition to verify it (live verification tiers in [practices.md](./practices.md)).
+4.4.1 If the correctness of the change depends on a real boundary that tests replace with doubles (the network, the operating system or runtime, an external service, the deployment environment), add a live smoke test to the acceptance. If a live test is not possible in this environment, write "not live-verified" and the condition to verify it (live verification tiers in [judgment-practices.md](./judgment-practices.md)).
 
 4.5 Name each decision that you made for the owner. Write the reason. Tell the owner that they can change it.
 
 4.6 If the issue needs a decision that only the owner can make, ask the owner before you add the ready mark.
 
-4.7 Add the ready mark only if the issue meets the Definition of Ready and has no open hard dependency ([workflow.md](./workflow.md), section 2.1).
+4.7 Add the ready mark only if the issue meets the Definition of Ready and has no open hard dependency ([issue-workflow-standard.md](./issue-workflow-standard.md), section 2.1).
 
 4.8 Select the epic for the issue (see Task 6A).
 
@@ -113,7 +113,7 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 
 5.9 Set the WIP limit for the team or the epic. Write it in the epic.
 
-5.10 To let more issues run in parallel, divide the work so that issues change different files. Prefer this to a larger WIP limit. The other ways to reduce merge conflicts (remove hotspot files, small pull requests, one working copy per task, a merge queue) are in [guardrails.md](./guardrails.md), section 5.
+5.10 To let more issues run in parallel, divide the work so that issues change different files. Prefer this to a larger WIP limit. The other ways to reduce merge conflicts (remove hotspot files, small pull requests, one working copy per task, a merge queue) are in [guardrails-standard.md](./guardrails-standard.md), section 5.
 
 > **NOTE:** If there is only one implementer, all work is in sequence, and the conflict groups and the WIP limit have no effect. Keep them anyway, because more implementers can join later.
 
@@ -132,7 +132,7 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 
 6.1.2 Do not use a sequence name as a theme (for example "batch 7" or "queue 3"). A sequence name has no exit criterion.
 
-6.1.3 If the epic produces code, make its last issue a cleanup story (phase 5 of [framework.md](./framework.md)). Include the cleanup story in the exit criterion. Make the first issue of the next epic that builds on this code depend on the cleanup story.
+6.1.3 If the epic produces code, make its last issue a cleanup story (phase 5 of [delivery-phases-overview.md](./delivery-phases-overview.md)). Include the cleanup story in the exit criterion. Make the first issue of the next epic that builds on this code depend on the cleanup story.
 
 6.2 Keep an epic to 16 issues or fewer. This is a guideline, not a hard limit. If a theme needs more, divide it into phases at a dependency boundary. Make one epic for each phase.
 
@@ -246,13 +246,13 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 4. Check the Definition of Done: the one-command check passes on the merged result, and each document that the issue names is updated.
 5. Write down each part that you could not examine.
 
-7.4 If all the acceptance conditions and the Definition of Done are satisfied, close the issue. If the issue needs a live smoke test that cannot run now, mark it "not live-verified", write the condition, and add its live check to the smoke test list of the next release ([workflow.md](./workflow.md), section 6). Then close it.
+7.4 If all the acceptance conditions and the Definition of Done are satisfied, close the issue. If the issue needs a live smoke test that cannot run now, mark it "not live-verified", write the condition, and add its live check to the smoke test list of the next release ([issue-workflow-standard.md](./issue-workflow-standard.md), section 6). Then close it.
 
-7.5 If a condition is not satisfied, write a comment in the issue. Name the condition and the evidence. Move the issue back to "in progress" and count one round ([workflow.md](./workflow.md), section 4.1).
+7.5 If a condition is not satisfied, write a comment in the issue. Name the condition and the evidence. Move the issue back to "in progress" and count one round ([issue-workflow-standard.md](./issue-workflow-standard.md), section 4.1).
 
 7.6 If an implementer did something that the issue did not ask for, write it down. Tell the owner if it changes the behavior of the product.
 
-7.7 Examine the issues that are blocked, waiting, or on hold. Make sure that each one has the reason, the role that acts, and the condition to continue ([workflow.md](./workflow.md), section 5).
+7.7 Examine the issues that are blocked, waiting, or on hold. Make sure that each one has the reason, the role that acts, and the condition to continue ([issue-workflow-standard.md](./issue-workflow-standard.md), section 5).
 
 7.8 Update the epic:
 
@@ -272,13 +272,13 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 
 ## 7A. Task: handle a stop
 
-Use the task "classify a stop" in [workflow.md](./workflow.md), section 5.
+Use the task "classify a stop" in [issue-workflow-standard.md](./issue-workflow-standard.md), section 5.
 
 ## 7B. Task: review delivery health
 
 7B.1 Do this task at each sync, or at a fixed interval that the team sets.
 
-7B.2 Measure the signals in [workflow.md](./workflow.md), section 8:
+7B.2 Measure the signals in [issue-workflow-standard.md](./issue-workflow-standard.md), section 8:
 
 - The ready queue: the number of ready issues against how fast implementers consume them.
 - The false-ready rate: issues marked ready that implementers sent back as blocked or ambiguous.
@@ -326,7 +326,7 @@ Use the task "classify a stop" in [workflow.md](./workflow.md), section 5.
 
 9.6 Give the delivery health signals from Task 7B, and the issues that are blocked, waiting, or on hold, with the role that acts on each.
 
-9.7 Keep the report low-load ([practices.md](./practices.md), section 9): one recommendation for each decision, at most three questions with a default for each, and what the owner must do in a separate list.
+9.7 Keep the report low-load ([judgment-practices.md](./judgment-practices.md), section 9): one recommendation for each decision, at most three questions with a default for each, and what the owner must do in a separate list.
 
 **Completion criterion:** The owner can see the result, the decisions, their own next actions, the limits of your examination, and the health of delivery.
 

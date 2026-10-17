@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "checklist.schema.json",
+  "$id": "setup-checklist.schema.json",
   "title": "Setup checklist for agent-driven projects",
-  "description": "The shape of checklist.yaml. Field meanings are in the `fields` section of checklist.yaml.",
+  "description": "The shape of setup-checklist.yaml. Field meanings are in the `fields` section of setup-checklist.yaml.",
   "type": "object",
   "required": ["version", "weights", "scoring", "items", "final_checks"],
   "properties": {

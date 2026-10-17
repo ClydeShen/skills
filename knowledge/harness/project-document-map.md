@@ -1,6 +1,6 @@
 # Document Map: Which Documents a Project Should Prepare
 
-This file lists the standard documents of an agent-driven project. For each it gives the purpose, the main audience, who maintains it, when to create it, when to update it, and the writing standard. The paths are suggestions; adjust them to the project, then keep them fixed. Writing standards are in [writing-standards.md](./writing-standards.md); templates are in [templates/](./templates/).
+This file lists the standard documents of an agent-driven project. For each it gives the purpose, the main audience, who maintains it, when to create it, when to update it, and the writing standard. The paths are suggestions; adjust them to the project, then keep them fixed. Writing standards are in [document-writing-standards.md](./document-writing-standards.md); templates are in [templates/](./templates/).
 
 **Maintained by**: the role that keeps the document correct. The roles are in the repository [GLOSSARY.md](../../GLOSSARY.md).
 
@@ -33,8 +33,8 @@ This file lists the standard documents of an agent-driven project. For each it g
 | `docs/plans/<milestone>-integration.md` | Milestone integration design: components, seams, gates, stories | People, agents | Planner | At the start of each milestone | Reviewed once after the thinnest end-to-end path; when contracts change during implementation | Explanatory; the story table in STE |
 | `docs/setup-checklist.yaml` | The project's copy of the playbook checklist, with status, dates, and the score | People, agents | Planner | Phase 0 | When an item is done; at the end of each milestone (score) | Structured data |
 | `docs/team-agreements.md` | The agreements that the team selected from [social-contract.md](./social-contract.md), with their IDs | People | All members; the owner confirms changes | Phase 5 | When a member proposes a change; at the end of each milestone | ASD-STE100; one action for each agreement |
-| `docs/feedback-log.md` | Lessons: symptom, root cause, fix, prevention, count ([feedback.md](./feedback.md)) | People, agents | Planner | When the first lesson is recorded | When a problem is seen again, or its prevention is in place | Explanatory; one entry per kind of problem |
-| `docs/release.md` | Release runbook: trigger, what goes into a release, smoke test after release with the live checks, rollback, watch time, incident steps ([workflow.md](./workflow.md), section 6) | People, agents | Release role | Before the first release | When the release process changes | STE |
+| `docs/feedback-log.md` | Lessons: symptom, root cause, fix, prevention, count ([feedback-loops-standard.md](./feedback-loops-standard.md)) | People, agents | Planner | When the first lesson is recorded | When a problem is seen again, or its prevention is in place | Explanatory; one entry per kind of problem |
+| `docs/release.md` | Release runbook: trigger, what goes into a release, smoke test after release with the live checks, rollback, watch time, incident steps ([issue-workflow-standard.md](./issue-workflow-standard.md), section 6) | People, agents | Release role | Before the first release | When the release process changes | STE |
 | `docs/postmortems/YYYY-MM-DD-*.md` | One postmortem per incident: impact, actions taken, root cause, actions with owner and date | People, agents | The on-call role; a planner verifies | After each incident | Actions are tracked as issues; the text is not edited later | Explanatory |
 | `docs/research/*-YYYY-MM-DD.md` | Research notes with confidence markers and sources | People, agents | Planner (a background agent may draft) | When facts must be verified | Conclusions are not edited; when overturned, add a correction note at the top | Explanatory |
 

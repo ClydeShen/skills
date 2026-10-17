@@ -24,7 +24,7 @@ This file maps each tooling **role** to concrete tools for each language. The ro
 | 11 | Code security scanning | CodeQL or an equivalent |
 | 12 | Structure and naming | Official guidance on directory layout and naming |
 | 13 | Telemetry and logging | The OpenTelemetry API and SDK; a structured logger that writes the OpenTelemetry log data model with trace context |
-| 14 | Mutation testing | Change the code on purpose and check that a test fails; incremental or by diff, so it can run in cleanup stories; report only (see [testing.md](./testing.md)) |
+| 14 | Mutation testing | Change the code on purpose and check that a test fails; incremental or by diff, so it can run in cleanup stories; report only (see [testing-standard.md](./testing-standard.md)) |
 
 ---
 

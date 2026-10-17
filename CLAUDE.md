@@ -18,4 +18,4 @@ npx skills add . --list                 # repository discovery: each released sk
 
 ## Structured data
 
-`knowledge/harness/checklist.yaml` follows `knowledge/harness/checklist.schema.json`. When you change either file, keep each checklist item's stable `id` and update both files together.
+`knowledge/harness/setup-checklist.yaml` follows `knowledge/harness/setup-checklist.schema.json`. When you change either file, keep each checklist item's stable `id` and update both files together.

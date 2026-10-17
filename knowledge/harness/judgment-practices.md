@@ -63,7 +63,7 @@ At "very low", prefer the cautious action: "if in doubt, don't". Raise the level
 
 **Practice**: "done" has two tiers, and the line is the environment boundary:
 - **Logic-done**: parts whose correctness depends only on the code, not on the environment (encoding and decoding, state machines, hashes, parsing, regular expressions). Passing unit tests is enough.
-- **Live-done**: parts whose correctness depends on real boundaries that tests replace with doubles (the network, operating system and runtime behavior, real external services, the deployment environment). These need one real smoke test. If such a part is only logic-done, mark it "not live-verified" with the condition for verification, and put its live check on the smoke test list of the next release ([workflow.md](./workflow.md), section 6). Do not call it live-done before that check passes.
+- **Live-done**: parts whose correctness depends on real boundaries that tests replace with doubles (the network, operating system and runtime behavior, real external services, the deployment environment). These need one real smoke test. If such a part is only logic-done, mark it "not live-verified" with the condition for verification, and put its live check on the smoke test list of the next release ([issue-workflow-standard.md](./issue-workflow-standard.md), section 6). Do not call it live-done before that check passes.
 
 **Why**: unit tests are structurally blind to bugs that cross the environment boundary.
 
@@ -110,12 +110,12 @@ At "very low", prefer the cautious action: "if in doubt, don't". Raise the level
 
 **Practice**: when an agent plans, orchestrates work, or reports to the owner, it chooses and presents the option that asks the least of the owner: the least to read, to decide, to watch, and to maintain later.
 
-**Why**: in an agent-driven project, the attention of the owner is the limit, not the speed of the agents ([workflow.md](./workflow.md), section 8). Each option, open question, extra agent, tool, or step that an agent adds becomes work for a person, now or later. An unclear state ("Is it done? Is it safe? What must I do?") makes the owner anxious, and an anxious owner checks everything again [inference].
+**Why**: in an agent-driven project, the attention of the owner is the limit, not the speed of the agents ([issue-workflow-standard.md](./issue-workflow-standard.md), section 8). Each option, open question, extra agent, tool, or step that an agent adds becomes work for a person, now or later. An unclear state ("Is it done? Is it safe? What must I do?") makes the owner anxious, and an anxious owner checks everything again [inference].
 
 **How**:
 1. Recommend one option first, with its reason. Give other options only if they differ in something the owner cares about. Give at most three.
 2. Ask only the decisions that only the owner can make (practice 3). Ask at most three in one message. Give each a recommended answer and the default that applies if the owner does not answer.
-3. Prefer the option with the lowest lasting cost. Reuse what exists. Add a tool, file, setting, agent, or step only if the problem needs it ([delivery-planning.md](./delivery-planning.md), rule 3.4). Prefer a choice that can be reversed. For each option, say what a person must keep doing to maintain it.
+3. Prefer the option with the lowest lasting cost. Reuse what exists. Add a tool, file, setting, agent, or step only if the problem needs it ([planner-standard.md](./planner-standard.md), rule 3.4). Prefer a choice that can be reversed. For each option, say what a person must keep doing to maintain it.
 4. Scale the plan to the task. If you can describe the change in one sentence, do it without a plan document.
 5. Use the fewest agents and steps that do the job. Say how many and why. Each extra agent costs tokens and review.
 6. In each report, separate three things: what is done and verified, what is not done, and what the owner must do. Give each risk a severity and a next step. Do not raise an alarm without a next step.

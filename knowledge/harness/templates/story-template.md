@@ -36,7 +36,7 @@ Blocked by #<prerequisite issue>, #<prerequisite issue>
 
 <!--
 How to use:
-- The full procedure is in ../delivery-planning.md. The states are in ../workflow.md.
+- The full procedure is in ../planner-standard.md. The states are in ../issue-workflow-standard.md.
 - Keep "Part of" on the first line and "Blocked by" on the second line. If the tracker has parent links and dependency links, set them too.
 - A hard dependency exists only when B uses something that A makes. Put other ordering in the epic's suggested order.
 - Add the "ready" mark only when the story meets the project's Definition of Ready: a clear Definition of Done, no open hard dependency, testable acceptance criteria, the decisions it needs recorded, and pointers to the existing patterns and files to follow.

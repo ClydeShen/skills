@@ -24,7 +24,7 @@ Read [`docs/README.md`](docs/README.md) when placement is unclear. Read [`knowle
 ## Make the change
 
 1. Change the authoritative artifact and the references that must agree with it. Create a `SKILL.md` only when the user asks to implement or revise a specific skill.
-2. Follow [the writing standards](knowledge/harness/writing-standards.md) for terminology, procedures, research evidence, dates, and decisions. Use a template under `knowledge/harness/templates/` when its document type matches the task.
+2. Follow [the writing standards](knowledge/harness/document-writing-standards.md) for terminology, procedures, research evidence, dates, and decisions. Use a template under `knowledge/harness/templates/` when its document type matches the task.
 3. Keep shared knowledge independent of one skill. Keep files required at skill runtime inside that skill's package.
 4. When a document moves or its purpose changes, update every inbound link and the relevant README map in the same change.
 5. When the owner approves a terminology change, update `GLOSSARY.md`, then search the repository and update every affected use. Otherwise, preserve the canonical term.

@@ -1,6 +1,6 @@
 # Workflow
 
-This standard gives the states of an issue, the transitions between them, and the loops that close the work, from "ready" to production and back. It applies to all roles: planners, implementers, reviewers, and the owner. The roles and the terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). The tasks of each role are in [delivery-planning.md](./delivery-planning.md) (planner), [review.md](./review.md) (reviewer), and [templates/agents-md.md](./templates/agents-md.md) (implementing agent).
+This standard gives the states of an issue, the transitions between them, and the loops that close the work, from "ready" to production and back. It applies to all roles: planners, implementers, reviewers, and the owner. The roles and the terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). The tasks of each role are in [planner-standard.md](./planner-standard.md) (planner), [reviewer-standard.md](./reviewer-standard.md) (reviewer), and [templates/implementer-agents-md-template.md](./templates/implementer-agents-md-template.md) (implementing agent).
 
 ## 1. Rules for all roles
 
@@ -25,12 +25,12 @@ This standard gives the states of an issue, the transitions between them, and th
 
 "Waiting" is not a state. It is a ready issue that nobody can claim now, because no person, agent, or resource is free. It shows a capacity problem, not a block.
 
-2.1 **Definition of Ready**: an implementer (person or agent) can act on the issue at "high" confidence without asking ([practices.md](./practices.md), section 1). The issue has all of these:
+2.1 **Definition of Ready**: an implementer (person or agent) can act on the issue at "high" confidence without asking ([judgment-practices.md](./judgment-practices.md), section 1). The issue has all of these:
 
 - A clear Definition of Done.
 - No open hard dependency.
 - Acceptance conditions that can be tested: each has a command, a visible result, or a value.
-- The acceptance examples that need a new test are committed in the protected paths ([testing.md](./testing.md), section 2):
+- The acceptance examples that need a new test are committed in the protected paths ([testing-standard.md](./testing-standard.md), section 2):
   - If an example runs without new connecting code, it fails because the behaviour is missing.
   - If an example needs new connecting code, it is marked pending. The implementer writes the connecting code first and shows that the example then fails because the behaviour is missing.
 - The decisions that it needs, in the decision log.
@@ -53,7 +53,7 @@ Hold agents to a stricter bar than people. A person asks about a vague issue. An
 - An environment or an external system is not available.
 - An acceptance condition cannot be verified.
 - The round limit is reached.
-- A conflict between sources of feedback cannot be settled by the order of sources ([feedback.md](./feedback.md), section 3).
+- A conflict between sources of feedback cannot be settled by the order of sources ([feedback-loops-standard.md](./feedback-loops-standard.md), section 3).
 
 When an issue is blocked, stop. Write the reason, the role that can remove the cause, and the condition to continue. Do not guess your way around the block.
 
@@ -66,7 +66,7 @@ When an issue is blocked, stop. Write the reason, the role that can remove the c
 | In progress | Ready | Implementer | The implementer removes its claim. The issue says what is done and the next step. |
 | In progress | In review | Implementer | The one-command check passes. The report in the issue has the command and the output of each acceptance condition. The change is ready to merge (for example, a pull request). |
 | In review | In progress | Reviewer | A required check fails, the merge queue rejects the change, or there is a confirmed blocking finding. Count one round. |
-| In review | Verifying | Reviewer approves; the implementer or the merge queue merges | No confirmed blocking finding. The full check passes at the last gate ([guardrails.md](./guardrails.md), section 1). The change is merged. |
+| In review | Verifying | Reviewer approves; the implementer or the merge queue merges | No confirmed blocking finding. The full check passes at the last gate ([guardrails-standard.md](./guardrails-standard.md), section 1). The change is merged. |
 | Verifying | In progress | Planner | An acceptance condition or the Definition of Done is not satisfied on the merged result. Count one round. |
 | Verifying | Closed | Planner | The Definition of Done is satisfied (section 2.2). |
 | Closed | Verifying | Planner | The issue was closed without verification (for example, by a closing keyword in a merged pull request). |
@@ -153,7 +153,7 @@ A closed issue is not in front of users. The release loop puts it there and chec
 
 6.6 **Watch.** For a fixed time after the release, the release role reads the logs and the errors.
 
-6.7 **Incidents.** After an incident, write a postmortem: the impact, what was done, the root cause, and the actions that prevent a repeat. Make each action an issue with an assignee, a result that can be checked, and a date. "Improve monitoring" is too vague; "alert when the error rate is above 2% for 5 minutes" is clear. Write the lesson in the feedback log ([feedback.md](./feedback.md), section 4.4).
+6.7 **Incidents.** After an incident, write a postmortem: the impact, what was done, the root cause, and the actions that prevent a repeat. Make each action an issue with an assignee, a result that can be checked, and a date. "Improve monitoring" is too vague; "alert when the error rate is above 2% for 5 minutes" is clear. Write the lesson in the feedback log ([feedback-loops-standard.md](./feedback-loops-standard.md), section 4.4).
 
 ## 7. Loop cards and closure rules
 
@@ -174,11 +174,11 @@ A closed issue is not in front of users. The release loop puts it there and chec
 | Loop | Trigger | Who acts | Verifier and evidence | Done when | Limit | Escalation | Record |
 |---|---|---|---|---|---|---|---|
 | Agent session | Each edit; the end of each turn | Implementer | Session hooks: lint, types, related tests | The checks pass | Attempts for the same failure (AGENTS.md) | Blocked; the owner | The issue |
-| Review | The issue enters "in review" | Reviewer, then implementer | Required checks; confirmed findings ([review.md](./review.md)) | Approved and merged | Round limit | Blocked; the owner | The issue |
+| Review | The issue enters "in review" | Reviewer, then implementer | Required checks; confirmed findings ([reviewer-standard.md](./reviewer-standard.md)) | Approved and merged | Round limit | Blocked; the owner | The issue |
 | Verification | The issue enters "verifying" | Planner | The acceptance commands, run on the merged result | Closed | Round limit | Blocked; the owner | The issue; the epic |
 | Release | The release trigger | Release role | Smoke test after release, with the live checks; logs and errors during the watch time | Released, and the smoke test passed | One rollback, then stop | The owner | The release record |
 | Incident | An alert or a user report | On-call role | Monitoring shows that the service is restored | Restored; each postmortem action is an issue | The dates of the actions | The owner | The postmortem; the feedback log |
-| Harness | The end of a milestone; a problem seen again | Reviewer, planner | The review of the checks; the feedback log ([feedback.md](./feedback.md), section 4) | Each repeated problem has a prevention or a reason | Once per milestone | The owner approves changes to protected paths | The feedback log |
+| Harness | The end of a milestone; a problem seen again | Reviewer, planner | The review of the checks; the feedback log ([feedback-loops-standard.md](./feedback-loops-standard.md), section 4) | Each repeated problem has a prevention or a reason | Once per milestone | The owner approves changes to protected paths | The feedback log |
 | Delivery health | Each sync, or a fixed interval | Planner | The signals in section 8, measured with a date | Each recurring cause has an issue | Once per interval | The owner | The report to the owner |
 
 7.3 **Closure rules.** Check the workflow and the loop cards against these rules when you set them up, and at the end of each milestone:
@@ -191,7 +191,7 @@ A closed issue is not in front of users. The release loop puts it there and chec
 
 ## 8. Delivery health
 
-The states of the issues show the health of the whole delivery system. A planner measures these signals (Task 7B in [delivery-planning.md](./delivery-planning.md)):
+The states of the issues show the health of the whole delivery system. A planner measures these signals (Task 7B in [planner-standard.md](./planner-standard.md)):
 
 | Signal | What it shows |
 |---|---|
@@ -201,6 +201,6 @@ The states of the issues show the health of the whole delivery system. A planner
 | Work that waits for human verification or approval | In an agent-driven project, capacity is often not coding speed. It is the attention of the people who verify and approve, environment slots (a GPU, rate limits, token budgets), and file conflicts. A queue of ready work is normal. A growing queue of work that waits for people is the signal. |
 
 | Review sampling: the share of agent changes that a person read, and whether a person read each change to a contract, core logic, security, or data | Comprehension debt ([GLOSSARY.md](../../GLOSSARY.md)). A share that falls while the output grows means that the team owns more code that it cannot explain. |
-| Cost per closed issue (tokens or money), with the number of agent sessions and rounds | Whether the loops converge. A cost that grows for issues of the same size shows a stuck loop or a vague issue ([feedback.md](./feedback.md), section 2.3). |
+| Cost per closed issue (tokens or money), with the number of agent sessions and rounds | Whether the loops converge. A cost that grows for issues of the same size shows a stuck loop or a vague issue ([feedback-loops-standard.md](./feedback-loops-standard.md), section 2.3). |
 
 Count blocked, waiting, and on hold separately. If waiting is counted as blocked, the block signal is too high and a capacity problem is hidden. If on-hold work stays in progress, the cycle time and the work in progress are wrong.
