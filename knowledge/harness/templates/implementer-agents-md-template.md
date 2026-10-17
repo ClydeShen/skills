@@ -1,6 +1,6 @@
 # AGENTS.md (template)
 
-Put this file at the repository root for implementing agents (one or many). **Keep it to about 60 lines. Write only commands, rules, and pointers. Do not describe the current state of the codebase** (that belongs in the as-built docs, and it goes stale).
+Put this file at the repository root for implementing agents (one or many). **Keep it short (about 60 lines is a guide, not a limit). Write only commands, rules, and pointers. Do not describe the current state of the codebase** (that belongs in the as-built docs, and it goes stale).
 
 ---
 

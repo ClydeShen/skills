@@ -70,6 +70,8 @@ scoring:
     Read the two numbers together, then read the autonomy level. Autonomy is a design decision, not a reward
     for a high score: give agents only the level whose items are all done. Below the first level, a person
     watches the agents' work closely, even if the score is high. Items marked n/a with a reason count as done.
+    The score shows how much of the setup is in place, not how well the harness works; read the effect in the
+    delivery health signals (issue-workflow-standard.md, section 8).
   autonomy:
     - level: supervised
       means: A person watches the session and approves the result.
@@ -88,7 +90,8 @@ scoring:
     decision separate from capability (Feng, McDonald, Zhang, "Levels of Autonomy for AI Agents", 2025). The item
     sets are a first proposal; change them only with the reason in the change log of README.md.
   general: >-
-    The weights are a general standard from harness practice. Do not change a weight for one project.
+    The weights are this playbook's judgment of each item's role in the harness, not a measured effect. Do not
+    change a weight for one project.
     A project's situation shows in its own score and in its n/a items.
 
 items:
@@ -835,7 +838,9 @@ items:
     check: >-
       Write `AGENTS.md` with the commands, the way of working, and where to read first. Write only what every task needs.
       Do not describe the current state of the codebase.
-    done_when: The file has about 60 lines or fewer, and each line applies to every task.
+    done_when: >-
+      Each line applies to every task and gives what the agent cannot learn by reading the repository. About 60 lines
+      is a guide, not a limit.
     harness: { role: guide, control: human, timing: feedforward }
     why: >-
       Every agent session reads it first. It is the entry point to every other guide and sensor. Agents follow what it
@@ -997,7 +1002,7 @@ items:
     weight: 2
     check: >-
       Adopt the practices in judgment-practices.md. At minimum, give each important judgment a confidence level and its
-      supporting dimensions, agree on a plan before you change code, mark work that is only logic-done as "not live-verified",
+      dimension scores, agree on a plan before you change code, mark work that is only logic-done as "not live-verified",
       and keep plans and reports low-load (practice 9).
     done_when: The practices are in AGENTS.md or the agent's memory, and agents follow them.
     harness: { role: guide, control: inferential, timing: in-session }

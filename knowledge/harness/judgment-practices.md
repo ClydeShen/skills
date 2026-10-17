@@ -4,7 +4,7 @@ This file collects ways of judging and working that people and agents use in eve
 
 | # | Practice | In one sentence |
 |---|---|---|
-| 1 | Four-dimension confidence | The number of dimensions that support a judgment sets how sure you are and what you may do; at "very low", do not act, gather evidence first |
+| 1 | Four-dimension confidence | The sum of four dimension scores (each from 0 to 1) sets how sure you are and what you may do; at "very low", do not act, gather evidence first |
 | 2 | Sync before writing code | Before you change implementation code, give a plan and wait for confirmation |
 | 3 | Search before asking | Look up what can be looked up; ask only what cannot |
 | 4 | Live verification tiers | "Done" is either logic-done or live-done; the line is the environment boundary |
@@ -27,21 +27,29 @@ This file collects ways of judging and working that people and agents use in eve
 | **Reasoning** | The agent's conclusions from common knowledge, known algorithms, or reasoning |
 | **Project history** | What the project has already done: working code patterns, ways of thinking already used, wording and writing habits, recorded history |
 
-The level is **the number of dimensions that support a judgment at the same time**:
+Give **each dimension a score from 0 to 1**: how strongly that dimension supports the judgment.
 
-| Supporting dimensions | Level | What the agent does |
+| Score | Meaning |
+|---|---|
+| 1 | Direct and clear support: the owner decided it; an official or measured source states it; the project already does it the same way |
+| 0.5 | Partial, indirect, or weak support: a related decision, a secondhand source, a similar but not equal pattern |
+| 0 | No support, not checked, or the dimension contradicts the judgment. Name a contradiction; do not hide it in the sum |
+
+The level is **the sum of the four scores**:
+
+| Sum | Level | What the agent does |
 |---|---|---|
-| 4 | High | Act |
-| 3 | Medium | Act, then tell the owner which decisions were made |
-| 2 | Low | Ask the owner first |
-| 1 or 0 | Very low (none) | Do not act ("if in doubt, don't"). Gather more certain evidence first |
+| 3.5 to 4 | High | Act |
+| 2.5 to less than 3.5 | Medium | Act, then tell the owner which decisions were made |
+| 1.5 to less than 2.5 | Low | Ask the owner first |
+| Less than 1.5 | Very low | Do not act ("if in doubt, don't"). Gather more certain evidence first |
 
 At "very low", prefer the cautious action: "if in doubt, don't". Raise the level before you act, in one or more of these ways:
 - **Project history**: look for something similar that the project has already done.
 - **Research**: find out what others say.
 - **Owner**: ask the owner again from a different angle, to collect a more certain answer.
 
-**How**: when the agent gives an important judgment, it states the level and which dimensions support it, for example "Confidence: medium (owner, reasoning, project history; no research)". When the level is low or very low, it says which dimension is missing and how it will add it.
+**How**: when the agent gives an important judgment, it states the level, the sum, and the score of each dimension, for example "Confidence: medium, 2.5 (owner 1, reasoning 1, project history 0.5, research 0)". When the level is low or very low, it says which dimension is weak and how it will raise it.
 
 ## 2. Sync before writing code
 

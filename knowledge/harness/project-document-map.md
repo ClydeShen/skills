@@ -18,7 +18,7 @@ This file lists the standard documents of an agent-driven project. For each it g
 | `VISION.md` | Purpose, first principles, scope, what is proven and what is to be tested | People, agents | Planner (owner confirms) | Phase 0 | When a principle or the direction changes (with an ADR) | Explanatory |
 | `GLOSSARY.md` | The single source of terms | People, agents | Planner | Phase 0 | When a new concept appears or inconsistent wording is found | Explanatory (fixed entry format) |
 | `HANDOFF.md` | Where a new session starts: what to read, do, watch out for, and not do | Agents | Planner | End of phase 1 | End of each milestone; after important decisions | Mixed: background explanatory; steps and prohibitions in STE |
-| `AGENTS.md` | Entry point for implementing agents: commands, way of working, where to read first (about 60 lines at most) | Agents | Planner | Before the first story starts | When commands or the way of working change | STE |
+| `AGENTS.md` | Entry point for implementing agents: commands, way of working, where to read first (short; about 60 lines is a guide) | Agents | Planner | Before the first story starts | When commands or the way of working change | STE |
 | `.env.example` | Keys to fill in on each machine (no values) | People, agents | Planner | Phase 1 | When an environment requirement is added | — |
 | `.gitattributes`, `.editorconfig`, `.gitignore` | Line endings, encoding, indentation, ignore rules | Tools | Planner | Phase 0 | Rarely | — |
 | `LICENSE` | License | People | Owner | Before the repository goes public | Rarely | — |

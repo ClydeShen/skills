@@ -40,8 +40,8 @@ Rules:
 | Signals about the harness itself (section 2.2) | Continuous | Mixed | No. They change the harness |
 
 Two rules apply to all sources:
-1. **Only evidence can stop the work.** Deterministic checks (tests, types, builds, lint) give the same answer each time, so they can block. A model or a person gives an opinion. An opinion can send work back only when it is confirmed: the failure scenario is reproduced or shown in the code (section 2.1). Opinions add to the gates; they do not replace them.
-2. **The implementer does not judge its own work.** A different person or agent session, with a fresh context, judges whether the work is done ([issue-workflow-standard.md](./issue-workflow-standard.md)). A reviewer must not change the work that it reviews; it reports, and the implementer changes.
+1. **Only evidence can stop the work.** Computational checks (tests, types, builds, lint) can block when their result is reproducible. A failure that a rerun does not reproduce follows the flaky-test policy ([testing-standard.md](./testing-standard.md), M4). A model or a person gives an opinion. An opinion can send work back only when it is confirmed: the failure scenario is reproduced or shown in the code (section 2.1). Opinions add to the gates; they do not replace them.
+2. **The implementer does not give the final judgment on its own work.** The implementer tests and reviews its own change, but its own report is not enough to accept it. A different person or agent session, with a fresh context, judges whether the work is done ([issue-workflow-standard.md](./issue-workflow-standard.md)). A reviewer must not change the work that it reviews; it reports, and the implementer changes.
 
 ### 2.1 Review findings
 
@@ -127,7 +127,7 @@ One fix repairs one mistake. A change to the harness stops the same kind of mist
 
 Rules:
 1. **Prefer a check to a guide.** A check runs every time. A guide works only when the agent reads it and follows it.
-2. **Keep AGENTS.md to the minimum.** Agents follow each line, and every session reads every line. Extra requirements make tasks harder and cost more. Add only what every task needs.
+2. **Keep AGENTS.md to the minimum.** Most agent tools load the root AGENTS.md into every session, and agents follow its instructions, so each line costs context and work in every task. How a tool loads nested or other context files differs; check the tool you use. Extra requirements make tasks harder and cost more. Add only what every task needs and what the agent cannot learn by reading the repository.
 3. **When you change the harness because of an incident, add a test for the change.** For example, a new lint rule gets a test case that the old code fails.
 
 ### 4.3 Feedback on the checks

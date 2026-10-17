@@ -8,10 +8,10 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 
 | # | Idea | Why |
 |---|---|---|
-| 1 | **The repository is the single source of truth.** Conversations and memories get lost; documents, issues, and code do not. Agents get their context by reading the repository, so decisions, constraints, and terms must be written there | A new agent or a new session needs no verbal handoff |
+| 1 | **The repository is the system of record for durable project knowledge.** Conversations and session memory get lost; documents, issues, and code do not. Agents get their context by reading the repository, so decisions, constraints, and terms must be written there. State outside it (agent sessions, tool settings, external services) is not covered: link it, record it, or verify it again before you rely on it | A new agent or a new session needs no verbal handoff |
 | 2 | **Decisions carry a date and a source, and are recorded at once** ([document-writing-standards.md](./document-writing-standards.md), section 4). Write important decisions as ADRs. To change a decision, write a new ADR first | Otherwise documents contradict each other and nobody knows which one is current |
 | 3 | **What can be checked automatically is not left to discipline.** Mark every rule as "automatic" or "review", and turn review rules into automatic checks where you can. Instructions to an agent (AGENTS.md, prompts) are suggestions; tools (linters, structural tests, hooks, CI) are physical constraints | Agents miss things, and so do people; a rule an agent may skip is not a guardrail |
-| 4 | **Contracts first, dependencies inverted.** Define the interfaces between components first. Components depend only on interfaces. Concrete implementations appear only in one composition entry point | Components can be built in parallel and replaced independently; problems at the seams show up early |
+| 4 | **Contracts first at the seams that matter.** Where components are built in parallel, are replaced, or cross a process boundary, define the interfaces first and let components depend only on them. Check by a tool only the boundaries whose violation has a named cost | Components can be built in parallel and replaced independently; problems at the seams show up early |
 | 5 | **Prove the thinnest end-to-end path first, then thicken it.** At the start of a milestone, run the whole path once with the least content possible | Building layer by layer pushes integration problems to the end |
 | 6 | **Acceptance criteria must be checkable by a command.** Each criterion has a command, a visible result, or a concrete value. The planner runs the commands itself | "It's done" is not evidence |
 | 7 | **Search before asking** ([judgment-practices.md](./judgment-practices.md), section 3) | Fewer interruptions, better questions |
@@ -79,12 +79,12 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 ### Phase 2: Architect
 
 **What to do**
-1. **Architecture diagrams**: the C4 model (context, containers, components), and a sequence diagram of the key flow. Show who depends on whom.
-2. **Contracts**: the interfaces between components. Use ports and adapters: the core depends only on ports, concrete implementations are adapters, and only one **composition entry point** knows the concrete implementations. Data types that cross a process or network boundary must be serializable. Reuse existing standards. Add an abstraction layer only if you can name the failure or the change that it isolates.
+1. **Architecture diagrams**: for example the C4 model (context, containers, components), and a sequence diagram of the key flow. Show who depends on whom.
+2. **Contracts**: the interfaces between components. Where a component must be isolated or replaced, use ports and adapters: the core depends only on ports, concrete implementations are adapters, and one **composition entry point** for each executable knows the concrete implementations. Data types that cross a process or network boundary must be serializable. Reuse existing standards. Add an abstraction layer only if you can name the failure or the change that it isolates.
 3. **Dependency classes**: put every dependency in one class: hard (part of the architecture), configurable (swapping it is a config change), or optional (the system runs without it). Say when each default must be chosen.
-4. **Directory and naming rules**: the directory structure shows the direction of dependencies. Write a "who may depend on whom" table. Organize directories by domain concept, not by technical layer. No catch-all directories such as `utils`. One public entry point per package.
+4. **Directory and naming rules**: the directory structure shows the direction of dependencies. Write a "who may depend on whom" table. Organize directories by domain concept, not by technical layer. No catch-all directories such as `utils`. One public entry point per package where the language supports it.
 5. **Tech stack**: for each tool, its role, its class, when it is introduced, and when to replace it. List what you deliberately do not use, and why. Tools per language: [language-tooling-profiles.md](./language-tooling-profiles.md).
-6. **Configuration format**: one resource format for everything configurable. Version it, validate it on load, and reference secrets only through environment variables.
+6. **Configuration format**: one format and one schema for each kind of configuration. Version it, validate it on load, and reference secrets only through environment variables.
 
 **Outputs**: `docs/architecture/`, `docs/dependencies.md`, `docs/project-structure.md`, `docs/tech-stack.md`.
 
@@ -144,7 +144,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 
 **What to do**
 1. **Roles**: name who holds each role ([GLOSSARY.md](../../GLOSSARY.md)). Each issue has exactly one implementer at a time.
-2. **AGENTS.md**: a thin entry point for implementing agents, about 60 lines at most: commands, the way of working, the team agreements for agents, and where to read first. Do not describe the current state of the codebase here. Template: [templates/implementer-agents-md-template.md](./templates/implementer-agents-md-template.md).
+2. **AGENTS.md**: a thin entry point for implementing agents (about 60 lines is a guide, not a limit; remove each line that no task needs): commands, the way of working, the team agreements for agents, and where to read first. Do not describe the current state of the codebase here. Template: [templates/implementer-agents-md-template.md](./templates/implementer-agents-md-template.md).
 3. **Handoff document**: where a new session starts: what to read, what to do, what to verify, what to watch out for, and what not to do.
 4. **Review and verification**: [reviewer-standard.md](./reviewer-standard.md) for reviewers; verification by a planner in [issue-workflow-standard.md](./issue-workflow-standard.md) and [planner-standard.md](./planner-standard.md), Task 7.
 5. **Cleanup story**: every epic that produces code ends with one. Steps: record a baseline (commit, check result, and a hash or output that represents behaviour) → architecture review → classify findings (severe or not) → fix severe ones (refactor only) → re-index the codebase → update the as-built docs → run all checks again. Severe: breaking a dependency rule, code that disagrees with the contract, anything that would force rework in the next epic, and coupling that prevents testing core logic on its own.

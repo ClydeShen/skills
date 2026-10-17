@@ -115,4 +115,4 @@ For ADRs, the vision, architecture descriptions, research notes, the tech stack,
 
 - **Mark each fact in research** with its confidence: [official], [official · summary only], [secondhand], [inference], [measured]. Template: [templates/research-note-template.md](./templates/research-note-template.md).
 - **Look up version numbers, release dates, and tool capabilities** with a command or the official docs, and write the date. Never write them from memory.
-- **Give each important judgment** a confidence level and the dimensions that support it (four-dimension confidence, section 1 of [judgment-practices.md](./judgment-practices.md)).
+- **Give each important judgment** a confidence level and the score of each dimension (four-dimension confidence, section 1 of [judgment-practices.md](./judgment-practices.md)).
