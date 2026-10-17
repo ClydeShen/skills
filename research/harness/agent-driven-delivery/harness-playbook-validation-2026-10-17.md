@@ -1,6 +1,6 @@
 # Research: third-party validation of the agent-driven delivery playbook
 
-Date: 2026-10-17. Subject: how practitioners and researchers understand and configure harness engineering, loop engineering, and graph engineering, and which parts of the playbook (`docs/playbook/`) this evidence confirms, contests, or misses. Context: the playbook was written from one project and is marked mostly "designed" or "researched". This note raises or lowers the confidence of its rules, and feeds a revision of `checklist.yaml` (weights, levels, the autonomy rule).
+Date: 2026-10-17. Subject: how practitioners and researchers understand and configure harness engineering, loop engineering, and graph engineering, and which parts of the playbook (`knowledge/harness/`) this evidence confirms, contests, or misses. Context: the playbook was written from one project and is marked mostly "designed" or "researched". This note raises or lowers the confidence of its rules, and feeds a revision of `checklist.yaml` (weights, levels, the autonomy rule).
 
 Confidence markers:
 - **[official]**: the relevant part of official docs, a specification, a tool's README, or a paper page was read.

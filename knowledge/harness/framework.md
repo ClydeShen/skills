@@ -1,6 +1,6 @@
 # A Framework for Starting Agent-Driven Projects
 
-This file is the map of the playbook: the core ideas, seven phases from defining the product to maintaining it, and how to scale the phases to the project size. Each phase says what to do, the outputs, and when it is done, and points to the file with the detailed rules. The terms are in [glossary.md](./glossary.md).
+This file is the map of the playbook: the core ideas, seven phases from defining the product to maintaining it, and how to scale the phases to the project size. Each phase says what to do, the outputs, and when it is done, and points to the file with the detailed rules. The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md).
 
 ---
 
@@ -143,7 +143,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 ### Phase 5: Operate
 
 **What to do**
-1. **Roles**: name who holds each role ([glossary.md](./glossary.md)). Each issue has exactly one implementer at a time.
+1. **Roles**: name who holds each role ([GLOSSARY.md](../../GLOSSARY.md)). Each issue has exactly one implementer at a time.
 2. **AGENTS.md**: a thin entry point for implementing agents, about 60 lines at most: commands, the way of working, the team agreements for agents, and where to read first. Do not describe the current state of the codebase here. Template: [templates/agents-md.md](./templates/agents-md.md).
 3. **Handoff document**: where a new session starts: what to read, what to do, what to verify, what to watch out for, and what not to do.
 4. **Review and verification**: [review.md](./review.md) for reviewers; verification by a planner in [workflow.md](./workflow.md) and [delivery-planning.md](./delivery-planning.md), Task 7.

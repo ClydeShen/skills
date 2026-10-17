@@ -862,12 +862,12 @@ items:
     phase: 5
     level: required
     weight: 2
-    check: Write down who holds each role (glossary.md). Say who plans, who implements (people or agents, how many), who reviews, and who decides for each area.
+    check: Write down who holds each role (GLOSSARY.md). Say who plans, who implements (people or agents, how many), who reviews, and who decides for each area.
     done_when: Each issue in progress has exactly one implementer.
     harness: { role: guide, control: human, timing: feedforward }
     why: Separates the one who implements from the one who verifies, and stops two agents from taking the same issue.
     weight_reason: Makes independent verification possible; the verification flow carries the check.
-    see: [glossary.md#roles, framework.md#phase-5-operate]
+    see: [GLOSSARY.md#roles, framework.md#phase-5-operate]
     status: todo
 
   - id: parallel-work-rules

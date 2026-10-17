@@ -1,6 +1,6 @@
 # Workflow
 
-This standard gives the states of an issue, the transitions between them, and the loops that close the work, from "ready" to production and back. It applies to all roles: planners, implementers, reviewers, and the owner. The roles and the terms are in [glossary.md](./glossary.md). The tasks of each role are in [delivery-planning.md](./delivery-planning.md) (planner), [review.md](./review.md) (reviewer), and [templates/agents-md.md](./templates/agents-md.md) (implementing agent).
+This standard gives the states of an issue, the transitions between them, and the loops that close the work, from "ready" to production and back. It applies to all roles: planners, implementers, reviewers, and the owner. The roles and the terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). The tasks of each role are in [delivery-planning.md](./delivery-planning.md) (planner), [review.md](./review.md) (reviewer), and [templates/agents-md.md](./templates/agents-md.md) (implementing agent).
 
 ## 1. Rules for all roles
 
@@ -200,7 +200,7 @@ The states of the issues show the health of the whole delivery system. A planner
 | Reasons for "not ready" and "blocked", by the role that can fix them | Technical dependency (tech lead), architecture gap (architect), unclear story or acceptance (business analyst), missing test criteria (QA or business analyst), missing decision (owner). A cause that recurs needs a fix of the system, not only of the issue. |
 | Work that waits for human verification or approval | In an agent-driven project, capacity is often not coding speed. It is the attention of the people who verify and approve, environment slots (a GPU, rate limits, token budgets), and file conflicts. A queue of ready work is normal. A growing queue of work that waits for people is the signal. |
 
-| Review sampling: the share of agent changes that a person read, and whether a person read each change to a contract, core logic, security, or data | Comprehension debt ([glossary.md](./glossary.md)). A share that falls while the output grows means that the team owns more code that it cannot explain. |
+| Review sampling: the share of agent changes that a person read, and whether a person read each change to a contract, core logic, security, or data | Comprehension debt ([GLOSSARY.md](../../GLOSSARY.md)). A share that falls while the output grows means that the team owns more code that it cannot explain. |
 | Cost per closed issue (tokens or money), with the number of agent sessions and rounds | Whether the loops converge. A cost that grows for issues of the same size shows a stuck loop or a vague issue ([feedback.md](./feedback.md), section 2.3). |
 
 Count blocked, waiting, and on hold separately. If waiting is counted as blocked, the block signal is too high and a capacity problem is hidden. If on-hold work stays in progress, the cycle time and the work in progress are wrong.

@@ -1,6 +1,6 @@
 # Glossary
 
-The terms of this playbook. Each term has one meaning in all files. A project keeps its own glossary of product terms ([writing-standards.md](./writing-standards.md), section 1).
+The shared terms of this repository. Each term has one meaning across repository documentation, research, shared knowledge, incubator initiatives, and released skills. A project that uses these materials keeps its own glossary of product terms ([writing standards](./knowledge/harness/writing-standards.md), section 1).
 
 ## Roles
 
@@ -9,14 +9,14 @@ A role can be a person or an agent. One person or agent can hold several roles, 
 | Term | Meaning |
 |---|---|
 | **Owner** | The person who decides scope, priorities, and rules, and confirms decisions. In a team, this can be a product owner or a lead. The owner can name a person who decides for one area; write the name and the area. In this playbook, the word "owner" alone means only this role. |
-| **Planner** | Writes issues, epics, and plan documents; verifies results; syncs status ([delivery-planning.md](./delivery-planning.md)). Does not change the product, except for acceptance examples. |
+| **Planner** | Writes issues, epics, and plan documents; verifies results; syncs status ([delivery planning](./knowledge/harness/delivery-planning.md)). Does not change the product, except for acceptance examples. |
 | **Implementer** | Changes the product to complete an issue. There can be many. |
-| **Reviewer** | Reviews a change and reports findings ([review.md](./review.md)). Does not change the work that it reviews. |
+| **Reviewer** | Reviews a change and reports findings ([review standard](./knowledge/harness/review.md)). Does not change the work that it reviews. |
 | **Business analyst** | Writes requirements and acceptance examples. Often the same role as a planner. |
 | **Architect** | Keeps the architecture, the contracts, and the dependency rules. Maintains the conformance suites. |
 | **Tech lead** | Clears technical dependencies and settles technical disagreements that the owner gives to them. |
 | **QA** | Writes test criteria and gate tests. |
-| **Release role** | Starts a release, runs the smoke test after release, and watches the result ([workflow.md](./workflow.md), section 6). |
+| **Release role** | Starts a release, runs the smoke test after release, and watches the result ([workflow](./knowledge/harness/workflow.md), section 6). |
 | **On-call role** | Restores the service after an incident and writes the postmortem. |
 | **User** | A person who uses the product. |
 
@@ -46,21 +46,21 @@ A role can be a person or an agent. One person or agent can hold several roles, 
 
 ## Workflow
 
-The states and the transitions are in [workflow.md](./workflow.md).
+The states and the transitions are in the [workflow](./knowledge/harness/workflow.md).
 
 | Term | Meaning |
 |---|---|
-| **Definition of Ready** | The conditions that an issue meets before it can be claimed ([workflow.md](./workflow.md), section 2). |
+| **Definition of Ready** | The conditions that an issue meets before it can be claimed ([workflow](./knowledge/harness/workflow.md), section 2). |
 | **Definition of Done** | The conditions that an issue meets before it can be closed. |
 | **Definition of Blocked** | The conditions that make an issue blocked. |
 | **State owner** | The role that moves an issue out of a state. |
 | **Round** | One move of an issue back to "in progress" from "in review" or "verifying", or after a revert. |
 | **Round limit** | The maximum number of rounds for one issue. At the limit, the issue is blocked. |
-| **Logic-done** | Correct by tests alone: the result does not depend on the environment ([practices.md](./practices.md), section 4). |
+| **Logic-done** | Correct by tests alone: the result does not depend on the environment ([practices](./knowledge/harness/practices.md), section 4). |
 | **Live-done** | Verified once against the real boundary (network, operating system, external service, deployment). |
-| **Loop card** | A description of one feedback loop with seven fields ([workflow.md](./workflow.md), section 7). |
-| **Comprehension debt** | The gap between the code that agents produced and the code that the team has read and can explain. It grows when people accept agent output without reading it ([social-contract.md](./social-contract.md), F8 and F9). |
-| **Low-load proposal** | A plan or report that asks the least of the owner to read, decide, watch, and maintain ([practices.md](./practices.md), section 9). |
+| **Loop card** | A description of one feedback loop with seven fields ([workflow](./knowledge/harness/workflow.md), section 7). |
+| **Comprehension debt** | The gap between the code that agents produced and the code that the team has read and can explain. It grows when people accept agent output without reading it ([social contract](./knowledge/harness/social-contract.md), F8 and F9). |
+| **Low-load proposal** | A plan or report that asks the least of the owner to read, decide, watch, and maintain ([practices](./knowledge/harness/practices.md), section 9). |
 
 ## Harness and tests
 
@@ -70,7 +70,7 @@ The states and the transitions are in [workflow.md](./workflow.md).
 | **Guide** | A part of the harness that acts before the agent acts (an instruction, a template, a type). |
 | **Sensor** | A part of the harness that checks the work after the agent acts (a test, a lint rule, a review). |
 | **Gate** | A check that can stop the work. The **last gate** is the outermost layer that everyone passes: the required checks on the server where CI exists, or else the pre-push hook or the agent session gate. |
-| **Protected tests** | Gate tests and acceptance tests. The implementer cannot change them ([testing.md](./testing.md), section 2). |
+| **Protected tests** | Gate tests and acceptance tests. The implementer cannot change them ([testing standard](./knowledge/harness/testing.md), section 2). |
 | **Acceptance example** | One example of a requirement: a starting state, an action, and the expected result. The planner owns it. |
 | **Connecting code** | The code that connects an acceptance example to the product (for example, step definitions or fixtures). The implementer writes it. |
 | **Shared agent context** | What the agents of all members read: AGENTS.md, shared skills, hooks, and check configuration. |

@@ -2,7 +2,7 @@
 
 This file lists the standard documents of an agent-driven project. For each it gives the purpose, the main audience, who maintains it, when to create it, when to update it, and the writing standard. The paths are suggestions; adjust them to the project, then keep them fixed. Writing standards are in [writing-standards.md](./writing-standards.md); templates are in [templates/](./templates/).
 
-**Maintained by**: the role that keeps the document correct. The roles are in [glossary.md](./glossary.md).
+**Maintained by**: the role that keeps the document correct. The roles are in the repository [GLOSSARY.md](../../GLOSSARY.md).
 
 **Writing standard**:
 - **STE**: procedural text, in ASD-STE100 or its principles for non-English docs (the ASD-STE100 section of the writing standards).

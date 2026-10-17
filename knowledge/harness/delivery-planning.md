@@ -1,6 +1,6 @@
 # Delivery Planning Standard
 
-This standard gives the tasks of a planner: write issues and epics, set dependencies and parallel work, verify results, sync status, and report to the owner. It does not name a tool or a platform. The terms are in [glossary.md](./glossary.md). The states and the transitions of an issue are in [workflow.md](./workflow.md). The templates are [templates/story.md](./templates/story.md) and [templates/epic.md](./templates/epic.md).
+This standard gives the tasks of a planner: write issues and epics, set dependencies and parallel work, verify results, sync status, and report to the owner. It does not name a tool or a platform. The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). The states and the transitions of an issue are in [workflow.md](./workflow.md). The templates are [templates/story.md](./templates/story.md) and [templates/epic.md](./templates/epic.md).
 
 ## 1. Scope
 
@@ -19,7 +19,7 @@ This standard gives the tasks of a planner: write issues and epics, set dependen
 
 ## 2. Terms
 
-The terms are in [glossary.md](./glossary.md). Use the functions of your tracker that agree with them (section 10).
+The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functions of your tracker that agree with them (section 10).
 
 ## 3. General rules
 
