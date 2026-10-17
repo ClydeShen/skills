@@ -28,12 +28,12 @@ Read [`docs/README.md`](docs/README.md) when placement is unclear. Read [`knowle
 3. Keep shared knowledge independent of one skill. Keep files required at skill runtime inside that skill's package.
 4. When a document moves or its purpose changes, update every inbound link and the relevant README map in the same change.
 5. When the owner approves a terminology change, update `GLOSSARY.md`, then search the repository and update every affected use. Otherwise, preserve the canonical term.
-6. Record feedback against the lifecycle stage that owns the cause. Promote a finding only after it becomes reusable knowledge or a verified skill change. Before changing feedback intake or triage, read [`research/github-feedback-system-2026-10-18.md`](research/github-feedback-system-2026-10-18.md).
+6. Record feedback against the lifecycle stage that owns the cause. Promote a finding only after it becomes reusable knowledge or a verified skill change.
 7. Follow `.editorconfig`. Finish editing only when the diff contains no unrelated cleanup or duplicate source of truth.
 
 ## Package and release skills
 
-Before changing skill layout, validation, installation, or release behavior, read [`research/skills-sh-publishing-and-repository-layout-2026-10-18.md`](research/skills-sh-publishing-and-repository-layout-2026-10-18.md) and verify time-sensitive claims against current official sources.
+Before changing skill layout, validation, installation, or release behavior, verify time-sensitive claims against current official sources.
 
 - Put released packages below `skills/`. Keep the repository root, `skills/`, and category directories free of `SKILL.md` files that would shadow nested packages.
 - Add a category directory when its first released package needs it. Treat categories as source organization, not skill namespaces.

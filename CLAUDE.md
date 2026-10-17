@@ -14,7 +14,7 @@ skills-ref validate ./skills/<category>/<skill-name>   # Agent Skills format che
 npx skills add . --list                 # repository discovery: each released skill listed exactly once
 ```
 
-`skills-ref` is the reference validator from the Agent Skills specification; the research note on publishing explains the remote and installation checks that follow a push.
+`skills-ref` is the reference validator from the Agent Skills specification.
 
 ## Structured data
 
