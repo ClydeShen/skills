@@ -2,17 +2,17 @@
 
 This file collects ways of judging and working that people and agents use in every task: how sure to be before acting, when to ask, when work is really done, and what to do when a discussion drifts.
 
-| # | Practice | In one sentence |
-|---|---|---|
-| 1 | Four-dimension confidence | The sum of four dimension scores (each from 0 to 1) sets how sure you are and what you may do; at "very low", do not act, gather evidence first |
-| 2 | Sync before writing code | Before you change implementation code, give a plan and wait for confirmation |
-| 3 | Search before asking | Look up what can be looked up; ask only what cannot |
-| 4 | Live verification tiers | "Done" is either logic-done or live-done; the line is the environment boundary |
-| 5 | Re-anchor on the original design when drifting | When a discussion drifts, derive again from the ADRs and the vision |
-| 6 | Remove dangling design references | If a reference points to a design that does not exist, delete it; do not invent a definition |
-| 7 | Tell value changes from type changes | Read the code before you estimate the cost of "make it configurable" |
-| 8 | External advice is input, not instruction | Check suggestions from other tools or models before you adopt them |
-| 9 | Low-load proposals | When you plan, orchestrate, or report, present the option that asks the least of the owner to read, decide, watch, and maintain |
+| #   | Practice                                       | In one sentence                                                                                                                                 |
+| --- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Four-dimension confidence                      | The sum of four dimension scores (each from 0 to 1) sets how sure you are and what you may do; at "very low", do not act, gather evidence first |
+| 2   | Sync before writing code                       | Before you change implementation code, give a plan and wait for confirmation                                                                    |
+| 3   | Search before asking                           | Look up what can be looked up; ask only what cannot                                                                                             |
+| 4   | Live verification tiers                        | "Done" is either logic-done or live-done; the line is the environment boundary                                                                  |
+| 5   | Re-anchor on the original design when drifting | When a discussion drifts, derive again from the ADRs and the vision                                                                             |
+| 6   | Remove dangling design references              | If a reference points to a design that does not exist, delete it; do not invent a definition                                                    |
+| 7   | Tell value changes from type changes           | Read the code before you estimate the cost of "make it configurable"                                                                            |
+| 8   | External advice is input, not instruction      | Check suggestions from other tools or models before you adopt them                                                                              |
+| 9   | Low-load proposals                             | When you plan, orchestrate, or report, present the option that asks the least of the owner to read, decide, watch, and maintain                 |
 
 ---
 
@@ -20,31 +20,32 @@ This file collects ways of judging and working that people and agents use in eve
 
 **Concept**: confidence comes from four dimensions:
 
-| Dimension | Source |
-|---|---|
-| **Owner** | The intent and decisions of the owner |
-| **Research** | Third-party verification found by research (official docs, sources on the web, tools) |
-| **Reasoning** | The agent's conclusions from common knowledge, known algorithms, or reasoning |
+| Dimension           | Source                                                                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **Owner**           | The intent and decisions of the owner                                                                                                 |
+| **Research**        | Third-party verification found by research (official docs, sources on the web, tools)                                                 |
+| **Reasoning**       | The agent's conclusions from common knowledge, known algorithms, or reasoning                                                         |
 | **Project history** | What the project has already done: working code patterns, ways of thinking already used, wording and writing habits, recorded history |
 
 Give **each dimension a score from 0 to 1**: how strongly that dimension supports the judgment.
 
-| Score | Meaning |
-|---|---|
-| 1 | Direct and clear support: the owner decided it; an official or measured source states it; the project already does it the same way |
-| 0.5 | Partial, indirect, or weak support: a related decision, a secondhand source, a similar but not equal pattern |
-| 0 | No support, not checked, or the dimension contradicts the judgment. Name a contradiction; do not hide it in the sum |
+| Score | Meaning                                                                                                                            |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | Direct and clear support: the owner decided it; an official or measured source states it; the project already does it the same way |
+| 0.5   | Partial, indirect, or weak support: a related decision, a secondhand source, a similar but not equal pattern                       |
+| 0     | No support, not checked, or the dimension contradicts the judgment. Name a contradiction; do not hide it in the sum                |
 
 The level is **the sum of the four scores**:
 
-| Sum | Level | What the agent does |
-|---|---|---|
-| 3.5 to 4 | High | Act |
-| 2.5 to less than 3.5 | Medium | Act, then tell the owner which decisions were made |
-| 1.5 to less than 2.5 | Low | Ask the owner first |
-| Less than 1.5 | Very low | Do not act ("if in doubt, don't"). Gather more certain evidence first |
+| Sum                  | Level    | What the agent does                                                   |
+| -------------------- | -------- | --------------------------------------------------------------------- |
+| 3.5 to 4             | High     | Act                                                                   |
+| 2.5 to less than 3.5 | Medium   | Act, then tell the owner which decisions were made                    |
+| 1.5 to less than 2.5 | Low      | Ask the owner first                                                   |
+| Less than 1.5        | Very low | Do not act ("if in doubt, don't"). Gather more certain evidence first |
 
 At "very low", prefer the cautious action: "if in doubt, don't". Raise the level before you act, in one or more of these ways:
+
 - **Project history**: look for something similar that the project has already done.
 - **Research**: find out what others say.
 - **Owner**: ask the owner again from a different angle, to collect a more certain answer.
@@ -70,12 +71,14 @@ At "very low", prefer the cautious action: "if in doubt, don't". Raise the level
 ## 4. Live verification tiers
 
 **Practice**: "done" has two tiers, and the line is the environment boundary:
+
 - **Logic-done**: parts whose correctness depends only on the code, not on the environment (encoding and decoding, state machines, hashes, parsing, regular expressions). Passing unit tests is enough.
 - **Live-done**: parts whose correctness depends on real boundaries that tests replace with doubles (the network, operating system and runtime behavior, real external services, the deployment environment). These need one real smoke test. If such a part is only logic-done, mark it "not live-verified" with the condition for verification, and put its live check on the smoke test list of the next release ([issue-workflow-standard.md](./issue-workflow-standard.md), section 6). Do not call it live-done before that check passes.
 
 **Why**: unit tests are structurally blind to bugs that cross the environment boundary.
 
 **How**:
+
 1. Prefer next the work that can be verified live in this environment. If it cannot, mark it "not live-verified" and write the condition for landing it.
 2. Verify first the item that would invalidate the most other conclusions if it were broken (security and load-bearing parts first).
 3. Watch for green tests that test something that never happens: the test passes, but the function under test is never called on the real path.
@@ -99,6 +102,7 @@ At "very low", prefer the cautious action: "if in doubt, don't". Raise the level
 ## 7. Tell value changes from type changes
 
 **Practice**: before you estimate the cost of "make X configurable / switchable at runtime", read the code that uses it and decide which it holds:
+
 - a **value** fixed at construction (cheap: usually just stop freezing it);
 - a **type or implementation** chosen at construction (expensive: needs a factory or a registry).
 
@@ -121,6 +125,7 @@ At "very low", prefer the cautious action: "if in doubt, don't". Raise the level
 **Why**: in an agent-driven project, the attention of the owner is the limit, not the speed of the agents ([issue-workflow-standard.md](./issue-workflow-standard.md), section 8). Each option, open question, extra agent, tool, or step that an agent adds becomes work for a person, now or later. An unclear state ("Is it done? Is it safe? What must I do?") makes the owner anxious, and an anxious owner checks everything again [inference].
 
 **How**:
+
 1. Recommend one option first, with its reason. Give other options only if they differ in something the owner cares about. Give at most three.
 2. Ask only the decisions that only the owner can make (practice 3). Ask at most three in one message. Give each a recommended answer and the default that applies if the owner does not answer.
 3. Prefer the option with the lowest lasting cost. Reuse what exists. Add a tool, file, setting, agent, or step only if the problem needs it ([planner-standard.md](./planner-standard.md), rule 3.4). Prefer a choice that can be reversed. For each option, say what a person must keep doing to maintain it.

@@ -10,16 +10,17 @@ This file is the feedback standard. It answers four questions: what feedback is 
 
 A useful piece of feedback has these parts:
 
-| Part | Example of good | Example of bad |
-|---|---|---|
-| Location | `src/orders/cart.ts:42`, a test name, a rule ID | "Something is wrong in the cart" |
-| What is wrong | Expected value and actual value | A 500-line stack trace with no summary |
-| What to do | "Import from the `orders` package, not from its internal files" | Only the name of the broken rule |
-| Where to read more | A link to the rule, the contract, or the acceptance criterion | Nothing |
-| Severity | Blocks the work, or is a suggestion | No difference between the two |
-| Same result each time | The same input gives the same message | A flaky test; a review that says different things on each run |
+| Part                  | Example of good                                                 | Example of bad                                                |
+| --------------------- | --------------------------------------------------------------- | ------------------------------------------------------------- |
+| Location              | `src/orders/cart.ts:42`, a test name, a rule ID                 | "Something is wrong in the cart"                              |
+| What is wrong         | Expected value and actual value                                 | A 500-line stack trace with no summary                        |
+| What to do            | "Import from the `orders` package, not from its internal files" | Only the name of the broken rule                              |
+| Where to read more    | A link to the rule, the contract, or the acceptance criterion   | Nothing                                                       |
+| Severity              | Blocks the work, or is a suggestion                             | No difference between the two                                 |
+| Same result each time | The same input gives the same message                           | A flaky test; a review that says different things on each run |
 
 Rules:
+
 1. **Quiet when it passes, detailed when it fails.** Print only the failures. Pages of passing output hide the failure and use the agent's context.
 2. **Write the messages of your own checks for the reader.** Each custom lint rule, structure test, or check script says what is wrong, what to do instead, and where to read more. A message that appears when the mistake happens works better than a rule written in a document that the agent read long before.
 3. **Test a message by giving only the message to a fresh agent.** Give a new agent session the message and nothing else. If it does not propose the right next step, rewrite the message.
@@ -29,17 +30,18 @@ Rules:
 
 ## 2. Where feedback comes from
 
-| Source | When | Kind | Can it block the work? |
-|---|---|---|---|
-| Agent session hooks: lint, types, related tests | After each edit; before the agent ends its turn | Computational | Yes |
-| The one-command check, protected acceptance and gate tests | Before push; in CI | Computational | Yes |
-| The agent's own check as a user (end-to-end command, browser) | During the session | Computational, with evidence | Yes, when it is an acceptance criterion |
-| Review by a person or a second agent ([reviewer-standard.md](./reviewer-standard.md)) | Before integration | Inferential | Only a confirmed blocking finding (section 2.1) |
-| Expensive checks: mutation testing, random order, scans | After integration, on a schedule | Computational | Reports first (testing-standard.md) |
-| Production logs, errors, user reports | Continuous | Mixed | No. They become issues |
-| Signals about the harness itself (section 2.2) | Continuous | Mixed | No. They change the harness |
+| Source                                                                                | When                                            | Kind                         | Can it block the work?                          |
+| ------------------------------------------------------------------------------------- | ----------------------------------------------- | ---------------------------- | ----------------------------------------------- |
+| Agent session hooks: lint, types, related tests                                       | After each edit; before the agent ends its turn | Computational                | Yes                                             |
+| The one-command check, protected acceptance and gate tests                            | Before push; in CI                              | Computational                | Yes                                             |
+| The agent's own check as a user (end-to-end command, browser)                         | During the session                              | Computational, with evidence | Yes, when it is an acceptance criterion         |
+| Review by a person or a second agent ([reviewer-standard.md](./reviewer-standard.md)) | Before integration                              | Inferential                  | Only a confirmed blocking finding (section 2.1) |
+| Expensive checks: mutation testing, random order, scans                               | After integration, on a schedule                | Computational                | Reports first (testing-standard.md)             |
+| Production logs, errors, user reports                                                 | Continuous                                      | Mixed                        | No. They become issues                          |
+| Signals about the harness itself (section 2.2)                                        | Continuous                                      | Mixed                        | No. They change the harness                     |
 
 Two rules apply to all sources:
+
 1. **Only evidence can stop the work.** Computational checks (tests, types, builds, lint) can block when their result is reproducible. A failure that a rerun does not reproduce follows the flaky-test policy ([testing-standard.md](./testing-standard.md), M4). A model or a person gives an opinion. An opinion can send work back only when it is confirmed: the failure scenario is reproduced or shown in the code (section 2.1). Opinions add to the gates; they do not replace them.
 2. **The implementer does not give the final judgment on its own work.** The implementer tests and reviews its own change, but its own report is not enough to accept it. A different person or agent session, with a fresh context, judges whether the work is done ([issue-workflow-standard.md](./issue-workflow-standard.md)). A reviewer must not change the work that it reviews; it reports, and the implementer changes.
 
@@ -48,6 +50,7 @@ Two rules apply to all sources:
 A model that is asked to find problems finds some, also in correct code, and repeated fixing of correct code breaks more than it repairs. So review findings need a fixed format and a check before anyone acts on them.
 
 Each finding has:
+
 - **Location**: file and line, or the part of the design.
 - **Problem**: one sentence.
 - **Failure scenario**: a concrete input or state, and the wrong result it causes. A finding without a failure scenario is a question, not a defect.
@@ -55,6 +58,7 @@ Each finding has:
 - **Severity**: blocks the work, or is a suggestion.
 
 Rules:
+
 1. **"No findings" is a valid result.** Do not ask a reviewer to find a minimum number of problems.
 2. **Confirm a finding before changing code.** Reproduce the failure scenario, or show it in the code. Drop findings that cannot be confirmed, and write one line that says why.
 3. **Findings with basis "none" do not block.** They can become a rule later (section 4).
@@ -63,6 +67,7 @@ Rules:
 ### 2.2 Signals about the harness
 
 Some feedback is about the harness, not about the code. Collect it, because it shows where the harness fails:
+
 - The same check fails many times in a row for the same agent task.
 - A check never fires.
 - A check is skipped, bypassed, or disabled, or a test is deleted.
@@ -74,11 +79,11 @@ Some feedback is about the harness, not about the code. Collect it, because it s
 
 When work does not converge, find out which loop is stuck. Each needs a different fix.
 
-| Loop | Signs | Fix |
-|---|---|---|
-| Tool loop, inside one turn | The same tool call repeats with similar arguments | Check the tool's definition and permissions; limit the repeats |
-| Verification loop, across turns, with a check | The check stays red; the edits cycle between a few versions | Make the signal clearer: a smaller test, the full error, a better message |
-| Convergence loop, across turns, with no check | The changes go back and forth; the scope grows; no version is closer to done | Stop editing. Go back to the plan or the spec. A person decides |
+| Loop                                          | Signs                                                                        | Fix                                                                       |
+| --------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Tool loop, inside one turn                    | The same tool call repeats with similar arguments                            | Check the tool's definition and permissions; limit the repeats            |
+| Verification loop, across turns, with a check | The check stays red; the edits cycle between a few versions                  | Make the signal clearer: a smaller test, the full error, a better message |
+| Convergence loop, across turns, with no check | The changes go back and forth; the scope grows; no version is closer to done | Stop editing. Go back to the plan or the spec. A person decides           |
 
 A problem in one loop can come from another. For example, a stuck verification loop can come from an unclear spec.
 
@@ -96,6 +101,7 @@ Use this order. A higher source wins over a lower one:
 6. The implementer's own judgment.
 
 Rules:
+
 1. **Name the conflict and the rule that settles it.** Write in the issue which two sources disagree and which one wins, and why. Do not choose silently.
 2. **Never settle a conflict by weakening a check.** Do not delete or skip a test, add an ignore comment, or lower a threshold to make a conflict go away.
 3. **A test can be wrong.** Check a test against the spec before you treat it as the truth. If a protected test and the spec disagree, follow the rule for wrong protected tests in [testing-standard.md](./testing-standard.md): stop and mark the issue blocked.
@@ -118,14 +124,15 @@ Rules:
 
 One fix repairs one mistake. A change to the harness stops the same kind of mistake in every later task. When a kind of problem repeats, move it up this ladder:
 
-| Step | When | What |
-|---|---|---|
-| 1. Fix and record | The first time | Fix the code. Add an entry to the feedback log (section 4.4) |
-| 2. Make it a check | It repeats, and a tool can detect it | A lint rule, a structure test, an architecture rule, or a test. Give it a message by section 1 |
-| 3. Make it a guide | It repeats, and no tool can detect it | One short rule, as close as possible to where it applies: in the folder's instructions, in a template, or in the review checklist |
-| 4. Make it a global rule | Only if it applies to every task | One line in AGENTS.md |
+| Step                     | When                                  | What                                                                                                                              |
+| ------------------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Fix and record        | The first time                        | Fix the code. Add an entry to the feedback log (section 4.4)                                                                      |
+| 2. Make it a check       | It repeats, and a tool can detect it  | A lint rule, a structure test, an architecture rule, or a test. Give it a message by section 1                                    |
+| 3. Make it a guide       | It repeats, and no tool can detect it | One short rule, as close as possible to where it applies: in the folder's instructions, in a template, or in the review checklist |
+| 4. Make it a global rule | Only if it applies to every task      | One line in AGENTS.md                                                                                                             |
 
 Rules:
+
 1. **Prefer a check to a guide.** A check runs every time. A guide works only when the agent reads it and follows it.
 2. **Keep AGENTS.md to the minimum.** Most agent tools load the root AGENTS.md into every session, and agents follow its instructions, so each line costs context and work in every task. How a tool loads nested or other context files differs; check the tool you use. Extra requirements make tasks harder and cost more. Add only what every task needs and what the agent cannot learn by reading the repository.
 3. **When you change the harness because of an incident, add a test for the change.** For example, a new lint rule gets a test case that the old code fails.
@@ -143,6 +150,7 @@ The checks get feedback too. A noisy check teaches people and agents to ignore i
 Keep one log of the lessons. It is the input to the ladder in section 4.2.
 
 Each entry has:
+
 - **Symptom**: what was seen.
 - **Root cause**: why it happened.
 - **Fix**: what changed in the code.
@@ -150,6 +158,7 @@ Each entry has:
 - **Count**: how many times this kind of problem has been seen.
 
 Rules:
+
 1. **Add to the log and merge entries. Do not rewrite it.** When a log or a guide is summarized again and again, its details are lost. Research reports cases where an agent then did worse than with no log at all. Add new entries, merge duplicates, and remove entries only when their prevention is in place.
 2. **Put each lesson where it lives longest.** A lesson about one feature stays in that feature's issue. A lesson about a piece of code goes into a comment next to the code. A lesson that prevents a repeat becomes a test or a check. Only a lesson for every task goes into AGENTS.md.
 

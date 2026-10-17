@@ -6,37 +6,37 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 
 ## 1. Core ideas
 
-| # | Idea | Why |
-|---|---|---|
-| 1 | **The repository is the system of record for durable project knowledge.** Conversations and session memory get lost; documents, issues, and code do not. Agents get their context by reading the repository, so decisions, constraints, and terms must be written there. State outside it (agent sessions, tool settings, external services) is not covered: link it, record it, or verify it again before you rely on it | A new agent or a new session needs no verbal handoff |
-| 2 | **Decisions carry a date and a source, and are recorded at once** ([document-writing-standards.md](./document-writing-standards.md), section 4). Write important decisions as ADRs. To change a decision, write a new ADR first | Otherwise documents contradict each other and nobody knows which one is current |
-| 3 | **What can be checked automatically is not left to discipline.** Mark every rule as "automatic" or "review", and turn review rules into automatic checks where you can. Instructions to an agent (AGENTS.md, prompts) are suggestions; tools (linters, structural tests, hooks, CI) are physical constraints | Agents miss things, and so do people; a rule an agent may skip is not a guardrail |
-| 4 | **Contracts first at the seams that matter.** Where components are built in parallel, are replaced, or cross a process boundary, define the interfaces first and let components depend only on them. Check by a tool only the boundaries whose violation has a named cost | Components can be built in parallel and replaced independently; problems at the seams show up early |
-| 5 | **Prove the thinnest end-to-end path first, then thicken it.** At the start of a milestone, run the whole path once with the least content possible | Building layer by layer pushes integration problems to the end |
-| 6 | **Acceptance criteria must be checkable by a command.** Each criterion has a command, a visible result, or a concrete value. The planner runs the commands itself | "It's done" is not evidence |
-| 7 | **Search before asking** ([judgment-practices.md](./judgment-practices.md), section 3) | Fewer interruptions, better questions |
-| 8 | **Grade the evidence.** Mark each fact as official, secondhand, inference, or measured. Take version numbers and dates from a lookup, not from memory | Tools and versions change fast; memory goes stale |
-| 9 | **Separate planning from implementation.** Planners read code, write plans, and verify results. Implementers write code from stories. They communicate only through the tracker | Clean context, clear responsibility, and the plan cannot be changed quietly during implementation |
-| 10 | **Clean up at milestone boundaries.** Every epic that produces code ends with a cleanup story | Technical debt does not pile up; the next epic builds on a tidy structure |
-| 11 | **Decide at the last responsible moment.** A default is not a commitment; name the milestone that settles it. A choice that can be configuration is not a one-time decision | Keeps options open and avoids locking in early |
-| 12 | **Machine details stay out of the repository.** Machines, paths, and secrets go only in files that are not committed | The repository may be public; docs do not break when you change machines |
-| 13 | **Configure a trusted work environment first; writing code comes late.** The main early work is to set the limits before implementation: what the agent may do, what it may not do, and how each rule is checked | Trust comes from narrowing what the agent can produce. This applies most to new projects; retrofitting it onto an inconsistent codebase can cost more than it returns |
-| 14 | **Review moves; it does not disappear.** Tools enforce style, so line-by-line review of style matters less. Review moves **left** to the plan (stories, contracts, acceptance criteria), moves **up** to the guardrails (are the rules and tests strong enough?), and **stays** on behaviour and security | Tools cannot tell whether code does the right thing or is secure, and a weak test passes broken code |
-| 15 | **"Ready for agent" is a strong signal, and a health check of the delivery system.** An issue is ready only when an implementer can act on it at high confidence without asking. How often issues are ready, falsely ready, or blocked shows whether the roles upstream have done their part | An agent given a vague issue guesses instead of asking; when implementation is fast, the bottleneck moves to producing ready issues |
+| #   | Idea                                                                                                                                                                                                                                                                                                                                                                                                                      | Why                                                                                                                                                                   |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **The repository is the system of record for durable project knowledge.** Conversations and session memory get lost; documents, issues, and code do not. Agents get their context by reading the repository, so decisions, constraints, and terms must be written there. State outside it (agent sessions, tool settings, external services) is not covered: link it, record it, or verify it again before you rely on it | A new agent or a new session needs no verbal handoff                                                                                                                  |
+| 2   | **Decisions carry a date and a source, and are recorded at once** ([document-writing-standards.md](./document-writing-standards.md), section 4). Write important decisions as ADRs. To change a decision, write a new ADR first                                                                                                                                                                                           | Otherwise documents contradict each other and nobody knows which one is current                                                                                       |
+| 3   | **What can be checked automatically is not left to discipline.** Mark every rule as "automatic" or "review", and turn review rules into automatic checks where you can. Instructions to an agent (AGENTS.md, prompts) are suggestions; tools (linters, structural tests, hooks, CI) are physical constraints                                                                                                              | Agents miss things, and so do people; a rule an agent may skip is not a guardrail                                                                                     |
+| 4   | **Contracts first at the seams that matter.** Where components are built in parallel, are replaced, or cross a process boundary, define the interfaces first and let components depend only on them. Check by a tool only the boundaries whose violation has a named cost                                                                                                                                                 | Components can be built in parallel and replaced independently; problems at the seams show up early                                                                   |
+| 5   | **Prove the thinnest end-to-end path first, then thicken it.** At the start of a milestone, run the whole path once with the least content possible                                                                                                                                                                                                                                                                       | Building layer by layer pushes integration problems to the end                                                                                                        |
+| 6   | **Acceptance criteria must be checkable by a command.** Each criterion has a command, a visible result, or a concrete value. The planner runs the commands itself                                                                                                                                                                                                                                                         | "It's done" is not evidence                                                                                                                                           |
+| 7   | **Search before asking** ([judgment-practices.md](./judgment-practices.md), section 3)                                                                                                                                                                                                                                                                                                                                    | Fewer interruptions, better questions                                                                                                                                 |
+| 8   | **Grade the evidence.** Mark each fact as official, secondhand, inference, or measured. Take version numbers and dates from a lookup, not from memory                                                                                                                                                                                                                                                                     | Tools and versions change fast; memory goes stale                                                                                                                     |
+| 9   | **Separate planning from implementation.** Planners read code, write plans, and verify results. Implementers write code from stories. They communicate only through the tracker                                                                                                                                                                                                                                           | Clean context, clear responsibility, and the plan cannot be changed quietly during implementation                                                                     |
+| 10  | **Clean up at milestone boundaries.** Every epic that produces code ends with a cleanup story                                                                                                                                                                                                                                                                                                                             | Technical debt does not pile up; the next epic builds on a tidy structure                                                                                             |
+| 11  | **Decide at the last responsible moment.** A default is not a commitment; name the milestone that settles it. A choice that can be configuration is not a one-time decision                                                                                                                                                                                                                                               | Keeps options open and avoids locking in early                                                                                                                        |
+| 12  | **Machine details stay out of the repository.** Machines, paths, and secrets go only in files that are not committed                                                                                                                                                                                                                                                                                                      | The repository may be public; docs do not break when you change machines                                                                                              |
+| 13  | **Configure a trusted work environment first; writing code comes late.** The main early work is to set the limits before implementation: what the agent may do, what it may not do, and how each rule is checked                                                                                                                                                                                                          | Trust comes from narrowing what the agent can produce. This applies most to new projects; retrofitting it onto an inconsistent codebase can cost more than it returns |
+| 14  | **Review moves; it does not disappear.** Tools enforce style, so line-by-line review of style matters less. Review moves **left** to the plan (stories, contracts, acceptance criteria), moves **up** to the guardrails (are the rules and tests strong enough?), and **stays** on behaviour and security                                                                                                                 | Tools cannot tell whether code does the right thing or is secure, and a weak test passes broken code                                                                  |
+| 15  | **"Ready for agent" is a strong signal, and a health check of the delivery system.** An issue is ready only when an implementer can act on it at high confidence without asking. How often issues are ready, falsely ready, or blocked shows whether the roles upstream have done their part                                                                                                                              | An agent given a vague issue guesses instead of asking; when implementation is fast, the bottleneck moves to producing ready issues                                   |
 
 ---
 
 ## 2. Phases at a glance
 
-| Phase | Purpose | Main outputs |
-|---|---|---|
-| 0 Define | Say what to build, what not to build, and which words to use | Product definition, vision and principles, scope, glossary |
-| 1 Decide | Record decisions, constraints, and open questions | ADRs, global constraint table, open questions, research notes |
-| 2 Architect | Fix boundaries, interfaces, and the directory structure | Architecture diagrams, contracts, dependency classes, structure and naming rules, tech stack |
-| 3 Guardrails | Turn rules into tools and checks | Code style, test strategy, security and data requirements, Git conventions, hooks, CI |
-| 4 Plan | Break goals into executable, trackable work | Roadmap, milestone integration design, workflow, epics and stories |
-| 5 Operate | Let planners, implementers, and reviewers work together, and release the result | AGENTS.md, handoff document, loop cards, cleanup stories, as-built docs, release runbook, team agreements |
-| 6 Maintain | Keep docs and code consistent over time | Consistency reviews, change process, evidence refresh |
+| Phase        | Purpose                                                                         | Main outputs                                                                                              |
+| ------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| 0 Define     | Say what to build, what not to build, and which words to use                    | Product definition, vision and principles, scope, glossary                                                |
+| 1 Decide     | Record decisions, constraints, and open questions                               | ADRs, global constraint table, open questions, research notes                                             |
+| 2 Architect  | Fix boundaries, interfaces, and the directory structure                         | Architecture diagrams, contracts, dependency classes, structure and naming rules, tech stack              |
+| 3 Guardrails | Turn rules into tools and checks                                                | Code style, test strategy, security and data requirements, Git conventions, hooks, CI                     |
+| 4 Plan       | Break goals into executable, trackable work                                     | Roadmap, milestone integration design, workflow, epics and stories                                        |
+| 5 Operate    | Let planners, implementers, and reviewers work together, and release the result | AGENTS.md, handoff document, loop cards, cleanup stories, as-built docs, release runbook, team agreements |
+| 6 Maintain   | Keep docs and code consistent over time                                         | Consistency reviews, change process, evidence refresh                                                     |
 
 ---
 
@@ -45,6 +45,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 ### Phase 0: Define
 
 **What to do**
+
 1. Write a one-sentence product definition, then expand it into a paragraph. The sentence tells an outsider who it is for and what it does.
 2. Write the vision and **first principles**. Number them. For each, say why it holds and how to test it. Do not write a hypothesis as a fact.
 3. Write the **scope and non-goals**: what you will not build, and what you might build later.
@@ -55,12 +56,14 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 **Done when**: the glossary covers every concept that recurs in the docs; a new reader can say what the project will not do after reading the vision.
 
 **Common mistakes**
+
 - The same word means different things in different docs.
 - A hypothesis to be tested is written as a settled fact.
 
 ### Phase 1: Decide
 
 **What to do**
+
 1. **ADRs**: one per important decision: the decision, the reasons, the options considered, and the consequences. Do not edit an accepted ADR; write a new one. Template: [templates/adr-template.md](./templates/adr-template.md).
 2. **Global constraint table**: the constraints that every phase and every branch must follow, each with an ID and its source ADR. Breaking one requires a new ADR first.
 3. **Open questions**: each with a decision date and the candidate options. A question without a decision date stays open forever.
@@ -72,6 +75,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 **Done when**: every constraint traces back to an ADR; every open question has a decision date.
 
 **Common mistakes**
+
 - A decision exists only in a conversation.
 - An ADR changes, but the documents that cite it do not. After you change an ADR, search for every reference and update it.
 - Version numbers, dates, and tool capabilities written from memory.
@@ -79,6 +83,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 ### Phase 2: Architect
 
 **What to do**
+
 1. **Architecture diagrams**: for example the C4 model (context, containers, components), and a sequence diagram of the key flow. Show who depends on whom.
 2. **Contracts**: the interfaces between components. Where a component must be isolated or replaced, use ports and adapters: the core depends only on ports, concrete implementations are adapters, and one **composition entry point** for each executable knows the concrete implementations. Data types that cross a process or network boundary must be serializable. Reuse existing standards. Add an abstraction layer only if you can name the failure or the change that it isolates.
 3. **Dependency classes**: put every dependency in one class: hard (part of the architecture), configurable (swapping it is a config change), or optional (the system runs without it). Say when each default must be chosen.
@@ -91,6 +96,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 **Done when**: the dependency-direction rules can be written as an automatic check; every port has explicit input and output types.
 
 **Common mistakes**
+
 - The docs say "the core does not depend on implementations", but no tool checks it.
 - Choosing every tool at once. Mark the milestone at which each tool is introduced, and choose it then.
 - Experiment tools treated as product. If the project tests ideas first, say which parts are validation tools (not shipped) and which are product components.
@@ -98,6 +104,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 ### Phase 3: Guardrails
 
 **What to do**
+
 1. **Code style**: mark every rule **[auto]** (which tool and rule checks it) or **[review]**. Cover at least: dependency inversion, function style, control flow, error handling, data and immutability, types and modules, naming, comments. State when a rule may be broken, and require a one-line "why" comment next to the code.
 2. **Test strategy and test ownership**: [testing-standard.md](./testing-standard.md).
 3. **Security and data requirements**: [guardrails-standard.md](./guardrails-standard.md), section 3.
@@ -113,6 +120,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 **Done when**: every style rule is marked [auto] or [review]; a newcomer can clone the repository and learn in one command whether the code is acceptable.
 
 **Common mistakes**
+
 - Rules exist only in the docs, or only in agent instructions, with no tool behind them.
 - Treating "the hook passed" as "the code is acceptable".
 - Tests chase count and coverage but miss the contracts and invariants.
@@ -120,6 +128,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 ### Phase 4: Plan
 
 **What to do**
+
 1. **Roadmap**: phased, with **observable** entry and exit criteria for every milestone. The global constraint table lives here too.
 2. **Milestone integration design** (one per milestone, written at its start):
    1. List the components and mark which are core and which are temporary.
@@ -135,6 +144,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 **Done when**: an implementer can read any one story and know what to do and when it is done; anyone can say when any epic may close.
 
 **Common mistakes**
+
 - Slicing by layer (finish all of layer A, then layer B), which pushes integration to the end.
 - Acceptance criteria such as "implement feature X", with nothing to run.
 - An epic that becomes a bucket, with no theme and no exit criterion.
@@ -143,6 +153,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 ### Phase 5: Operate
 
 **What to do**
+
 1. **Roles**: name who holds each role ([GLOSSARY.md](../../GLOSSARY.md)). Each issue has exactly one implementer at a time.
 2. **AGENTS.md**: a thin entry point for implementing agents (about 60 lines is a guide, not a limit; remove each line that no task needs): commands, the way of working, the team agreements for agents, and where to read first. Do not describe the current state of the codebase here. Template: [templates/implementer-agents-md-template.md](./templates/implementer-agents-md-template.md).
 3. **Handoff document**: where a new session starts: what to read, what to do, what to verify, what to watch out for, and what not to do.
@@ -159,6 +170,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 **Done when**: a new agent with no background can start work by reading `AGENTS.md` and a story; every close by a planner rests on command output; no two issues in progress change the same file; every loop card is complete and the workflow passes the closure rules.
 
 **Common mistakes**
+
 - An implementer's own report is taken as fact.
 - Design docs used as the current state of the code.
 - As-built docs that restate the code, or cite line numbers, and go stale quickly.
@@ -169,6 +181,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 ### Phase 6: Maintain
 
 **What to do**
+
 1. **Consistency review**: at the end of every milestone, and whenever the docs grow noticeably. Check counts, IDs, terms, cross-references, and differences between defaults and reality.
 2. **Change process**:
    - Breaking a constraint requires a new ADR first.
@@ -187,21 +200,21 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 
 The rules are written for several people and several agents working in parallel. A smaller project drops what it does not need.
 
-| Size | What to do |
-|---|---|
-| Small (one or two people, a few weeks to a few months, one package) | The Required items of the checklist. Keep each document short |
-| Medium (a few people plus agents, several months, several packages) | The Required items, and the Recommended items that fit. Contract-first for the main seams. The cleanup stories can be merged into one per milestone |
-| Large (many people and agents, long-lived) | The full checklist. Set up CI early. Implement every security requirement. Give the as-built docs and the consistency reviews a fixed maintainer and cadence |
+| Size                                                                | What to do                                                                                                                                                   |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Small (one or two people, a few weeks to a few months, one package) | The Required items of the checklist. Keep each document short                                                                                                |
+| Medium (a few people plus agents, several months, several packages) | The Required items, and the Recommended items that fit. Contract-first for the main seams. The cleanup stories can be merged into one per milestone          |
+| Large (many people and agents, long-lived)                          | The full checklist. Set up CI early. Implement every security requirement. Give the as-built docs and the consistency reviews a fixed maintainer and cadence |
 
 Mark a Recommended item that does not fit as "n/a" with the reason. Required items apply to every project.
 
 Size is one axis. The kind of project is another, and it decides which items fit:
 
-| Kind of project | What changes |
-|---|---|
-| Frontend application | verify-as-user uses a browser tool; the last gate is often a hosting platform's checks or the pre-push hook |
-| Backend service | verify-as-user calls the API; logs and traces matter most (agent-log-access) |
-| Library or command-line tool | verify-as-user installs the package and runs one example; no running service, so logs mean check and CI results |
-| No CI or hosting server | The last gate is the pre-push hook or the agent session gate. Write the gap down ([guardrails-standard.md](./guardrails-standard.md), section 1, rule 4) |
+| Kind of project              | What changes                                                                                                                                             |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Frontend application         | verify-as-user uses a browser tool; the last gate is often a hosting platform's checks or the pre-push hook                                              |
+| Backend service              | verify-as-user calls the API; logs and traces matter most (agent-log-access)                                                                             |
+| Library or command-line tool | verify-as-user installs the package and runs one example; no running service, so logs mean check and CI results                                          |
+| No CI or hosting server      | The last gate is the pre-push hook or the agent session gate. Write the gap down ([guardrails-standard.md](./guardrails-standard.md), section 1, rule 4) |
 
 How much an agent may do alone is a third axis. It follows the autonomy levels in `scoring.autonomy` of [setup-checklist.yaml](./setup-checklist.yaml), not the score.

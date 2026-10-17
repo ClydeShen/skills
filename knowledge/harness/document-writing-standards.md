@@ -43,30 +43,30 @@ _Avoid_: purchase, booking (Booking is only a reserved time slot)
 
 ASD-STE100 (Simplified Technical English) is a controlled form of English that the aerospace industry created for maintenance documentation. It has writing rules and a dictionary of approved words, each with one meaning. The official text is free from asd-ste100.org. The rules that matter most here (rule numbers of Issue 9, from third-party summaries):
 
-| Rule | Content |
-|---|---|
-| 1.1–1.3 | Use only approved words, only as their approved part of speech and with their approved meaning |
-| 2.1 | Write noun clusters of no more than three nouns |
-| 3.6 | Use the active voice (in descriptive text, use the passive only when the agent is unknown) |
-| 5.1 | Write short sentences (no more than 20 words in procedural sentences) |
-| 5.2 | Write only one instruction in each sentence, unless the actions occur at the same time |
-| 5.3 | Write instructions in the imperative |
+| Rule    | Content                                                                                                                                                           |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.1–1.3 | Use only approved words, only as their approved part of speech and with their approved meaning                                                                    |
+| 2.1     | Write noun clusters of no more than three nouns                                                                                                                   |
+| 3.6     | Use the active voice (in descriptive text, use the passive only when the agent is unknown)                                                                        |
+| 5.1     | Write short sentences (no more than 20 words in procedural sentences)                                                                                             |
+| 5.2     | Write only one instruction in each sentence, unless the actions occur at the same time                                                                            |
+| 5.3     | Write instructions in the imperative                                                                                                                              |
 | 7.1–7.3 | Safety instructions: use a fixed word for the risk level (for example, WARNING, CAUTION); start with a clear command or condition; explain the risk or the result |
 
 ### Which documents use it
 
 The principle: **procedural text** (it tells the reader what to do and in which order) follows STE; **explanatory text** (it explains why, or compares options) follows the explanatory standard ("Writing explanatory documents" below). If procedural text is misread, the reader does the wrong thing, and an agent follows text literally. STE's "one instruction per sentence" also makes every step checkable.
 
-| Document | STE? | Reason |
-|---|---|---|
-| Agent operating procedures (skills, the operating standard of a planning or implementing agent) | **Yes** | An agent executes them sentence by sentence; ambiguity becomes a wrong action |
-| The "way of working" and "rules" parts of `AGENTS.md` | **Yes** | Same reason |
-| Runbooks (deploy, release, roll back, recover, rotate secrets) | **Yes** | Mistakes are expensive, and people read them under pressure |
-| Checklists, the workflow, and team agreements | **Yes** | Each item is one checkable action |
-| The "scope" and "acceptance" sections of a story | **Yes** | Each item is one change or one checkable condition |
-| Safety warnings | **Yes** (rules in section 7 of STE) | State the risk first, and the result |
-| ADRs, vision, research notes, architecture descriptions | No | They explain trade-offs and uncertainty; use the explanatory standard |
-| The handoff document | Partly: background in explanatory style; "first steps" and "do not" lists in STE | Mixed content |
+| Document                                                                                        | STE?                                                                             | Reason                                                                        |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Agent operating procedures (skills, the operating standard of a planning or implementing agent) | **Yes**                                                                          | An agent executes them sentence by sentence; ambiguity becomes a wrong action |
+| The "way of working" and "rules" parts of `AGENTS.md`                                           | **Yes**                                                                          | Same reason                                                                   |
+| Runbooks (deploy, release, roll back, recover, rotate secrets)                                  | **Yes**                                                                          | Mistakes are expensive, and people read them under pressure                   |
+| Checklists, the workflow, and team agreements                                                   | **Yes**                                                                          | Each item is one checkable action                                             |
+| The "scope" and "acceptance" sections of a story                                                | **Yes**                                                                          | Each item is one change or one checkable condition                            |
+| Safety warnings                                                                                 | **Yes** (rules in section 7 of STE)                                              | State the risk first, and the result                                          |
+| ADRs, vision, research notes, architecture descriptions                                         | No                                                                               | They explain trade-offs and uncertainty; use the explanatory standard         |
+| The handoff document                                                                            | Partly: background in explanatory style; "first steps" and "do not" lists in STE | Mixed content                                                                 |
 
 ### How non-English documents can borrow it
 

@@ -20,15 +20,15 @@ checked_on: "2026-10-14"
 project:
   name: ""
   language: ""
-  size: ""          # small | medium | large
-  type: ""          # what the project produces, for example "frontend app", "backend service", "library", "CLI"
-  last_gate: ""     # the outermost check layer that everyone passes, for example "CI required check" or "pre-push hook (no CI)"
-  throughput: ""    # tolerant | strict (testing-standard.md, M4; issue-workflow-standard.md, section 4.2)
+  size: "" # small | medium | large
+  type: "" # what the project produces, for example "frontend app", "backend service", "library", "CLI"
+  last_gate: "" # the outermost check layer that everyone passes, for example "CI required check" or "pre-push hook (no CI)"
+  throughput: "" # tolerant | strict (testing-standard.md, M4; issue-workflow-standard.md, section 4.2)
   start_date: ""
   score:
-    value: ""       # for example "64/132 = 48%"
-    core: ""        # for example "9/14"
-    autonomy: ""    # the highest level in `scoring.autonomy` whose items are all done
+    value: "" # for example "64/132 = 48%"
+    core: "" # for example "9/14"
+    autonomy: "" # the highest level in `scoring.autonomy` whose items are all done
     scored_on: ""
 
 fields:
@@ -78,10 +78,24 @@ scoring:
       needs: []
     - level: unattended-task
       means: An agent takes one task to the end without a person watching. A person checks the evidence afterwards.
-      needs: [one-command-check, agent-session-hooks, protect-checks, test-ownership, deterministic-tests]
+      needs:
+        [
+          one-command-check,
+          agent-session-hooks,
+          protect-checks,
+          test-ownership,
+          deterministic-tests,
+        ]
     - level: unattended-backlog
       means: An agent takes issues from the tracker one after another.
-      needs: [required-check-on-server, verify-as-user, verification-flow, story-spec, ready-done-blocked]
+      needs:
+        [
+          required-check-on-server,
+          verify-as-user,
+          verification-flow,
+          story-spec,
+          ready-done-blocked,
+        ]
     - level: parallel
       means: Several implementers work at the same time.
       needs: [contracts, boundary-check, parallel-work-rules, merge-queue]
@@ -95,7 +109,6 @@ scoring:
     A project's situation shows in its own score and in its n/a items.
 
 items:
-
   # ---------------------------------------------------------------- Phase 0: Define
 
   - id: product-definition
@@ -307,7 +320,11 @@ items:
     harness: { role: guide, control: human, timing: feedforward }
     why: Agents add libraries they know. A list of chosen and rejected tools stops new dependencies that nobody decided on.
     weight_reason: Guides tool choice; a lock file review catches what it misses.
-    see: [delivery-phases-overview.md#phase-2-architect, language-tooling-profiles.md]
+    see:
+      [
+        delivery-phases-overview.md#phase-2-architect,
+        language-tooling-profiles.md,
+      ]
     status: todo
 
   - id: configuration-format
@@ -374,7 +391,11 @@ items:
       Agents read every line. Pages of passing output waste context and hide the failure. A message that says
       what to do at the moment of the mistake works better than a rule the agent read long before.
     weight_reason: Makes the sensors more useful; the sensors work without it.
-    see: [testing-standard.md, feedback-loops-standard.md#1-what-useful-feedback-is]
+    see:
+      [
+        testing-standard.md,
+        feedback-loops-standard.md#1-what-useful-feedback-is,
+      ]
     status: todo
 
   - id: agent-session-hooks
@@ -392,7 +413,12 @@ items:
       Git hooks run only at commit and push, but an agent edits many times per task. Session hooks give
       feedback before the agent builds on a mistake, and stop it from reporting "done" while checks fail.
     weight_reason: The earliest deterministic sensor; it removes "done" claims that the checks contradict.
-    see: [guardrails-standard.md#1-layers-of-checks, testing-standard.md, feedback-loops-standard.md#3-when-feedback-conflicts]
+    see:
+      [
+        guardrails-standard.md#1-layers-of-checks,
+        testing-standard.md,
+        feedback-loops-standard.md#3-when-feedback-conflicts,
+      ]
     status: todo
 
   - id: boundary-check
@@ -404,7 +430,11 @@ items:
     harness: { role: sensor, control: computational, timing: pre-integration }
     why: Agents take the shortest path, which often crosses a layer. Only a tool keeps the architecture intact over many changes.
     weight_reason: Architecture erosion is silent and hard to undo; only a computational check stops it reliably.
-    see: [delivery-phases-overview.md#phase-2-architect, guardrails-standard.md#1-layers-of-checks]
+    see:
+      [
+        delivery-phases-overview.md#phase-2-architect,
+        guardrails-standard.md#1-layers-of-checks,
+      ]
     status: todo
 
   - id: test-strategy
@@ -524,7 +554,11 @@ items:
     harness: { role: sensor, control: computational, timing: pre-integration }
     why: Covers people and every tool, not only the agent that has session hooks.
     weight_reason: Can be skipped with --no-verify; it gives earlier feedback, it is not the gate.
-    see: [guardrails-standard.md#1-layers-of-checks, guardrails-standard.md#2-git-conventions]
+    see:
+      [
+        guardrails-standard.md#1-layers-of-checks,
+        guardrails-standard.md#2-git-conventions,
+      ]
     status: todo
 
   - id: layers-of-checks
@@ -798,7 +832,11 @@ items:
       A person asks about a vague issue; an agent guesses. Ready keeps vague work away from agents, Done makes
       completion a verified fact, and Blocked gives the agent a legal way to stop instead of guessing.
     weight_reason: Decides what agents receive and what counts as done, but it is a definition that people apply, not a check.
-    see: [issue-workflow-standard.md#2-states, feedback-loops-standard.md#3-when-feedback-conflicts]
+    see:
+      [
+        issue-workflow-standard.md#2-states,
+        feedback-loops-standard.md#3-when-feedback-conflicts,
+      ]
     status: todo
 
   - id: workflow-states
@@ -848,7 +886,11 @@ items:
     weight_reason: >-
       The guide that every agent meets, every time. Weight 2, not 3: it is a guide, and context files did not raise task
       success in an evaluation while they raised cost by over 20% (arXiv 2602.11988). Its value is in being short.
-    see: [templates/implementer-agents-md-template.md, feedback-loops-standard.md#42-later-into-the-harness]
+    see:
+      [
+        templates/implementer-agents-md-template.md,
+        feedback-loops-standard.md#42-later-into-the-harness,
+      ]
     status: todo
 
   - id: handoff-document
@@ -884,7 +926,11 @@ items:
     harness: { role: guide, control: human, timing: feedforward }
     why: Parallel agents that touch the same files create conflicts that someone must resolve by hand.
     weight_reason: Important with many implementers; not needed with one.
-    see: [guardrails-standard.md#5-parallel-work-and-merge-conflicts, planner-standard.md]
+    see:
+      [
+        guardrails-standard.md#5-parallel-work-and-merge-conflicts,
+        planner-standard.md,
+      ]
     status: todo
 
   - id: merge-queue
@@ -966,7 +1012,8 @@ items:
     weight: 1
     check: Set up the as-built docs. Use a template, one page per package, `covers` and `verified-at`, and a check script.
     done_when: The check commands report no stale page.
-    harness: { role: guide+sensor, control: computational, timing: post-integration }
+    harness:
+      { role: guide+sensor, control: computational, timing: post-integration }
     why: Agents read docs as truth. Stale docs guide them wrong; a staleness check shows which pages to distrust.
     weight_reason: Keeps guides accurate over time; the code itself remains the source.
     see: [delivery-phases-overview.md#phase-5-operate]
@@ -978,7 +1025,8 @@ items:
     weight: 1
     check: If the environment has a code indexing tool, re-index in each cleanup story.
     done_when: Each cleanup story records the re-index.
-    harness: { role: foundation, control: computational, timing: post-integration }
+    harness:
+      { role: foundation, control: computational, timing: post-integration }
     why: Agents search a stale index and miss new code.
     weight_reason: A convenience that depends on the environment.
     see: [delivery-phases-overview.md#phase-5-operate]
@@ -1026,7 +1074,12 @@ items:
       Checks prove that code passes; they do not make the team understand it. Without reading, the team owns more and
       more code that it cannot explain (comprehension debt), and the owner can no longer judge what the agents do.
     weight_reason: A human sensor for what no tool measures; it strengthens the harness but does not stop wrong work by itself.
-    see: [social-contract.md, issue-workflow-standard.md#8-delivery-health, judgment-practices.md]
+    see:
+      [
+        social-contract.md,
+        issue-workflow-standard.md#8-delivery-health,
+        judgment-practices.md,
+      ]
     status: todo
 
   # ---------------------------------------------------------------- Phase 6: Maintain
@@ -1091,7 +1144,11 @@ items:
       One fix repairs one mistake; a change to the harness stops the same kind of mistake in every later task.
       Without a log, the same lesson is learned again in each session.
     weight_reason: The way the harness improves; the harness works without it, but does not get better.
-    see: [feedback-loops-standard.md#42-later-into-the-harness, feedback-loops-standard.md#44-the-feedback-log]
+    see:
+      [
+        feedback-loops-standard.md#42-later-into-the-harness,
+        feedback-loops-standard.md#44-the-feedback-log,
+      ]
     status: todo
 
   - id: change-process
