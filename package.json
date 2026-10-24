@@ -1,0 +1,17 @@
+{
+  "name": "personal-agent-skills",
+  "private": true,
+  "engines": {
+    "node": ">=24.0.0 <25"
+  },
+  "scripts": {
+    "test": "node --test evals/harness.test.mjs",
+    "test:transport": "node --test evals/provider.test.mjs",
+    "eval": "node evals/run.mjs",
+    "eval:model": "node evals/run.mjs --mode model",
+    "eval:nvidia": "node evals/run.mjs --mode model --provider nvidia"
+  },
+  "devDependencies": {
+    "promptfoo": "0.125.0"
+  }
+}
