@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "domain-modeling": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/domain-modeling/SKILL.md",
+      "computedHash": "f377a1341e1b368833cfe5889ace3e61d7df48d7a9e5da9253dba75d062bbfbc"
+    },
+    "research": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/research/SKILL.md",
+      "computedHash": "2c8b768d5f0309eaea9f92ef740101e813645b39aef88fb82733a52eae23dc0b"
+    }
+  }
+}
