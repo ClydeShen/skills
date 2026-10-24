@@ -1,0 +1,16 @@
+{
+  "description": "Shared repository checks at handoff; review and trust through /hooks.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"const c=require('node:child_process');const p=require('node:path');const root=c.execFileSync('git',['rev-parse','--show-toplevel'],{encoding:'utf8'}).trim();const r=c.spawnSync(process.execPath,[p.join(root,'harness','stop-hook.mjs')],{stdio:'inherit'});process.exit(Number.isInteger(r.status)?r.status:1)\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

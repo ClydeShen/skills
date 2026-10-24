@@ -14,7 +14,7 @@ npm test
 npm run eval
 ```
 
-`npm test` 检查评分逻辑和样例隔离。`npm run eval` 用合成回答运行 Promptfoo，检验 prompt 渲染、断言和结果输出；它不调用模型。首次安装需要网络，安装后基础检查不需要模型 API 或凭证。
+`npm test` 检查共享 harness、评分逻辑和样例隔离。`npm run eval` 用合成回答运行 Promptfoo，检验 prompt 渲染、断言和结果输出；它不调用模型，也不加载 `.env.evaluation`。首次安装需要网络，安装后基础检查不需要模型 API 或凭证。完整仓库检查用 `npm run check`，覆盖范围见[共享 delivery harness](./HARNESS.md)。
 
 `npm run test:transport` 另测本机 HTTP 传输，连接一次临时 loopback 测试服务，不调用真实模型。受限云端需要允许绑定本机端口；基础检查不依赖这项权限。
 

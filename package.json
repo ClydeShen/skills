@@ -5,13 +5,24 @@
     "node": ">=24.0.0 <25"
   },
   "scripts": {
-    "test": "node --test evals/harness.test.mjs",
+    "check": "node harness/run.mjs",
+    "check:repo": "node harness/check.mjs",
+    "lint:agents": "agnix .",
+    "skills:sync": "node harness/sync-skills.mjs --write",
+    "test": "node --test harness/*.test.mjs evals/harness.test.mjs",
     "test:transport": "node --test evals/provider.test.mjs",
     "eval": "node evals/run.mjs",
     "eval:model": "node evals/run.mjs --mode model",
     "eval:nvidia": "node evals/run.mjs --mode model --provider nvidia"
   },
   "devDependencies": {
-    "promptfoo": "0.125.0"
+    "ajv": "8.20.0",
+    "github-slugger": "2.0.0",
+    "markdown-it": "15.0.3",
+    "promptfoo": "0.125.0",
+    "yaml": "2.9.1"
+  },
+  "optionalDependencies": {
+    "agnix": "0.59.3"
   }
 }

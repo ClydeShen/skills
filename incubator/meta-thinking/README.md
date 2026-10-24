@@ -2,6 +2,8 @@
 
 第一版将[共享知识](../../knowledge/meta-thinking/meta-thinking-guidance.md)转成可试用的低频 skill。用户于 2026-10-25 授权开始实现。当前处于孵化阶段，实际行为与长期收益待试用。
 
+日期：2026-10-25。阶段：candidate。活跃包：[candidate/meta-thinking/](./candidate/meta-thinking/SKILL.md)。评估唯一来源：[evals/suite.mjs](./evals/suite.mjs) 与 [evals/cases.json](./evals/cases.json)。试用与验证记录：[evaluation.md](./evaluation.md)。
+
 ## 文件
 
 - [候选 skill](./candidate/meta-thinking/SKILL.md)：短主体，支持显式调用、停滞诊断、目标探索及 agent 设计。

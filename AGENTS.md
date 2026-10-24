@@ -6,20 +6,13 @@
 2. Read [`GLOSSARY.md`](GLOSSARY.md) before naming or changing a repository-wide concept.
 3. Inspect the working tree. Preserve changes outside the task.
 4. Search for the topic, its authoritative document, and inbound links. Start editing only after every affected artifact has an identified location.
+5. Read [the source-of-truth and folder contract](docs/REPOSITORY-STRUCTURE.md) and [document formats](docs/DOCUMENT-FORMATS.md) before introducing or moving artifacts. Use uppercase stems for harness framework documents, as defined there.
 
 ## Place the work
 
-Use the lifecycle `research → knowledge → incubator → external trial → skills`. Feedback from trials can return to research, knowledge, or incubation.
+Use [the folder contract](docs/REPOSITORY-STRUCTURE.md) for lifecycle, exact paths, active package ownership, development-tool projections, and promotion rules. Read [`knowledge/harness/README.md`](knowledge/harness/README.md) before changing the harness playbook; it defines file ownership, maintenance rules, and maturity updates.
 
-| Directory | Put here | Done when |
-|---|---|---|
-| `research/` | Dated evidence and conclusions for a question | The note follows the research template, identifies sources and confidence, and preserves superseded conclusions with a correction. |
-| `knowledge/` | Current domain knowledge reusable by multiple skills | The guidance synthesizes its evidence and contains no skill-specific packaging. |
-| `incubator/` | A concrete skill initiative, candidate package, evaluations, and trial feedback | The initiative has enough isolated material to verify and improve before release. |
-| `skills/` | Released, installable skill packages, optionally grouped by category | Each package is self-contained and passes format and repository-discovery checks. |
-| `docs/` | This repository's structure, lifecycle, quality model, release process, and decisions | The repository procedure or decision has one authoritative home and correct navigation. |
-
-Read [`docs/README.md`](docs/README.md) when placement is unclear. Read [`knowledge/harness/README.md`](knowledge/harness/README.md) before changing the harness playbook; it defines file ownership, maintenance rules, and maturity updates.
+Use [the shared delivery harness](docs/HARNESS.md) for coordination, check coverage, client hooks and handoff. All agents use the same commands; extra roles are optional. When work is delegated, assign disjoint write scopes or separate worktrees. One integrator owns the final combined check. Do not overwrite another agent's changes or describe author self-review as independent review.
 
 ## Make the change
 
@@ -35,10 +28,13 @@ Read [`docs/README.md`](docs/README.md) when placement is unclear. Read [`knowle
 
 Before changing skill layout, validation, installation, or release behavior, verify time-sensitive claims against current official sources.
 
-- Put released packages below `skills/`. Keep the repository root, `skills/`, and category directories free of `SKILL.md` files that would shadow nested packages.
-- Add a category directory when its first released package needs it. Treat categories as source organization, not skill namespaces.
-- Give every skill a repository-wide unique name. Match frontmatter `name` to the immediate parent directory.
-- Keep install-time references, scripts, and assets inside the package. A released skill must not depend on `research/`, `knowledge/`, or `incubator/`.
+Follow [candidate and release rules](docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) and [package format](docs/DOCUMENT-FORMATS.md#skill-package-format). Maintain one active source per authored skill. Update package targets and links when promotion changes the source path.
+
+## Project tools
+
+Use `package.json` as the command source. Run `npm run check` before handing off a change. Use `npm run check:repo` for fast feedback. Read [prompt evaluation setup](docs/prompt-evaluation.md) for model configuration and test limits. `npm test` checks the harness; `npm run eval` is synthetic replay, not a model-quality gate. Keep credentials and local run results out of commits. Never weaken a gate just to make the task pass; report pre-existing failures and unavailable checks.
+
+Validate `knowledge/harness/setup-checklist.yaml` against its adjacent schema when either changes. Keep stable checklist IDs and schema constraints consistent.
 
 ## Verify
 
@@ -46,3 +42,4 @@ Before changing skill layout, validation, installation, or release behavior, ver
 2. Run `git diff --check`. Inspect the complete diff for scope, terminology, and stale navigation.
 3. For a skill package, run the current Agent Skills reference validator on the package. Run `npx skills add . --list` from the repository root and confirm that every intended released skill appears exactly once.
 4. If a required validator or network-backed check is unavailable, report the unverified check and the reason. Do not claim release readiness.
+5. Inspect the authored package inventory independently; CLI name deduplication cannot prove uniqueness. Use the full [release checks](docs/REPOSITORY-STRUCTURE.md#installation-and-release-checks) before publication.

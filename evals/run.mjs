@@ -9,8 +9,9 @@ const local = resolve(root, 'evals/.local');
 const envFile = resolve(root, '.env.evaluation');
 
 async function main() {
-  if (existsSync(envFile)) process.loadEnvFile(envFile);
   const { mode, provider: selection, suite: suitePath, case: caseId } = parseArgs(process.argv.slice(2));
+  // Offline repository gates must not load the user's model credentials.
+  if (mode === 'model' && existsSync(envFile)) process.loadEnvFile(envFile);
   const provider = mode === 'model' ? modelProvider(process.env, selection) : null;
   process.env.PROMPTFOO_DISABLE_TELEMETRY = '1';
   process.env.PROMPTFOO_DISABLE_UPDATE = '1';

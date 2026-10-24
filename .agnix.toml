@@ -1,0 +1,3 @@
+# Advisory diagnostics; deterministic repository constraints live in harness/.
+tools = ["codex", "claude-code"]
+exclude = ["node_modules/**", ".git/**", "evals/.local/**", ".claude/skills/**"]

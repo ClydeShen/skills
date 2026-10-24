@@ -2,6 +2,8 @@
 
 This repository is my workspace for developing and publishing reusable agent skills. This README helps people understand the project and find its materials.
 
+Delivery agents share [AGENTS.md](./AGENTS.md). The [source-of-truth and folder contract](./docs/REPOSITORY-STRUCTURE.md) and [document formats](./docs/DOCUMENT-FORMATS.md) define how artifacts are maintained; Claude imports the same instructions through its thin adapter.
+
 ## Development flow
 
 Research questions, synthesize reusable knowledge, incubate a specific skill, verify it, optionally evaluate it when time and token budget allow, try it in external projects, then release it. Feedback can return to research, knowledge, or incubation.
@@ -20,6 +22,10 @@ The current knowledge base covers harness engineering in [`knowledge/harness/`](
 The [Human-AI Meta Thinking research](./research/human-ai-interaction/meta-thinking/README.md) preserves the original draft, evidence, and open questions behind the guidance.
 
 No skill has been released yet.
+
+## Shared delivery harness
+
+Use Node.js 24 and Git, run `npm ci`, then `npm run check`. The same deterministic gate serves Codex, Claude, other delivery agents and CI. It checks package layout, references, structured data, tool projections, harness tests and synthetic evaluation. See [the harness guide](./docs/HARNESS.md) for collaboration, optional local hooks and enforcement limits.
 
 ## Prompt evaluation
 

@@ -2,6 +2,12 @@
 
 The shared terms of this repository. Each term has one meaning across repository documentation, research, shared knowledge, incubator initiatives, and released skills. A project that uses these materials keeps its own glossary of product terms ([writing standards](./knowledge/harness/document-writing-standards.md), section 1).
 
+## Repository knowledge
+
+| Term | Meaning |
+| --- | --- |
+| **Source of truth** | 一个事实或规则的唯一权威维护位置，简称 SoT。导航、派生副本及历史证据可以引用它，但不独立定义同一个当前规则。_Avoid_: 将聊天、客户端自动记忆或多个手工副本视为同一规则的并行权威。 |
+
 ## Human-AI interaction
 
 | Term | Meaning |

@@ -13,3 +13,9 @@ Desktop.ini
 node_modules/
 evals/.local/
 .env.evaluation
+
+# Private agent settings and additional local environment files
+.env
+.env.*
+!.env.evaluation.example
+.claude/settings.local.json

@@ -1,4 +1,4 @@
-name: Prompt evaluation harness
+name: Repository harness
 
 on:
   push:
@@ -16,11 +16,26 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: npm
       - run: npm ci --no-audit --no-fund
-      - run: npm test
+      - run: npm run check
       - run: npm run test:transport
-      - run: npm run eval
+  agent-lint-report:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      # Advisory while CLI extensions and client-version diagnostics are calibrated.
+      - run: npm run lint:agents -- --ignore-inline-suppressions
