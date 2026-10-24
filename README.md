@@ -15,6 +15,8 @@ Research questions, synthesize reusable knowledge, incubate a specific skill, ve
 - [`incubator/`](./incubator/): initiatives that turn shared knowledge into candidate skills.
 - [`skills/`](./skills/): released skills that users can install.
 
-The current knowledge base covers harness engineering in [`knowledge/harness/`](./knowledge/harness/). No concrete skill initiative has entered the incubator yet.
+The current knowledge base covers harness engineering in [`knowledge/harness/`](./knowledge/harness/) and [Meta Thinking](./knowledge/meta-thinking/README.md), shared guidance for choosing thinking and interaction approaches. No concrete skill initiative has entered the incubator yet.
+
+The [Human-AI Meta Thinking research](./research/human-ai-interaction/meta-thinking/README.md) preserves the original draft, evidence, and open questions behind the guidance.
 
 No skill has been released yet.

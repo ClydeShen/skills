@@ -2,6 +2,13 @@
 
 The shared terms of this repository. Each term has one meaning across repository documentation, research, shared knowledge, incubator initiatives, and released skills. A project that uses these materials keeps its own glossary of product terms ([writing standards](./knowledge/harness/document-writing-standards.md), section 1).
 
+## Human-AI interaction
+
+| Term | Meaning |
+| --- | --- |
+| **Meta Thinking** | 在关键困惑或设计任务中，审视目标、假设、判断依据与人机互动方式，并据此选择和检验下一步行动。当前方向是低频、按需使用；见 [Meta Thinking 指南](./knowledge/meta-thinking/meta-thinking-guidance.md)。_Avoid_: 将其等同于固定 Level 1–6 流程（层级仍是探索假设）。 |
+| **User profile** | 用户画像：对用户思考与协作模式的可修正记录，由带情境的观察和经验支持，用于改善后续互动。_Avoid_: 人格定型（本仓库画像不表示对用户人格的固定分类）。 |
+
 ## Roles
 
 A role can be a person or an agent. One person or agent can hold several roles, but does not review or verify its own change.
