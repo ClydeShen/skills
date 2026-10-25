@@ -4,6 +4,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync, symlinkSync, readFileSyn
 import path from 'node:path';
 import os from 'node:os';
 import { execFileSync, spawnSync } from 'node:child_process';
+import { parse as parseYaml } from 'yaml';
 import { checkRepository, checkSkill, exactPathExists, frameworkFilenameError, markdownTargets, repositoryFiles, repositoryRoot } from './repository.mjs';
 import { stopDecision } from './stop-hook.mjs';
 
@@ -35,6 +36,22 @@ function fixture(t, extra = {}) {
 
 test('valid isolated repository fixture passes without a network or model', t => {
   assert.deepEqual(fixture(t).check().errors, []);
+});
+
+test('main protection preset matches the CI matrix, pins Actions and leaves advisory lint optional', () => {
+  const workflow = parseYaml(readFileSync(path.join(repositoryRoot, '.github/workflows/prompt-evaluation.yml'), 'utf8'));
+  const preset = JSON.parse(readFileSync(path.join(repositoryRoot, '.github/main-protection.json'), 'utf8'));
+  const names = workflow.jobs['local-evaluation'].strategy.matrix.os.map(os => `local-evaluation (${os})`);
+  assert.deepEqual(preset.required_status_checks.checks.map(check => check.context), names);
+  assert.ok(preset.required_status_checks.checks.every(check => check.app_id === 15368));
+  assert.equal(preset.required_status_checks.strict, true);
+  assert.equal(preset.enforce_admins, true);
+  assert.equal(preset.allow_force_pushes, false);
+  assert.equal(preset.allow_deletions, false);
+  assert.equal(preset.required_pull_request_reviews.required_approving_review_count, 0);
+  assert.equal(preset.required_pull_request_reviews.require_code_owner_reviews, false);
+  assert.equal(workflow.jobs['agent-lint-report']['continue-on-error'], true);
+  assert.ok(!preset.required_status_checks.checks.some(check => check.context.includes('lint')));
 });
 
 test('framework documents use uppercase stems without renaming ordinary content or tool files', t => {
@@ -155,7 +172,13 @@ test('hook CLI checks a relocated fixture and surfaces failure without an endles
   mkdirSync(path.join(root, 'harness'));
   writeFileSync(path.join(root, 'harness/stop-hook.mjs'), readFileSync(path.join(repositoryRoot, 'harness/stop-hook.mjs')));
   const check = path.join(root, 'harness/check.mjs');
-  const run = active => spawnSync(process.execPath, [path.join(root, 'harness/stop-hook.mjs')], { input: JSON.stringify({ hook_event_name: 'Stop', stop_hook_active: active }), encoding: 'utf8' });
+  const run = active => {
+    const result = spawnSync(process.execPath, [path.join(root, 'harness/stop-hook.mjs')], { input: JSON.stringify({ hook_event_name: 'Stop', stop_hook_active: active }), encoding: 'utf8' });
+    assert.ifError(result.error);
+    assert.equal(result.status, 0, result.stderr);
+    assert.ok(result.stdout.trim(), 'Stop hook must emit a JSON decision, not silently skip its entrypoint');
+    return result;
+  };
   writeFileSync(check, 'process.exitCode = 0;\n');
   assert.deepEqual(JSON.parse(run(false).stdout), {});
   writeFileSync(check, 'console.error("synthetic check failed"); process.exitCode = 1;\n');
@@ -163,6 +186,29 @@ test('hook CLI checks a relocated fixture and surfaces failure without an endles
   const repeated = JSON.parse(run(true).stdout);
   assert.equal(repeated.decision, undefined);
   assert.match(repeated.systemMessage, /synthetic check failed/);
+});
+
+test('hook entrypoint works through directory aliases with spaces and preserved main symlinks', t => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'skills-hook-alias-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const actual = path.join(root, 'actual workspace');
+  const alias = path.join(root, 'alias workspace');
+  mkdirSync(path.join(actual, 'harness'), { recursive: true });
+  writeFileSync(path.join(actual, 'harness/stop-hook.mjs'), readFileSync(path.join(repositoryRoot, 'harness/stop-hook.mjs')));
+  writeFileSync(path.join(actual, 'harness/check.mjs'), 'console.error("synthetic alias failure"); process.exitCode = 1;\n');
+  try { symlinkSync(actual, alias, process.platform === 'win32' ? 'junction' : 'dir'); }
+  catch (error) { if (['EPERM', 'EACCES'].includes(error.code)) { t.skip('OS requires symlink/junction privilege'); return; } throw error; }
+  for (const flags of [[], ['--preserve-symlinks-main']]) {
+    const result = spawnSync(process.execPath, [...flags, path.join(alias, 'harness/stop-hook.mjs')], {
+      input: JSON.stringify({ hook_event_name: 'Stop', stop_hook_active: false }), encoding: 'utf8',
+    });
+    assert.ifError(result.error);
+    assert.equal(result.status, 0, result.stderr);
+    assert.ok(result.stdout.trim(), 'aliased entrypoint must not silently skip validation');
+    const decision = JSON.parse(result.stdout);
+    assert.equal(decision.decision, 'block');
+    assert.match(decision.reason, /synthetic alias failure/);
+  }
 });
 
 test('client hook configurations point to the shared implementation and do not grant permissions', () => {
