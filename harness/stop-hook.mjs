@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { existsSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 export function stopDecision(input, result) {
@@ -12,7 +13,9 @@ export function stopDecision(input, result) {
     : { decision: 'block', reason };
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
+// Node normally resolves module URLs to physical paths; argv can retain an alias
+// (notably /var -> /private/var on macOS). Compare both physical paths.
+if (process.argv[1] && existsSync(process.argv[1]) && realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))) {
   let input;
   try {
     let raw = '';

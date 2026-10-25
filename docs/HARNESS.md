@@ -79,18 +79,31 @@ Inspect `git config --local --get core.hooksPath` and existing hooks first. If n
 
 The workflow runs the shared gate plus transport tests on Ubuntu, Windows and macOS, with no model key. The separate Linux agnix job reports advisory findings. WSL uses the same Node path but is not a separate CI runner. A workflow definition is not evidence of a successful remote run.
 
-`.github/CODEOWNERS` routes reviews to the repository owner. Before relying on protected integration, the owner must configure a GitHub ruleset/branch protection for the integration branch to:
+The owner approved PR-based integration and three required platform checks on 2026-10-24 (UTC). The desired REST API payload is [main-protection.json](../.github/main-protection.json). It requires the three `local-evaluation` matrix checks from the GitHub Actions app (observed app ID 15368), an up-to-date head and a pull request; it applies restrictions to administrators and disallows force pushes and deletion. agnix remains advisory. A regression test checks that the required names match the actual workflow matrix.
 
-1. Require the three `local-evaluation` matrix status checks and an up-to-date tested head (or a tested merge queue).
-2. Require code-owner review, dismiss stale approvals and restrict bypass identities. Arrange an independent eligible reviewer when the author is the owner; CODEOWNERS alone cannot supply independence.
-3. Review changes to `AGENTS.md`, source/format policies, `harness/`, npm dependencies, client/Git adapters, CI and CODEOWNERS as changes to the checks themselves.
+The preset requires no approving reviews for the current single-owner workflow. This enforces the agreed PR/check gate without locking the owner out of their own PRs. `.github/CODEOWNERS` still routes review, but it is not independent review enforcement. Add a genuinely independent eligible reviewer before enabling required code-owner approval or last-push approval. Review changes to `AGENTS.md`, source/format policies, `harness/`, dependencies, client/Git adapters, CI, the protection preset and CODEOWNERS as changes to the checks themselves.
 
-Remote rules were not inspected or modified in this implementation. A delivery agent with the owner's admin/bypass credentials can defeat same-repository controls. Stronger boundaries need a separate managed host policy, restricted credentials and server-side review. The harness provides stable feedback and reviewable contracts, not a security sandbox.
+Activation is pending, not implied by this file. The last observed branch response was `protected: false`, with an empty ruleset list. The available integration rejected the administration endpoint with HTTP 403; the cloud CLI's GitHub API request was also forbidden. Repository owner/admin role alone does not give the active integration an Administration API scope. This session could not apply protection.
+
+After all three platform jobs pass, an administrator with GitHub CLI Administration access can inspect existing protection/rulesets and apply the preset from the repository root:
+
+```text
+gh api --method PUT repos/ClydeShen/skills/branches/main/protection --input .github/main-protection.json
+gh api repos/ClydeShen/skills/branches/main/protection
+```
+
+Do not overwrite newer protection settings without reconciling them. Verify that the GET response contains the three expected check contexts/app IDs, strict status checks, administrator enforcement and PR requirements, and that the branch response reports `protected: true`. Record the observed state and date here. Do not grant a bypass just to make this workflow pass.
+
+A delivery agent with the owner's admin credentials can still change server settings. Stronger boundaries need a separate managed host policy, restricted credentials and independent server-side review. The harness provides stable feedback and reviewable contracts, not a security sandbox.
 
 ## Maintenance and observed verification
 
 Change a rule in its owning standard, update the corresponding checker and add a negative regression case. Keep hook adapters thin and reuse commands in CI. Imported development tools are upstream dependencies: review the canonical tree and lock provenance, then explicitly synchronize the projection; the copy command refuses orphan deletions and symlinks. For a removal, review and delete the obsolete projection explicitly.
 
-Local Linux verification on 2026-10-24 uses synthetic fixtures, no real profile or model key. The regression tests exercise valid/invalid package metadata, duplicate sources, links/anchors/case, package escapes, projection drift, schema errors, ignored credentials, symlinks where supported, Stop success/failure/repeat/error paths, malformed input, and the actual Codex bootstrap from a subdirectory. These adapter tests are protocol/command checks, not real client event delivery. Windows/macOS/WSL execution, actual client loading, remote CI and protected integration remain host-side verification steps.
+Local Linux verification on 2026-10-24 uses synthetic fixtures, no real profile or model key. The regression tests exercise valid/invalid package metadata, duplicate sources, links/anchors/case, package escapes, projection drift, schema errors, ignored credentials, symlinks where supported, Stop success/failure/repeat/error paths, malformed input, and the actual Codex bootstrap from a subdirectory. These adapter tests are protocol/command checks, not real client event delivery. Subsequent Windows/macOS CI evidence is recorded below; WSL-specific execution, actual client loading and protected integration still need host-side verification.
 
 Observed results: clean `npm ci` succeeded with the proxy setting above; `npm run check` passed (22 unit/regression tests, including the framework filename convention, and 42/42 synthetic replay assertions); `test:transport` passed for generic and NVIDIA loopback requests. Projection synchronization and the pinned Agent Skills reference validator passed. Cached skills CLI 1.7.4 listed no released skills at the root (expected exit 1) and exactly one skill at the explicit internal candidate path. agnix reported the known AS-016 incompatibility and VER-001 unpinned-client-version information; it was not a clean scan. No real model or actual client lifecycle was tested.
+
+Remote run for `6250662` passed Ubuntu and Windows but failed the macOS relocated-hook test: `argv` retained a temporary-directory alias while Node resolved the module URL to its physical path, causing the CLI entrypoint to emit no JSON. The repair compares physical paths and adds an explicit directory-alias regression, including spaces and `--preserve-symlinks-main`. This changes invocation handling, not package-resource symlink policy. Local repair verification on 2026-10-25 passed 24 unit/regression tests, 42/42 fixture assertions and both loopback provider requests. The updated remote matrix must be verified before applying branch protection.
+
+Remote repair verification on 2026-10-25: the [PR run for `e53af33`](https://github.com/ClydeShen/skills/actions/runs/40145054674) passed all three platform jobs, including macOS and Windows alias-entrypoint regression tests (24/24 tests, none skipped), fixture replay and transport checks. agnix retained the known non-blocking metadata diagnostic. This verifies the code on those runners; it does not activate the pending server protection or prove actual client hook delivery.
