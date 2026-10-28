@@ -183,7 +183,9 @@ This refines the section 2.7 rule that a third-party product uses its official l
 6. **Legacy libraries.** Older generations stay visible in the editor and in search. A human editing a generated file can mix generations. [official: `Sidebar.js`; inference for the editing risk]
 7. **Licence change.** draw.io removed Azure icons once for licensing reasons, in 2020. A vendor can change terms. [official]
 
-### Proposed failure criteria (pending owner confirmation)
+### Proposed failure criteria (subsequently adopted)
+
+Historical research proposal. The owner subsequently adopted F1-F6 and the F2 tolerance in [requirements section 2.9](./requirements-and-observed-style-2026-10-28.md#29-notation-and-icon-decisions-after-the-conventions-research-owner-2026-10-28). Later accepted scope and fallback choices in that note take precedence over this proposal's unanswered questions.
 
 The trial fails for a vendor when any check below fails. Run them on the pinned release and the team's real viewers. [inference]
 
@@ -210,6 +212,8 @@ The trial fails for a vendor when any check below fails. Run them on the pinned 
 - Whether the `mscae` Docker whale is a retired Docker logo. Only its colours were checked.
 
 ## Decisions for the owner
+
+Historical questions at the end of this investigation; the later [requirements decisions](./requirements-and-observed-style-2026-10-28.md#29-notation-and-icon-decisions-after-the-conventions-research-owner-2026-10-28) record the chosen plain-box fallback, category-icon acceptance, failure criteria and Desktop viewer requirement.
 
 - Accept a split now: built-in libraries for AWS, Azure, Google Cloud and Kubernetes, and a separate solution for Docker, Argo CD and Red Hat products, which already fail F1. Or wait for the full trial.
 - Confirm the failure criteria F1 to F6, including the freshness tolerance in F2.
