@@ -1,6 +1,8 @@
 ---
 name: tech-humanizer
 description: Remove AI writing patterns from prose and adapt it to the user's voice. Use for humanization, AI-style reviews, rewrites in the user's voice, and learning writing preferences from conversation and samples.
+metadata:
+  internal: true
 ---
 
 # Tech Humanizer

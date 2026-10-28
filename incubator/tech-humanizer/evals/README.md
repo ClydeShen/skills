@@ -1,6 +1,6 @@
 # Tech Humanizer evaluations
 
-Run the evaluations locally with Promptfoo. The target and grading models may use APIs. The suite reads the current [released package](../../../skills/tech-humanizer/SKILL.md) each run.
+Run the evaluations locally with Promptfoo. The target and grading models may use APIs. The suite reads the current [candidate package](../candidate/tech-humanizer/SKILL.md) each run.
 
 ## Setup
 

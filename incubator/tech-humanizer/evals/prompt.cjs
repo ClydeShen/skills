@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 
-const skillRoot = path.resolve(__dirname, '../../../skills/tech-humanizer');
+const skillRoot = path.resolve(__dirname, '../candidate/tech-humanizer');
 
 function loadSkill(extraReferences = []) {
   const files = [

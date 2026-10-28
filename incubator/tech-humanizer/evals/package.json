@@ -2,7 +2,7 @@
   "name": "tech-humanizer-evals",
   "version": "0.1.0",
   "private": true,
-  "description": "Local behavior evaluations for the released tech-humanizer skill.",
+  "description": "Local behavior evaluations for the tech-humanizer candidate skill.",
   "engines": {
     "node": ">=22.22.0"
   },
