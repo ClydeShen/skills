@@ -20,7 +20,7 @@ If access is unavailable, continue the task and report the persistence limitatio
 ## Data contract
 
 Keep one UTF-8 JSON object with `version: 1`, `episodes`, and `patterns` arrays.
-Use the user's language for descriptive text.
+Follow the configured storage language for descriptive text; otherwise use the user's language.
 Use stable, locally unique IDs and absolute dates in `YYYY-MM-DD` format.
 
 An episode records an event:

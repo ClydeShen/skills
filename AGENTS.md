@@ -16,6 +16,10 @@ Use [the shared delivery harness](docs/HARNESS.md) for coordination, check cover
 
 ## Make the change
 
+Write repository content in English, including documents, prompts, examples and code comments. Conversation with the user may use their preferred language. Follow [the language convention](docs/DOCUMENT-FORMATS.md#common-conventions) when recording translated source material.
+
+When creating, reviewing or revising a skill, use [the skill design principles](knowledge/skill-design/skill-design-principles.md). They guide behavioral value, model freedom, human interaction and evidence; package format remains in `docs/DOCUMENT-FORMATS.md`.
+
 1. Change the authoritative artifact and the references that must agree with it. Create a `SKILL.md` only when the user asks to implement or revise a specific skill.
 2. Follow [the writing standards](knowledge/harness/document-writing-standards.md) for terminology, procedures, research evidence, dates, and decisions. Use a template under `knowledge/harness/templates/` when its document type matches the task.
 3. Keep shared knowledge independent of one skill. Keep files required at skill runtime inside that skill's package.

@@ -1,15 +1,15 @@
 # Meta Thinking
 
-这里保存从[研究记录](../../research/human-ai-interaction/meta-thinking/README.md)和用户需求中提炼的共享知识，对应本次工作的 silver layer。它可支持停滞诊断、目标探索、agent 设计及经验记忆等不同用途。
+This topic contains shared knowledge synthesized from [research](../../research/human-ai-interaction/meta-thinking/README.md) and user requirements: the silver layer for this work. It supports stall diagnosis, intent exploration, agent design and experiential memory.
 
-从[Meta Thinking 指南](./meta-thinking-guidance.md)开始：定位与边界、可复用原则、场景示例、轻量画像和待验证问题集中在这一处。
+Start with the [Meta Thinking guidance](./meta-thinking-guidance.md), which owns the positioning, boundaries, reusable principles, examples, lightweight profiles and open questions.
 
-## 状态与维护
+## Status and maintenance
 
-2026-10-25：完成首轮知识综合。用户已确认低频、按需、少步骤、事件触发画像维护的方向，并授权沉淀知识。文献提供相关理论与局部实验支持；本文建议尚未经过项目试用，不代表完整方法已验证。
+2026-10-25: Completed the first synthesis. The owner confirmed low-frequency, on-demand use, few steps and event-triggered profile maintenance, and authorized knowledge consolidation. Literature provides related theory and local experimental support; the recommendations have not been validated as a complete method in project trials.
 
-当前指南是本主题的知识入口。新增证据及修订理由记录在 `research/`，可复用结论更新到指南。具体 skill 的指令、文件格式、评估记录和试用反馈在进入孵化时归入 `incubator/`。发布包所需内容应在包内自包含。
+Record new evidence and revision rationale in `research/`; update reusable conclusions in the guidance. Specific instructions, formats, evaluation and trial feedback belong to `incubator/`. Released packages must contain their runtime dependencies.
 
-阅读这些知识不要求每次执行全部内容；指南中的场景和参考依据按问题取用。
+Reading the guidance does not require executing every section. Select scenarios and evidence for the current question.
 
-2026-10-25：用户授权开始实现，[Meta Thinking 孵化项目](../../incubator/meta-thinking/README.md)已建立。候选包和评估归该项目维护，本目录继续保存可复用知识。
+2026-10-25: The owner authorized implementation and the [Meta Thinking initiative](../../incubator/meta-thinking/README.md) was established. It owns the candidate and evaluation; this directory continues to own reusable knowledge.

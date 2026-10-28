@@ -6,14 +6,14 @@ The shared terms of this repository. Each term has one meaning across repository
 
 | Term | Meaning |
 | --- | --- |
-| **Source of truth** | 一个事实或规则的唯一权威维护位置，简称 SoT。导航、派生副本及历史证据可以引用它，但不独立定义同一个当前规则。_Avoid_: 将聊天、客户端自动记忆或多个手工副本视为同一规则的并行权威。 |
+| **Source of truth** | The single authoritative maintenance location for a fact or rule, abbreviated SoT. Navigation, derived copies and historical evidence may reference it, but do not independently define the same current rule. _Avoid_: treating chat, client auto-memory or multiple manual copies as parallel authorities for one rule. |
 
 ## Human-AI interaction
 
 | Term | Meaning |
 | --- | --- |
-| **Meta Thinking** | 在关键困惑或设计任务中，审视目标、假设、判断依据与人机互动方式，并据此选择和检验下一步行动。当前方向是低频、按需使用；见 [Meta Thinking 指南](./knowledge/meta-thinking/meta-thinking-guidance.md)。_Avoid_: 将其等同于固定 Level 1–6 流程（层级仍是探索假设）。 |
-| **User profile** | 用户画像：对用户思考与协作模式的可修正记录，由带情境的观察和经验支持，用于改善后续互动。_Avoid_: 人格定型（本仓库画像不表示对用户人格的固定分类）。 |
+| **Meta Thinking** | Examining goals, assumptions, evidence standards and human-AI interaction at a consequential obstacle or during design, then choosing and testing the next action. The current direction is low-frequency, on-demand use; see the [Meta Thinking guidance](./knowledge/meta-thinking/meta-thinking-guidance.md). _Avoid_: equating it with a fixed Level 1–6 procedure (the hierarchy remains an exploratory hypothesis). |
+| **User profile** | A revisable record of the user's thinking and collaboration patterns, supported by contextual observations and experience, used to improve subsequent interactions. _Avoid_: personality typing (profiles here are not fixed personality classifications). |
 
 ## Roles
 

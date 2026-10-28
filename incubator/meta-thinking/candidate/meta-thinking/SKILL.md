@@ -1,6 +1,6 @@
 ---
 name: meta-thinking
-description: Reconsider goals, assumptions, and human-AI interaction to find a useful next move. Use when the user requests Meta Thinking or metathinking, asks to examine an approach before designing an agent skill, system prompt, or agentic workflow, or a conversation repeatedly returns to the same obstacle without new evidence or progress. Also use when unresolved goals prevent choosing a direction. Avoid interrupting productive exploration or clear tasks that are progressing.
+description: Find a useful next move by reconsidering goals, assumptions, evidence or human-AI interaction. Use for explicit Meta Thinking or metathinking requests, including skill, system-prompt and workflow design; repeated attempts at the same obstacle without new evidence; or an unresolved goal that blocks choosing a direction. Do not interrupt clear tasks or exploration that is producing useful distinctions.
 compatibility: Works with conversation context. Optional persistent memory requires local user-directory access and JSON editing tools.
 metadata:
   internal: true
@@ -8,51 +8,42 @@ metadata:
 
 # Meta Thinking
 
-Find the assumption or interaction worth changing. Test it with a small next move.
-Match the user's language. Keep the intervention brief.
+Change the framing only far enough to change the next action.
+Keep the intervention brief; spend the effort on the user's task.
+Match the user's conversational language. Follow the destination's language convention for saved artifacts.
 
-## Understand the obstacle
+## Find the leverage
 
-Use the available conversation to identify the goal, repeated obstacle, and previous attempts.
-Check your own misunderstandings and repeated answers.
-Consider missing evidence, conflicting constraints, and tool limits.
-Treat new distinctions and clearer preferences as progress, even when the user changes direction.
-If the task is progressing, continue the task.
-If a relevant profile could help, read it using [memory](references/memory.md).
-Treat stored patterns as hypotheses; prefer current evidence and user corrections.
+Use the conversation to identify the goal, obstacle and previous attempts.
+Check your own repeated answers or missed constraints before attributing the problem to the user.
+Distinguish a framing problem from missing facts, conflicting constraints or tool limits.
+New distinctions and clearer preferences count as progress, even when the user changes direction.
+If progress is already happening, continue it; explicit design requests do not require a prior stall.
 
-## Reframe and act
+Choose the goal, assumption, evidence standard or division of work whose revision could change the outcome.
+Treat a possible cause as a hypothesis, not a diagnosis of the person.
+Read [interaction options](references/interaction-options.md) when you need help choosing a different approach.
+Research only an uncertainty that could change that choice.
 
-Examine the goal, assumption, evidence standard, or division of work behind the obstacle.
-Abstract only far enough to change the next action.
-Explain the useful connection in plain language.
-Keep uncertain causes tentative.
-Use [interaction options](references/interaction-options.md) when another approach is needed.
-Research a specific principle only when it could change the recommendation.
+## Make the next move useful
 
-Choose one small, reversible move: a comparison, decisive question, evidence check, or experiment.
-Ask a question only when its answer would change the next move.
-When goals are unclear, offer concrete alternatives to help form preferences.
-Leave room for alternatives the user has not yet named.
+Briefly connect the observed obstacle to one small, reversible move and the result that would distinguish useful directions.
+Take that move within the user's authorization: produce a sample, inspect evidence, test an assumption or draft the requested artifact.
+Do not stop at naming a method or promising to use it.
+When preferences are unclear, provide concrete alternatives the user can react to, without treating them as exhaustive.
+Ask for clarification only when consequential missing information cannot reasonably be retrieved or inferred.
 
-For agent design, connect the task's needs to reasoning, delegation, feedback, and stopping conditions.
-Produce or revise the requested artifact within the user's scope.
-Choose extra roles or steps only when they serve a concrete need.
+For agent design, turn the task's needs into usable instructions: what to decide, what evidence matters, and when to stop.
+Add roles or steps only for distinct work or feedback; approval establishes permission, not correctness.
 
-State the observation, proposed change, and reason briefly.
-Take the authorized next action when possible.
-When feedback arrives, check what changed.
-Return to the task when progress resumes.
-If the change fails, revise the diagnosis.
-Stop when further analysis is unlikely to change the decision, or the user wants to continue directly.
+Use feedback to retain or revise the hypothesis.
+Return to the task when progress resumes, further analysis would not change the action, or the user requests direct execution.
 
-## Remember selectively
+## Remember only useful evidence
 
-Consider memory only after a meaningful stall or breakthrough reveals a reusable lesson or counterexample.
-Read [memory](references/memory.md) before writing.
-Skip writes that add no useful evidence.
-Distinguish observations, causal hypotheses, and outcomes.
-Include your own contribution to the failure or improvement.
-Keep lessons conditional on context.
+Read [memory](references/memory.md) before consulting or updating a relevant user profile.
+Consider a write only when a meaningful stall or breakthrough adds a reusable lesson or counterexample.
+Keep observations, attempted changes and known outcomes distinct; include your own contribution.
+Current evidence and user corrections override stored hypotheses.
 Do not infer usual behavior frequencies from selectively recorded events.
-Never create a profile merely because this skill was invoked.
+Invocation alone never warrants creating a profile.

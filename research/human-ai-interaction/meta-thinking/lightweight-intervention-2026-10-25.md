@@ -1,134 +1,134 @@
-# Research: 低频 Meta Thinking 的触发、目标探索与复杂度
+# Research: Triggers, goal exploration, and complexity in low-frequency Meta Thinking
 
-日期：2026-10-25。问题：在新增使用场景下，怎样兼顾有深度的帮助与少步骤、低负担？背景：用户在原稿与首轮调查后进一步明确用途。本记录保存这些需求，并据此做定向研究。
+Date: 2026-10-25. Question: With the newly specified use cases, how can substantial help coexist with few steps and low burden? Context: after the original draft and initial investigation, the user further clarified the intended use. This record preserves those requirements and investigates them through targeted research.
 
-当前结论：[inference] 值得尝试“发现具体障碍、改变一个关键条件、观察是否推进”的轻量干预。需要把偏好形成与无效打转分开，把用户目标、agent 行为及环境限制一起检查。以下都是研究建议，尚未实现 skill、监控或用户画像功能。
+Conclusion: [inference] A lightweight intervention worth testing is to identify a concrete obstacle, change one important condition, and observe whether progress follows. Distinguish preference formation from unproductive repetition, and examine user goals, agent behavior, and environmental constraints together. These were research recommendations only; this investigation implemented no skill, monitoring, or user-profile functionality.
 
-证据标记沿用[研究模板](../../../knowledge/harness/templates/research-note-template.md)。`[official]` 表示已核读一手来源相关正文，不表示对本项目的有效性已获证明；`[inference]` 表示本项目推断。没有复现实验。
+Evidence markers follow the [research template](../../../knowledge/harness/templates/research-note-template.md). `[official]` means relevant first-party source text was read, not that effectiveness for this project was established. `[inference]` means project-specific reasoning. No experiments were reproduced. User requirements and quoted examples below are translated from the original Chinese record.
 
-## 本轮需求来源
+## Requirements from this conversation
 
-以下来自本聊天中用户的明确说明，属于需求依据，而非文献发现：
+The following came from the user's explicit statements in this conversation on 2026-10-25. They are requirements, not literature findings:
 
-- 低频使用；用户目标清楚、互动有效时通常无需启动。
-- 显式入口包括“用 metathinking 帮我设计某个 agent skill、system prompt 或 agentic workflow”。
-- agent 可以根据交流记录识别停滞，或者用户尚未明确自身目标的情况。
-- 向上审视问题和假设，再向下选择另一种互动方式，帮助用户从哲学层面提高效率。
-- 在用户目录保存结构化画像，记录思考模式、停滞原因及突破经验。采用 lazy 更新，只在值得积累的事件发生时考虑写入。
-- skill 应简单，避免大量操作步骤。
+- Use should be infrequent. Activation is usually unnecessary when the user's goal is clear and the interaction is effective.
+- Explicit entry points include: "Use metathinking to help me design an agent skill, system prompt, or agentic workflow."
+- The agent may identify stalled progress from conversation history, or situations where the user has not yet clarified their own goal.
+- Step back to examine the problem and its assumptions, then return to a different way of interacting, helping the user become more effective at a philosophical level.
+- Store a structured profile in the user directory, recording thinking patterns, reasons for stalled progress, and breakthrough experiences. Update lazily: consider a write only when an event is worth retaining.
+- Keep the skill simple and avoid a large number of operational steps.
 
-这些说明收窄了[原始草稿](./meta-ai-thinking-working-draft-2026-10-25.md)中通用 Meta Reasoning Router 的产品假设。原始稿继续保留，以便追溯；具体格式、路径、触发阈值尚未决定。
+These statements narrow the product assumptions behind the general Meta Reasoning Router in the [original draft](./meta-ai-thinking-working-draft-2026-10-25.md). That draft remains available for traceability. Specific formats, paths, and activation thresholds had not been decided.
 
 ## Overview
 
-| 问题 | 收获及候选方向 | 证据与边界 | 判断 |
+| Question | Finding and candidate direction | Evidence and limits | Judgment |
 | --- | --- | --- | --- |
-| 用户改主意是否等于打转？ | 可能是在形成偏好；检查是否新增取舍和理解 | 偏好建构研究提供邻近依据 | J1，中 |
-| 增加反思是否必然有益？ | 同时观察效果与用户负担 | 特定 AI 决策实验支持存在取舍 | J2，中 |
-| 设计 agent 时如何少步骤？ | 先辨别任务所需灵活性与反馈，再考虑模式 | 一线工程建议，非对照实验 | J3，中 |
-| skill 如何主动发现停滞？ | 触发描述要可见；激活后再做深入诊断 | 标准解释加载机制，不保证激活准确率 | J4，中 |
+| Does changing one's mind mean going in circles? | Preferences may be forming; check for new trade-offs and understanding | Preference-construction research provides adjacent evidence | J1, medium |
+| Is additional reflection necessarily helpful? | Observe effectiveness and user burden together | A specific AI-assisted decision experiment supports a trade-off | J2, medium |
+| How can agent design require fewer steps? | Identify the flexibility and feedback the task requires before choosing patterns | First-party engineering guidance, not a controlled experiment | J3, medium |
+| How can a skill proactively detect stalled progress? | Activation descriptions must be visible; deeper diagnosis follows activation | The standard explains loading, not activation accuracy | J4, medium |
 
-## 1. 用户的目标可能是在互动中形成的
-
-### Evidence
-
-[official] Slovic 的《The Construction of Preference》讨论偏好随引出方式和情境发生变化，认为部分偏好是在表达过程中形成的。核读引言及偏好反转研究讨论；原研究不能直接证明 agent 对话中怎样引导最好。[S1]
-
-### Recommendation for the project
-
-[inference · J1] 避免用“目标变化”“改了几轮”单独判断停滞。可以看交流是否增加了新的约束、区分了候选目标，或明确了取舍。目标变化伴随这些进展时，可能是在正常探索。
-
-[inference] 用户说不清目标时，可以给出少量具有实际差异的例子，请他指出什么吸引或排斥自己；再根据反馈修正理解。该做法是待测建议，并非 S1 已证明的最佳流程。需要允许用户提出菜单之外的目标，避免把 agent 提供的选项当作完整选择空间。
-
-### Relation to existing constraints
-
-对应“用户不知道要什么”的入口及少步骤要求。偏好还在形成时，直接把暂时选择固化为长期画像会丢失其情境。
-
-## 2. 有效的反思干预也可能令用户厌烦
+## 1. User goals may form through interaction
 
 ### Evidence
 
-[official] Buçinca 等在 199 名参与者的 AI 辅助决策实验中，发现认知强制干预减少盲从，但效果更强的设计获得更差的主观评价。核读引言与研究概述；这不代表所有反思都会增加负担。[S2]
+[official] Slovic's The Construction of Preference discusses how preferences vary with elicitation method and context, arguing that some preferences form during their expression. The introduction and discussion of preference-reversal research were read. The original research does not directly establish how best to guide an agent conversation.[S1]
 
 ### Recommendation for the project
 
-[inference · J2] 将“少步骤”转化为需要观察的结果：多花了多少用户时间、问了几个真正改变下一步的问题、是否更快找到可用行动。单纯缩短 skill 文本不能证明交互轻量。
+[inference · J1] Do not diagnose stalled progress solely from a changing goal or the number of revisions. Ask whether the conversation has introduced new constraints, distinguished candidate goals, or clarified trade-offs. A changing goal accompanied by these advances may be normal exploration.
 
-[inference] 可以先用一个短干预检验最关键假设。例如：“我们一直在改措辞，但是否尚未决定说给谁听？先用两个受众各写一版比较。”如果取得进展，就回到原任务；没有进展则修正诊断，不能把坚持反思当成成功。
-
-[inference] 诊断对象应包含 agent 的重复回答、误解、能力边界、工具或证据不足。看到用户打圈，不能直接归因于用户的思维缺陷。
+[inference] When a user cannot articulate a goal, offer a few meaningfully different examples and ask what attracts or repels them, then revise the understanding from their feedback. This is a proposal to test, not a best procedure established by S1. Allow goals outside the offered menu; the agent's options must not be treated as the complete choice space.
 
 ### Relation to existing constraints
 
-对应低频使用、向上后重新落地，以及“无需大量操作步骤”。无需预先承诺每次反思都达到某个固定抽象层。
+This addresses the entry point where the user does not know what they want, while respecting the requirement for few steps. If preferences are still forming, turning a provisional choice directly into a lasting profile loses its context.
 
-## 3. 设计模式的选择应由任务条件支持
+## 2. Effective reflection can still frustrate users
 
 ### Evidence
 
-[official] Anthropic 的工程文章建议从能满足需要的简单方案开始，根据任务是否能预定义步骤、是否需要动态调整来区分 workflow 与 agent，并强调反馈和评价标准。核读复杂度建议、工作流模式及反馈段落。这是供应商工程经验，并非本项目的对照证据。[S3]
+[official] In an AI-assisted decision-making experiment with 199 participants, Buçinca and colleagues found that cognitive forcing reduced overreliance, but the more effective designs received worse subjective ratings. The introduction and study overview were read. This does not mean that all reflection increases burden.[S2]
 
 ### Recommendation for the project
 
-[inference · J3] 用户要求设计 skill 或 system prompt 时，可以围绕任务条件推导设计：目标是否清楚、路径是否可预先确定、什么反馈能判断推进。遇到具体设计难点，再查相关模式与理论。
+[inference · J2] Make "few steps" an observable outcome: how much extra user time was spent, how many questions actually changed the next step, and whether a usable action was found sooner. Shortening the skill text alone does not establish lightweight interaction.
 
-[inference] 例如设计 reviewer skill，先明确它要识别的错误和可用证据；当检查标准稳定且能自动验证时，可以采用明确检查。需要探索不同解释时，才有理由加入多视角或对抗检查。上述例子是设计推断，不是成熟方案。
+[inference] Start by testing the most important assumption with one brief intervention. For example: "We keep revising the wording, but have we decided who it is for? Let's write one version for each of two audiences and compare." If progress follows, return to the original task. If not, revise the diagnosis; persistence in reflection is not itself success.
+
+[inference] Diagnosis should include repetitive agent answers, misunderstandings, capability limits, and missing tools or evidence. Apparent circling by the user must not automatically be attributed to a flaw in their thinking.
 
 ### Relation to existing constraints
 
-支持简单主体、按需深入的候选方式。没有验证通用模式目录的覆盖性，也不要求新增编排系统或多个 agent。
+This supports infrequent use, stepping back and then returning to action, and avoiding many operational steps. There is no need to promise a fixed level of abstraction for every reflection.
 
-## 4. 低频加载与自动触发是两个不同问题
+## 3. Task conditions should justify design-pattern choices
 
 ### Evidence
 
-[official] Agent Skills 规范将名称和描述、激活后的正文、按需资源分开加载；集成指南说明模型依据可见目录判断相关性，也可由用户显式激活。核读规范的 progressive disclosure 与集成指南的 activation 部分。[S4][S5]
+[official] Anthropic's engineering article recommends starting with the simplest approach that meets the need. It distinguishes workflows from agents according to whether steps can be predefined or need dynamic adjustment, and emphasizes feedback and evaluation criteria. The complexity guidance, workflow patterns, and feedback passages were read. This is vendor engineering experience, not controlled evidence for this project.[S3]
 
 ### Recommendation for the project
 
-[inference · J4] 停滞信号需要出现在启动前可见的描述或宿主规则里。只把“发现打转时启动”写在尚未加载的正文内，不能确保它会被发现。应保留显式调用作为可靠入口，并单独测试自然触发。
+[inference · J3] When asked to design a skill or system prompt, derive the design from task conditions: whether the goal is clear, whether the path can be determined in advance, and what feedback indicates progress. Consult relevant patterns and theories when a concrete design difficulty arises.
 
-[inference] 短主体可以承载必要判断；模式知识和例子可以按需读取。低频 skill 也可以由常驻的短描述被发现，但这不等于它在后台独立持续监控。
-
-[inference] 用户目录是否跨会话持久、是否跨项目可访问、云端与本地是否共享，属于宿主能力与部署选择。不能仅由 skill 文本保证。本轮不选定实际画像路径，不执行画像写入。
+[inference] For example, when designing a reviewer skill, first identify the errors it should detect and the evidence available. Stable, automatically verifiable criteria can justify explicit checks. Add multiple perspectives or adversarial checks when different explanations need exploration. These examples are design inferences, not validated solutions.
 
 ### Relation to existing constraints
 
-对应隐式触发、用户级记忆与轻量要求。该节核验机制，不修改 skill 安装、发布或宿主配置。
+This supports a simple main body with deeper material loaded when needed. The coverage of a general pattern catalog was not validated, and no additional orchestration system or multiple agents are required.
 
-## 下一轮最小验证
+## 4. Infrequent loading and automatic activation are different problems
 
-[inference] 先用少量匿名或合成对话评估三个边界，无需建设完整系统：
+### Evidence
 
-| 对话 | 理想行为 | 失败信号 |
+[official] The Agent Skills specification separates loading of names and descriptions, activated instructions, and on-demand resources. The integration guide explains that models judge relevance from a visible catalog and that users can activate skills explicitly. The specification's progressive-disclosure section and the integration guide's activation sections were read.[S4][S5]
+
+### Recommendation for the project
+
+[inference · J4] Signals of stalled progress must appear in a description or host rule visible before activation. Placing "activate when progress stalls" only inside an unloaded body cannot ensure discovery. Keep explicit invocation as a reliable entry point and test natural activation separately.
+
+[inference] A short main body can carry necessary judgments, with pattern knowledge and examples read on demand. An infrequently used skill can be discovered through a continuously available short description. That does not mean it independently monitors activity in the background.
+
+[inference] Persistence across sessions, access across projects, and sharing between cloud and local user directories are host capabilities and deployment choices. Skill text alone cannot guarantee them. This investigation selected no actual profile path and performed no profile writes.
+
+### Relation to existing constraints
+
+This addresses implicit activation, user-level memory, and lightweight interaction. This section verifies mechanisms; it changes no skill installation, publication, or host configuration.
+
+## Minimal next validation
+
+[inference] Start with a few anonymized or synthetic conversations to evaluate these boundaries, without building a complete system:
+
+| Conversation | Desired behavior | Failure signal |
 | --- | --- | --- |
-| 目标清楚且持续推进 | 正常完成任务 | 无必要地切入反思 |
-| 用户不断比较而逐渐明确偏好 | 帮助形成取舍 | 将正常探索误判为思维问题 |
-| 多轮返回同一障碍且没有新信息 | 提出可检验的诊断和不同下一步 | 继续重复，或给出无依据的根因结论 |
-| 失败来自 agent 重复或工具限制 | 修正 agent 行为或补足条件 | 写成用户的负面习惯 |
+| The goal is clear and progress continues | Complete the task normally | Introduce unnecessary reflection |
+| The user keeps comparing options and gradually clarifies preferences | Help form trade-offs | Misdiagnose normal exploration as a thinking problem |
+| Several turns return to the same obstacle without new information | Offer a testable diagnosis and a different next step | Continue repeating, or assert an unsupported root cause |
+| Failure comes from repetitive agent behavior or tool limits | Correct agent behavior or supply missing conditions | Record it as a negative user habit |
 
-[inference] 先比较轻量干预与原有互动，记录触发误报、任务改善、额外提问及用户负担。长期学习收益与画像有效性需要后续独立验证。
+[inference] First compare lightweight intervention with the existing interaction, recording false triggers, task improvement, extra questions, and user burden. Long-term learning benefits and profile effectiveness require separate later validation.
 
-## 判断信心
+## Judgment confidence
 
-四维分数用于记录建议支持度，不是统计概率。J1–J4 均为 Owner 1（用户明确提出相应方向）、Research 0.5（邻近研究支持，尚无本项目实测）、Reasoning 1、Project history 0.5（已有草稿，未验证），合计 3，中。具体触发阈值、最佳干预形式及存储选择不在这些判断之内。
+The four-dimensional scores record support for recommendations, not statistical probabilities. J1–J4 each receive Owner 1 (the user explicitly requested the direction), Research 0.5 (adjacent evidence, without project measurements), Reasoning 1, and Project history 0.5 (an existing but unvalidated draft): total 3, medium. These judgments do not establish specific activation thresholds, the best intervention form, or storage choices.
 
 ## Not verified
 
-- 没有检验任何自动停滞检测器，也没有验证画像能改善后续互动。
-- 没有证明某组固定步骤、层级或哲学基础适合所有场景。
-- Schön 的 reflection-in-action 是相关线索，但本轮作者章节超时、书籍 PDF 超出读取大小限制，未据其提出实质结论。
-- 本轮是定向调查，不是截至 2026-10-25 的系统综述。
-- 工程文章包含后续更新，只引用本轮实际核读的设计原则，不追溯断言所有内容在 2024 年已存在。
+- No automatic stall detector was tested, and no profile was shown to improve subsequent interactions.
+- No fixed set of steps, levels, or philosophical foundations was established as suitable for all situations.
+- Schön's reflection-in-action is a relevant lead, but the author's chapter timed out and the book PDF exceeded the reading size limit during the original investigation. No substantive conclusion relies on it.
+- This was a targeted investigation, not a systematic review of research available through 2026-10-25.
+- The engineering article includes later updates. Only design principles actually read during this investigation are cited; the note does not retrospectively assert that all its content existed in 2024.
 
 ## Decisions for the owner
 
-本轮无必须决定的事项。未来实施时再选首个宿主和画像存储位置，当前保留开放。
+No decision was required at this stage. The first host and profile storage location can be selected during implementation; both remained open in this investigation.
 
 ## Sources
 
-- [S1 — Slovic: The Construction of Preference](https://bear.warrington.ufl.edu/brenner/mar7588/Papers/slovic-ampsy1995.pdf)：作者论文，大学托管副本，核读相关正文。
-- [S2 — Buçinca 等: To Trust or to Think](https://arxiv.org/pdf/2102.09692)：作者论文正文，核读认知干预及负担取舍相关部分。
-- [S3 — Anthropic: Building effective agents](https://www.anthropic.com/research/building-effective-agents)：一手工程经验，核读简单设计、模式条件及反馈建议。
-- [S4 — Agent Skills specification](https://agentskills.io/specification)：官方格式与分层加载规范。
-- [S5 — Adding skills support](https://agentskills.io/client-implementation/adding-skills-support)：官方集成指南，核读目录可见性与两种激活机制。
+- [S1 — Slovic: The Construction of Preference](https://bear.warrington.ufl.edu/brenner/mar7588/Papers/slovic-ampsy1995.pdf): the author's paper, hosted by a university; relevant body text was read.
+- [S2 — Buçinca and colleagues: To Trust or to Think](https://arxiv.org/pdf/2102.09692): the authors' paper; passages on cognitive intervention and burden trade-offs were read.
+- [S3 — Anthropic: Building effective agents](https://www.anthropic.com/research/building-effective-agents): first-party engineering experience; simple design, pattern conditions, and feedback guidance were read.
+- [S4 — Agent Skills specification](https://agentskills.io/specification): official format and progressive-loading specification.
+- [S5 — Adding skills support](https://agentskills.io/client-implementation/adding-skills-support): official integration guide; catalog visibility and both activation mechanisms were read.
