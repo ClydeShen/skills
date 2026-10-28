@@ -25,7 +25,7 @@ No skill has been released yet.
 
 ## Shared delivery harness
 
-Use Node.js 24 and Git, run `npm ci`, then `npm run check`. The same deterministic gate serves Codex, Claude, other delivery agents and CI. It checks package layout, references, structured data, tool projections, harness tests and synthetic evaluation. See [the harness guide](./docs/HARNESS.md) for collaboration, optional local hooks and enforcement limits.
+Use Node.js 24 and Git, run `npm ci`, `npm run git:setup`, then `npm run check`. Start each agent session with `npm run git:check`. Work on short-lived `work/<topic>` branches; use separate worktrees for concurrent tasks and squash PRs into `main`. See [Git strategy](./docs/HARNESS.md#git-strategy) for startup and cleanup. The shared gate checks Git policy, package layout, references, structured data, tool projections, harness tests and synthetic evaluation. See [the harness guide](./docs/HARNESS.md) for enforcement limits.
 
 ## Prompt evaluation
 

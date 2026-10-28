@@ -1,6 +1,8 @@
 import { checkRepository, repositoryRoot } from './repository.mjs';
+import { checkGit } from './git-policy.mjs';
 
 try {
+  console.log(`Git policy: ${checkGit(repositoryRoot)}`);
   const result = checkRepository(repositoryRoot);
   for (const warning of result.warnings) console.warn(`WARN ${warning}`);
   for (const error of result.errors) console.error(`FAIL ${error}`);

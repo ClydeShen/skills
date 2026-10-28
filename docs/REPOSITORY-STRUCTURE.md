@@ -20,6 +20,7 @@ A source of truth owns one kind of fact. Other files link to it or contain an ex
 | Initiative cases and assertions | `incubator/<initiative>/evals/` | `evaluation.md` records runs and interpretation |
 | Shared evaluation implementation | Root `evals/` | npm scripts and CI call it |
 | Repository checks and client-neutral hook implementation | Root `harness/` | Client adapters, Git hooks and CI reuse it; `docs/HARNESS.md` explains coverage and activation |
+| Git workflow and session/cleanup instructions | `docs/HARNESS.md` Git strategy | `AGENTS.md` links the procedure; `harness/git-policy.mjs`, Git hooks and CI enforce observable rules |
 | Executable project commands and dependencies | `package.json` and `package-lock.json` | Agent instructions link to documented commands |
 | Desired `main` protection settings | `.github/main-protection.json` | GitHub holds actual enforcement state; `docs/HARNESS.md` records activation and verification |
 | Imported development-skill provenance | `skills-lock.json` and its upstream sources | `.agents/skills/` is the canonical installed tree; `.claude/skills/` is a synchronized projection |

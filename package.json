@@ -7,6 +7,8 @@
   "scripts": {
     "check": "node harness/run.mjs",
     "check:repo": "node harness/check.mjs",
+    "git:setup": "node harness/git-policy.mjs setup",
+    "git:check": "node harness/git-policy.mjs check",
     "lint:agents": "agnix .",
     "skills:sync": "node harness/sync-skills.mjs --write",
     "test": "node --test harness/*.test.mjs evals/harness.test.mjs",
