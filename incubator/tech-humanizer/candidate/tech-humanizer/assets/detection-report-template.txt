@@ -1,0 +1,43 @@
+Marker density (when requested): <flagged sentences / total sentences, rounded to an integer percentage>
+
+Content: <count>
+- Location: <paragraph/sentence>
+  Fragment: "<text>"
+  Issue: <why it reads AI-shaped>
+  Rewrite example: "<example>"
+
+Language: <count>
+- Location: <paragraph/sentence>
+  Fragment: "<text>"
+  Issue: <why it reads AI-shaped>
+  Rewrite example: "<example>"
+
+Style and formatting: <count>
+- Location: <paragraph/sentence>
+  Fragment: "<text>"
+  Issue: <why it reads AI-shaped>
+  Rewrite example: "<example>"
+
+Communication intent: <count>
+- Location: <paragraph/sentence>
+  Fragment: "<text>"
+  Issue: <why it reads AI-shaped>
+  Rewrite example: "<example>"
+
+Markup, citations, and sources: <count>
+- Location: <paragraph/sentence>
+  Fragment: "<text>"
+  Issue: <why it reads AI-shaped>
+  Rewrite example: "<example>"
+
+Comment-style residue: <count>
+- Location: <paragraph/sentence>
+  Fragment: "<text>"
+  Issue: <why it reads AI-shaped>
+  Rewrite example: "<example>"
+
+Code: <count>
+- Location: <file/line>
+  Fragment: "<text>"
+  Issue: <why it reads AI-shaped>
+  Rewrite example: "<example>"

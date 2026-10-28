@@ -1,0 +1,588 @@
+[
+  {
+    "description": "cleanup-technical",
+    "vars": {
+      "request": "Rewrite this technical update: Certainly! It is important to note that our robust Gateway API implementation seamlessly leverages HTTPRoute to route requests to the payments service. This marks a pivotal milestone in our innovative platform.",
+      "checks": {
+        "contains": [
+          "Gateway API",
+          "HTTPRoute",
+          "payments service"
+        ],
+        "forbidden": [
+          "certainly",
+          "important to note",
+          "seamless",
+          "pivotal",
+          "innovative"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "State that Gateway API uses HTTPRoute to route requests to the payments service. Remove ceremonial framing and promotional evaluation. Add no new capability, metric, or deployment claim.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "protected-modern-terms",
+    "vars": {
+      "request": "Humanize this technical note: Our innovative platform leverages OpenTelemetry and OTLP for telemetry, while ML-KEM protects key establishment. The deployment uses a StatefulSet and a ConfigMap.",
+      "checks": {
+        "contains": [
+          "OpenTelemetry",
+          "OTLP",
+          "ML-KEM",
+          "StatefulSet",
+          "ConfigMap"
+        ],
+        "forbidden": [
+          "innovative",
+          "leverages"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Keep each named term exactly, including case. Preserve which component performs each role. Use plain language.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "unknown-and-legacy-terms",
+    "vars": {
+      "request": "Humanize this compatibility note: It is important to note that QuasarLedger-v7 uses SSL for the legacy endpoint. New endpoints use TLS 1.3. The legacy endpoint will remain until 2027-03-01.",
+      "checks": {
+        "contains": [
+          "QuasarLedger-v7",
+          "SSL",
+          "TLS 1.3",
+          "2027-03-01"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Preserve the unlisted product identifier, legacy SSL distinction, and retirement commitment. Do not silently modernize SSL to TLS.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "clean-text",
+    "vars": {
+      "request": "Rewrite this message if needed: The export failed. Retry it after the worker restarts.",
+      "checks": {
+        "exact": "The export failed. Retry it after the worker restarts.",
+        "unchanged_profiles": true
+      },
+      "rubric": "Return the already natural message unchanged. Preserve its condition and add no explanation or profile entry.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "plain-verbs",
+    "vars": {
+      "request": "Humanize this instruction: It is important to note that you can get the project number, open the console, and run the query. The trigger fires after the worker restarts.",
+      "checks": {
+        "contains": [
+          "get",
+          "open",
+          "run",
+          "trigger fires"
+        ],
+        "forbidden": [
+          "retrieve",
+          "obtain",
+          "navigate to",
+          "important to note"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Remove the preamble while retaining ordinary verbs and the event-driven expression trigger fires.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "business-document",
+    "vars": {
+      "request": "Humanize this business recommendation: This strategic renewal represents a pivotal opportunity to unlock value. We recommend renewing for two years because the supplier will hold the unit price at the current rate. The migration fee is waived.",
+      "checks": {
+        "contains": [
+          "two years",
+          "unit price",
+          "migration fee"
+        ],
+        "forbidden": [
+          "pivotal",
+          "unlock value"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Lead with the renewal recommendation and its two supplied commercial reasons. Use clear business prose; retain the two-year duration and fee waiver.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "client-email",
+    "vars": {
+      "request": "Rewrite this email to a new client: Dear Priya, It is important to note that the migration finished at 14:30 UTC. The post-migration checks found no data loss. Kindly review the dashboard by Friday. Best regards, Alex",
+      "checks": {
+        "contains": [
+          "Priya",
+          "14:30 UTC",
+          "Friday"
+        ],
+        "forbidden": [
+          "important to note"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Fit a new client email: concise greeting, courteous direct request, brief closing. Preserve the completed migration, check result, deadline, and signatory.",
+      "user_profile": {
+        "version": 2,
+        "global_voice": {
+          "preferences": [],
+          "patterns": [],
+          "do_not_change": []
+        },
+        "contexts": {
+          "business-document": {
+            "patterns": []
+          },
+          "technical-document": {
+            "patterns": []
+          },
+          "email": {
+            "patterns": [
+              {
+                "rule": "Use a short greeting, a courteous direct request, and a brief closing in client email.",
+                "language": "en",
+                "audience": "client",
+                "confidence": "explicit",
+                "updated_at": "2026-10-19"
+              }
+            ]
+          },
+          "message": {
+            "patterns": [
+              {
+                "rule": "Use contractions and omit greetings in active team chat.",
+                "language": "en",
+                "audience": "teammate",
+                "confidence": "explicit",
+                "updated_at": "2026-10-19"
+              }
+            ]
+          }
+        },
+        "candidates": []
+      },
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "team-message",
+    "vars": {
+      "request": "Rewrite this message in an active teammate thread: Hello everyone, I am pleased to inform you that deployment is complete. We have not seen errors in the checks so far. Please check your dashboards.",
+      "checks": {
+        "forbidden": [
+          "pleased to inform",
+          "hello everyone"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Use a brief conversational team message, omit the greeting, and follow message preferences. Keep the qualified check result rather than claiming there are no errors.",
+      "user_profile": {
+        "version": 2,
+        "global_voice": {
+          "preferences": [],
+          "patterns": [],
+          "do_not_change": []
+        },
+        "contexts": {
+          "business-document": {
+            "patterns": []
+          },
+          "technical-document": {
+            "patterns": []
+          },
+          "email": {
+            "patterns": [
+              {
+                "rule": "Use a short greeting, a courteous direct request, and a brief closing in client email.",
+                "language": "en",
+                "audience": "client",
+                "confidence": "explicit",
+                "updated_at": "2026-10-19"
+              }
+            ]
+          },
+          "message": {
+            "patterns": [
+              {
+                "rule": "Use contractions and omit greetings in active team chat.",
+                "language": "en",
+                "audience": "teammate",
+                "confidence": "explicit",
+                "updated_at": "2026-10-19"
+              }
+            ]
+          }
+        },
+        "candidates": []
+      },
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "context-isolation",
+    "vars": {
+      "request": "Rewrite this executive business brief: We recommend postponing the launch because the access review is incomplete. Approval is required before launch.",
+      "checks": {
+        "contains": [
+          "access review",
+          "before launch"
+        ],
+        "forbidden": [
+          "hey",
+          "ping me"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Use a formal concise recommendation and preserve the approval condition. Message-only habits such as omitting greetings or using contractions do not establish an executive-document voice.",
+      "user_profile": {
+        "version": 2,
+        "global_voice": {
+          "preferences": [],
+          "patterns": [],
+          "do_not_change": []
+        },
+        "contexts": {
+          "business-document": {
+            "patterns": []
+          },
+          "technical-document": {
+            "patterns": []
+          },
+          "email": {
+            "patterns": [
+              {
+                "rule": "Use a short greeting, a courteous direct request, and a brief closing in client email.",
+                "language": "en",
+                "audience": "client",
+                "confidence": "explicit",
+                "updated_at": "2026-10-19"
+              }
+            ]
+          },
+          "message": {
+            "patterns": [
+              {
+                "rule": "Use contractions and omit greetings in active team chat.",
+                "language": "en",
+                "audience": "teammate",
+                "confidence": "explicit",
+                "updated_at": "2026-10-19"
+              }
+            ]
+          }
+        },
+        "candidates": []
+      },
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "source-scope",
+    "vars": {
+      "request": "Humanize this report paragraph: It is important to note that the pilot reduced export time from 90 seconds to 20 seconds for 12 test accounts, according to the pilot report (https://example.org/pilot). This demonstrates that all customers will benefit.",
+      "checks": {
+        "contains": [
+          "90 seconds",
+          "20 seconds",
+          "12 test accounts",
+          "https://example.org/pilot"
+        ],
+        "forbidden": [
+          "all customers will benefit"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Scope the measured result to the pilot's 12 accounts and retain the citation. Remove the unsupported universal extrapolation; invent no further evidence.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": [
+        "references/source-and-markup-integrity.md"
+      ]
+    }
+  },
+  {
+    "description": "uncertainty-and-safety",
+    "vars": {
+      "request": "Humanize this operational note: It is worth noting that the retry may fail if the upstream service remains unavailable. Do not disable certificate verification. Retry only after the certificate chain has been repaired.",
+      "checks": {
+        "contains": [
+          "may fail",
+          "Do not disable certificate verification.",
+          "Retry only after the certificate chain has been repaired."
+        ],
+        "forbidden": [
+          "worth noting"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Keep the real uncertainty, failure condition, and exact safety and prerequisite sentences. Use direct language without softening the instructions.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "personal-punctuation",
+    "vars": {
+      "request": "Rewrite this message if needed: The worker is ready — the logs confirm it.",
+      "checks": {
+        "exact": "The worker is ready — the logs confirm it.",
+        "unchanged_profiles": true
+      },
+      "rubric": "The source is already natural and matches the explicit punctuation preference. Retain the em dash and whole message unchanged.",
+      "user_profile": {
+        "version": 2,
+        "global_voice": {
+          "preferences": [
+            {
+              "rule": "Keep an occasional em dash when it joins a brief aside naturally.",
+              "language": "en",
+              "confidence": "explicit",
+              "updated_at": "2026-10-19"
+            }
+          ],
+          "patterns": [],
+          "do_not_change": []
+        },
+        "contexts": {
+          "business-document": {
+            "patterns": []
+          },
+          "technical-document": {
+            "patterns": []
+          },
+          "email": {
+            "patterns": []
+          },
+          "message": {
+            "patterns": []
+          }
+        },
+        "candidates": []
+      },
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "explicit-preference",
+    "vars": {
+      "request": "For all my English writing, please use 'use' instead of 'utilize'. Remember that wording preference.",
+      "checks": {
+        "profile_rule": {
+          "scope": "global",
+          "pattern": "utilize",
+          "confidence": "explicit"
+        }
+      },
+      "rubric": "Persist the explicit English word preference globally and acknowledge it briefly. Keep project profile absent.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "correction-revert",
+    "vars": {
+      "request": "Keep 'get' instead of 'retrieve' in that sentence. Please remember this correction.",
+      "checks": {
+        "profile_rule": {
+          "scope": "global",
+          "pattern": "get",
+          "confidence": "explicit"
+        }
+      },
+      "rubric": "Capture the user's explicit get/retrieve correction in preferences or do_not_change. Apply it to the revised sentence. Generalize only as far as this correction supports.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [
+        {
+          "role": "user",
+          "content": "Rewrite: You can get the project number from the console."
+        },
+        {
+          "role": "assistant",
+          "content": "You can retrieve the project number from the console."
+        }
+      ],
+      "references": []
+    }
+  },
+  {
+    "description": "draft-contamination",
+    "vars": {
+      "request": "Humanize this draft. Its author is unknown: I always use fragments. Lots of them. It is important to note that the deployment finished.",
+      "checks": {
+        "unchanged_profiles": true
+      },
+      "rubric": "Rewrite the draft without treating its first-person style claims as user preferences or sampling its fragments into the user profile.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "one-conversation-candidate",
+    "vars": {
+      "request": "This is my own message: I put the decision first. Then I explain my reason in a longer sentence so the reader can see how I reached it. Please learn my writing habits.",
+      "checks": {
+        "candidate_only": true
+      },
+      "rubric": "Create a provisional observation from this one sample. Repeated features within one sample do not count as three independent observations and cannot establish a global habit.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "promotion-after-independent-evidence",
+    "vars": {
+      "request": "This is another message I wrote myself in a separate conversation: I recommend delaying the launch. The access review is incomplete, so the team needs more time. Please update my writing profile.",
+      "checks": {
+        "profile_rule": {
+          "scope": "message",
+          "pattern": "decision|recommendation|reason",
+          "confidence": "observed"
+        }
+      },
+      "rubric": "The candidate has two independently recorded earlier message samples and this is the third. Promote the decision-before-reason habit in the message context. It has no evidence across contexts, so keep it out of global patterns.",
+      "user_profile": {
+        "version": 2,
+        "global_voice": {
+          "preferences": [],
+          "patterns": [],
+          "do_not_change": []
+        },
+        "contexts": {
+          "business-document": {
+            "patterns": []
+          },
+          "technical-document": {
+            "patterns": []
+          },
+          "email": {
+            "patterns": []
+          },
+          "message": {
+            "patterns": []
+          }
+        },
+        "candidates": [
+          {
+            "pattern": "Lead with the decision, then give the reason.",
+            "language": "en",
+            "context": "message",
+            "observation_count": 2,
+            "evidence": [
+              "Independent message sample on 2026-10-12",
+              "Independent message sample on 2026-10-15"
+            ],
+            "updated_at": "2026-10-15"
+          }
+        ]
+      },
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "project-terminology",
+    "vars": {
+      "request": "In this project, the release stage is called 'deployment ring', not 'release wave'. Remember that project term.",
+      "checks": {
+        "project_term": "deployment ring"
+      },
+      "rubric": "Save deployment ring as a project term with release wave as its alternative. Keep personal voice free of the project vocabulary.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  },
+  {
+    "description": "asd-ste100-explicit",
+    "vars": {
+      "request": "Rewrite this maintenance instruction using ASD-STE100 principles: Prior to commencing inspection, ensure that the unit is disconnected from the power supply. You have only the bundled principles, not the complete standard or dictionary.",
+      "checks": {
+        "contains": [
+          "ASD-STE100-inspired"
+        ],
+        "forbidden": [
+          "ASD-STE100 compliant"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Produce a short direct maintenance instruction retaining disconnection before inspection. Identify the result as ASD-STE100-inspired because a full conformance check is unavailable.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": [
+        "references/asd-ste100.md"
+      ]
+    }
+  },
+  {
+    "description": "asd-ste100-normal-email",
+    "vars": {
+      "request": "Humanize this ordinary client email: Hi Priya, please review the access report by Friday. Thanks, Alex.",
+      "checks": {
+        "contains": [
+          "Priya",
+          "Friday",
+          "Alex"
+        ],
+        "forbidden": [
+          "ASD-STE100",
+          "controlled dictionary"
+        ],
+        "unchanged_profiles": true
+      },
+      "rubric": "Keep an ordinary courteous email. Do not activate controlled-English mode or add conformance commentary.",
+      "user_profile": null,
+      "project_profile": null,
+      "history": [],
+      "references": []
+    }
+  }
+]

@@ -1,6 +1,6 @@
-# Social Contract
+# Human Team in the Loop
 
-The harness enforces some rules with tools: checks, branch rules, permissions. Other rules cannot be enforced, or are not worth a tool. A team keeps those rules by agreement. This file is a catalog of such agreements for teams of several people, each with their own agents.
+The human team stays responsible for work that agents help to produce. The harness enforces some rules with tools: checks, branch rules, permissions. Other rules cannot be enforced, or are not worth a tool. A team keeps those rules by agreement. This file is a catalog of such agreements for teams of several people, each with their own agents.
 
 An agreement is not a workflow step. The workflow is in [issue-workflow-standard.md](./issue-workflow-standard.md). Nobody tracks the agreements. Each member keeps them in mind and applies them at the moment they act.
 

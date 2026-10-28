@@ -132,4 +132,4 @@ At "very low", prefer the cautious action: "if in doubt, don't". Raise the level
 4. Scale the plan to the task. If you can describe the change in one sentence, do it without a plan document.
 5. Use the fewest agents and steps that do the job. Say how many and why. Each extra agent costs tokens and review.
 6. In each report, separate three things: what is done and verified, what is not done, and what the owner must do. Give each risk a severity and a next step. Do not raise an alarm without a next step.
-7. If a decision is in your role and you can reverse it, make it and tell the owner (agreement D1 in [social-contract.md](./social-contract.md)). Do not ask.
+7. If a decision is in your role and you can reverse it, make it and tell the owner (agreement D1 in [human-team-in-loop.md](./human-team-in-loop.md)). Do not ask.

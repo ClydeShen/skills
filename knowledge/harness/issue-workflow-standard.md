@@ -113,7 +113,7 @@ The table is the source. The diagram shows the table.
 
 4.3 **Closing keywords.** Do not use the keywords that close an issue on merge (for example, `Fixes #12` on some hosting platforms). Refer to the issue with a trailer such as `Refs: #12`. A closing keyword moves the issue to "closed" without verification.
 
-4.4 **A change of claim.** To take over an issue that another implementer claimed, ask in the issue. Change the claim only when the first implementer removes it, or by the rule that the team set for claims with no answer ([social-contract.md](./social-contract.md), B4 and B5). The state does not change.
+4.4 **A change of claim.** To take over an issue that another implementer claimed, ask in the issue. Change the claim only when the first implementer removes it, or by the rule that the team set for claims with no answer ([human-team-in-loop.md](./human-team-in-loop.md), B4 and B5). The state does not change.
 
 4.5 **New states.** A project can add states. Each new state must have a state owner, a condition to enter, and a transition out. Check the workflow with the closure rules in section 7.
 

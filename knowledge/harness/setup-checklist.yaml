@@ -716,7 +716,7 @@ items:
     harness: { role: guide, control: computational, timing: pre-integration }
     why: Agents copy what they see, including local paths and secrets, into committed files.
     weight_reason: Prevents leaks; does not affect whether work is correct.
-    see: [delivery-phases-overview.md#phase-3-guardrails, social-contract.md]
+    see: [delivery-phases-overview.md#phase-3-guardrails, human-team-in-loop.md]
     status: todo
 
   # ---------------------------------------------------------------- Phase 4: Plan
@@ -1076,7 +1076,7 @@ items:
     weight_reason: A human sensor for what no tool measures; it strengthens the harness but does not stop wrong work by itself.
     see:
       [
-        social-contract.md,
+        human-team-in-loop.md,
         issue-workflow-standard.md#8-delivery-health,
         judgment-practices.md,
       ]

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tech Humanizer"
+  short_description: "Rewrite AI-shaped prose in your own voice"
+  default_prompt: "Use $tech-humanizer to rewrite this text in my established writing style."
