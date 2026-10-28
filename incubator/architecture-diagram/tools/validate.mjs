@@ -12,18 +12,86 @@ const intersects = (a, b, r) => {
   return false;
 };
 
+// A route's inside/outside sequence must match its endpoints' declared membership.
+// Geometry cannot silently invent transit through another architectural domain.
+export function validateBoundaryRoutes(nodes, routes) {
+  const errors = [], byId = new Map(nodes.map(n => [n.id, n]));
+  const member = (id, domain) => {
+    const seen = new Set();
+    while (byId.has(id) && !seen.has(id)) {
+      if (id === domain) return true;
+      seen.add(id); id = byId.get(id).parent;
+    }
+    return false;
+  };
+  const epsilon = 1e-6;
+  const validRoutes = routes.filter(route => {
+    const valid = Array.isArray(route.points) && route.points.length >= 2 && route.points.every(p => p && Number.isFinite(p.x) && Number.isFinite(p.y));
+    if (!valid) errors.push(`Invalid boundary route coordinates: ${route.id}`);
+    return valid;
+  });
+  for (const domain of nodes.filter(boundary)) {
+    const r = domain.bounds;
+    if (!r || !Object.values(r).every(Number.isFinite)) { errors.push(`Missing boundary bounds: ${domain.id}`); continue; }
+    for (const node of nodes.filter(n => n.bounds && n.id !== domain.id && member(n.id, domain.id))) {
+      const b = node.bounds;
+      if (b.x < r.x || b.y < r.y || b.x + b.w > r.x + r.w || b.y + b.h > r.y + r.h) errors.push(`Element outside declared boundary ${domain.id}: ${node.id}`);
+    }
+    for (const route of validRoutes) {
+      if (!byId.has(route.source) || !byId.has(route.target)) { errors.push(`Missing route endpoint metadata: ${route.id}`); continue; }
+      const states = [];
+      for (let i = 1; i < route.points.length; i++) {
+        const a = route.points[i - 1], b = route.points[i], dx = b.x - a.x, dy = b.y - a.y;
+        if (Math.abs(dx) + Math.abs(dy) < epsilon) continue;
+        const cuts = [0, 1];
+        for (const [delta, start, walls] of [[dx, a.x, [r.x, r.x + r.w]], [dy, a.y, [r.y, r.y + r.h]]]) {
+          if (Math.abs(delta) > epsilon) for (const wall of walls) {
+            const t = (wall - start) / delta;
+            if (t > 0 && t < 1) cuts.push(t);
+          }
+        }
+        cuts.sort((x, y) => x - y);
+        for (let j = 1; j < cuts.length; j++) {
+          if (cuts[j] - cuts[j - 1] < epsilon) continue;
+          const t = (cuts[j] + cuts[j - 1]) / 2, x = a.x + dx * t, y = a.y + dy * t;
+          const onVertical = (Math.abs(x - r.x) < epsilon || Math.abs(x - r.x - r.w) < epsilon) && y >= r.y && y <= r.y + r.h;
+          const onHorizontal = (Math.abs(y - r.y) < epsilon || Math.abs(y - r.y - r.h) < epsilon) && x >= r.x && x <= r.x + r.w;
+          if (onVertical || onHorizontal) errors.push(`Route follows boundary ${domain.id}: ${route.id}`);
+          const state = x > r.x && x < r.x + r.w && y > r.y && y < r.y + r.h ? 'inside' : 'outside';
+          if (states.at(-1) !== state) states.push(state);
+        }
+      }
+      const start = member(route.source, domain.id) ? 'inside' : 'outside';
+      const end = member(route.target, domain.id) ? 'inside' : 'outside';
+      const expected = start === end ? [start] : [start, end];
+      if (states.join(',') !== expected.join(',')) errors.push(`Boundary route mismatch ${domain.id}: ${route.id} (${states.join(' -> ')}; expected ${expected.join(' -> ')})`);
+    }
+  }
+  return [...new Set(errors)];
+}
+
 export function validateRender(report) {
   const errors = [], metrics = report.metrics || [], vertices = metrics.filter(n => !n.points);
   if (report.upstream_commit !== '84487b4891cbc0f32d7e30f34cf878c87cb1f414' || !metrics.length) return ['Missing or unpinned render evidence.'];
   for (const edge of metrics.filter(n => n.points)) {
-    let longestHorizontal = 0;
+    let hosted = false;
     for (let i = 1; i < edge.points.length; i++) {
       const a = edge.points[i - 1], b = edge.points[i];
-      if (Math.abs(a.y - b.y) < 1) longestHorizontal = Math.max(longestHorizontal, Math.abs(a.x - b.x));
+      // A connector's own opaque label interrupts the line; this is not a collision.
+      if (edge.text) {
+        const t = edge.text, cx = t.x + t.w / 2, cy = t.y + t.h / 2;
+        if (Math.abs(a.y - b.y) < 1 && Math.abs(cy - a.y) < 3 && cx - t.w / 2 >= Math.min(a.x, b.x) - 2 && cx + t.w / 2 <= Math.max(a.x, b.x) + 2) hosted = true;
+        if (Math.abs(a.x - b.x) < 1 && Math.abs(cx - a.x) < 3 && cy - t.h / 2 >= Math.min(a.y, b.y) - 2 && cy + t.h / 2 <= Math.max(a.y, b.y) + 2) hosted = true;
+      }
       for (const node of vertices) if (node.text && intersects(a, b, node.text)) errors.push(`Rendered line crosses text ${node.id}: ${edge.id}`);
     }
-    if (edge.text && edge.text.w > longestHorizontal + 2) errors.push(`Rendered label is longer than any horizontal segment: ${edge.id}`);
+    if (edge.text && !hosted) errors.push(`Rendered label must sit on and fit its host segment: ${edge.id}`);
+    for (const domain of vertices.filter(n => boundary({ c4Type: n.type }) && n.bounds)) {
+      const r = domain.bounds, corners = [{ x: r.x, y: r.y }, { x: r.x + r.w, y: r.y }, { x: r.x + r.w, y: r.y + r.h }, { x: r.x, y: r.y + r.h }];
+      if (edge.text && corners.some((a, i) => intersects(a, corners[(i + 1) % 4], edge.text))) errors.push(`Rendered label obscures boundary ${domain.id}: ${edge.id}`);
+    }
   }
+  errors.push(...validateBoundaryRoutes(vertices.map(n => ({ ...n, c4Type: n.type })), metrics.filter(n => n.points)));
   return [...new Set(errors)];
 }
 
@@ -88,16 +156,20 @@ export function validateDiagram(xml, catalog) {
     const lines = n.label.split('\n').reduce((sum, line) => sum + Math.max(1, Math.ceil(line.length * 7.2 / width)), 0);
     captions.set(n.id, { x: b.x + b.w / 2 - width / 2, y: b.y + b.h + Number(s.spacingTop || 0), w: width, h: lines * 16 });
   }
-  const segments = [];
+  const segments = [], routes = [];
   for (const e of nodes.filter(n => n.edge === '1')) {
     const source = byId.get(e.source), target = byId.get(e.target), s = styleMap(e.style || '');
     if (!source || !target || !boxes.has(e.source) || !boxes.has(e.target)) { errors.push(`Missing edge endpoint: ${e.id}`); continue; }
     if (!e.value?.trim()) errors.push(`Missing relationship label: ${e.id}`);
     if (s.startArrow !== 'none' || s.endArrow !== 'block' || s.endFill !== '1') errors.push(`Use one filled, single-direction arrow: ${e.id}`);
     if (s.fontSize !== '12') errors.push(`Wrong relationship font: ${e.id}`);
+    if (s.labelBackgroundColor !== '#ffffff' || Number(e.mxGeometry?.y || 0) !== 0) errors.push(`Use an opaque label on the connector: ${e.id}`);
     if (source.c4Type === 'Container' && target.c4Type === 'Container' && !/\[[^\]]+\]/.test(e.value)) errors.push(`Missing relationship technology/protocol: ${e.id}`);
     const port = (id, x, y) => { const b = boxes.get(id); return { x: b.x + b.w * Number(x ?? 0.5), y: b.y + b.h * Number(y ?? 0.5) }; };
     const points = [port(e.source, s.exitX, s.exitY), ...list(e.mxGeometry?.Array?.mxPoint).map(p => ({ x: Number(p.x), y: Number(p.y) })), port(e.target, s.entryX, s.entryY)];
+    if (e.parent !== '1') errors.push(`Prototype routes require root coordinates: ${e.id}`);
+    if (!points.every(p => Number.isFinite(p.x) && Number.isFinite(p.y))) errors.push(`Invalid route coordinates: ${e.id}`);
+    routes.push({ id: e.id, source: e.source, target: e.target, points });
     for (let i = 1; i < points.length; i++) {
       const a = points[i - 1], b = points[i];
       if (Math.abs(a.x - b.x) >= 1 && Math.abs(a.y - b.y) >= 1) errors.push(`Non-orthogonal declared segment: ${e.id}`);
@@ -109,6 +181,7 @@ export function validateDiagram(xml, catalog) {
       segments.push({ a, b, id: e.id });
     }
   }
+  errors.push(...validateBoundaryRoutes(nodes.filter(n => n.vertex === '1').map(n => ({ ...n, bounds: boxes.get(n.id) })), routes));
   for (let i = 0; i < segments.length; i++) for (let j = i + 1; j < segments.length; j++) {
     const p = segments[i], q = segments[j]; if (p.id === q.id) continue;
     const horizontal = Math.abs(p.a.y - p.b.y) < 1 && Math.abs(q.a.y - q.b.y) < 1 && Math.abs(p.a.y - q.a.y) < 1;

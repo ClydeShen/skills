@@ -24,7 +24,7 @@ function vertex(id, label, type, technology, parent, x, y, width, height, entry 
 function note(id, label, x, y, width, height, bold = false) {
   cells.push(`<mxCell id="${id}" value="${xml(label)}" vertex="1" parent="1" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=12;fontStyle=${bold ? 1 : 0};"><mxGeometry x="${x}" y="${y}" width="${width}" height="${height}" as="geometry"/></mxCell>`);
 }
-function edge(id, from, to, label, points = [], { dashed = false, bold = false, exitX = 1, exitY = 0.5, entryX = 0, entryY = 0.5, labelX = 0, labelY = -18 } = {}) {
+function edge(id, from, to, label, points = [], { dashed = false, bold = false, exitX = 1, exitY = 0.5, entryX = 0, entryY = 0.5, labelX = 0, labelY = 0 } = {}) {
   const style = `edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;startArrow=none;strokeColor=#545b64;strokeWidth=1.5;fontFamily=Arial;fontSize=12;fontStyle=${bold ? 1 : 0};dashed=${dashed ? 1 : 0};labelBackgroundColor=#ffffff;exitX=${exitX};exitY=${exitY};exitPerimeter=0;entryX=${entryX};entryY=${entryY};entryPerimeter=0;`;
   cells.push(`<mxCell id="${id}" value="${xml(label)}" edge="1" parent="1" source="${from}" target="${to}" style="${style}"><mxGeometry x="${labelX}" y="${labelY}" relative="1" as="geometry">${points.length ? '<Array as="points">' + points.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('') + '</Array>' : ''}</mxGeometry></mxCell>`);
 }
@@ -33,21 +33,21 @@ note('title', 'Dynamic diagram (deployment view): Token-based API authorization'
 note('requirement', 'Requirement: Authenticate users and authorize each API request.\nResolved evaluation fixture; not evidence of an executed service.', 60, 90, 460, 65);
 note('token', 'Example token claims: cognito:username=alex; custom:tenantId=T-001;\ncustom:type=Customer; cognito:groups=[Customers]', 600, 65, 1130, 45);
 vertex('aws', 'AWS Cloud', 'Deployment node', '', '1', 600, 130, 1240, 740, lookup('AWS Cloud', 'aws4Groups', 'aws4-d0472fc38ac34dce'));
-vertex('enforcement', 'API enforcement', 'Software system boundary', '', 'aws', 440, 100, 380, 530);
-vertex('user', 'User', 'Person', '', '1', 100, 300, 60, 72);
-vertex('web', 'Web sign-in page', 'Container', 'Web app', '1', 260, 300, 160, 72);
-vertex('cognito', 'Amazon Cognito user pool', 'Container', 'Amazon Cognito', 'aws', 70, 170, 72, 72, lookup('Cognito'), 'Authenticates and issues tokens');
-vertex('gateway', 'Amazon API Gateway', 'Container', 'AWS managed service', 'enforcement', 70, 70, 72, 72, lookup('API Gateway', 'aws4Network Content Delivery'), 'Enforces the authorization result');
-vertex('authorizer', 'Lambda authorizer', 'Container', 'AWS Lambda', 'enforcement', 70, 370, 72, 72, lookup('Lambda'), 'Verifies token and queries policy');
-vertex('policy', 'Amazon Verified Permissions', 'Container', 'AWS managed service', 'aws', 160, 470, 72, 72, lookup('Verified Permissions'), 'Makes policy decisions');
-vertex('backend', 'Backend APIs', 'Container', 'REST API', 'aws', 1000, 170, 160, 72);
-edge('uses', 'user', 'web', 'Uses web app', [], { labelY: -18 });
-edge('authenticate', 'web', 'cognito', '1. Authenticate [HTTPS]\nreturns tokens');
-edge('request', 'web', 'gateway', '2. API request with token [HTTPS]', [[340, 230], [1350, 230], [1350, 318]], { exitX: 0.5, exitY: 0, entryX: 1, entryY: 0.25, labelX: -0.15 });
-edge('authorize', 'gateway', 'authorizer', '3. Pass token [AWS invocation]', [[930, 336], [930, 520], [1146, 520]], { exitX: 0, exitY: 0.5, entryX: 0.5, entryY: 0, labelX: 0.5, labelY: -18 });
-edge('query', 'authorizer', 'policy', '4. Query policy [HTTPS]', [[930, 650], [930, 636]], { dashed: true, exitX: 0, exitY: 0.7, entryX: 1, entryY: 0.5, labelY: 20 });
-edge('forward', 'gateway', 'backend', '5. Forward allowed request [HTTPS]');
-edge('failure', 'gateway', 'web', "5'. Authorization failure: HTTP 403 [HTTPS]", [[1000, 318], [1000, 210], [300, 210]], { bold: true, exitX: 0, exitY: 0.25, entryX: 0.25, entryY: 0, labelX: 0.15, labelY: -18 });
+vertex('enforcement', 'API enforcement', 'Software system boundary', '', 'aws', 410, 220, 440, 460);
+vertex('user', 'User', 'Person', '', '1', 100, 470, 60, 72);
+vertex('web', 'Web sign-in page', 'Container', 'Web app', '1', 260, 470, 160, 72);
+vertex('cognito', 'Amazon Cognito user pool', 'Container', 'Amazon Cognito', 'aws', 100, 120, 72, 72, lookup('Cognito'), 'Authenticates and issues tokens');
+vertex('gateway', 'Amazon API Gateway', 'Container', 'AWS managed service', 'enforcement', 70, 120, 72, 72, lookup('API Gateway', 'aws4Network Content Delivery'), 'Enforces the authorization result');
+vertex('authorizer', 'Lambda authorizer', 'Container', 'AWS Lambda', 'enforcement', 290, 270, 72, 72, lookup('Lambda'), 'Verifies token and queries policy');
+vertex('policy', 'Amazon Verified Permissions', 'Container', 'AWS managed service', 'aws', 160, 490, 72, 72, lookup('Verified Permissions'), 'Makes policy decisions');
+vertex('backend', 'Backend APIs', 'Container', 'REST API', 'aws', 1030, 340, 160, 72);
+edge('uses', 'user', 'web', 'Uses web app');
+edge('authenticate', 'web', 'cognito', '1. Authenticate [HTTPS]\nreturns tokens', [[380, 286]], { exitX: 0.75, exitY: 0, labelX: 0.3 });
+edge('request', 'web', 'gateway', '2. API request with token [HTTPS]');
+edge('authorize', 'gateway', 'authorizer', '3. Pass token\n[AWS invocation]', [[1336, 488]], { exitX: 1, exitY: 0.25, entryX: 0.5, entryY: 0, labelX: -0.5 });
+edge('query', 'authorizer', 'policy', '4. Query policy [HTTPS]', [], { dashed: true, exitX: 0, exitY: 0.5, entryX: 1, entryY: 0.5, labelX: 0.7 });
+edge('forward', 'gateway', 'backend', '5. Forward allowed request\n[HTTPS]', [], { exitY: 0.75, entryY: 0.75, labelX: 0.62 });
+edge('failure', 'gateway', 'web', "5'. Authorization failure: HTTP 403 [HTTPS]", [[1116, 430], [300, 430]], { bold: true, exitX: 0.5, exitY: 0, entryX: 0.25, entryY: 0, labelX: -0.25 });
 note('legend', 'Legend\nAWS service tiles: pinned draw.io AWS4 icons.\nWhite box: custom container. Actor glyph: person.\nOutlined groups: deployment node or system boundary.\nSolid: main call. Dashed: auxiliary policy query.\nBold relationship: failure response. Arrows: caller to callee.', 60, 680, 460, 150);
 note('assumptions', 'Prototype assumptions (not owner approvals): generic Web app and REST API;\nHTTPS on external calls; generic AWS invocation for the authorizer.\nThe planted password-verification error is corrected only in this fixture.', 600, 905, 1190, 70);
 const diagram = `<?xml version="1.0" encoding="UTF-8"?>\n<mxfile host="app.diagrams.net" version="${catalog.drawio_version}" compressed="false"><diagram id="scenario-01" name="Scenario 01"><mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1900" pageHeight="1040"><root><mxCell id="0"/><mxCell id="1" parent="0"/>${cells.join('')}</root></mxGraphModel></diagram></mxfile>\n`;
