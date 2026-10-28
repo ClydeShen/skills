@@ -22,7 +22,7 @@ A source of truth owns one kind of fact. Other files link to it or contain an ex
 | Repository checks and client-neutral hook implementation | Root `harness/` | Client adapters, Git hooks and CI reuse it; `docs/HARNESS.md` explains coverage and activation |
 | Git workflow and session/cleanup instructions | `docs/HARNESS.md` Git strategy | `AGENTS.md` links the procedure; `harness/git-policy.mjs`, Git hooks and CI enforce observable rules |
 | Executable project commands and dependencies | `package.json` and `package-lock.json` | Agent instructions link to documented commands |
-| Desired `main` protection settings | `.github/main-protection.json` | GitHub holds actual enforcement state; `docs/HARNESS.md` records activation and verification |
+| Optional stricter `main` protection preset | `.github/main-protection.json` | GitHub holds actual enforcement state; `docs/HARNESS.md` records the accepted soft policy and any separately requested activation |
 | Imported development-skill provenance | `skills-lock.json` and its upstream sources | `.agents/skills/` is the canonical installed tree; `.claude/skills/` is a synchronized projection |
 
 Reusable knowledge explains mechanisms and limits. A package defines installed behavior. These are distinct responsibilities: a runtime instruction must not require the knowledge tree to be installed. The initiative README records which knowledge informed the package.
