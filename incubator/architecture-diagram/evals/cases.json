@@ -1,0 +1,120 @@
+[
+  {
+    "id": "S01",
+    "source": "scenario-01.md",
+    "findings": [
+      "Cognito[\\s\\S]*(?:password|credential)|(?:password|credential)[\\s\\S]*Cognito"
+    ],
+    "fixture": {
+      "action": "clarify",
+      "questions": [
+        {
+          "question": "The page is described as verifying the password. Should Cognito perform this?",
+          "recommendation": "Cognito should verify credentials; the page only collects and submits them."
+        },
+        {
+          "question": "What are the page technology and backend APIs?",
+          "recommendation": "Use generic Web app and REST API containers if their implementation is unknown."
+        }
+      ],
+      "ignored": [],
+      "omitted": []
+    }
+  },
+  {
+    "id": "S02",
+    "source": "scenario-02.md",
+    "findings": [
+      "outbound[\\s\\S]*DNS",
+      "(?:hosted zone|zone)[\\s\\S]*VPC"
+    ],
+    "fixture": {
+      "action": "clarify",
+      "questions": [
+        {
+          "question": "The Route 53 outbound endpoint is described as forwarding HTTPS traffic. Is it needed?",
+          "recommendation": "An outbound resolver forwards DNS only. Route application traffic through Transit Gateway to the execute-api interface endpoint."
+        },
+        {
+          "question": "Should the hosted zone be associated with the ingress VPC?",
+          "recommendation": "Associate the private hosted zone with the VPC rather than the inbound endpoint."
+        },
+        {
+          "question": "Should DNS also pass inspection, and is the Lambda runtime known?",
+          "recommendation": "Confirm DNS inspection from the port 53 rule and use AWS Lambda as the generic technology if the runtime is unknown."
+        }
+      ],
+      "ignored": [],
+      "omitted": []
+    }
+  },
+  {
+    "id": "S03",
+    "source": "scenario-03.md",
+    "findings": [
+      "(?:amend|amendment)",
+      "ManageDocuments",
+      "(?:HTTPS|JSON)"
+    ],
+    "ignored_min": 2,
+    "fixture": {
+      "action": "clarify",
+      "questions": [
+        {
+          "question": "Does the reference to cancel requests mean amend requests?",
+          "recommendation": "Treat it as amend requests after confirmation."
+        },
+        {
+          "question": "Should roles be selected by method rather than always ManageOrders?",
+          "recommendation": "Use ManageOrders for amend_order and ManageDocuments for amend_document."
+        },
+        {
+          "question": "Can the AWS operation remain unspecified?",
+          "recommendation": "Use HTTPS/JSON without an invented operation until the API specification is supplied."
+        }
+      ],
+      "ignored": [
+        "The struck-out accessible-registrations lookup.",
+        "The struck-out orders query."
+      ],
+      "omitted": []
+    }
+  },
+  {
+    "id": "S04",
+    "source": "scenario-04.md",
+    "findings": [
+      "(?:three|3)[\\s\\S]*queue|queue[\\s\\S]*(?:three|3)",
+      "(?:public[\\s\\S]*HTTPS|HTTPS[\\s\\S]*public)",
+      "(?:producer|publishing service)"
+    ],
+    "omitted_min": 3,
+    "fixture": {
+      "action": "clarify",
+      "questions": [
+        {
+          "question": "Should the TBD queue count follow the three workflow types?",
+          "recommendation": "Use three queues, one per record type, subject to confirmation."
+        },
+        {
+          "question": "Who publishes the objects and events?",
+          "recommendation": "Use a plain-box document publishing service until its name is known."
+        },
+        {
+          "question": "What network path connects Azure to the AWS services?",
+          "recommendation": "Recommend public HTTPS endpoints with AWS Signature; do not assume private connectivity."
+        },
+        {
+          "question": "Do steps 5 and 6 describe one blob write?",
+          "recommendation": "Merge them into retrieve, store once and return the blob reference."
+        }
+      ],
+      "ignored": [],
+      "omitted": [
+        "Status and availability business rules.",
+        "Cosmos DB schemas, keys and sample items.",
+        "Alarm and retry handling details."
+      ]
+    }
+  }
+]

@@ -1,6 +1,6 @@
 # Research: Architecture-diagram skill requirements and observed house style
 
-Date: 2026-10-28. Subject: What the owner wants from an architecture-diagram skill, and which visual and structural conventions recur in the owner's real project diagrams. Context: Requirement gathering for a future skill that draws technical architecture diagrams in C4 terms. No initiative or package exists yet. This note is the durable handoff so a fresh session can continue gathering requirements without the earlier conversation.
+Date: 2026-10-28. Subject: What the owner wants from an architecture-diagram skill, and which visual and structural conventions recur in the owner's real project diagrams. Context: Requirements for a skill that draws technical architecture diagrams in C4 terms. The initiative now owns prototype work and evaluation; no installable package exists yet. This note is the durable handoff so a fresh session can continue gathering requirements without the earlier conversation.
 
 Confidence markers:
 - **[owner]**: stated or confirmed by the owner in conversation on the stated date.
@@ -13,7 +13,7 @@ Confidence markers:
 - Decided: requirements R1-R6, the five structural rules, the C4 mapping, and every item in sections 2.5 to 2.9. [owner, 2026-10-28]
 - Requirement gathering reached an empty decision frontier on 2026-10-28. What remains is checked on a rendered prototype: element descriptions do not clutter captions, and the icon size.
 - Research done: [vendor and C4 conventions](vendor-diagram-conventions-2026-10-28.md) and [draw.io built-in libraries](drawio-builtin-icon-libraries-2026-10-28.md).
-- Not started: test scenarios, draw.io prototype, initiative README, any `SKILL.md`. Each waits for the owner to say start.
+- Revised on 2026-10-28: four scenarios were approved later in this conversation and are now migrated to the initiative. The owner authorized work that can proceed without Scenario 05. Prototype and evaluation status are maintained in the initiative README; no `SKILL.md` has been created.
 - The samples come from a client project's internal wiki. Do not copy the images, client names, system names or file paths into this repository. Record only client-neutral rules. [owner, confirmed]
 
 ## 1. Owner requirements (as stated)
@@ -86,7 +86,7 @@ The skill should normalize these rather than copy them:
 - Lines cross captions and other elements. Labels use inconsistent font sizes. Several parallel lines merge into one target.
 - Large empty areas inside a zone. A spelling mistake in a line label.
 - Diagrams lack a legend and the C4 element triple (name, type, technology), except S10.
-- S11 puts labels beside rather than on the lines, crosses lines heavily, and shows a non-AWS element (a source-repository service) with an icon that looks like an AWS developer-tools tile. This is the failure that R2 exists to prevent. The owner has not said whether S11 is a bad example or a target.
+- S11 puts labels beside rather than on the lines, crosses lines heavily, and shows a non-AWS element (a source-repository service) with an icon that looks like an AWS developer-tools tile. This is the failure that R2 exists to prevent. At the initial observation its role was open; section 2.8 later records the owner's decision that it is a bad example.
 
 ### 2.5 C4 notation rules adopted for R6 [owner: adopt all, provisionally]
 
@@ -101,7 +101,7 @@ The owner adopted every row as a provisional baseline on 2026-10-28. If a render
 | Every element states its type. | Missing everywhere except S10. | `[Container: technology]` line under the caption, in smaller grey text. |
 | Every element has a short description. | Missing. | Optional one-line description under the type line. Open: may clutter icon captions. |
 | Every container and component states its technology. | Partly covered by the icon. | Combined with the type line. The icon does not replace the text. |
-| Every line is unidirectional. | Samples use double-headed arrows for two-way flows. | Conflicts with the house style. Owner decision needed. |
+| Every line is unidirectional. | Samples use double-headed arrows for two-way flows. | Initial conflict resolved by section 2.9: caller-to-callee line with notable response in its label. |
 | Every line has a specific label consistent with its direction, avoiding words like "Uses". | Labels exist; some are generic. | Keep labels on the line, add a verb phrase. |
 | Relationships between containers state a technology or protocol. | Mostly missing. | `[HTTPS]`, `[JDBC]` appended to the label or on a second line. |
 | Acronyms are understandable or explained in the key. | Unexplained acronyms occur. [inference] | Explain in the legend. |
@@ -165,7 +165,7 @@ Criteria that would trigger the switch to a separate icon set. [inference; super
 | Several scenarios in one description | The skill lists the scenarios it found, asks which to draw, and draws one diagram per scenario. |
 | Uncertain vendor capability | The skill first checks the vendor's official documentation and cites it in its reply. If the documentation cannot be reached or does not answer the question, it falls back to the missing-information rule: ask with a recommendation, then draw. |
 | Layout gates | Must pass: no line crosses a caption or an element; each line label fits its segment; one font size across the diagram; zone titles stay clear of lines; no two lines share a path segment. Line-to-line crossings are minimized, not forbidden. |
-| Evaluation | During incubation, a test set of 3-5 client-neutral synthetic scenarios modelled on the sample kinds. Each states the expected elements, the gates that must pass, and one planted common-sense error that tests ask-before-drawing. The owner reviews the scenarios before use. Not written yet. |
+| Evaluation | During incubation, a test set of 3-5 client-neutral synthetic scenarios modelled on the sample kinds. Each states the expected elements, the gates that must pass, and one planted common-sense error that tests ask-before-drawing. The owner reviews the scenarios before use. Four approved drafts are maintained in the initiative; Scenario 05 is deferred. |
 | Test set content | The first scenario is a token-based API authorization flow (identity provider, API gateway with a custom authorizer, policy decision service, backend API), rewritten client-neutrally from a reference document the owner supplied. Only vendor service names and the flow enter the repository; no source path, image or client marker. Scenario 02 is a private cross-cloud API call from Azure to a private AWS API Gateway, rewritten client-neutrally from a second owner-supplied reference; its source text contains two vendor-capability errors that stay in the input as natural test points. Scenario 03 is an application-level cross-cloud request (SOAP gateway, authentication, workflow routing and authorization, conversion, a REST API in AWS), rewritten client-neutrally from a third owner-supplied reference; it tests request and response folding, parallel entry branches, struck-out input and natural internal inconsistencies. Scenario 04 is an event-driven cross-cloud flow (publish to object storage and a queue, poll from Azure, store metadata, retrieve on demand), rewritten client-neutrally from a fourth owner-supplied reference. Scenario 05 covers Google Cloud or Kubernetes; the multi-account log collection scenario is dropped because Scenario 02 covers multiple accounts. The set has five scenarios. [owner, 2026-10-28] |
 | "Approximately the same information" | Two checks. (1) The owner looks at the diagram alone and judges whether it is understandable. (2) A fresh agent with no other context reads the rendered diagram and writes down what it says; its readout must carry about the same information as the input text. Intentional differences required by the rules (response folded into the request label, dashed auxiliary calls, added title, legend and type lines) count as a pass. [owner, 2026-10-28] Rendering the `.drawio` file to an image for that agent is not settled; draw.io desktop's command-line export is an [unverified lead]. |
 
@@ -221,7 +221,7 @@ A throwaway prototype draws a synthetic cross-cloud scenario in the style above.
 - Whether S10 comes from a specific C4 tool. [inference] Do not rely on it.
 - The meaning of dashed lines beyond the two uses seen.
 - The meaning of the yellow area numbers in S9.
-- Everything about draw.io built-in shape libraries: which vendors and icon-set versions they cover, how often they update, whether they render offline, and their licensing terms. Not researched yet. [unverified lead]
+- Superseded by the [built-in library research](drawio-builtin-icon-libraries-2026-10-28.md): coverage, catalog extraction, versions and written terms have been investigated. Real desktop offline rendering and specific platform behavior remain verification work.
 
 ## Decisions for the owner
 
@@ -240,254 +240,18 @@ A throwaway prototype draws a synthetic cross-cloud scenario in the style above.
 
 ## Next steps
 
-1. When the owner says start: write the 3-5 synthetic test scenarios (section 2.8) for owner review.
-2. When the owner says start: build a throwaway draw.io prototype of one scenario with built-in shapes, to settle the open prototype checks (decision 2, icon size). Research the separate icon set only if a failure criterion F1-F6 fires.
-3. Create `incubator/<initiative>/README.md` from the initiative template once the owner is ready to start the initiative.
-4. Create a `SKILL.md` only when the owner explicitly asks to implement the skill.
+2026-10-28: the owner authorized independent prototype work while offline and deferred Scenario 05. Continue from the [initiative README](../../../incubator/architecture-diagram/README.md), which owns current next steps, artifacts and verification status. Preserve pending owner review of icon size and description density. Research a separate icon set only if an adopted failure criterion warrants it. Candidate authoring follows prototype evidence; this migration creates no installable skill.
 
+## Approved scenarios
 
-## Appendix A: Scenario 01 (owner-approved draft)
+The four owner-approved drafts now live in the [architecture-diagram initiative](../../../incubator/architecture-diagram/README.md). The scenario documents are the authoritative inputs and expectations:
 
-Approved by the owner on 2026-10-28. Move it to `incubator/<initiative>/evals/` when the initiative exists, and delete it here in the same change.
+- [Scenario 01 — token-based API authorization](../../../incubator/architecture-diagram/evals/scenario-01.md)
+- [Scenario 02 — private cross-cloud API access](../../../incubator/architecture-diagram/evals/scenario-02.md)
+- [Scenario 03 — SOAP request processing](../../../incubator/architecture-diagram/evals/scenario-03.md)
+- [Scenario 04 — event-driven metadata sync](../../../incubator/architecture-diagram/evals/scenario-04.md)
 
-**Name:** Token-based API authorization with a policy decision service.
-
-**Input text given to the skill:**
-
-> A user signs in through a web sign-in page with a username and password. Amazon Cognito user pool authenticates the user and issues tokens. The ID token carries user attributes, for example:
-> `{"cognito:username": "alex", "custom:tenantId": "T-001", "custom:type": "Customer", "cognito:groups": ["Customers"]}`
-> The sign-in page verifies the user's password before sending it to Cognito.
-> The web app sends the token with each API request to Amazon API Gateway. API Gateway passes the token to a Lambda authorizer. The Lambda authorizer verifies the token and asks the Amazon Verified Permissions decision endpoint whether the request is allowed. If it is allowed, API Gateway forwards the request to the backend APIs. If authorization fails, API Gateway returns HTTP 403 with an authorization error message.
-
-**Planted common-sense error:** "The sign-in page verifies the user's password." The skill must raise it with a recommendation (Cognito verifies the password; the page only collects and submits credentials) and wait for confirmation.
-
-**Questions the skill asks before drawing:**
-
-1. The planted error.
-2. Sign-in page technology. Recommendation: `[Container: Web app]`.
-3. What the backend APIs are. Recommendation when unknown: a plain box with `[Container: REST API]`.
-4. The API the authorizer calls on Verified Permissions. The skill checks AWS documentation first and asks only if that fails.
-
-**Expected elements:**
-
-- Person: User.
-- Container: Web sign-in page.
-- Deployment node: AWS Cloud, containing Amazon Cognito user pool; a boundary "API enforcement" with a bold title, containing Amazon API Gateway and Lambda authorizer; Amazon Verified Permissions; Backend APIs as a plain box.
-- Note: token attribute example, placed near step 1.
-
-**Expected relationships:**
-
-| # | From → to | Line | Label content |
-|---|---|---|---|
-| 1 | Web page → Cognito | solid | Submit credentials and authenticate, returns tokens, with protocol |
-| 2 | Web page → API Gateway | solid | API request with token |
-| 3 | API Gateway → Lambda authorizer | solid | Pass token for authorization |
-| 4 | Lambda authorizer → Verified Permissions | dashed (auxiliary call) | Named authorization query |
-| 5 | API Gateway → Backend APIs | solid | Forward request after authorization |
-| 5' | API Gateway → Web page | solid, bold label | HTTP 403 on authorization failure |
-
-Plus "User uses web sign-in page".
-
-**Gates:** the five layout gates; C4 notation (title, legend, type and technology lines, single-direction lines, protocols); icons only from the shape-name catalog with matching vendor; the token note near step 1.
-
-**Information checklist for the blind readout (11 items):** the user signs in through the page; Cognito authenticates and issues tokens; the token attributes; the page calls API Gateway with the token; the gateway hands the token to the Lambda authorizer; the authorizer verifies the token; the authorizer queries Verified Permissions; an allowed request is forwarded to the backend; a failed authorization returns 403; these services sit in AWS; the gateway and the authorizer form one enforcement group.
-
-## Appendix B: Scenario 02 (owner-approved draft)
-
-Approved by the owner on 2026-10-28, including the E1 recommendation that may remove the outbound endpoint and the rule tables drawn as notes. Move it to `incubator/<initiative>/evals/` with Appendix A.
-
-**Name:** Private cross-cloud API call from Azure to AWS API Gateway.
-
-**Input text given to the skill:**
-
-> Integration workloads in Azure need private access to internal REST APIs hosted in Amazon API Gateway in AWS.
->
-> **Azure side.** The workloads run as Azure Function Apps or Logic Apps in one spoke VNet per environment (dev, test, prod). The spoke VNets connect to a hub VNet that contains Azure Firewall and an existing Azure VPN Gateway, and to a DNS extension VNet that hosts Azure DNS Private Resolver with an inbound endpoint and an outbound endpoint. A DNS forwarding ruleset attached to the outbound endpoint forwards `*.execute-api.{region}.amazonaws.com` to the IP addresses of the AWS Route 53 Resolver inbound endpoint.
->
-> **Connectivity.** A site-to-site IPsec VPN connects the Azure VPN Gateway to a new AWS Site-to-Site VPN attached to an AWS Transit Gateway.
->
-> **AWS side.** A network services account contains three VPCs attached to the Transit Gateway: an ingress VPC (10.1.0.0/20) with the Route 53 Resolver inbound endpoint, an inspection VPC (10.2.0.0/24) with AWS Network Firewall for IDPS, and an egress VPC (10.3.0.0/20) with an execute-api interface VPC endpoint and a Route 53 Resolver outbound endpoint. A private hosted zone for `execute-api.{region}.amazonaws.com` is attached to the Route 53 Resolver inbound endpoint. Each environment has its own workload account with a private REST API in API Gateway, protected by a resource policy and backed by a Lambda function.
->
-> **Flow.** (1) A function app calls the API. Its DNS query goes to the private resolver's inbound endpoint and is forwarded by the ruleset. (2) The query travels through Azure Firewall and the VPN to AWS. (3) The Route 53 Resolver inbound endpoint resolves the name using the private hosted zone. (4) The API traffic is routed through the inspection VPC, where AWS Network Firewall inspects it. (5) The Route 53 Resolver outbound endpoint in the egress VPC forwards the request to the API Gateway VPC endpoint, and API Gateway invokes the Lambda function.
->
-> **Firewall rules** (Azure Firewall and AWS Network Firewall, per environment): spoke subnet to Route 53 inbound endpoint IP, port 53; spoke subnet to `*.execute-api.{region}.amazonaws.com`, port 443.
-
-**Natural errors the skill must raise with a recommendation:**
-
-| # | Source claim | Recommendation | Evidence |
-|---|---|---|---|
-| E1 | The Route 53 Resolver outbound endpoint forwards the request to the API Gateway VPC endpoint. | An outbound endpoint forwards DNS queries out of a VPC, not application requests. The Transit Gateway routes the HTTPS request to the execute-api interface VPC endpoint. The outbound endpoint may be unnecessary here; ask whether to keep it. | AWS Route 53 Developer Guide, "Forwarding outbound DNS queries to your network", accessed 2026-10-28 |
-| E2 | A private hosted zone is attached to the Route 53 Resolver inbound endpoint. | Associate the private hosted zone with the VPC, here the ingress VPC that holds the inbound endpoint. | AWS Route 53 Developer Guide, "Forwarding inbound DNS queries to your VPCs", accessed 2026-10-28. That a zone cannot attach to an endpoint is not quoted there; the skill rechecks at run time. |
-
-**Other questions before drawing:** whether DNS queries also pass AWS Network Firewall (the port 53 rule suggests yes; recommend yes); the Lambda runtime (recommend `[Container: AWS Lambda]` when unknown).
-
-**Expected elements:** an Azure boundary (light-blue, Azure logo) with spoke VNet (x3: dev, test, prod, stacked) holding Function Apps and Logic Apps, DNS extension VNet holding the Private Resolver inbound and outbound endpoints, and hub VNet holding Azure Firewall and Azure VPN Gateway; a Site-to-Site VPN connector on the gap between the clouds; AWS Cloud and Region holding the network services account (Transit Gateway as an infrastructure node; ingress VPC with the inbound endpoint and the associated private hosted zone; inspection VPC with AWS Network Firewall; egress VPC with the execute-api VPC endpoint) and workload account (x3, stacked) with API Gateway (private REST API, resource policy in its description) and Lambda; notes with the forwarding rule, the firewall rules and the environment list.
-
-**Expected relationships:**
-
-| Flow | # | From → to | Line | Label content |
-|---|---|---|---|---|
-| A, DNS | A1 | Function app → Private Resolver inbound endpoint | dashed | Resolve execute-api name [DNS] |
-| | A2 | Private Resolver outbound endpoint → Route 53 inbound endpoint, through Azure Firewall, VPN and Transit Gateway | dashed | Forward query by rule [DNS 53] |
-| | A3 | Route 53 inbound endpoint → private hosted zone | dashed | Returns the VPC endpoint private IP |
-| B, API call | B1 | Function app → Azure Firewall | solid | API request [HTTPS 443] |
-| | B2 | Azure VPN Gateway → AWS Site-to-Site VPN → Transit Gateway | solid | [IPsec] |
-| | B3 | Transit Gateway → Network Firewall | solid | Inspect (IDPS) |
-| | B4 | → execute-api VPC endpoint | solid | [HTTPS] |
-| | B5 | VPC endpoint → API Gateway in the workload account | solid | Invoke private API, allowed by resource policy |
-| | B6 | API Gateway → Lambda | solid | Invoke |
-
-The outbound endpoint is left out if the user confirms its removal.
-
-**Gates:** the five layout gates; C4 notation; icons only from the catalog, AWS and Azure each with their own; flow colours A and B explained in the legend and separable by numbering in black and white; the connector on the gap between the clouds.
-
-**Information checklist for the blind readout (14 items):** callers in three Azure environments as Function Apps or Logic Apps; egress through the hub VNet's firewall and VPN gateway; DNS by Azure Private Resolver with a forwarding rule for the execute-api domain; IPsec site-to-site VPN between the clouds; Transit Gateway connecting three VPCs; the Route 53 inbound endpoint in the ingress VPC; the private hosted zone resolving the execute-api domain; inspection by Network Firewall; the request entering the execute-api VPC endpoint in the egress VPC; a private REST API controlled by a resource policy; Lambda behind the API; one workload account per environment; firewall rules for ports 53 and 443; DNS resolution and the API call as two separate paths.
-
-## Appendix C: Scenario 03 (owner-approved draft)
-
-Approved by the owner on 2026-10-28, including the E1 and E2 recommendations and the sub-workflows drawn as a nested group inside the inbound-processing boundary. Move it to `incubator/<initiative>/evals/` with Appendices A and B.
-
-**Name:** Partner amendment requests through a SOAP gateway to a validation API in AWS.
-
-**Input text given to the skill (Markdown kept):**
-
-> ## High level flow
-> 1. Existing partner integrators send SOAP requests to the existing legacy endpoint, routed to the *Legacy SOAP API* in Azure API Management (APIM). New partner integrators send requests to a new endpoint, routed to the *Partner SOAP API* in APIM.
-> 2. In APIM, the request is authenticated against Azure AD B2C with either basic auth or bearer auth. APIM also checks the roles of the system account and the presence of a user profile, as it is mandatory for **cancel order** requests.
-> 3. The authenticated request is passed to the `API-Route-Processor` Logic App workflow.
-> 4. `API-Route-Processor` passes the authorization check to the `Common-Authx-Handler` workflow, which queries Cosmos DB by system account name and user profile name
->    1. to check whether the user profile has the required role
->    2. ~~to get a list of accessible registrations and pass it back to `API-Route-Processor`~~
-> 5. Authorized requests are passed to the sub-workflows `Amend-Order-Processor` and `Amend-Document-Processor`.
-> 6. The sub-workflows validate the request XML and the request method, and check that the base64-encoded content is not malformed. ~~They extract the document_id and query the `orders` container in Cosmos DB to check that the order exists and is accessible.~~
-> 7. The sub-workflow wraps the decoded XML in JSON and calls the amend API in AWS API Gateway over the site-to-site VPN.
-> 8. In AWS, API Gateway invokes the *Validation engine* Lambda function in the core platform, which performs business rule validation.
-> 9. The JSON response returns to the sub-workflow, which converts it to XML with a Liquid template.
-> 10. The workflow sends the XML response back to the partner integrator.
->
-> ## Authorization rules
-> - SOAP method `amend_order` requires the user profile role **ManageOrders**.
-> - SOAP method `amend_document` requires the user profile role **ManageDocuments**.
-> - The user profile is mandatory and, based on the Cosmos DB result, needs the **ManageOrders** role.
->
-> ## Error handling
-> Internal errors, for example a timeout on the AWS call, are hidden. The integrator receives only a generic error response.
->
-> TBD: AWS amend API specification. Sample response: TBD.
-
-**Natural inconsistencies the skill must raise with a recommendation:**
-
-| # | Source claim | Recommendation |
-|---|---|---|
-| E1 | Step 2: the user profile is mandatory "for cancel order requests", in a document about amendments. | Read it as "for amend requests"; it looks copied from another design. |
-| E2 | `amend_document` requires ManageDocuments, but the last rule says every user profile needs ManageOrders. | Per method: `amend_order` needs ManageOrders, `amend_document` needs ManageDocuments. Remove or rewrite the last rule. |
-
-**Other statements and questions before drawing:** list the ignored struck-out content (accessible registrations in 4.2; the `orders` query in step 6); the TBD AWS API specification (recommend the label `[HTTPS/JSON]` with no operation name); APIM's system-account role check and the handler's user-profile check are two separate checks (recommend drawing both).
-
-**Expected elements:** outside every boundary, two external software systems as plain boxes (existing partner integrators, new partner integrators); an Azure boundary (light-blue, Azure logo) with API Management holding the Legacy SOAP API and the Partner SOAP API, Azure AD B2C, a boundary "Inbound processing" (bold title) holding API-Route-Processor, Common-Authx-Handler and a nested sub-workflows group with Amend-Order-Processor and Amend-Document-Processor (XML and JSON conversion in their descriptions), and Azure Cosmos DB (roles and permissions); a VPN connector on the gap between the clouds; AWS Cloud with API Gateway and a boundary "Core platform" holding the Validation engine (Lambda); a note with the method-to-role table.
-
-**Expected relationships:**
-
-| # | From → to | Line | Label content |
-|---|---|---|---|
-| 1a | Existing integrators → Legacy SOAP API | solid | Amend request [SOAP/HTTPS], returns XML response |
-| 1b | New integrators → Partner SOAP API | solid | Same |
-| 2 | APIM → Azure AD B2C | dashed (auxiliary) | Authenticate (basic or bearer) |
-| 3 | APIM → API-Route-Processor | solid | Pass authenticated request |
-| 4 | API-Route-Processor → Common-Authx-Handler | solid | Authorization check |
-| 5 | Common-Authx-Handler → Cosmos DB | dashed (auxiliary) | Query roles by system account and user profile |
-| 6a, 6b | API-Route-Processor → Amend-Order-Processor or Amend-Document-Processor | solid | Forward authorized request |
-| 7 | Processor → API Gateway, through the VPN | solid | Amend request [HTTPS/JSON], returns JSON response |
-| 8 | API Gateway → Validation engine | solid | Invoke: business rule validation |
-| Failure | APIM → integrators | solid, bold label | Generic error only, on internal error |
-
-Source steps 9 and 10 are responses; they fold into the labels of 7 and 1a/1b.
-
-**Gates:** the five layout gates and C4 notation; AWS and Azure icons from their own vendors; no double-headed arrows; no struck-out content in the diagram; entry branches numbered 1a and 1b.
-
-**Information checklist for the blind readout (13 items):** two kinds of partner; two SOAP APIs in APIM as entry points; authentication by Azure AD B2C; APIM's system-account role check; routing through API-Route-Processor; Common-Authx-Handler querying user roles in Cosmos DB; requests split by method into two sub-workflows; XML and base64 validation in the sub-workflows; XML and JSON conversion; the call to AWS API Gateway through the VPN; business rule validation in Lambda; the method-to-role table; generic error responses for internal errors.
-
-## Appendix D: Scenario 04 (owner-approved draft)
-
-Approved by the owner on 2026-10-28, including G2 (no assumed private connectivity) and B1 drawn dashed under the query rule. Move it to `incubator/<initiative>/evals/` with Appendices A to C.
-
-**Name:** Event-driven document metadata sync from AWS to Azure, with on-demand retrieval.
-
-**Input text given to the skill (Markdown kept):**
-
-> ## Requirements
-> Cosmos DB in the Azure integration layer decouples Azure from AWS. If the connection between the two clouds fails, the integration platform can still serve some requests, for example finding documents.
->
-> ## High level flow
-> 1. When a document is published or a template version is approved, it is saved into Amazon S3 and, at the same time, an event with its metadata is added to Amazon SQS. In Azure, an SQS listener is set up in the outbound Logic App workflows to listen for new events.
-> 2. The SQS listener inserts or updates the metadata in Cosmos DB, in the database and container that match the record type.
-> 3. During document or template retrieval, a processing workflow queries Cosmos DB.
-> 4. The processing workflow extracts the S3 reference from the metadata and passes it to the retrieving workflow.
-> 5. The retrieving workflow retrieves the document from S3 using the reference and saves it into temporary blob storage.
-> 6. The retrieving workflow saves the retrieved document into temporary blob storage and sends its blob reference back to the processing workflow.
->
-> ## Components
-> | Component | Description |
-> |--|--|
-> | Azure Logic Apps workflows | Orchestrate the tasks |
-> | Azure Blob Storage | Temporary storage with a retention policy |
-> | Azure Cosmos DB | NoSQL database for document metadata |
->
-> ## Workflows
-> **SQS-Document-Cosmos** is triggered by the documents queue and upserts metadata by document number:
-> - *Published*: upsert and set `isAvailableForCollection = true`.
-> - *Withdrawn*: if not yet sent or collected, set `isAvailableForCollection = false`; otherwise upsert `status = withdrawn` and `isAvailableForCollection = true`.
-> - *Replaced*: for destination A or B, hide the original if it has not been sent, otherwise upsert the replacement; for destination C, always upsert the replacement.
-> - Always update the timestamp on upsert.
->
-> **SQS-Template-Cosmos** uses a separate SQS queue for templates and persists metadata by template ID. **SQS-Bundle-Cosmos** uses a separate SQS queue for bundles and persists metadata by bundle ID.
->
-> ## Cosmos DB
-> Database `Exports`, containers `Documents` (unique key `/documentNumber`), `Bundles` (`/bundleId`) and `Templates` (`/templateId`). Sample item:
-> `{"isAvailableForCollection": true, "isSendOrCollected": false, "retryCount": 0, "documentNumber": "DOC.2025", "document": {"status": "Published"}}`
->
-> ## Error handling
-> | Scenario | Handling |
-> |--|--|
-> | Connection to S3 fails | Default HTTP retry; after retries the workflow terminates and an alarm is raised for the dev team |
-> | Document not found in S3 | Alarm for the dev team |
-> | Cannot connect to SQS | Alarm for the platform team |
->
-> ## Upstream configuration
-> | System | Notes |
-> |--|--|
-> | AWS SQS | TBD: how many SQS instances? One per record type, or one for all? |
-> | AWS S3 | Authentication: AWS Signature |
-
-**Natural inconsistencies and gaps the skill must raise with a recommendation:**
-
-| # | Content | Recommendation |
-|---|---|---|
-| E1 | The workflows section gives each record type its own SQS queue; the upstream table says the number of queues is TBD. | Read it as three queues, drawn as "SQS queue (x3: documents, templates, bundles)" with the listeners also x3. Ask the user to confirm. |
-| E2 | Steps 5 and 6 both describe saving into temporary blob storage. | Merge into one step: retrieve from S3, save to temporary blob storage, return the blob reference. |
-| G1 | No producer of the S3 objects and SQS events is named. | A plain box in AWS, "Document publishing service [Software system]"; ask the user for its name. |
-| G2 | No network path from Azure to S3 and SQS is stated. | Do not assume private connectivity. Recommend public HTTPS endpoints with AWS Signature authentication; ask the user to confirm. |
-
-**Content the skill lists as not drawn:** the status rules, the Cosmos DB container and key structure, the sample item, the error and alarm table.
-
-**Expected elements:** AWS Cloud with the document publishing service (plain box), Amazon S3 (document store) and Amazon SQS (x3, stacked); an Azure boundary (light-blue, Azure logo) with a boundary "Outbound workflows" (bold title) holding the SQS listener workflows (x3), the processing workflow and the retrieving workflow, all Logic Apps; Azure Cosmos DB (metadata store); Azure Blob Storage (temporary, retention policy); a note on the decoupling purpose.
-
-**Expected relationships:**
-
-| Flow | # | From → to | Line | Label content |
-|---|---|---|---|---|
-| A, write | A1 | Publishing service → S3 | solid | Save document [HTTPS] |
-| | A2 | Publishing service → SQS | solid | Publish metadata event [async, SQS] |
-| | A3 | SQS listener → SQS | solid | Poll for new messages [SQS API/HTTPS], returns events |
-| | A4 | SQS listener → Cosmos DB | solid | Upsert metadata by record ID |
-| B, read | B1 | Processing workflow → Cosmos DB | dashed (query) | Query metadata, returns S3 reference |
-| | B2 | Processing workflow → Retrieving workflow | solid | Pass S3 reference, returns blob reference |
-| | B3 | Retrieving workflow → S3 | solid | Get document [HTTPS, AWS Signature] |
-| | B4 | Retrieving workflow → Blob Storage | solid | Save document temporarily |
-
-**Gates:** the five layout gates and C4 notation; flow colours A and B and `[async]` explained in the legend; polling drawn from listener to SQS; no status rules, schemas or alarms in the diagram.
-
-**Information checklist for the blind readout (13 items, architectural only):** the AWS publishing service stores documents in S3 and publishes events to SQS; one queue per record type; Azure listeners poll SQS; listeners upsert metadata into Cosmos DB; Cosmos DB decouples the clouds so documents can still be found when the link fails; the processing workflow gets the S3 reference from Cosmos DB; it passes the reference to the retrieving workflow; the retrieving workflow gets the document from S3; the document goes to temporary blob storage with a retention policy; the blob reference returns to the processing workflow; write and read are separate paths; S3 access uses AWS Signature; the workflows are Logic Apps in the outbound workflows group.
+Scenario 05 (Google Cloud or Kubernetes) is deferred while the owner is offline; no new scenario is represented as owner-approved.
 
 ## Sources
 
