@@ -1,0 +1,17 @@
+{
+  "name": "tech-humanizer-evals",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local behavior evaluations for the released tech-humanizer skill.",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "check": "node --test checks.test.cjs && promptfoo validate config -c promptfooconfig.cjs",
+    "eval": "node run.cjs",
+    "view": "promptfoo view"
+  },
+  "devDependencies": {
+    "promptfoo": "0.124.1"
+  }
+}
