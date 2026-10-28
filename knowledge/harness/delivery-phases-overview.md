@@ -163,7 +163,7 @@ This file is the map of the playbook: the core ideas, seven phases from defining
 7. **Parallel work and merge conflicts**: [guardrails-standard.md](./guardrails-standard.md), section 5.
 8. **Release and incidents**: [issue-workflow-standard.md](./issue-workflow-standard.md), section 6.
 9. **Loop cards and closure rules**: [issue-workflow-standard.md](./issue-workflow-standard.md), section 7.
-10. **Team agreements**: select them from [social-contract.md](./social-contract.md).
+10. **Human team in the loop**: select the team agreements from [human-team-in-loop.md](./human-team-in-loop.md).
 
 **Outputs**: `AGENTS.md`, `HANDOFF.md`, `docs/as-built/`, check scripts, merge queue configuration, `docs/release.md`, postmortems, `docs/team-agreements.md`.
 
