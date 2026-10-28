@@ -6,7 +6,9 @@ This file defines project-specific document shapes. General writing, terminology
 
 Use UTF-8, LF, a final newline and `.editorconfig`. `.gitattributes` defines Git's text line-ending normalization. Use one H1 title per document. Use relative links within the repository and text-based diagrams when useful. Match path case exactly. Keep one topic per paragraph and distinguish evidence, recommendations and accepted decisions.
 
-Write agent procedures in concise English, following the procedural principles in the writing standards. Research and explanatory knowledge may use Chinese or English; preserve the language of original source material. Do not duplicate whole documents just to translate them unless there is an explicit translation owner and synchronization rule.
+Write all repository-authored content in English: documents, research, skill instructions, prompts, examples, fixtures and code comments. Write agent procedures concisely, following the procedural principles in the writing standards. User-facing conversation in Claude, Codex or another client may use the user's preferred language; this does not change the language of saved repository artifacts. The owner confirmed this convention on 2026-10-25.
+
+Translate non-English source material faithfully and label translated quotations or historical drafts; keep their provenance, dates, uncertainty and source links. Git history retains earlier repository text. Maintain one English document, not parallel language copies. Do not alter external source identifiers or vendored dependency content merely to translate it.
 
 Use established terminology from `GLOSSARY.md`. Add an entry when a shared concept becomes part of the maintained model. Do not fill the glossary with file schemas or provisional research categories.
 
@@ -32,6 +34,8 @@ The repository checker rejects lowercase or mixed-case variants of the establish
 Do not add empty scaffold sections to existing content mechanically. Preserve useful historical notes. Apply missing fields when a document's substance or purpose changes.
 
 ## Skill package format
+
+Use the [skill design principles](../knowledge/skill-design/skill-design-principles.md) for behavioral value, freedom, interaction and iteration. This section owns package format and resource boundaries.
 
 Require YAML frontmatter with `name` and `description`. Follow the Agent Skills limits: name at most 64 characters, description at most 1024 characters, and name matching the immediate parent directory. Use lowercase kebab-case names. Describe both the useful task and activation conditions.
 

@@ -29,7 +29,7 @@ test('the real framework adapter talks to a loopback Chat Completions stub', asy
     // Override the endpoint only in this test: no request goes to NVIDIA.
     nvidia.config.apiBaseUrl = loopback;
     const record = await promptfoo.evaluate({
-      prompts: [renderPrompt('Transport test only.\nSecond line.', { conversation: '用户：测试传输。' })],
+      prompts: [renderPrompt('Transport test only.\nSecond line.', { conversation: 'User: Test UTF-8 transport — ✓.' })],
       providers: [modelProvider({ EVAL_MODEL: 'transport-stub-not-a-model', EVAL_API_BASE_URL: loopback }), nvidia],
       tests: [{ assert: [{ type: 'equals', value: 'transport-ok' }] }],
       writeLatestResults: false,
@@ -39,7 +39,7 @@ test('the real framework adapter talks to a loopback Chat Completions stub', asy
     assert.equal(summary.stats.successes, 2);
     for (const request of received) {
       assert.equal(request.url, '/v1/chat/completions');
-      assert.equal(request.body.messages[1].content, '用户：测试传输。');
+      assert.equal(request.body.messages[1].content, 'User: Test UTF-8 transport — ✓.');
       assert.ok(request.body.messages[0].content.includes('Transport test only.\nSecond line.'));
     }
     const nvidiaRequest = received.find((request) => request.body.model === nvidiaDefaultModel);

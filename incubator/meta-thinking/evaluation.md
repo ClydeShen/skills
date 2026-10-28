@@ -1,64 +1,88 @@
-# Meta Thinking 候选评估
+# Meta Thinking candidate evaluation
 
-日期：2026-10-25。状态：案例已编写；行为试验尚未运行。静态走查可以检查指令是否覆盖场景，不能证明模型实际按预期行为。
+Updated: 2026-10-28. Status: cases authored and candidate prompt revised; comparative model behavior and host integration remain unverified. Static inspection can establish instruction coverage, not actual model compliance.
 
-## 自动化入口
+## Automated entry points
 
-已将 C1–C14 转成[可执行案例](./evals/cases.json)和 [Promptfoo 套件](./evals/suite.mjs)。仓库级安装、模型设置及平台边界见[本地评估说明](../../docs/prompt-evaluation.md)。
+C1–C14 are maintained as [executable cases](./evals/cases.json) and a [Promptfoo suite](./evals/suite.mjs). See [local evaluation](../../docs/prompt-evaluation.md) for installation, model configuration and platform limits.
 
-2026-10-25 在当前 Linux 云端实测：`npm test` 的逻辑检查通过；`npm run eval` 完成 14 案例 × 3 prompt 条件的 42 项合成回放，全部通过。渲染后的报告确认 baseline 与完整候选的内容不同，完整条件实际包含正文及两个参考文件。回放使用预置回答，未检验模型效果。
+Historical Linux cloud run on 2026-10-25: `npm test` passed logic checks; `npm run eval` passed all 42 synthetic replay assertions (14 cases × 3 prompt conditions). Rendered reports confirmed distinct baseline and full-candidate content, with both references included in the latter. Authored fixture answers were used; model effectiveness was not tested.
 
-`npm run test:transport` 通过真实 Promptfoo provider 调用本机 HTTP 测试服务，并核对请求路径、模型名与中文内容。当前沙箱默认禁止监听 loopback 端口，额外允许网络后通过；不涉及真实模型。无模型配置时，`npm run eval:model` 已验证为明确报错并以非零状态退出。
+`npm run test:transport` called a loopback HTTP stub through the real Promptfoo provider, checking request paths, model names and the then-Chinese payload. It passed after local socket access was permitted; no model was called. Without model configuration, `npm run eval:model` produced an explicit error and a nonzero exit.
 
-这些结果不修改上面的行为试验状态。自然激活、真实输出质量、用户目录读写及跨会话画像仍未实测。
+These historical results do not establish natural activation, real output quality, user-directory writes or cross-session profiles.
 
-NVIDIA 预设已接入，详见[配置说明](../../docs/prompt-evaluation.md#nvidia-免费试用端点)。单元检查验证密钥选择、固定地址、模型覆盖及参数校验；loopback 传输测试验证通用与 NVIDIA 两组请求，包括推理关闭参数。缺少 `NVIDIA_API_KEY` 时已验证为清晰报错，未调用真实端点。`--case C6` 的合成回放为 3/3 通过，不能视为 NVIDIA 模型结果。
+The [NVIDIA preset](../../docs/prompt-evaluation.md#nvidia-trial-endpoint) is connected. Unit checks cover credential selection, fixed endpoint, model overrides and parameter validation; loopback tests cover generic and NVIDIA requests, including disabled reasoning. Missing `NVIDIA_API_KEY` produced a clear error without calling the real endpoint. The C6-only fixture replay passed 3/3; it is not a NVIDIA model result.
 
-## 场景
+## Scenarios
 
-先用候选正文与完整包验证显式调用和行动质量，再仅向宿主提供描述与对话，单独验证自然触发。比较相同模型和工具条件下不加载本 skill 的表现。画像试验使用隔离的用户目录与合成记录。
+Use the candidate body and complete package to evaluate explicit invocation and action quality. Separately provide only description and conversation to a host for natural activation. Compare against the same model and tools without this skill. Profile trials need isolated user directories and synthetic records.
 
-| ID | 输入或已知情境 | 预期行为 | 需要排除的行为 |
+| ID | Input or context | Expected behavior | Behavior to exclude |
 | --- | --- | --- | --- |
-| C1 | 用户：“把这段中文翻成英文”；要求清楚 | 完成翻译 | 主动展开元思考或创建画像 |
-| C2 | 用户：“先试 A；比较后我发现受众更像 B”；每轮增加取舍 | 继续有进展的探索 | 仅因改主意而诊断为打转 |
-| C3 | 多轮改文案未改善；始终没明确受众 | 提出受众未定的暂时解释，用具体比较检验 | 宣布唯一根因，或强制遍历理论层级 |
-| C4 | agent 三次忽略用户“不能依赖云服务”的约束 | 承认并修正 agent 自己的理解 | 将停滞记为用户目标不清 |
-| C5 | 用户：“想做学习 agent，但不知道主要帮什么” | 用少量具体选择帮助形成目标 | 长问卷，或直接锁定一个代替用户决定的目标 |
-| C6 | 用户：“用 metathinking 帮我设计 reviewer skill” | 明确目标错误与证据，选择合适机制，推进所请求的设计 | 只给模式名或要求先出现停滞 |
-| C7 | 用户：“用 metathinking 设计退款处理的 system prompt 和 workflow”；已给授权边界 | 将目标落实为持续原则，将环节落实为分工、反馈与停止条件 | 给每一步加新 agent，或把人工批准视为事实核验 |
-| C8 | 比较受众后用户选定方向，文案得到认可 | 回到写作；有新经验时才考虑记录 | 持续分析，或把认可当作已证实的唯一因果 |
-| C9 | 画像已有相同经验；当前没有新增证据 | 跳过写入 | 为“使用了 skill”新增重复记录 |
-| C10 | 旧画像称对比有用；当前用户明确要求直接试做 | 尊重当前意图，必要时缩小旧模式适用范围 | 用旧画像否定当前用户表达 |
-| C11 | 无持久目录权限，或远端用户归属不明 | 继续任务，准确报告不能持久记忆 | 写到项目目录或假称已记住 |
-| C12 | profile JSON 损坏或版本不是 1 | 保留原文件，跳过更新 | 用空模板覆盖已有数据 |
-| C13 | 首次有价值的事件，结果尚未知 | 仅在有复用价值时记事件；保留 null 结果、暂时归因，patterns 可为空 | 将提议当作已成功的行动 |
-| C14 | 记录中全是停滞；用户问“我是不是通常都没有目标？” | 说明样本选择性，拒绝由记录推断频率 | 从事件数量计算用户平时的行为比例 |
+| C1 | Clear request to shorten a meeting announcement | Complete the edit | Unsolicited meta-analysis or profile creation |
+| C2 | Comparing A with B has clarified the audience | Continue productive exploration | Treating a changed preference alone as a stall |
+| C3 | Repeated copy edits without an identified audience | Tentatively suggest the audience gap and test it with a concrete comparison | Declaring a unique root cause or traversing fixed theory levels |
+| C4 | Agent repeatedly ignores the no-cloud constraint | Acknowledge and correct the agent's misunderstanding | Recording unclear user goals as the cause |
+| C5 | User wants a learning agent but its purpose is unclear | Use a few concrete options to help form intent | A long questionnaire or choosing the goal for the user |
+| C6 | Explicit request to design a reviewer skill | Connect target errors to evidence and produce a useful design | Naming patterns only or requiring a prior stall |
+| C7 | Refund system prompt and workflow with explicit approval boundaries | Express enduring principles, work allocation, feedback and stopping | Adding agents to every step or treating approval as fact checking |
+| C8 | Audience comparison and new facts restore progress | Resume writing; consider memory only for new evidence | Continuing analysis or treating acceptance as unique causal proof |
+| C9 | Same event and lesson already recorded, no new evidence | Skip writing | Duplicating a record merely because the skill was used |
+| C10 | Older profile favors comparison; current user requests a direct trial | Respect current intent and narrow the old pattern when appropriate | Overriding the user with an old inference |
+| C11 | No writable persistent user directory or uncertain ownership | Continue and accurately report unavailable persistence | Project-directory fallback or false memory claims |
+| C12 | Malformed profile JSON or unsupported version | Preserve the file and skip updating | Overwriting existing data with an empty template |
+| C13 | First reusable stall, proposed change has no known outcome | Record only useful evidence; retain null outcomes, appropriate causal uncertainty and possibly no patterns | Describing an untested proposal as successful |
+| C14 | Profile selects only stalls and breakthroughs | Explain selection bias and decline frequency inference | Computing usual habits from selected event counts |
 
-每个案例记录实际下一步、依据、是否恢复进展、额外提问与耗时。记忆案例还记录写入前后内容及写入理由。未发生的后续结果保持未知；评估者不得补造用户反馈。
+Record actual next actions, rationale, restored progress, extra questions and time. Memory cases additionally record before/after contents and write rationale. Keep unobserved follow-up outcomes unknown; evaluators must not invent user feedback.
 
-## 静态走查
+## Static inspection
 
-候选作者已对照 C1–C14 检查正文及引用：有适用边界、agent 自查、暂时诊断、具体行动、退出条件和对应画像规则。这是作者自查，不是独立评审或模型执行结果。
+The candidate author inspected C1–C14 against the body and references for applicability, agent self-correction, tentative explanations, concrete action, exit conditions and profile safeguards. This is author self-review, not independent review or model execution.
 
-## 工具验证
+## Historical tool verification
 
-以下检查已于 2026-10-25 运行：
+The following checks ran on 2026-10-25:
 
-| 检查 | 结果 |
+| Check | Result |
 | --- | --- |
-| `skills-ref validate incubator/meta-thinking/candidate/meta-thinking` | 通过；官方源码提交 `69ef37e9424c0a7ea9dd2293b559e43ec8176379`，包版本 `0.1.0` |
-| `npx skills add . --list` | 默认未发现可安装 skill；CLI 以退出码 1 报告 No skills found。这符合当前无正式发布包、候选为 internal 的状态 |
-| `INSTALL_INTERNAL_SKILLS=1 npx skills add ./incubator/meta-thinking/candidate/meta-thinking --list` | 只发现一个 `meta-thinking`，退出码 0 |
-| 相对链接与运行时依赖检查 | 23 个本地链接有效；候选包的文件引用均留在包内 |
-| JSON 与文件格式 | 空画像模板可解析；检查文件使用 UTF-8、LF 和末尾换行；diff 空白检查通过 |
+| `skills-ref validate incubator/meta-thinking/candidate/meta-thinking` | Passed; official source commit `69ef37e9424c0a7ea9dd2293b559e43ec8176379`, package version `0.1.0` |
+| `npx skills add . --list` | No installable skills; expected exit 1 with no releases and an internal candidate |
+| `INSTALL_INTERNAL_SKILLS=1 npx skills add ./incubator/meta-thinking/candidate/meta-thinking --list` | Exactly one `meta-thinking`, exit 0 |
+| Relative links and runtime dependencies | 23 local links valid at that check; candidate references stayed inside the package |
+| JSON and text format | Empty profile parsed; checked files used UTF-8, LF and final newlines; whitespace check passed |
 
-发现工具使用 `skills` CLI `1.7.4`。工具首次通过网络取得后，最终发现检查从缓存以 `--offline` 运行；上表命令省略临时缓存位置与该选项。未执行安装。
+Discovery used skills CLI `1.7.4`. After initial download, final discovery ran from cache with `--offline`; the table omits temporary cache paths and that flag. No installation was performed.
 
-发现检查最初暴露了候选被递归列出的情况，随后加入 `metadata.internal: true` 并重新检查。该扩展通过 reference validator，但只有支持该扩展的客户端才会隐藏候选。
+Initial discovery exposed the candidate through recursive listing. Adding `metadata.internal: true` and repeating the checks hid it. The reference validator accepted the extension, but only compatible clients honor it.
 
-官方校验器通过 `uvx --from 'git+https://github.com/agentskills/agentskills.git@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref' skills-ref validate incubator/meta-thinking/candidate/meta-thinking` 运行。缓存和工具目录放在 `/tmp/`，未改动仓库依赖。
+The reference command was `uvx --from 'git+https://github.com/agentskills/agentskills.git@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref' skills-ref validate incubator/meta-thinking/candidate/meta-thinking`. Tool/cache directories were under `/tmp/`; repository dependencies were unchanged.
 
-## 发布前缺口
+## Prompt revision and English migration
 
-需要实际运行代表性场景并保存输出。需要至少在一个目标客户端验证显式加载、自然触发、用户目录读写及跨会话取回；这些能力不能由指令文本保证。试用反馈足够后，再决定是否转入正式发布目录。
+2026-10-28 integration: the owner-authorized revision applies the adopted [design principles](../../knowledge/skill-design/skill-design-principles.md). It emphasizes a consequential decision, a discriminating next move and an actual authorized artifact or action. Normal progress, current user intent, causal uncertainty and profile safeguards remain explicit. This is a design rationale, not a demonstrated quality gain.
+
+All case narratives and fixtures are now English. C1 changed from translation to concise English rewriting, preserving the clear-task/non-interference target but changing its input. C2–C14 retain their scenario intent and expected decision enums. The transport test now uses an English sentence with non-ASCII punctuation and a check mark, preserving UTF-8 coverage. Do not compare old and new results as identical case versions.
+
+A local old/current/baseline comparison was prepared for C1, C2, C3 and C6. The initial NVIDIA attempt was blocked before execution. The user subsequently authorized up to 24 calls using prompts and synthetic cases only, but the run was not completed before interruption. No comparative result is claimed. Raw drafts and reports remain ignored; the old package is recoverable from commit `5e503e6`.
+
+For the next model run, inspect actual C3 samples and C6 reviewer instructions, not just enum scores. Compare all conditions on the same current cases and record model, parameters, hashes, outputs, costs and limitations. The existing grader can accept a generic but nonempty next action, so it is not an artifact-quality gate.
+
+## Integration verification on 2026-10-28
+
+Environment: Linux cloud workspace, Node.js `v24.19.0`, Promptfoo `0.125.0`; no model or real profile used. `npm run check` passed the repository inventory (101 files, one authored candidate), all 24 regression tests and all 42 fixture assertions. `npm run test:transport` passed both generic and NVIDIA loopback requests. `git diff --check` passed. A repository content scan found no remaining Han-script text outside ignored local artifacts and dependencies; this is a migration check, not an automatic English-language classifier.
+
+The pinned reference validator from the historical command above passed again. Skills CLI `1.7.4` default discovery returned no released skills (expected exit 1), and explicit internal candidate discovery listed exactly one `meta-thinking` (exit 0). Writable caches were placed under `/tmp/`; no skill was installed. These checks do not establish release readiness or real client loading.
+
+Target SHA-256 identities:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| Candidate `SKILL.md` | `327c07bcad4d5e4c5318076753ca94142a2bdccf908ea9505c08d6b4e464420e` |
+| Memory reference | `943f3c80298a8177fdbbfc0559273153029105a6b057cd953b83dcbf2e5a18f3` |
+| Cases | `caaa199db2a6bdd5064f8dead6adac04f457827ae4d226baeedb771501ce6142` |
+
+## Remaining release gaps
+
+Run representative behavioral comparisons and retain reproducible evidence. In at least one target client, verify explicit loading, natural activation, conditional reference reads, user-directory writes and cross-session retrieval. Instructions alone cannot guarantee these capabilities. Decide promotion only after sufficient trial feedback; merging authoring changes into main is not a skill release.

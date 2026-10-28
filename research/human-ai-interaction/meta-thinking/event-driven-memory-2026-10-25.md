@@ -1,113 +1,113 @@
-# Research: 事件触发的经验记忆与轻量用户画像
+# Research: Event-triggered experience memory and lightweight user profiles
 
-日期：2026-10-25。问题：如何让低频 Meta Thinking skill 记住停滞和突破，又不把它变成持续画像、固定归因或复杂操作流程？背景：[原始草稿](./meta-ai-thinking-working-draft-2026-10-25.md)及用户随后对低频使用、结构化画像和 be lazy 更新的补充。
+Date: 2026-10-25. Question: How can a low-frequency Meta Thinking skill remember stalls and breakthroughs without continuous profiling, fixed attribution or complex procedures? Context: the [original draft](./meta-ai-thinking-working-draft-2026-10-25.md) and subsequent user requirements for low-frequency use, structured profiles and lazy updates.
 
-当前收获：[inference] 可以优先保存少量具体事件及其后果，再从重复证据中形成可修正的模式假设。稀疏更新与简短指令相容，但“只在打转或突破时记录”尚无直接实验验证。记住经历、推测原因、概括用户习惯应在数据含义上区分，未必需要拆成多个文件或多套流程。
+Current finding: [inference] Start with a few concrete events and their consequences, then form revisable pattern hypotheses from recurring evidence. Sparse updates suit short instructions, but recording only stalls and breakthroughs has no direct experimental validation here. Distinguish remembered experience, causal inference and generalized habits in meaning; separate files or workflows are not necessarily needed.
 
-标记：`[official]` 表示已读一手论文相关正文；`[inference]` 表示项目推断。本文未复现论文。所有建议均待验证，不建立用户画像文件、不定义正式 schema、不发布 skill。
+Markers: `[official]` means the relevant primary-paper text was read; `[inference]` means a project inference. No experiments were reproduced. Recommendations were unverified at this research stage; this note creates no profile, formal schema or released skill. Translated into English on 2026-10-28, preserving the historical findings and limits.
 
 ## Overview
 
-| 问题 | 当前建议 | 证据强度 | 判断信心 |
+| Question | Recommendation | Evidence strength | Judgment confidence |
 | --- | --- | --- | --- |
-| 应先记用户类型还是具体经历？ | 先记可追溯事件，再保留带情境的模式假设 | 中，相关记忆机制与评估支持，非直接产品验证 | 中，J1 |
-| 能否不在每轮更新？ | 有重要新信息才考虑写入；没有新增经验可跳过 | 弱，存在阈值触发先例，触发信号不同 | 中，J2 |
-| 突破能否证明根因？ | 区分实际变化、原因假设和验证程度 | 中，反思归因困难已有论述；本项目策略为推断 | 中，J3 |
-| 如何避免画像越积越死？ | 保留时间、情境、证据和修正入口；证据不足可不判断 | 中，长期记忆任务支持时序、更新和弃答需求 | 中，J4 |
+| Record user types or specific experience first? | Traceable events, then contextual pattern hypotheses | Medium: related memory mechanisms and evaluation, not direct product validation | Medium, J1 |
+| Can updates skip turns? | Consider writes only for important new information | Weak: threshold-triggered precedents use different signals | Medium, J2 |
+| Does a breakthrough establish the root cause? | Separate observed change, causal hypotheses and verification | Medium: attribution difficulty is discussed; the project strategy is inferred | Medium, J3 |
+| How can profiles stay revisable? | Retain time, context, evidence and correction paths; abstain when evidence is insufficient | Medium: long-term memory tasks support temporal reasoning, updating and abstention | Medium, J4 |
 
-## 1. 可复用的经验，不必从固定用户类型开始
-
-### Evidence
-
-[official] Reflexion 根据任务反馈生成语言反思，并把它放入 episodic memory 影响后续尝试。作者指出有用反思需要正确归因，也依赖评估能力且没有成功保证；实验中的记忆窗口有限。已读方法、引言和限制。[S1]
-
-### Recommendation for the project
-
-[inference · J1] 画像可以先围绕“什么情境下，发生什么停滞，尝试了什么变化，结果如何”积累。类似“在目标模糊的设计讨论中，比较两个具体例子曾帮助形成偏好”的记录，比“用户是某种思维类型”更容易指导下一次行动。
-
-[inference] 单个 JSON 或 YAML 文件也能区分事件观察与模式假设。数据结构暂不定；可先检验哪些最少信息足以在相似任务中避免重复失败。研究记录多，不代表运行时也应读取所有资料或执行全部方法。
-
-### Relation to existing constraints
-
-符合用户要求的结构化画像和少步骤；不将候选字段提升为共享术语，不写入用户目录。
-
-## 2. 低频写入有相关先例，但需要界定新信息
+## 1. Reusable experience need not start with fixed user types
 
 ### Evidence
 
-[official] Generative Agents 区分观察与抽象反思，以近期事件的重要性累计值触发反思，并给反思保存所引观察的指针。论文也记录了记忆补饰错误。其目标是模拟可信行为，不是提高真实用户效率。已读架构、反思方法和错误分析。[S2]
+[official] Reflexion generates linguistic reflections from task feedback and places them in episodic memory to influence later attempts. Useful reflection requires correct attribution, depends on evaluation capability and does not guarantee success; experimental memory windows were limited. Methods, introduction and limitations were read. [S1]
 
 ### Recommendation for the project
 
-[inference · J2] 可把 be lazy 理解为：重要事件触发“考虑更新”，而非强制写一条。已有相同经验、原因不明且无新证据、当前事件对未来没有可见用途时，可以不写。来源中的数值阈值、反思频率不宜移植。
+[inference · J1] Build profiles around context, the stall, the attempted change and its outcome. “Comparing two concrete examples helped form preferences during an unclear design discussion” more directly informs action than “the user has a particular thinking type.”
 
-[inference] 不需要每轮给用户打分。只有出现值得复用的改变，再留一个简短经验；已经有类似记录时补充支持、反例或适用范围，避免不断堆积近义条目。
-
-[inference] 只记录停滞与突破，会得到经过选择的事件样本。它可以帮助找回重要经验，却不能据此推断用户平时各种思维方式的真实频率。例如，记录里反复出现“目标不清”不等于用户通常都缺少目标；大量顺利推进的情境可能从未进入记录。
+[inference] One JSON or YAML file can distinguish event observations from pattern hypotheses. Leave the data structure open; first test the minimum information needed to avoid repeated failures in similar tasks. Extensive research does not imply loading every source or executing every method at runtime.
 
 ### Relation to existing constraints
 
-用户明确要求只在有意义的打转或突破时低频维护。本研究支持可行方向，没有找到其最优阈值或更新算法。
+Fits structured profiles and few steps. This note neither promotes candidate fields into shared terminology nor writes to a user directory.
 
-## 3. 突破后的归因应保持可修正
+## 2. Infrequent writes have precedents, but new information needs definition
 
 ### Evidence
 
-[official] Reflexion 直接把错误归因列为生成有效反馈的困难；其去掉测试反馈的一个编程实验会产生有害修改。已读该消融及限制。[S1]
+[official] Generative Agents separates observations from abstract reflections, triggers reflection using accumulated importance of recent events, and stores pointers to cited observations. The paper also reports memory embellishment errors. Its aim is believable simulated behavior, not real-user efficiency. Architecture, reflection and error-analysis sections were read. [S2]
 
 ### Recommendation for the project
 
-[inference · J3] “换视角之后进展了”只能先记录为事件顺序，不能立即证明唯一根因。期间也可能补充了事实、修改了约束，或只是获得另一次生成机会。可分别记录观察到的变化、候选解释和支持证据。
+[inference · J2] Interpret “be lazy” as important events prompting consideration, not mandatory writes. Skip when experience is already recorded, causes remain unclear without new evidence, or the event has no visible future use. Do not transplant the source's numerical thresholds or reflection frequency.
 
-[inference] 停滞原因也可能在 agent：误读目标、重复同类回答、没有执行查证。若只记录用户的问题，画像会把系统失误反复解释成用户特点。一次成功可以提供下一次尝试的线索；跨情境反复有效才更有理由形成较一般的模式假设。
+[inference] Do not score the user every turn. Save a short lesson when a reusable change occurs. Extend an existing record with support, counterexamples or applicability instead of accumulating near-duplicates.
+
+[inference] Recording only stalls and breakthroughs creates a selected event sample. It can retrieve important experience, not estimate usual thinking-pattern frequencies. Repeated “unclear goal” entries do not establish that the user usually lacks goals; many successful contexts may never be recorded.
 
 ### Relation to existing constraints
 
-延续前轮研究对反馈来源、批评与验证的区分，见[证据边界记录](./interaction-evidence-and-evaluation-2026-10-25.md)。这里不要求额外的正式根因分析流程。
+The user explicitly requested low-frequency maintenance after meaningful stalls or breakthroughs. This research supports a plausible direction, not an optimal threshold or update algorithm.
 
-## 4. 记忆能力包含更新和承认不知道
+## 3. Attribution after a breakthrough should remain revisable
 
 ### Evidence
 
-[official] LongMemEval 把知识更新、时间推理和不可回答时弃答纳入评估。在其所测设置中，进一步压缩为独立用户事实有信息损失；结构化格式单独也并非总优于自然语言。已读任务定义、记忆粒度与读取实验相关段落。[S3]
+[official] Reflexion identifies error attribution as a difficulty in generating useful feedback. A coding ablation without test feedback produced harmful changes. That ablation and the limitations were read. [S1]
 
 ### Recommendation for the project
 
-[inference · J4] 不把“存成结构化数据”当作准确性的保证。模式应保留证据来自何时、适用于何种任务、是否出现反例。当前观察冲突时，应降低确信或修正；画像缺少相关信息时，可以不作个性化推断。
+[inference · J3] “Progress followed a perspective change” initially records a sequence, not a uniquely established root cause. New facts, changed constraints or another generation attempt may explain the result. Record observed changes, candidate explanations and supporting evidence separately.
 
-[inference] 一个值得测试的最小差异是：单一总结式画像，是否比“简短模式＋关联事件证据”更容易误用过期经验。先用少量历史案例测可追溯性、错误迁移和纠正能力，无须先搭建大型记忆系统。
+[inference] Agents may cause stalls by misreading goals, repeating answers or failing to check evidence. Recording only user problems can repeatedly misclassify system failures as user traits. One success suggests another attempt; repeated effectiveness across contexts better supports broader pattern hypotheses.
 
 ### Relation to existing constraints
 
-支持结构化但可修正的画像。该基准主要检验交互历史问答，不直接证明可以可靠识别用户思维习惯或因果机制。
+Extends the distinction between feedback, criticism and verification in the [evidence-boundary record](./interaction-evidence-and-evaluation-2026-10-25.md). It does not require an additional formal root-cause process.
 
-## 判断信心
+## 4. Memory includes updating and admitting uncertainty
 
-以下分数依次为 Owner / Research / Reasoning / Project history，各项 0–1；合计表示建议的项目支持度，不是统计概率。
+### Evidence
 
-| 判断 | 四维分数 | 合计与等级 | 主要缺口 |
+[official] LongMemEval evaluates knowledge updates, temporal reasoning and abstention on unanswerable questions. In its tested settings, further compression into isolated user facts lost information; structured formats alone were not always better than natural language. Task definitions, memory granularity and retrieval experiments were read. [S3]
+
+### Recommendation for the project
+
+[inference · J4] Structured storage does not guarantee accuracy. Preserve when evidence arose, applicable tasks and counterexamples. Reduce confidence or revise when current observations conflict; avoid personalization when relevant profile evidence is absent.
+
+[inference] Test whether a summary-only profile misuses stale experience more often than a short pattern linked to event evidence. Begin with a few historical cases testing traceability, bad transfer and correction, without first building a large memory system.
+
+### Relation to existing constraints
+
+Supports structured but revisable profiles. The benchmark primarily tests questions about interaction history; it does not establish reliable inference of thinking habits or causal mechanisms.
+
+## Judgment confidence
+
+Scores are Owner / Research / Reasoning / Project history, each 0–1. Totals record project support, not statistical probabilities.
+
+| Judgment | Four scores | Total and level | Main gap |
 | --- | --- | --- | --- |
-| J1 事件证据支持模式假设 | 0.5 / 0.5 / 1 / 0.5 | 2.5，中 | 尚无用户画像实测 |
-| J2 事件触发而非逐轮写入 | 1 / 0.5 / 1 / 0.5 | 3，中 | 最佳触发规则未知 |
-| J3 区分原因假设与已观察结果 | 0.5 / 0.5 / 1 / 0.5 | 2.5，中 | 未执行因果对照 |
-| J4 保留情境、时间与修正 | 0.5 / 1 / 1 / 0.5 | 3，中 | 从历史问答迁移到行为画像待验证 |
+| J1 Event evidence supports pattern hypotheses | 0.5 / 0.5 / 1 / 0.5 | 2.5, medium | No user-profile trial |
+| J2 Event-triggered rather than per-turn writes | 1 / 0.5 / 1 / 0.5 | 3, medium | Optimal trigger unknown |
+| J3 Separate causal hypotheses and observed outcomes | 0.5 / 0.5 / 1 / 0.5 | 2.5, medium | No causal comparison |
+| J4 Preserve context, time and correction | 0.5 / 1 / 1 / 0.5 | 3, medium | Transfer from history QA to behavioral profiles unverified |
 
 ## Not verified
 
-- 未证明事件触发优于定期更新，也未证明事件少一定能提高效果。
-- 未验证从有限对话推断稳定思维模式的可靠性；本轮没有选用人格推断研究作为直接依据。
-- 未确定用户目录位置、格式、容量、检索方式和过期规则。
-- 未证明轻量画像会提高用户长期效率；应分别评估记忆准确性与后续行动收益。
-- 论文只定向阅读相关部分，未全面审查后续研究或运行代码。Generative Agents PDF 因大小限制未取得，改读作者 arXiv HTML 正文。
+- Event-triggered updates have not been shown superior to periodic updates; fewer events do not necessarily improve results.
+- Reliable stable-pattern inference from limited conversation is unverified; personality-inference research was not used as direct support.
+- User-directory location, format, capacity, retrieval and expiry rules were not selected in this research.
+- Long-term user efficiency is unproven. Evaluate memory accuracy separately from subsequent-action benefit.
+- Only relevant paper sections were read; later research and code were not comprehensively reviewed. The Generative Agents PDF exceeded size limits, so the author's arXiv HTML was read instead.
 
 ## Decisions for the owner
 
-本轮没有必须决定的事项。进入实现时，用户目录位置及画像维护方式需结合运行宿主确定，不由研究笔记提前固定。
+No immediate decision was required in this round. Select directory location and maintenance mechanisms with the implementation host, rather than fixing them in this research note.
 
 ## Sources
 
-以下一手来源于 2026-10-25 打开，正文阅读范围见各节。
+These primary sources were opened on 2026-10-25; reading scope is stated above.
 
-- [S1 — Reflexion，NeurIPS 2023 正文](https://papers.nips.cc/paper_files/paper/2023/file/1b44b878bb782e6954cd888628510e90-Paper-Conference.pdf)：反馈、事件记忆、归因困难与限制。
-- [S2 — Generative Agents，作者 arXiv v2 正文](https://arxiv.org/html/2304.03442v2)：观察、反思、重要性触发与证据链接，以及记忆补饰错误。
-- [S3 — LongMemEval，ICLR 2025 正文](https://proceedings.iclr.cc/paper_files/paper/2025/file/d813d324dbf0598bbdc9c8e79740ed01-Paper-Conference.pdf)：时序更新、弃答、记忆粒度与读取策略实验。
+- [S1 — Reflexion, NeurIPS 2023 paper](https://papers.nips.cc/paper_files/paper/2023/file/1b44b878bb782e6954cd888628510e90-Paper-Conference.pdf): feedback, episodic memory, attribution difficulty and limits.
+- [S2 — Generative Agents, author arXiv v2 text](https://arxiv.org/html/2304.03442v2): observations, reflections, importance triggers, evidence links and embellishment errors.
+- [S3 — LongMemEval, ICLR 2025 paper](https://proceedings.iclr.cc/paper_files/paper/2025/file/d813d324dbf0598bbdc9c8e79740ed01-Paper-Conference.pdf): temporal updates, abstention, memory granularity and retrieval experiments.
