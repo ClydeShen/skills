@@ -5,6 +5,7 @@
 1. Read [`README.md`](README.md) for the lifecycle and repository map.
 2. Read [`GLOSSARY.md`](GLOSSARY.md) before naming or changing a repository-wide concept.
 3. Inspect the working tree. Preserve changes outside the task.
+   Run `npm run git:setup` once per clone, then `npm run git:check` at session start. Resume the task's existing branch/worktree, or create `work/<kebab-case-topic>` from freshly fetched `origin/main` before editing. Concurrent independent sessions use separate worktrees. Follow [Git strategy](docs/HARNESS.md#git-strategy) for integration and cleanup.
 4. Search for the topic, its authoritative document, and inbound links. Start editing only after every affected artifact has an identified location.
 5. Read [the source-of-truth and folder contract](docs/REPOSITORY-STRUCTURE.md) and [document formats](docs/DOCUMENT-FORMATS.md) before introducing or moving artifacts. Use uppercase stems for harness framework documents, as defined there.
 

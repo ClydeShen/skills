@@ -16,6 +16,7 @@ Use Node.js 24 and Git on Windows, macOS, Linux, WSL or a cloud workspace. Run t
 
 ```text
 npm ci
+npm run git:setup
 npm run check
 ```
 
@@ -24,6 +25,8 @@ npm run check
 | Entry | Purpose | Gate |
 | --- | --- | --- |
 | `npm run check:repo` | Fast repository contracts | Blocking |
+| `npm run git:setup` | Enable reviewed repository Git hooks in this clone; refuses conflicting hooks | Explicit local setup |
+| `npm run git:check` | Check current branch, authoring state and local hook activation, or CI source/target refs | Blocking; also part of `check:repo` |
 | `npm test` | Shared checker and evaluation-harness regression tests | Blocking |
 | `npm run eval` | Offline synthetic replay of initiative cases | Blocking harness smoke, not skill quality |
 | `npm run check` | Runs the three entries above, stopping at the first failure | Shared handoff/CI gate |
@@ -71,9 +74,27 @@ Review `.claude/settings.json` and inspect `/hooks` in a trusted project. The ad
 
 Neither adapter installs a global hook or changes the user's managed policy. Client hook startup errors or unsupported configurations may fail open. We intentionally do not add broad auto-approve rules, pretend Read/Edit rules cover arbitrary shell IO, or claim identical OS sandboxing across native Windows, WSL, macOS and cloud.
 
-### Optional pre-push hook
+### Git strategy
 
-Inspect `git config --local --get core.hooksPath` and existing hooks first. If no conflicting hook setup exists, opt in with `git config --local core.hooksPath .githooks`. The checked-in pre-push hook calls `npm run check`. Do not overwrite an existing hooks path without resolving it. This setting is local, not automatically installed by `npm ci`, and can be bypassed; CI remains necessary.
+Adopted by the owner on 2026-10-28 for concurrent skill incubation and knowledge work. Keep one long-lived `main` and short-lived `work/<topic>` branches, where topic is lowercase kebab-case. Examples: `work/meta-thinking-prompt`, `work/reviewer-draft`, `work/memory-knowledge`, `work/harness-hooks`. Branches represent independently reviewable changes. Skills and knowledge topics may span many branches; maturity belongs in repository directories and initiative records.
+
+At session start, inspect the current branch, worktree, status and task before editing. Run `npm run git:setup` once per clone and `npm run git:check` each session. Resume an existing task in its own worktree. For new work, fetch `origin`, then create a task branch from `origin/main`. Keep concurrent independent sessions in separate worktrees; do not switch a shared directory's branch beneath another session. Inspect `git worktree list` before choosing a path. For example, `git worktree add ../skills-reviewer -b work/reviewer-draft origin/main` creates an isolated task. Each worktree needs its own dependencies; Git hook configuration is shared by linked worktrees.
+
+Make one coherent change per PR. Include related evidence, knowledge, candidate and evaluation updates when they implement that change. Designate one integrator for overlapping shared files. Merge current `origin/main` into an active task branch when needed; do not rewrite shared history. Paused work uses a draft PR with current status and next steps.
+
+Integrate through a PR targeting `main` after all three platform gates pass. Default to squash merge. Merging research or a candidate does not release a skill. Releases follow the package lifecycle, with a tag when a version needs an immutable reference. Do not use long-lived develop, per-skill or release branches.
+
+The owner reported enabling GitHub's automatic deletion of merged head branches on 2026-10-28. Let GitHub clean up the merged remote branch. Before deleting a local branch, inspect its PR's merged state, exact head and local commits. Squash merges are not reliably recognized by `git branch --merged`. Confirm that no local work was added after the merged PR; retain it when uncertain. Inspect linked worktrees, including untracked and ignored files, and preserve local artifacts before removal. Remove only the finished task's worktree without `--force`, then its local branch. A verified squash merge can require `git branch -D <exact-task-branch>`; use it only after these checks. Never batch force-delete branches. Closed, unmerged PRs need an explicit decision to retain or discard their work. Finish by fetching with `--prune`; update a clean main checkout with `git merge --ff-only origin/main` without disturbing other active worktrees.
+
+### Git enforcement
+
+`npm run git:setup` sets local `core.hooksPath` to `.githooks`, enables executable hooks and refuses an existing custom path or default hooks. Reconcile conflicts instead of overwriting them. Installation is explicit and repeated for each clone; `npm ci` does not change Git configuration. Relative hook paths resolve within each linked worktree.
+
+The pre-commit hook rejects `main`, detached HEAD and invalid task names. The pre-push hook reads every actual ref update: it rejects direct main updates/deletion, invalid or renamed task destinations, non-fast-forward or unverifiable updates, non-current task branches and changes/deletions of existing tags. New tags remain subject to release authorization. It then runs the complete shared gate. `check:repo` and client Stop hooks also check Git policy: local main must be clean, task naming valid and hooks enabled. A clean main may be inspected and tested normally.
+
+CI checks real push/PR context, including detached checkouts: PR source must be `work/<topic>` and target must be `main`; pushes allow main, task branches and release tags. The check runs inside the existing three required platform jobs. Old inactive local branch names do not fail current-task checks; inspect and retire them separately.
+
+These are workflow controls. Hooks can be bypassed, and editable CI cannot prevent a privileged direct push by itself. Required PR/status checks must be enforced by server protection. Parallel session identity, semantic task scope, human authorization and safe squash cleanup require agent judgment; the tools do not infer them or delete work automatically.
 
 ## CI and protected integration
 
@@ -107,3 +128,5 @@ Observed results: clean `npm ci` succeeded with the proxy setting above; `npm ru
 Remote run for `6250662` passed Ubuntu and Windows but failed the macOS relocated-hook test: `argv` retained a temporary-directory alias while Node resolved the module URL to its physical path, causing the CLI entrypoint to emit no JSON. The repair compares physical paths and adds an explicit directory-alias regression, including spaces and `--preserve-symlinks-main`. This changes invocation handling, not package-resource symlink policy. Local repair verification on 2026-10-25 passed 24 unit/regression tests, 42/42 fixture assertions and both loopback provider requests. The updated remote matrix must be verified before applying branch protection.
 
 Remote repair verification on 2026-10-25: the [PR run for `e53af33`](https://github.com/ClydeShen/skills/actions/runs/40145054674) passed all three platform jobs, including macOS and Windows alias-entrypoint regression tests (24/24 tests, none skipped), fixture replay and transport checks. agnix retained the known non-blocking metadata diagnostic. This verifies the code on those runners; it does not activate the pending server protection or prove actual client hook delivery.
+
+Git strategy verification on 2026-10-28: local setup enabled repository hooks after checking for conflicts. `npm run check` passed 28 regression tests and 42 fixture assertions; loopback transport passed. Git policy tests exercised a real rejected main commit, successful task commits, linked-worktree isolation, conflicting hook setup, detached authoring, CI refs, push destinations, multiple ref updates, ancestry and immutable tags. GitHub CLI requests for repository settings and main protection returned Forbidden, so current server protection could not be refreshed or enabled through that route. The connector reports squash, merge and rebase methods all available; squash is the project default, not an exclusively enabled server method. GitHub automatic head deletion is owner-reported. Client Stop delivery and other clones' local hook setup still require their hosts.
