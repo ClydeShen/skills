@@ -33,7 +33,7 @@ try {
   var metrics = Object.values(graph.getModel().cells).map(function(cell) {
     var state=graph.view.getState(cell);
     if (!state) return null;
-    return {id:cell.id,type:cell.value?.getAttribute?.('c4Type') || null,body:rect(state.shape?.boundingBox),text:rect(state.text?.boundingBox),points:state.absolutePoints?.map(function(p){return {x:p.x,y:p.y};}) || null};
+    return {id:cell.id,parent:cell.parent?.id || null,source:cell.source?.id || null,target:cell.target?.id || null,type:cell.value?.getAttribute?.('c4Type') || null,bounds:rect(state),body:rect(state.shape?.boundingBox),text:rect(state.text?.boundingBox),points:state.absolutePoints?.map(function(p){return {x:p.x,y:p.y};}) || null};
   }).filter(Boolean);
   document.getElementById('result').textContent = 'JSON:' + btoa(unescape(encodeURIComponent(JSON.stringify({svg:mxUtils.getXml(svg),metrics:metrics}))));
 } catch (e) { document.getElementById('result').textContent = 'ERROR:' + e.stack; }
