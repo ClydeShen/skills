@@ -1,0 +1,11 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+import { validateDiagram, validateRender } from '../../../tools/validate.mjs';
+const base = new URL('.', import.meta.url);
+const report = JSON.parse(readFileSync(new URL('diagram.render.json',base)));
+const catalog = JSON.parse(readFileSync(new URL('../../../candidate/architecture-diagram/assets/catalog.json',base)));
+const text = report.metrics.filter(x=>x.text);
+const overlaps = text.flatMap((a,i)=>text.slice(i+1).filter(b=>Math.min(a.text.x+a.text.w,b.text.x+b.text.w)>Math.max(a.text.x,b.text.x)&&Math.min(a.text.y+a.text.h,b.text.y+b.text.h)>Math.max(a.text.y,b.text.y)).map(b=>[a.id,b.id]));
+const result={static_errors:validateDiagram(readFileSync(new URL('diagram.drawio',base),'utf8'),catalog),render_errors:validateRender(report),pairwise_text_overlaps:overlaps,visual_review:'Author inspected actual PNG at full overview and readable scale; no image reference used.',source_fidelity:'Author traced all supported source relationships and documented unresolved paths separately.',desktop_verified:false};
+writeFileSync(new URL('validation.json',base),JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result,null,2));
+if(result.static_errors.length||result.render_errors.length||overlaps.length)process.exitCode=1;

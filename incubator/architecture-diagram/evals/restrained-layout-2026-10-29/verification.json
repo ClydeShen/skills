@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-29",
+  "mode": "Two fresh-context host-agent generations, one per unchanged text scenario",
+  "skill_sha256": {
+    "SKILL.md": "51f673f05eec7d9eb3917bd9032a4ac9e5cac9cc1ecb4f0d79fd36f88bebfa67",
+    "references/notation.md": "9a68815f5014d31d2a8e15a12ab85c34b9b376d3682ec515170b0060ff9fe52f",
+    "references/drawio.md": "ff7f7d213e655d4a836ee266ad0134692384b65171993dfe357ff9a5f6640f00",
+    "scripts/find-icon.mjs": "b7ea7aea44784ca82f8c7f3fe44e76ebe39c0c9a3561fa69b1900f1143af4f95",
+    "scripts/catalog.mjs": "835db1152ba35f42bb7cbd1c4fb191070bc825643e745e8a35d781f35ab792df",
+    "assets/catalog.json": "d567841c18435af41a9ee8ce7de82783e222e91c8f76161c553adf9e3e141b77"
+  },
+  "cases": {
+    "case-a": {
+      "generator": "/root/layout_case_a",
+      "fork_turns": "none",
+      "reference_provided": false,
+      "source": "../three-tier-2026-10-29/source.md",
+      "source_sha256": "3f05a13aee8ba2134499ffb4cb48a3b873322b375be9b14b0787a356d636c3a9",
+      "previous_preview": "../three-tier-2026-10-29/revised/diagram.png",
+      "previous_preview_sha256": "408c9907ec1b25d9878039a414257d7441af0aba42e27c556c6536cc1d22ed97",
+      "artifact_sha256": {
+        "diagram.drawio": "daac8e7b090be231e06d911a853cedd0ed12d5f322f5b3fa727529f13e5be299",
+        "diagram.svg": "357310c1bf180676483775c49c9d42528c79645e9eff2ddb13b7fc5498e15928",
+        "diagram.png": "5306a715050d6472062573100e69b0e7d040f7a998b6097c9ec5f504fceefba7",
+        "diagram.render.json": "562f96a37b0efaf9382a6a8996946b1093e0bb746fa709b08aff9d04cda9b2df",
+        "generate.mjs": "0fe75d7b22321fadbd193acae40e23584e657e6abc0e29a432f9ae43f236998f",
+        "generation.json": "d4cdda2dc3d51b848280f753a7e63a10663de9e75278f627863426aea172b46a"
+      },
+      "renderer": {
+        "name": "Chromium with pinned local draw.io viewer",
+        "drawio": "32.6.1",
+        "commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+        "browser": "Chrome/154.0.8037.57"
+      },
+      "checks": []
+    },
+    "case-b": {
+      "generator": "/root/layout_case_b",
+      "fork_turns": "none",
+      "reference_provided": false,
+      "source": "../three-tier-supporting-2026-10-29/source.md",
+      "source_sha256": "a83a330a20349e6fe0897a3547684f6b1883810cbc6be9b93dc260b22d3972ae",
+      "previous_preview": "../three-tier-supporting-2026-10-29/first.png",
+      "previous_preview_sha256": "70467acf2d6c314af7a993236c4ecd1d4c68314703656cf7d57a6b9fd82de059",
+      "artifact_sha256": {
+        "diagram.drawio": "90c5993b9e516e158f8883749ee2e0d180cfb79f58b8dc22e2f0f8b14f991dc3",
+        "diagram.svg": "74b6695b40f659929bf81606d198167e1c3cf8f1bf03e93c88090831327794d0",
+        "diagram.png": "5871694ba31eeb233c3fca446bcdcda34fb746b872b36e11a04db2777ebbea9e",
+        "diagram.render.json": "920d80c28e039a8041ee0bb4959f97f7adfb413616af59c851f585aefa2200a4",
+        "generate.mjs": "93172051016a19229799808e0bf2155ff67a8225deb278fae442f11cf969c829",
+        "generation.json": "c01768d83b99379e4401a701173f35ceb0d92cf2f80a7f233d32bd284e0f91af"
+      },
+      "renderer": {
+        "name": "Chromium with pinned local draw.io viewer",
+        "drawio": "32.6.1",
+        "commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+        "browser": "Chrome/154.0.8037.57"
+      },
+      "checks": []
+    }
+  },
+  "limits": [
+    "Generators received no parent conversation, old diagram, visual reference or score; each was instructed to read only its source and current package plus neutral authoring tools.",
+    "Agents shared filesystem access; input isolation is procedural, not an access-control guarantee.",
+    "The parent had seen earlier diagrams and references; its comparison is not independent review.",
+    "One generation per case is not a controlled effect estimate, a reliability score or an image-only round trip.",
+    "These checks cover declared XML, rendered geometry and text overlaps; they do not prove source fidelity, aesthetics or deployed correctness.",
+    "No external model endpoint was called; exact host model parameters were not exposed. Desktop remains unverified.",
+    "The second user-supplied reference image was not downloaded or archived."
+  ]
+}

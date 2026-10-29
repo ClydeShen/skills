@@ -83,7 +83,7 @@ test('candidate-layout repairs preserve identities, ownership and existing hops 
   }
 });
 
-test('readable uniform typography passes without label collisions; mixed, undersized and invalid declarations fail', () => {
+test('readable typography preserves the declared minimum and rejects undersized or invalid declarations', () => {
   for (const id of ['02', '03']) {
     const source = xml(id);
     assert.deepEqual(validateDiagram(source, catalog), []);

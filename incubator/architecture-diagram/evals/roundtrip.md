@@ -46,7 +46,7 @@ Owner clarification, 2026-10-29: a diagram covered in explanatory Notes can pres
 
 For visual review, identify the visible encoding of domain membership, main/auxiliary/failure paths, branch conditions, transformations and repeated mappings. The reader should trace the essential architecture without detached explanations. Short node/edge labels and a notation key remain legitimate vocabulary. Keep unknowns and meaningful qualifiers; do not invent graph structure or discard information to reduce text. Any comment-removal or other ablation is a separate diagnostic artifact and must not replace an already frozen measured image.
 
-The [visual-expression revision](./visual-expression-2026-10-29/README.md) records the initial application and its limits. It is not a completed new round-trip experiment.
+The [visual-expression revision](./visual-expression-2026-10-29/README.md) records the initial application and its limits. The [three-tier reference case](./three-tier-2026-10-29/README.md) adds owner-calibrated review of region hierarchy, multiplicity, selective labels and readability. Neither is a completed new round-trip experiment. Reference images and comparison feedback remain evaluator-only inputs during text-to-diagram runs; reference-informed redraws are calibration, not blind generation evidence.
 
 ### Runner and comparator
 

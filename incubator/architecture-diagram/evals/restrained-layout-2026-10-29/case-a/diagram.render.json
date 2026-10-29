@@ -1,0 +1,1338 @@
+{
+  "renderer": "Chromium with pinned local draw.io viewer",
+  "drawio_version": "32.6.1",
+  "upstream_commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+  "browser": "Chrome/154.0.8037.57",
+  "metrics": [
+    {
+      "id": "0",
+      "parent": null,
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "body": null,
+      "text": null,
+      "points": null
+    },
+    {
+      "id": "1",
+      "parent": "0",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "body": null,
+      "text": null,
+      "points": null
+    },
+    {
+      "id": "title",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 40,
+        "y": 20,
+        "w": 1100,
+        "h": 42
+      },
+      "body": {
+        "x": 40,
+        "y": 20,
+        "w": 1100,
+        "h": 42
+      },
+      "text": {
+        "x": 42,
+        "y": 24,
+        "w": 411,
+        "h": 34
+      },
+      "points": null
+    },
+    {
+      "id": "vpc",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 430,
+        "y": 90,
+        "w": 1250,
+        "h": 790
+      },
+      "body": {
+        "x": 429.5,
+        "y": 89.5,
+        "w": 1251,
+        "h": 791
+      },
+      "text": {
+        "x": 446,
+        "y": 109,
+        "w": 151,
+        "h": 23
+      },
+      "points": null
+    },
+    {
+      "id": "aza",
+      "parent": "vpc",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 600,
+        "y": 145,
+        "w": 1020,
+        "h": 285
+      },
+      "body": {
+        "x": 599.5,
+        "y": 144.5,
+        "w": 1021,
+        "h": 286
+      },
+      "text": {
+        "x": 616,
+        "y": 164,
+        "w": 130,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "web-aza",
+      "parent": "aza",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 620,
+        "y": 200,
+        "w": 220,
+        "h": 190
+      },
+      "body": {
+        "x": 620,
+        "y": 200,
+        "w": 220,
+        "h": 190
+      },
+      "text": {
+        "x": 636,
+        "y": 219,
+        "w": 101,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "web-a",
+      "parent": "web-aza",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 694,
+        "y": 265,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 694,
+        "y": 265,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 685,
+        "y": 353,
+        "w": 90,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "app-aza",
+      "parent": "aza",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 980,
+        "y": 200,
+        "w": 220,
+        "h": 190
+      },
+      "body": {
+        "x": 980,
+        "y": 200,
+        "w": 220,
+        "h": 190
+      },
+      "text": {
+        "x": 996,
+        "y": 219,
+        "w": 97,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "app-a",
+      "parent": "app-aza",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1054,
+        "y": 265,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 1054,
+        "y": 265,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 1047.5,
+        "y": 353,
+        "w": 85,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "db-aza",
+      "parent": "aza",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1340,
+        "y": 200,
+        "w": 240,
+        "h": 190
+      },
+      "body": {
+        "x": 1340,
+        "y": 200,
+        "w": 240,
+        "h": 190
+      },
+      "text": {
+        "x": 1356,
+        "y": 219,
+        "w": 102,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "primary",
+      "parent": "db-aza",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1424,
+        "y": 265,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 1423.5,
+        "y": 264.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 1414,
+        "y": 353,
+        "w": 92,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "azb",
+      "parent": "vpc",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 600,
+        "y": 580,
+        "w": 1020,
+        "h": 275
+      },
+      "body": {
+        "x": 599.5,
+        "y": 579.5,
+        "w": 1021,
+        "h": 276
+      },
+      "text": {
+        "x": 616,
+        "y": 599,
+        "w": 131,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "web-azb",
+      "parent": "azb",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 620,
+        "y": 625,
+        "w": 220,
+        "h": 190
+      },
+      "body": {
+        "x": 620,
+        "y": 625,
+        "w": 220,
+        "h": 190
+      },
+      "text": {
+        "x": 636,
+        "y": 644,
+        "w": 101,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "web-b",
+      "parent": "web-azb",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 694,
+        "y": 690,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 694,
+        "y": 690,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 685,
+        "y": 778,
+        "w": 90,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "app-azb",
+      "parent": "azb",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 980,
+        "y": 625,
+        "w": 220,
+        "h": 190
+      },
+      "body": {
+        "x": 980,
+        "y": 625,
+        "w": 220,
+        "h": 190
+      },
+      "text": {
+        "x": 996,
+        "y": 644,
+        "w": 97,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "app-b",
+      "parent": "app-azb",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1054,
+        "y": 690,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 1054,
+        "y": 690,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 1047.5,
+        "y": 778,
+        "w": 85,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "db-azb",
+      "parent": "azb",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1340,
+        "y": 625,
+        "w": 240,
+        "h": 190
+      },
+      "body": {
+        "x": 1340,
+        "y": 625,
+        "w": 240,
+        "h": 190
+      },
+      "text": {
+        "x": 1356,
+        "y": 644,
+        "w": 102,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "standby",
+      "parent": "db-azb",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1424,
+        "y": 690,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 1423.5,
+        "y": 689.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 1379.5,
+        "y": 778,
+        "w": 161,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "web-elb",
+      "parent": "vpc",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 484,
+        "y": 465,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 483.5,
+        "y": 464.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 486.5,
+        "y": 553,
+        "w": 67,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "app-elb",
+      "parent": "vpc",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 874,
+        "y": 465,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 873.5,
+        "y": 464.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 878.5,
+        "y": 553,
+        "w": 63,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "web-asg",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 612,
+        "y": 260,
+        "w": 224,
+        "h": 550
+      },
+      "body": {
+        "x": 611.35,
+        "y": 259.35,
+        "w": 225.3,
+        "h": 551.3
+      },
+      "text": null,
+      "points": null
+    },
+    {
+      "id": "app-asg",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 972,
+        "y": 260,
+        "w": 236,
+        "h": 550
+      },
+      "body": {
+        "x": 971.35,
+        "y": 259.35,
+        "w": 237.3,
+        "h": 551.3
+      },
+      "text": null,
+      "points": null
+    },
+    {
+      "id": "web-asg-label",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 640,
+        "y": 465,
+        "w": 180,
+        "h": 56
+      },
+      "body": {
+        "x": 640,
+        "y": 465,
+        "w": 180,
+        "h": 56
+      },
+      "text": {
+        "x": 667,
+        "y": 474,
+        "w": 126,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "app-asg-label",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1000,
+        "y": 465,
+        "w": 180,
+        "h": 56
+      },
+      "body": {
+        "x": 1000,
+        "y": 465,
+        "w": 180,
+        "h": 56
+      },
+      "text": {
+        "x": 1029,
+        "y": 474,
+        "w": 122,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "users",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Person",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 64,
+        "y": 465,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 63.5,
+        "y": 464.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 79,
+        "y": 553,
+        "w": 42,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "dns",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 64,
+        "y": 185,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 63.5,
+        "y": 184.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 16.5,
+        "y": 273,
+        "w": 167,
+        "h": 38
+      },
+      "points": null
+    },
+    {
+      "id": "cdn",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 284,
+        "y": 465,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 283.5,
+        "y": 464.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 280.5,
+        "y": 553,
+        "w": 79,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "s3",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 284,
+        "y": 185,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 284,
+        "y": 185,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 284.5,
+        "y": 273,
+        "w": 71,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "dns-query",
+      "parent": "1",
+      "source": "users",
+      "target": "dns",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 100,
+        "y": 221,
+        "w": 95,
+        "h": 244
+      },
+      "body": {
+        "x": 92.15,
+        "y": 213.15,
+        "w": 111.7,
+        "h": 260.7
+      },
+      "text": {
+        "x": 130,
+        "y": 395.5,
+        "w": 34,
+        "h": 19
+      },
+      "points": [
+        {
+          "x": 100,
+          "y": 465
+        },
+        {
+          "x": 100,
+          "y": 405
+        },
+        {
+          "x": 195,
+          "y": 405
+        },
+        {
+          "x": 195,
+          "y": 221
+        },
+        {
+          "x": 136,
+          "y": 221
+        }
+      ]
+    },
+    {
+      "id": "entry",
+      "parent": "1",
+      "source": "users",
+      "target": "cdn",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 136,
+        "y": 501,
+        "w": 148,
+        "h": 1
+      },
+      "body": {
+        "x": 128.15,
+        "y": 493.15,
+        "w": 164.7,
+        "h": 16.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 136,
+          "y": 501
+        },
+        {
+          "x": 284,
+          "y": 501
+        }
+      ]
+    },
+    {
+      "id": "static",
+      "parent": "1",
+      "source": "cdn",
+      "target": "s3",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 220,
+        "y": 221,
+        "w": 100,
+        "h": 244
+      },
+      "body": {
+        "x": 212.15,
+        "y": 213.15,
+        "w": 116.7,
+        "h": 260.7
+      },
+      "text": {
+        "x": 200,
+        "y": 330.5,
+        "w": 40,
+        "h": 19
+      },
+      "points": [
+        {
+          "x": 320,
+          "y": 465
+        },
+        {
+          "x": 320,
+          "y": 400
+        },
+        {
+          "x": 220,
+          "y": 400
+        },
+        {
+          "x": 220,
+          "y": 221
+        },
+        {
+          "x": 285.39074380915633,
+          "y": 221
+        }
+      ]
+    },
+    {
+      "id": "dynamic",
+      "parent": "1",
+      "source": "cdn",
+      "target": "web-elb",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 356,
+        "y": 501,
+        "w": 128,
+        "h": 1
+      },
+      "body": {
+        "x": 348.15,
+        "y": 493.15,
+        "w": 144.7,
+        "h": 16.7
+      },
+      "text": {
+        "x": 365,
+        "y": 491.5,
+        "w": 62,
+        "h": 19
+      },
+      "points": [
+        {
+          "x": 356,
+          "y": 501
+        },
+        {
+          "x": 484,
+          "y": 501
+        }
+      ]
+    },
+    {
+      "id": "web-to-a",
+      "parent": "1",
+      "source": "web-elb",
+      "target": "web-a",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 556,
+        "y": 301,
+        "w": 138,
+        "h": 182
+      },
+      "body": {
+        "x": 548.15,
+        "y": 293.15,
+        "w": 154.7,
+        "h": 198.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 556,
+          "y": 483
+        },
+        {
+          "x": 574,
+          "y": 483
+        },
+        {
+          "x": 574,
+          "y": 301
+        },
+        {
+          "x": 694,
+          "y": 301
+        }
+      ]
+    },
+    {
+      "id": "web-to-b",
+      "parent": "1",
+      "source": "web-elb",
+      "target": "web-b",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 556,
+        "y": 519,
+        "w": 138,
+        "h": 207
+      },
+      "body": {
+        "x": 548.15,
+        "y": 511.15,
+        "w": 154.7,
+        "h": 223.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 556,
+          "y": 519
+        },
+        {
+          "x": 584,
+          "y": 519
+        },
+        {
+          "x": 584,
+          "y": 726
+        },
+        {
+          "x": 694,
+          "y": 726
+        }
+      ]
+    },
+    {
+      "id": "a-to-app-elb",
+      "parent": "1",
+      "source": "web-a",
+      "target": "app-elb",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 766,
+        "y": 301,
+        "w": 144,
+        "h": 164
+      },
+      "body": {
+        "x": 758.15,
+        "y": 293.15,
+        "w": 160.7,
+        "h": 180.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 766,
+          "y": 301
+        },
+        {
+          "x": 910,
+          "y": 301
+        },
+        {
+          "x": 910,
+          "y": 465
+        }
+      ]
+    },
+    {
+      "id": "b-to-app-elb",
+      "parent": "1",
+      "source": "web-b",
+      "target": "app-elb",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 766,
+        "y": 519,
+        "w": 108,
+        "h": 207
+      },
+      "body": {
+        "x": 758.15,
+        "y": 511.15,
+        "w": 124.7,
+        "h": 223.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 766,
+          "y": 726
+        },
+        {
+          "x": 850,
+          "y": 726
+        },
+        {
+          "x": 850,
+          "y": 519
+        },
+        {
+          "x": 874,
+          "y": 519
+        }
+      ]
+    },
+    {
+      "id": "app-to-a",
+      "parent": "1",
+      "source": "app-elb",
+      "target": "app-a",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 946,
+        "y": 301,
+        "w": 108,
+        "h": 182
+      },
+      "body": {
+        "x": 938.15,
+        "y": 293.15,
+        "w": 124.7,
+        "h": 198.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 946,
+          "y": 483
+        },
+        {
+          "x": 964,
+          "y": 483
+        },
+        {
+          "x": 964,
+          "y": 301
+        },
+        {
+          "x": 1054,
+          "y": 301
+        }
+      ]
+    },
+    {
+      "id": "app-to-b",
+      "parent": "1",
+      "source": "app-elb",
+      "target": "app-b",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 946,
+        "y": 519,
+        "w": 108,
+        "h": 207
+      },
+      "body": {
+        "x": 938.15,
+        "y": 511.15,
+        "w": 124.7,
+        "h": 223.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 946,
+          "y": 519
+        },
+        {
+          "x": 988,
+          "y": 519
+        },
+        {
+          "x": 988,
+          "y": 726
+        },
+        {
+          "x": 1054,
+          "y": 726
+        }
+      ]
+    },
+    {
+      "id": "a-to-db",
+      "parent": "1",
+      "source": "app-a",
+      "target": "primary",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1126,
+        "y": 301,
+        "w": 298,
+        "h": 1
+      },
+      "body": {
+        "x": 1118.15,
+        "y": 293.15,
+        "w": 314.7,
+        "h": 16.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 1126,
+          "y": 301
+        },
+        {
+          "x": 1424,
+          "y": 301
+        }
+      ]
+    },
+    {
+      "id": "b-to-db",
+      "parent": "1",
+      "source": "app-b",
+      "target": "primary",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1126,
+        "y": 319,
+        "w": 298,
+        "h": 407
+      },
+      "body": {
+        "x": 1118.15,
+        "y": 311.15,
+        "w": 314.7,
+        "h": 423.7
+      },
+      "text": null,
+      "points": [
+        {
+          "x": 1126,
+          "y": 726
+        },
+        {
+          "x": 1270,
+          "y": 726
+        },
+        {
+          "x": 1270,
+          "y": 319
+        },
+        {
+          "x": 1424,
+          "y": 319
+        }
+      ]
+    },
+    {
+      "id": "replication",
+      "parent": "1",
+      "source": "primary",
+      "target": "standby",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1496,
+        "y": 301,
+        "w": 104,
+        "h": 425
+      },
+      "body": {
+        "x": 1488.15,
+        "y": 293.15,
+        "w": 120.7,
+        "h": 441.7
+      },
+      "text": {
+        "x": 1553.5,
+        "y": 495,
+        "w": 93,
+        "h": 38
+      },
+      "points": [
+        {
+          "x": 1496,
+          "y": 301
+        },
+        {
+          "x": 1600,
+          "y": 301
+        },
+        {
+          "x": 1600,
+          "y": 726
+        },
+        {
+          "x": 1496,
+          "y": 726
+        }
+      ]
+    },
+    {
+      "id": "scale-scope",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 430,
+        "y": 900,
+        "w": 1250,
+        "h": 28
+      },
+      "body": {
+        "x": 430,
+        "y": 900,
+        "w": 1250,
+        "h": 28
+      },
+      "text": {
+        "x": 432,
+        "y": 904.5,
+        "w": 898,
+        "h": 19
+      },
+      "points": null
+    },
+    {
+      "id": "scope",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 430,
+        "y": 938,
+        "w": 1250,
+        "h": 48
+      },
+      "body": {
+        "x": 430,
+        "y": 938,
+        "w": 1250,
+        "h": 48
+      },
+      "text": {
+        "x": 432,
+        "y": 943,
+        "w": 736,
+        "h": 38
+      },
+      "points": null
+    }
+  ]
+}

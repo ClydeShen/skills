@@ -13,8 +13,8 @@ test('actual prototype XML passes static checks; unknown and altered vendor icon
   for (const changed of [diagram.replace('resIcon=mxgraph.aws4.cognito', 'resIcon=mxgraph.aws4.invented'), diagram.replace('vendor="AWS"', 'vendor="Azure"'), diagram.replace('fillColor=#DD344C', 'fillColor=#000000'), diagram.replace('resIcon=mxgraph.aws4.cognito;', 'resIcon=mxgraph.aws4.cognito;rotation=45;')]) assert.ok(validateDiagram(changed, catalog).length);
 });
 
-test('invalid XML, DTDs, compressed pages, duplicate ids, missing legend and bidirectional arrows fail', () => {
-  for (const changed of ['<bad>', '<!DOCTYPE mxfile>' + diagram, diagram.replace('mxGraphModel', 'compressedModel'), diagram.replace('id="user"', 'id="web"'), diagram.replace('id="legend" value="Legend"', 'id="legend" value="Key"'), diagram.replace('startArrow=none', 'startArrow=block')]) assert.ok(validateDiagram(changed, catalog).length);
+test('invalid XML, DTDs, compressed pages, duplicate ids and bidirectional arrows fail', () => {
+  for (const changed of ['<bad>', '<!DOCTYPE mxfile>' + diagram, diagram.replace('mxGraphModel', 'compressedModel'), diagram.replace('id="user"', 'id="web"'), diagram.replace('startArrow=none', 'startArrow=block')]) assert.ok(validateDiagram(changed, catalog).length);
 });
 
 test('shared path segments and declared routes through captions are detected', () => {
@@ -124,8 +124,8 @@ test('native Misc Note retains automatic text fitting without changing architect
   const note = diagram.match(/<mxCell id="token"[\s\S]*?<\/mxCell>/)[0];
   for (const style of ['autosizeText=1;', 'html=1;', 'backgroundOutline=1;', 'fontSize=20;', 'direction=west;', 'fillColor=#FFF9B2;', 'gradientColor=#FFF2A1;', 'shadow=1;']) assert.ok(note.includes(style), style);
   assert.ok(note.includes('&lt;br&gt;'));
-  assert.ok(validateDiagram(diagram.replace(note, note.replace('autosizeText=1;', 'autosizeText=0;')), catalog).some(e => e.includes('Font must match the declared architectural size (12)')));
-  assert.ok(validateDiagram(diagram.replace('fontSize=12', 'fontSize=20'), catalog).some(e => e.includes('Font must match the declared architectural size (12)')));
-  assert.ok(validateDiagram(diagram.replace('shape=umlActor;', 'shape=umlActor;autosizeText=1;'), catalog).some(e => e.includes('Font must match the declared architectural size (12)')));
+  assert.ok(validateDiagram(diagram.replace(note, note.replace('autosizeText=1;', 'autosizeText=0;')), catalog).some(e => e.includes('Native Note must retain automatic text fitting')));
+  assert.ok(validateDiagram(diagram.replace('fontSize=12', 'fontSize=11'), catalog).some(e => e.includes('declared architectural size (12) minimum')));
+  assert.ok(validateDiagram(diagram.replace('shape=umlActor;', 'shape=umlActor;autosizeText=1;'), catalog).some(e => e.includes('declared architectural size (12) minimum')));
   assert.ok(validateDiagram(diagram.replace('edgeStyle=orthogonalEdgeStyle;', 'edgeStyle=orthogonalEdgeStyle;autosizeText=1;'), catalog).some(e => e.includes('Wrong relationship font')));
 });

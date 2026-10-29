@@ -121,8 +121,7 @@ export function validateDiagram(xml, catalog) {
   const objects = list(root.object);
   const nodes = [...list(root.mxCell), ...objects.map(o => ({ ...o.mxCell, ...o, mxCell: undefined, value: o.label }))];
   const byId = new Map();
-  if (!nodes.some(n => /^Dynamic diagram \(deployment view\):/.test(n.value || ''))) errors.push('Missing diagram type/scope title.');
-  if (!nodes.some(n => /^Legend\b/.test(n.value || ''))) errors.push('Missing notation legend.');
+  if (!pages[0].name?.trim()) errors.push('Missing diagram view name.');
   for (const n of nodes) {
     if (!n.id || byId.has(n.id)) errors.push(`Missing or duplicate id: ${n.id}`);
     byId.set(n.id, n);
@@ -146,10 +145,11 @@ export function validateDiagram(xml, catalog) {
     if (!Object.values(box).every(Number.isFinite) || box.w <= 0 || box.h <= 0) errors.push(`Invalid dimensions: ${n.id}`);
     boxes.set(n.id, box);
     const autoNote = n.annotationKind === 'comment' && s.shape === 'note' && s.html === '1' && s.autosizeText === '1';
-    const validFont = autoNote ? Number.isFinite(Number(s.fontSize)) && Number(s.fontSize) > 0 : Number(s.fontSize) === fontSize && s.autosizeText !== '1';
-    if (!validFont) errors.push(`Font must match the declared architectural size (${fontSize}) unless this is an auto-sized native Note comment: ${n.id}`);
+    if (n.annotationKind === 'comment' && s.shape === 'note' && !autoNote) errors.push(`Native Note must retain automatic text fitting: ${n.id}`);
+    const validFont = autoNote ? Number.isFinite(Number(s.fontSize)) && Number(s.fontSize) > 0 : Number.isFinite(Number(s.fontSize)) && Number(s.fontSize) >= fontSize && s.autosizeText !== '1';
+    if (!validFont) errors.push(`Font must meet the declared architectural size (${fontSize}) minimum unless this is an auto-sized native Note comment: ${n.id}`);
     if (n.c4Type) {
-      if (!n.value?.includes(`[${n.c4Type}`)) errors.push(`Missing visible C4 type: ${n.id}`);
+      if (!String(n.value || '').replace(/<[^>]*>/g, '').trim()) errors.push(`Missing visible element name: ${n.id}`);
       if (['Container', 'Component'].includes(n.c4Type) && !n.technology) errors.push(`Missing technology: ${n.id}`);
       if (['Person', 'External software system'].includes(n.c4Type) && n.parent !== '1') errors.push(`External element must remain outside boundaries: ${n.id}`);
     }
@@ -168,10 +168,13 @@ export function validateDiagram(xml, catalog) {
   }
   const captions = new Map();
   for (const n of objects.filter(n => !boundary(n) && n.iconKey)) {
+    // Native group headings sit inside their enclosure, not below an icon.
+    // Rendered text geometry remains authoritative for their collision checks.
+    if (!n.label?.trim() || catalog.entries.find(e => e.id === n.iconKey)?.palette === 'aws4Groups') continue;
     const b = boxes.get(n.id); if (!b) continue;
-    const s = styleMap(n.mxCell.style), width = Number(s.labelWidth || 200);
-    const lines = n.label.split(/\n|<br\s*\/?\s*>/i).reduce((sum, line) => sum + Math.max(1, Math.ceil(line.length * fontSize * 0.6 / width)), 0);
-    captions.set(n.id, { x: b.x + b.w / 2 - width / 2, y: b.y + b.h + Number(s.spacingTop || 0), w: width, h: lines * fontSize * 4 / 3 });
+    const s = styleMap(n.mxCell.style), width = Number(s.labelWidth || 200), captionFont = Number(s.fontSize);
+    const lines = n.label.split(/\n|<br\s*\/?\s*>/i).reduce((sum, line) => sum + Math.max(1, Math.ceil(line.length * captionFont * 0.6 / width)), 0);
+    captions.set(n.id, { x: b.x + b.w / 2 - width / 2, y: b.y + b.h + Number(s.spacingTop || 0), w: width, h: lines * captionFont * 4 / 3 });
   }
   const segments = [], routes = [];
   const annotationOwner = id => {
@@ -187,11 +190,9 @@ export function validateDiagram(xml, catalog) {
     const source = byId.get(e.source), target = byId.get(e.target), s = styleMap(e.style || '');
     if (!source || !target || !boxes.has(e.source) || !boxes.has(e.target)) { errors.push(`Missing edge endpoint: ${e.id}`); continue; }
     if (annotationOwner(source.id) || annotationOwner(target.id)) errors.push(`Architectural call must not target an annotation: ${e.id}`);
-    if (!e.value?.trim()) errors.push(`Missing relationship label: ${e.id}`);
     if (s.startArrow !== 'none' || s.endArrow !== 'block' || s.endFill !== '1') errors.push(`Use one filled, single-direction arrow: ${e.id}`);
-    if (Number(s.fontSize) !== fontSize || s.autosizeText === '1') errors.push(`Wrong relationship font: ${e.id}`);
-    if (s.labelBackgroundColor !== '#ffffff' || Number(e.mxGeometry?.y || 0) !== 0) errors.push(`Use an opaque label on the connector: ${e.id}`);
-    if (source.c4Type === 'Container' && target.c4Type === 'Container' && !/\[[^\]]+\]/.test(e.value)) errors.push(`Missing relationship technology/protocol: ${e.id}`);
+    if (!Number.isFinite(Number(s.fontSize)) || Number(s.fontSize) < fontSize || s.autosizeText === '1') errors.push(`Wrong relationship font: ${e.id}`);
+    if (e.value?.trim() && (s.labelBackgroundColor !== '#ffffff' || Number(e.mxGeometry?.y || 0) !== 0)) errors.push(`Use an opaque label on the connector: ${e.id}`);
     const port = (id, x, y) => { const b = boxes.get(id); return { x: b.x + b.w * Number(x ?? 0.5), y: b.y + b.h * Number(y ?? 0.5) }; };
     const points = [port(e.source, s.exitX, s.exitY), ...list(e.mxGeometry?.Array?.mxPoint).map(p => ({ x: Number(p.x), y: Number(p.y) })), port(e.target, s.entryX, s.entryY)];
     if (e.parent !== '1') errors.push(`Prototype routes require root coordinates: ${e.id}`);

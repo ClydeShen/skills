@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-29",
+  "mode": "independent text-only regeneration",
+  "source": "../../three-tier-2026-10-29/source.md",
+  "source_sha256": "3f05a13aee8ba2134499ffb4cb48a3b873322b375be9b14b0787a356d636c3a9",
+  "skill_sha256": "a55330763ffdbb8ddcc0fcdcbe228efe028d038bdf79efbd7036ffa10258fae3",
+  "reference_image": false,
+  "external_model_calls": false,
+  "scope": "Only case-a artifacts; parent integrates.",
+  "workflow_exception": "No branch switch or git setup: delegated shared workspace, parent owns Git integration. npm run git:check failed with spawnSync git EPERM.",
+  "checks": {
+    "staticErrors": [],
+    "renderErrors": [],
+    "textOverlaps": [],
+    "browserRender": "Chromium with pinned local draw.io viewer",
+    "drawioVersion": "32.6.1",
+    "desktopVerified": false,
+    "visualInspection": "Author inspected the final PNG at overview and readable detail.",
+    "sourceFidelity": "Author traced all eight source flow steps, six subnet CIDRs, two AZs, representative compute fleets and separate scaling groups. No independent review claimed."
+  }
+}

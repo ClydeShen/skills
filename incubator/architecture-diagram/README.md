@@ -8,7 +8,7 @@ Stage: **public**. Updated: 2026-10-29. Basis: verified candidate installation a
 
 ## What you get
 
-One editable `.drawio` dynamic diagram in a deployment view, from an English scenario description. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable.
+One editable `.drawio` architecture diagram, with a logical, deployment or flow emphasis supported by your English scenario description. Unresolved source claims and implementation choices stay in a concise companion account. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable.
 
 Start with a specific interaction, such as a sign-in flow or a request crossing cloud and on-premises boundaries. Code/IaC input, automatic redraw and exported images as product deliverables are outside current scope.
 
@@ -53,6 +53,7 @@ Try your own scenario before reading the examples. In [Issue #7](https://github.
 
 ## Development
 
+- [Handoff](./HANDOFF.md): latest outputs, accepted direction, verification limits and next steps.
 - [Active package](./candidate/architecture-diagram/SKILL.md): installed instructions and runtime resources.
 - [Evaluation record](./evaluation.md) and [round-trip protocol](./evals/roundtrip.md): findings and description/image fidelity testing.
 - [Authoring tools](./tools/README.md): local checks and rendering setup.

@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-29",
+  "mode": "Two fresh-context host agents with source-only scenario packets; parent semantic feedback before delivery",
+  "skill_sha256": {
+    "SKILL.md": "a55330763ffdbb8ddcc0fcdcbe228efe028d038bdf79efbd7036ffa10258fae3",
+    "references/notation.md": "ffbafede472e607212f9854805645c652bbdb2f71123458ba1a883685b490b21",
+    "references/drawio.md": "ff7f7d213e655d4a836ee266ad0134692384b65171993dfe357ff9a5f6640f00",
+    "scripts/find-icon.mjs": "b7ea7aea44784ca82f8c7f3fe44e76ebe39c0c9a3561fa69b1900f1143af4f95",
+    "scripts/catalog.mjs": "835db1152ba35f42bb7cbd1c4fb191070bc825643e745e8a35d781f35ab792df",
+    "assets/catalog.json": "d567841c18435af41a9ee8ce7de82783e222e91c8f76161c553adf9e3e141b77"
+  },
+  "cases": {
+    "case-a": {
+      "source": "../three-tier-2026-10-29/source.md",
+      "source_sha256": "3f05a13aee8ba2134499ffb4cb48a3b873322b375be9b14b0787a356d636c3a9",
+      "checks": [],
+      "artifacts_sha256": {
+        "diagram.drawio": "abb80599a552a4b8f003219018c414b56ecf2efedce12e49e29b63c9a39d0ea4",
+        "diagram.svg": "32d010e529414b07c89ed35899dfc67aee5fa10e1cf539fc372000db3b6299c6",
+        "diagram.png": "eaf6afce70c6ebe96356e4d9c2280a65a6faedd279eb9295c7904eb5c62211f5",
+        "diagram.render.json": "a36f2da8a630fbf40d7080717a710b4856cf4519aee6a44fb8b8c8fa510fb035",
+        "assumptions.md": "d2d66d77cbb3744a2490e364484392e8cb5017de721d3c270478f18ad445b244",
+        "generation.json": "7ea2a537a2208e25b04057ed0485c08d8f91990e8519733edbb6c09a165e432a",
+        "generate.mjs": "ef978f095cf22814a1a425e100624b37c782bb1ac810e30aaf1c7b5e991a7900",
+        "check.mjs": "0b5904a07af3354d0ad506c41b710e0d6b205e7a1b049cb6067b52bd82cba1b6"
+      }
+    },
+    "case-b": {
+      "source": "../three-tier-supporting-2026-10-29/source.md",
+      "source_sha256": "a83a330a20349e6fe0897a3547684f6b1883810cbc6be9b93dc260b22d3972ae",
+      "checks": [],
+      "artifacts_sha256": {
+        "diagram.drawio": "6faf34df47aaa1a5de75d6fc1c59f993387a4e675b46476521151cf5e9205981",
+        "diagram.svg": "44cc41b76971abee49979c008756be72a85b65d2a018e7deefc74f38a3605e4b",
+        "diagram.png": "88c6003139e84e87ebf80b519733ea711371a50337e4d6eb57ec653eb326c0bd",
+        "diagram.render.json": "a6ce6a2e72778a3b099644bf43e28d5728c4bc3f9b9abf05f6080ba2946c1acd",
+        "assumptions.md": "887521401879a72fc7d469a772c2742fdbf1bea30a771c6fd34c6a0866e41e61",
+        "generation.json": "7116af40db7084537ece09655c4d692ffff3c138646843a80b6983a97d144f52",
+        "generate.mjs": "bfc1a58cce5315ef99a8b0177eab287d77d6c93ca389023daf38388344e3d8dd",
+        "check.mjs": "d2103101390ded7e213831a061cc433fdbd5941ed351aa9629979115c79536d2"
+      }
+    }
+  },
+  "limits": [
+    "Shared filesystem; procedural input isolation, not an enforced sandbox.",
+    "Parent had seen references and supplied semantic/catalog feedback; this is not untouched blind evaluation.",
+    "No external model endpoint, independent image readout, deployed-system verification or Desktop test.",
+    "Geometry checks do not prove semantic correctness or visual quality; owner comparison remains pending."
+  ]
+}

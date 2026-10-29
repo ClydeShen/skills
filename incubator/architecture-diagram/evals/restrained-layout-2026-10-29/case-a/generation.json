@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-29",
+  "scenario_input": "../../three-tier-2026-10-29/source.md",
+  "skill": "../../../candidate/architecture-diagram/SKILL.md",
+  "input_isolation": {
+    "respected": true,
+    "description": "The scenario source was the only case input. No prior case artifacts, generators, reference images, sibling outputs, scores, evaluation records or diagram knowledge examples were read."
+  },
+  "composition": "Tiers progress left to right. Availability Zones form rows. Shared ELBs occupy the VPC corridor between AZs. Dashed amber logical overlays identify the two independent Auto Scaling groups.",
+  "interpretations": [
+    "Shared ELBs are shown at VPC level; their exact AZ and subnet placements remain unspecified.",
+    "AWS EC2 Instances symbols represent fleets in each compute subnet; counts are representative rather than fixed.",
+    "RDS uses the engine-neutral AWS RDS catalog symbol. No engine or read-replica capability is inferred.",
+    "Route 53 resolves to CloudFront and has a separate auxiliary DNS call. It does not forward application traffic.",
+    "Static and dynamic labels distinguish the two CloudFront origin paths. Normal responses are folded into request relationships."
+  ],
+  "fallbacks": [],
+  "checks": {
+    "static_validator_errors": 0,
+    "validate_render_errors": 0,
+    "pairwise_rendered_text_overlaps": 0,
+    "actual_png_inspected": true,
+    "source_path_and_membership_trace": "All six subnet CIDRs, both compute fleets per tier, both ELBs, the two shared scaling groups, both app-to-primary calls and synchronous primary-to-standby replication were checked.",
+    "git_diff_check": "Passed for the owned case directory.",
+    "git_policy": "Initial git:check could not spawn git under the default sandbox (EPERM). Existing branch and shared repository checks remain the parent integrator's responsibility.",
+    "repository_gate": "Delegated to the parent integrator as requested; not run by this worker.",
+    "desktop_verification": "Not performed. Rendering used Chromium and pinned local draw.io 32.6.1."
+  },
+  "unresolved_architectural_issues": [],
+  "limits": "The diagram preserves the stated architecture; it does not validate an actual AWS deployment. Unspecified implementation details remain unspecified."
+}

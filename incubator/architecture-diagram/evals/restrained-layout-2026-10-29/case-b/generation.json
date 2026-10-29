@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-29",
+  "kind": "Fresh-context text-to-diagram generation trial",
+  "source": "../../three-tier-supporting-2026-10-29/source.md",
+  "skill": "../../../candidate/architecture-diagram/SKILL.md",
+  "inputIsolation": "Read only the assigned text source, current skill and required references, repository operating instructions, reusable validation/render tools and package catalog metadata. No prior diagrams, case generators, case evaluations, reference images, sibling output or diagram research/knowledge examples were read.",
+  "interpretations": [
+    "The Web-to-App relationship is an inference already distinguished by the source. It is dashed, labeled Implied, and identified in the scope line; it does not assert a confirmed network path or protocol.",
+    "S3 is regional and sits outside both AZ boundaries. Route 53 and CloudFront sit outside the Region enclosure.",
+    "ElastiCache-to-RDS and standby-side-to-S3 links are preserved and marked with a dagger. Their operation and purpose remain unstated; no native cache database integration, backup or export mechanism is asserted.",
+    "Supporting-service connections terminate at the application deployment level because their individual callers are not identified. The DynamoDB relationship retains both directions.",
+    "DNS is separate from application requests. CloudFront points toward its S3 origin for retrieval and toward the media domain for delivery.",
+    "Web and app counts are illustrated instances, not asserted capacity settings. Replication is labeled without asserting synchronous mode or failover behavior."
+  ],
+  "checks": {
+    "xmlAndCatalogValidationErrors": 0,
+    "validateRenderErrors": 0,
+    "pairwiseRenderedTextOverlaps": 0,
+    "actualPngInspected": true,
+    "renderer": "Chromium with pinned local draw.io v32.6.1",
+    "drawioCommit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+    "gitPolicy": "Passed on existing work/diagram-visual-clarity branch after retry with local subprocess permission",
+    "scopedGitDiffCheck": "Passed",
+    "fullRepositoryCheck": "Owned by parent integrator"
+  },
+  "limitations": [
+    "Desktop rendering was not verified.",
+    "Source omissions remain unresolved as disclosed on the diagram; the artifact does not establish deployment correctness."
+  ],
+  "fallbacks": "Plain boxes represent the two domain endpoints. AWS resources use exact pinned AWS4 catalog matches.",
+  "writeScope": "Only this case-b directory. No Git commits or shared-document edits."
+}

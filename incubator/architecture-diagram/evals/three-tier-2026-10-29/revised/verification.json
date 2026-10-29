@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-29",
+  "mode": "reference-informed generation in the existing conversation",
+  "reference_seen": true,
+  "fresh_context": false,
+  "owner_score": null,
+  "input_sha256": "3f05a13aee8ba2134499ffb4cb48a3b873322b375be9b14b0787a356d636c3a9",
+  "skill_sha256": {
+    "SKILL.md": "87d5409f94731589a5088ca4a8b5a1375ac4ede8d55d5be5044a109298c9695e",
+    "references/notation.md": "0f0bbf6761e0f7e7300cda74cddd730d01790cd70788b5600710c0557959c28e",
+    "references/drawio.md": "ff7f7d213e655d4a836ee266ad0134692384b65171993dfe357ff9a5f6640f00",
+    "scripts/find-icon.mjs": "b7ea7aea44784ca82f8c7f3fe44e76ebe39c0c9a3561fa69b1900f1143af4f95",
+    "scripts/catalog.mjs": "835db1152ba35f42bb7cbd1c4fb191070bc825643e745e8a35d781f35ab792df",
+    "assets/catalog.json": "d567841c18435af41a9ee8ce7de82783e222e91c8f76161c553adf9e3e141b77"
+  },
+  "artifacts_sha256": {
+    "diagram.drawio": "1cf72af7fedabb2e4614c45675f25e3d351f3ca1d761cd193ba6c415455b23f0",
+    "diagram.svg": "671d97f2fc63b4b33f4eaa08cf0bd7df035bd0fddcd9d1f8d62779c954eea1cc",
+    "diagram.png": "408c9907ec1b25d9878039a414257d7441af0aba42e27c556c6536cc1d22ed97",
+    "diagram.render.json": "9786f4c06bd4c8caa07bb6ac750839d447845b87e08c880c29498360b7db0241",
+    "generate.mjs": "5436fe7ca93bfcc4f9525aa7105c056bf9b3b6526e645e59e117b1a7b798811c"
+  },
+  "checks": {
+    "errors": [],
+    "interpretation": "Bounded artifact checks; not independent semantic or aesthetic judgment."
+  },
+  "comparison": {
+    "baseline": {
+      "page": [
+        1480,
+        1900
+      ],
+      "directed_relationships": 13,
+      "labeled_relationships": 13,
+      "deployment_regions": 11,
+      "visible_words": 345
+    },
+    "revised": {
+      "page": [
+        1280,
+        1390
+      ],
+      "directed_relationships": 13,
+      "labeled_relationships": 4,
+      "deployment_regions": 10,
+      "visible_words": 98
+    },
+    "interpretation": "Descriptive counts only; reduced words or area do not establish improved quality."
+  },
+  "presentation_changes": [
+    "Omit the unspecified Region enclosure; preserve AWS/VPC/AZ/subnet membership.",
+    "Use native multi-instance symbols for each EC2 group.",
+    "Use filled subnet regions and remove service cards, repeated type tags and unknown-protocol placeholders."
+  ],
+  "unknowns": "Region, subnet exposure, ELB type/attachments, protocols other than DNS, security configuration and capacities remain unspecified; see the unchanged source for the full scope.",
+  "limitations": [
+    "The generator had seen the reference and previous output.",
+    "No fresh image-only readout, independent judge or owner rescore yet.",
+    "Browser rendering was checked; offline Desktop and deployed AWS behavior were not."
+  ]
+}
