@@ -1,10 +1,10 @@
 # Architecture Diagram evaluation
 
-Date: 2026-10-28. Updated: 2026-10-29. Status: prototype, deterministic checks, an existing-L1 pilot and four fresh full chains completed; critical/noncritical semantic drift found, Desktop integration and candidate behavior unverified.
+Date: 2026-10-28. Updated: 2026-10-29. Status: standard candidate packaged and relocation-checked; authored visual repairs follow an existing-L1 pilot and four fresh full chains with mixed semantic results. Desktop integration and fresh candidate-generation behavior remain unverified. Dated sections distinguish earlier targets from the current candidate.
 
 ## Scope and target
 
-- Stage: pre-candidate prototype, no installable skill.
+- Initial stage (2026-10-28): pre-candidate prototype, no installable skill. Current package checks are recorded under [Standard candidate and explicit paths](#standard-candidate-and-explicit-paths-2026-10-29).
 - Cases: four owner-approved drafts migrated from the requirements handoff, owned by [the scenario manifest](./evals/cases.json) and its linked Markdown files. Scenario 05 is deferred.
 - Prototype: [Scenario 01 draw.io XML](./prototype/scenario-01.drawio), using explicitly stated fixture assumptions. It is not a model's response to the contradictory raw input.
 - Upstream: draw.io `v32.6.1`, commit `84487b4891cbc0f32d7e30f34cf878c87cb1f414`, freshly resolved from the release tag. [measured]
