@@ -14,7 +14,7 @@ test('actual prototype XML passes static checks; unknown and altered vendor icon
 });
 
 test('invalid XML, DTDs, compressed pages, duplicate ids, missing legend and bidirectional arrows fail', () => {
-  for (const changed of ['<bad>', '<!DOCTYPE mxfile>' + diagram, diagram.replace('mxGraphModel', 'compressedModel'), diagram.replace('id="user"', 'id="web"'), diagram.replace('Legend&#xa;', 'Key&#xa;'), diagram.replace('startArrow=none', 'startArrow=block')]) assert.ok(validateDiagram(changed, catalog).length);
+  for (const changed of ['<bad>', '<!DOCTYPE mxfile>' + diagram, diagram.replace('mxGraphModel', 'compressedModel'), diagram.replace('id="user"', 'id="web"'), diagram.replace('id="legend" value="Legend"', 'id="legend" value="Key"'), diagram.replace('startArrow=none', 'startArrow=block')]) assert.ok(validateDiagram(changed, catalog).length);
 });
 
 test('shared path segments and declared routes through captions are detected', () => {
@@ -95,4 +95,27 @@ test('static XML rejects the original same-domain detour and detached labels', (
   const escaped = original.replace(/<Array as="points">[\s\S]*?<\/Array>/, '<Array as="points"><mxPoint x="980" y="488"/><mxPoint x="980" y="610"/><mxPoint x="1336" y="610"/></Array>');
   assert.ok(validateDiagram(diagram.replace(original, escaped), catalog).some(e => e.includes('Boundary route mismatch enforcement')));
   assert.ok(validateDiagram(diagram.replace('y="0" relative="1"', 'y="-18" relative="1"'), catalog).some(e => e.includes('opaque label on the connector')));
+});
+
+test('local comments have explicit subjects; legend cells stay editable and trial metadata stays out of the image', () => {
+  assert.match(diagram, /id="token"[^>]*annotationKind="comment"[^>]*annotationFor="cognito"[^>]*parent="aws"[^>]*shape=note/);
+  assert.match(diagram, /id="legend"[^>]*annotationKind="legend"/);
+  assert.equal((diagram.match(/parent="legend"/g) || []).length, 16);
+  assert.ok(!/Prototype assumptions|Resolved evaluation fixture|not evidence of an executed service|id="assumptions"/.test(diagram));
+  assert.ok(validateDiagram(diagram.replace('annotationFor="cognito"', 'annotationFor="missing"'), catalog).some(e => e.includes('comment target')));
+  assert.ok(validateDiagram(diagram.replace('target="cognito"', 'target="token"'), catalog).some(e => e.includes('must not target an annotation')));
+  assert.ok(validateDiagram(diagram.replace('target="cognito"', 'target="legend-1-0"'), catalog).some(e => e.includes('must not target an annotation')));
+  const report = JSON.parse(read('../prototype/scenario-01.render.json'));
+  assert.equal(report.metrics.find(m => m.id === 'token').annotationFor, 'cognito');
+  const altered = structuredClone(report), edge = altered.metrics.find(m => m.id === 'request');
+  const note = altered.metrics.find(m => m.id === 'token');
+  note.bounds = { x: 700, y: edge.points[0].y - 10, w: 100, h: 30 };
+  note.text = null; // Even blank sticker padding must not hide a call.
+  assert.ok(validateRender(altered).some(e => e.includes('line crosses annotation token')));
+  const covered = structuredClone(report);
+  covered.metrics.find(m => m.id === 'token').bounds = covered.metrics.find(m => m.id === 'cognito').body;
+  assert.ok(validateRender(covered).some(e => e.includes('annotation overlaps element cognito')));
+  const masked = structuredClone(report);
+  masked.metrics.find(m => m.id === 'token').bounds = { x: 590, y: 200, w: 100, h: 80 };
+  assert.ok(validateRender(masked).some(e => e.includes('annotation obscures boundary aws')));
 });

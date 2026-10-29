@@ -1,6 +1,6 @@
 # Architecture Diagram evaluation
 
-Date: 2026-10-28. Status: prototype and deterministic checks implemented; model behavior, desktop integration and owner visual acceptance pending.
+Date: 2026-10-28. Updated: 2026-10-29. Status: prototype and deterministic checks implemented; model behavior, desktop integration and final owner visual acceptance pending.
 
 ## Scope and target
 
@@ -30,11 +30,23 @@ The validator now derives permitted inside/outside sequences from each endpoint'
 
 The corrected file was rendered again using the same pinned local runtime. Author inspection found clear captions, inline labels and no internal authorization escape. A first correction put some labels over boundary outlines; their positions and wrapping were adjusted and the file rendered again. Owner acceptance, Desktop verification and independent blind review remain open.
 
+### Annotation feedback correction, 2026-10-29
+
+The owner described the corrected routing as much better, then identified scattered explanatory text. The owner authorized subject-based placement, nearby sticker comments and explanatory tables. That feedback is not acceptance of every visual detail or the subsequent revision.
+
+The requirement is now one line below the title. The token-claims example is a native folded note beside Cognito, inside AWS but outside API enforcement; its text names Step 1 and its editable metadata references Cognito. The legend is one grouped, editable two-column grid in a reserved area outside the architectural boundaries. It explains the folded-note notation as well as architecture symbols and line styles. No call arrow connects the comment. Trial caveats and assumptions were removed from the image, not from the evidence record.
+
+Fixture assumptions retained here: generic Web app and REST API, HTTPS on external calls, generic AWS invocation for the authorizer, and Cognito rather than the page verifying the password. These are synthetic test resolutions, not owner-confirmed architecture or an executed service. The token example remains the approved client-neutral scenario data.
+
+The validator checks comment targets, rejects annotations as architectural call endpoints, and detects paths through annotation backgrounds and rendered comments covering elements or captions. Tests retain the boundary-routing and inline-label regressions. The pinned local browser rendered the revised folded note and editable grid for author inspection; Desktop behavior and independent readout remain unverified.
+
 ## Reproduce and interpret
 
 Initial repository verification on 2026-10-28 passed: 153-file inventory with the two existing authored packages, 34 regression tests (including six architecture prototype checks), 42 default fixture assertions, and generic/NVIDIA loopback transport. The architecture suite separately passed 4/4 synthetic assertions. A second catalog extraction matched the committed generated metadata byte-for-byte. The original XML hash was `fddfcde8de8a79047708f16dd09dcd480d1ae0acc7851a4c0133857ddee01178`; those passes did not detect the owner's boundary failure.
 
-Corrected target SHA-256: draw.io XML `0461148363ba837bd34223e2b2feb460b70590cd6234183e6af73665885c0ae4`; unchanged catalog `d567841c18435af41a9ee8ce7de82783e222e91c8f76161c553adf9e3e141b77`. Local verification passed the repository gate (36 regression tests, including eight architecture checks, and 42 default fixture assertions), four architecture fixture assertions and both loopback provider contracts. The new validator also ran against the original `31ca399` XML and reported `Boundary route mismatch enforcement: authorize (inside -> outside -> inside; expected inside)`. No model calls were made. [measured]
+Boundary-correction target SHA-256: draw.io XML `0461148363ba837bd34223e2b2feb460b70590cd6234183e6af73665885c0ae4`; unchanged catalog `d567841c18435af41a9ee8ce7de82783e222e91c8f76161c553adf9e3e141b77`. Local verification passed the repository gate (36 regression tests, including eight architecture checks, and 42 default fixture assertions), four architecture fixture assertions and both loopback provider contracts. The new validator also ran against the original `31ca399` XML and reported `Boundary route mismatch enforcement: authorize (inside -> outside -> inside; expected inside)`. No model calls were made. [measured]
+
+Annotation revision target SHA-256: draw.io XML `14df0e5e40f3e0b5e2e3487eacccdfeec8038a11b2183cac5f67708caf022c68`. The catalog and architectural nodes, memberships and calls are unchanged; the revision changes annotations only. Local checks passed 37 regression tests (including nine architecture checks), 42 default fixture assertions, four architecture fixture assertions and both loopback provider contracts. Author inspection of the actual render found a readable folded note and table, with unchanged valid routing. Mutation tests reject missing comment subjects, calls to comments/table cells, annotation backgrounds hiding calls, and notes covering elements or boundaries. No model was evaluated. [measured]
 
 Commands and runtime setup are maintained in the [initiative README](./README.md#reproduce). The root `npm test` includes initiative `.test.mjs` files, so the deterministic regression checks run in CI. Default repository evaluation remains its existing synthetic smoke; the architecture suite also runs explicitly through the shared runner.
 
