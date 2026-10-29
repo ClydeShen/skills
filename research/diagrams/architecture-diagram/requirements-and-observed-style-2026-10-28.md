@@ -217,6 +217,14 @@ The owner rejected the Scenario 01 draw.io prototype after seeing an internal ca
 
 Priority: architectural meaning and domain membership, then readability, then visual economy. Boundary meaning cannot be traded for a collision-free layout. This clarification supersedes any interpretation of the earlier layout gates that treated boundaries as free routing space. The [initiative evaluation](../../../incubator/architecture-diagram/evaluation.md) records the failed prototype and correction, not retrospective owner approval of the corrected image.
 
+### 2.11 Annotation placement [owner, 2026-10-29]
+
+The owner accepted the improved routing but found explanatory text scattered around the prototype. The owner approved organizing annotations by their subject and allowed nearby sticker-style comments and tables for structured explanations.
+
+Place diagram-wide purpose or requirements below the title. Put local comments near their referenced element or step; use a folded-note shape when it improves the association. Identify the subject in the comment rather than relying on proximity alone. Use a compact table for repeated mappings such as notation and meaning, not for a single fact. Keep the legend in a consistent reserved area outside the deployment nodes and system boundaries.
+
+Annotations explain the architecture; they are not services, boundaries or data-flow endpoints. Do not add a normal call arrow to attach a comment. Keep comment backgrounds clear of elements, captions, paths and boundary outlines. Do not reroute a call outside its domain to make room for a comment. Keep authoring assumptions, evaluation status and prototype caveats in the evaluation record, not in the formal diagram. Preserve necessary architectural assumptions through the existing ask-before-drawing rule; moving trial metadata out of the image does not authorize inventing facts.
+
 ## 3. Style prototype
 
 A throwaway prototype draws a synthetic cross-cloud scenario in the style above. It shows nested zones with badges, icons with captions below, plain boxes, a person, a requirement note, step-numbered labels on lines, one dashed line, and a connector icon between two clouds. All icons are placeholders. They are not official vendor icons and use no vendor artwork.

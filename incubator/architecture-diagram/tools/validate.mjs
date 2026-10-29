@@ -6,6 +6,7 @@ import { styleMap, upstreamVersion } from './catalog.mjs';
 const list = value => value == null ? [] : Array.isArray(value) ? value : [value];
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', parseAttributeValue: false });
 const boundary = node => ['Deployment node', 'Software system boundary'].includes(node.c4Type);
+const overlaps = (a, b) => a && b && Math.min(a.x + a.w, b.x + b.w) > Math.max(a.x, b.x) && Math.min(a.y + a.h, b.y + b.h) > Math.max(a.y, b.y);
 const intersects = (a, b, r) => {
   if (Math.abs(a.x - b.x) < 1) return a.x > r.x && a.x < r.x + r.w && Math.max(a.y, b.y) > r.y && Math.min(a.y, b.y) < r.y + r.h;
   if (Math.abs(a.y - b.y) < 1) return a.y > r.y && a.y < r.y + r.h && Math.max(a.x, b.x) > r.x && Math.min(a.x, b.x) < r.x + r.w;
@@ -73,6 +74,15 @@ export function validateBoundaryRoutes(nodes, routes) {
 export function validateRender(report) {
   const errors = [], metrics = report.metrics || [], vertices = metrics.filter(n => !n.points);
   if (report.upstream_commit !== '84487b4891cbc0f32d7e30f34cf878c87cb1f414' || !metrics.length) return ['Missing or unpinned render evidence.'];
+  for (const annotation of vertices.filter(n => n.annotationKind && n.bounds)) {
+    for (const node of vertices.filter(n => n.type && !boundary({ c4Type: n.type }))) {
+      if (overlaps(annotation.bounds, node.body) || overlaps(annotation.bounds, node.text)) errors.push(`Rendered annotation overlaps element ${node.id}: ${annotation.id}`);
+    }
+    for (const domain of vertices.filter(n => boundary({ c4Type: n.type }) && n.bounds)) {
+      const r = domain.bounds, corners = [{ x: r.x, y: r.y }, { x: r.x + r.w, y: r.y }, { x: r.x + r.w, y: r.y + r.h }, { x: r.x, y: r.y + r.h }];
+      if (corners.some((a, i) => intersects(a, corners[(i + 1) % 4], annotation.bounds))) errors.push(`Rendered annotation obscures boundary ${domain.id}: ${annotation.id}`);
+    }
+  }
   for (const edge of metrics.filter(n => n.points)) {
     let hosted = false;
     for (let i = 1; i < edge.points.length; i++) {
@@ -84,6 +94,7 @@ export function validateRender(report) {
         if (Math.abs(a.x - b.x) < 1 && Math.abs(cx - a.x) < 3 && cy - t.h / 2 >= Math.min(a.y, b.y) - 2 && cy + t.h / 2 <= Math.max(a.y, b.y) + 2) hosted = true;
       }
       for (const node of vertices) if (node.text && intersects(a, b, node.text)) errors.push(`Rendered line crosses text ${node.id}: ${edge.id}`);
+      for (const node of vertices.filter(n => n.annotationKind && n.bounds)) if (intersects(a, b, node.bounds)) errors.push(`Rendered line crosses annotation ${node.id}: ${edge.id}`);
     }
     if (edge.text && !hosted) errors.push(`Rendered label must sit on and fit its host segment: ${edge.id}`);
     for (const domain of vertices.filter(n => boundary({ c4Type: n.type }) && n.bounds)) {
@@ -114,6 +125,8 @@ export function validateDiagram(xml, catalog) {
     if (!n.id || byId.has(n.id)) errors.push(`Missing or duplicate id: ${n.id}`);
     byId.set(n.id, n);
     if (n.parent && n.parent !== '0' && !nodes.some(p => p.id === n.parent)) errors.push(`Missing parent: ${n.id}`);
+    if (n.annotationKind === 'comment' && !nodes.some(p => p.id === n.annotationFor && p.c4Type)) errors.push(`Missing architectural comment target: ${n.id}`);
+    if (n.annotationKind && n.c4Type) errors.push(`Annotation must not declare an architectural type: ${n.id}`);
   }
   const geometry = (n, seen = new Set()) => {
     if (seen.has(n.id)) throw new Error(`Parent cycle: ${n.id}`);
@@ -157,9 +170,19 @@ export function validateDiagram(xml, catalog) {
     captions.set(n.id, { x: b.x + b.w / 2 - width / 2, y: b.y + b.h + Number(s.spacingTop || 0), w: width, h: lines * 16 });
   }
   const segments = [], routes = [];
+  const annotationOwner = id => {
+    const seen = new Set();
+    while (byId.has(id) && !seen.has(id)) {
+      const node = byId.get(id);
+      if (node.annotationKind) return node;
+      seen.add(id); id = node.parent;
+    }
+    return null;
+  };
   for (const e of nodes.filter(n => n.edge === '1')) {
     const source = byId.get(e.source), target = byId.get(e.target), s = styleMap(e.style || '');
     if (!source || !target || !boxes.has(e.source) || !boxes.has(e.target)) { errors.push(`Missing edge endpoint: ${e.id}`); continue; }
+    if (annotationOwner(source.id) || annotationOwner(target.id)) errors.push(`Architectural call must not target an annotation: ${e.id}`);
     if (!e.value?.trim()) errors.push(`Missing relationship label: ${e.id}`);
     if (s.startArrow !== 'none' || s.endArrow !== 'block' || s.endFill !== '1') errors.push(`Use one filled, single-direction arrow: ${e.id}`);
     if (s.fontSize !== '12') errors.push(`Wrong relationship font: ${e.id}`);
@@ -174,7 +197,7 @@ export function validateDiagram(xml, catalog) {
       const a = points[i - 1], b = points[i];
       if (Math.abs(a.x - b.x) >= 1 && Math.abs(a.y - b.y) >= 1) errors.push(`Non-orthogonal declared segment: ${e.id}`);
       for (const [id, box] of boxes) {
-        if ([e.source, e.target].includes(id) || boundary(byId.get(id)) || !byId.get(id).c4Type) continue;
+        if ([e.source, e.target].includes(id) || boundary(byId.get(id)) || (!byId.get(id).c4Type && !byId.get(id).annotationKind)) continue;
         if (intersects(a, b, box)) errors.push(`Line crosses element ${id}: ${e.id}`);
       }
       for (const [id, box] of captions) if (intersects(a, b, box)) errors.push(`Line crosses caption ${id}: ${e.id}`);
