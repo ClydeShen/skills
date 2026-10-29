@@ -1,20 +1,24 @@
 # Architecture Diagram
 
-Date: 2026-10-29. Stage: public. Decision authority: the owner's lifecycle definitions, 2026-10-29. The candidate has verified installation and a README quick start for direct user testing. Scenario 05 and behavioral verification gaps remain open; this is an experimental public trial.
+Turn architecture requirements into an editable draw.io diagram that makes components, deployment boundaries and interactions visible. Use it to discuss how a system works, review ownership and follow requests across services.
 
-## Goal and scope
+The skill is designed to preserve architectural meaning through layout: boundaries show real domains, arrows show directed relationships, and labels sit with the elements they explain. Consequential gaps and contradictions are raised before drawing.
 
-Turn an English scenario description into one editable `.drawio` dynamic diagram in a deployment view. Preserve the team's visual style, C4 information and correct vendor responsibilities. Raise consequential gaps and contradictions with recommendations before drawing. Initial input is text; overviews, infrastructure plans, code/IaC input, automatic redraw and exported images as product deliverables are later scope.
+Stage: **public**. Updated: 2026-10-29. Basis: verified candidate installation and the trial guide below, under the owner's lifecycle definitions. This is an experimental candidate; installed-client effectiveness remains unverified.
+
+## What you get
+
+One editable `.drawio` dynamic diagram in a deployment view, from an English scenario description. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable.
+
+Start with a specific interaction, such as a sign-in flow or a request crossing cloud and on-premises boundaries. Code/IaC input, automatic redraw and exported images as product deliverables are outside current scope.
 
 ## Quick start: install and test the candidate
 
-This is an experimental candidate, not a released skill. Use Codex or Claude Code with file access, Node.js 24, Git, and a draw.io editor/viewer. The candidate targets draw.io 32.6.1; record the version you actually use. No NVIDIA key, repository checkout or evaluation dependencies are needed.
+Use Codex or Claude Code with file access, Node.js 24, Git and a draw.io editor/viewer. The candidate targets draw.io 32.6.1. Use your normal client authentication; no separate evaluation API key or authoring-repository checkout is needed.
 
-### Install in a test project
+Review the [candidate package](./candidate/architecture-diagram/SKILL.md). Run the appropriate command in a disposable test project, outside this authoring repository.
 
-Review the [candidate package](./candidate/architecture-diagram/SKILL.md) before installing. Open a terminal in a new or disposable project directory, outside this authoring repository. Choose the block for your shell and paste it once.
-
-macOS / Linux / WSL (Bash or Zsh):
+macOS / Linux / WSL:
 
 ```bash
 INSTALL_INTERNAL_SKILLS=1 npx --yes skills@1.7.4 add https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/candidate/architecture-diagram --agent codex --copy --yes
@@ -27,13 +31,11 @@ $env:INSTALL_INTERNAL_SKILLS = "1"
 npx.cmd --yes skills@1.7.4 add https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/candidate/architecture-diagram --agent codex --copy --yes
 ```
 
-For Claude Code, replace `--agent codex` with `--agent claude-code` in either block. Installation is project-local, not global. The PowerShell setting lasts for that terminal session; use a dedicated test terminal. `INSTALL_INTERNAL_SKILLS=1` permits discovery of this candidate; it does not grant private-repository access. If access is restricted, use your normal Git credentials with repository read permission.
+For Claude Code, replace `--agent codex` with `--agent claude-code`. Installation is project-local. The PowerShell setting lasts for that terminal session. The internal flag enables candidate discovery; restricted repositories still require your normal Git read credentials.
 
-These commands install the candidate currently on `main`; an installed copy does not update itself. For a repeatable comparison, replace `/tree/main/` with `/tree/<full-commit-SHA>/` and record that SHA. If you see “No skills found”, check the internal setting and the full candidate path. Do not use the repository-root release command for this trial.
+These commands copy the current `main` candidate without automatic updates. To pin a trial, replace `/tree/main/` with `/tree/<full-commit-SHA>/`. If discovery finds no skills, check the internal flag and full candidate path.
 
-### Run a first trial
-
-Start a fresh client session in the same project after installation. Confirm that `architecture-diagram` appears in the client's skill list; restart the client if necessary. Send:
+Start a fresh client session in that project and confirm `architecture-diagram` appears in its skill list. Then send:
 
 ```text
 Use the architecture-diagram skill to create an editable .drawio architecture diagram from the requirements below.
@@ -41,75 +43,17 @@ Use the architecture-diagram skill to create an editable .drawio architecture di
 [Paste one sanitized architecture scenario here.]
 ```
 
-Open the generated `.drawio` file in draw.io. Check components, boundaries, arrow directions and conditions against your input. Keep the first diagram before asking for corrections. If the agent cannot render or inspect the image, record that limitation; XML generation is not visual verification.
+Open the result in draw.io. Check components, boundaries, arrow directions and conditions against the input. Save the first diagram before requesting corrections. If the agent cannot inspect a rendered image, treat the visual result as unverified.
 
-### Send useful feedback
+## Status and feedback
 
-Share the sanitized input, first diagram/screenshot, corrections, revision count, client/model and draw.io version in [Issue #7](https://github.com/ClydeShen/skills/issues/7). Report missing or invented architecture and anything that was hard to understand. Use your own scenario before reading this initiative's examples. Include the installed source revision (or install date if unknown), and distinguish installation problems from output-quality problems. Maintainers summarize approved findings in the [evaluation record](./evaluation.md); testers do not need to edit this repository. Installation success alone does not establish skill effectiveness.
+CLI delivery was checked on Linux for Codex and Claude Code. Real client activation, Windows command execution and offline draw.io Desktop remain unverified. Earlier diagram trials found information drift; authored repairs still need fresh end-to-end trials. See the [evaluation record](./evaluation.md) for evidence and remaining gaps.
 
-Installation check, 2026-10-29: the remote `main` candidate at `07bb667e7a5ddb59dd46e23a38ff6af23b7abffa` installed successfully with skills CLI 1.7.4 into an isolated Linux project for both Codex and Claude Code. All six files matched the source, and icon lookup ran successfully. This verifies CLI delivery, not actual client activation, Windows PowerShell execution or diagram quality.
+Try your own scenario before reading the examples. In [Issue #7](https://github.com/ClydeShen/skills/issues/7), share sanitized input, the first diagram/screenshot, corrections and revision count, client/model, draw.io version and installed source revision or date. Flag missing or invented architecture and confusing visual choices.
 
-## Sources and active artifacts
+## Development
 
-- Accepted requirements and decisions: [research handoff](../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md).
-- Evidence: [vendor/C4 conventions](../../research/diagrams/architecture-diagram/vendor-diagram-conventions-2026-10-28.md) and [draw.io libraries](../../research/diagrams/architecture-diagram/drawio-builtin-icon-libraries-2026-10-28.md).
-- Authoring philosophy: [skill design principles](../../knowledge/skill-design/skill-design-principles.md).
-- Active package: [Architecture Diagram](./candidate/architecture-diagram/SKILL.md), with package-local notation, draw.io authoring guidance, a text-only icon catalog and lookup/regeneration helpers. It is an experimental candidate, not a released skill.
-- Approved evaluation scenarios: [01](./evals/scenario-01.md), [02](./evals/scenario-02.md), [03](./evals/scenario-03.md), [04](./evals/scenario-04.md).
-- Evaluation suite and checks: [suite](./evals/suite.mjs), [manifest/assertion data](./evals/cases.json), [tests](./evals/checks.test.mjs).
-- Primary semantic evaluation: [two-round-trip protocol](./evals/roundtrip.md), [adapter runner/comparator](./evals/roundtrip.mjs), [regression tests](./evals/roundtrip.test.mjs), and [Scenario 01 existing-L1 pilot](./evals/roundtrip-pilot-2026-10-29/README.md).
-- Completed four-case full chains: [report, findings and improvement plan](./evals/full-roundtrip-2026-10-29/README.md), [frozen results](./evals/full-roundtrip-2026-10-29/summary.json), and [evidence collector](./evals/collect-roundtrips.mjs).
-- Current behavior: the active package and its [notation](./candidate/architecture-diagram/references/notation.md), informed by [layout guidance](../../knowledge/diagrams/architecture-layout.md) and [research](../../research/diagrams/architecture-diagram/layout-and-fidelity-2026-10-29.md).
-- Revised problem diagrams: [Scenario 02/03 repairs, previews and verification](./evals/layout-revision-2026-10-29/README.md). These preserve the frozen failures and record baseline corrections separately.
-- Earlier visual revisions: [Scenario 02/03 visual expression, restored environment instances and blind reviews](./evals/visual-expression-2026-10-29/README.md).
-- Latest revisions: [candidate packaging, explicit environment paths and readable typography](./evals/candidate-layout-2026-10-29/README.md). This is authored repair and package verification, not a fresh model-generation trial.
-- Historical prototype: [editable draw.io file](./prototype/scenario-01.drawio), [rendered evidence](./prototype/scenario-01.svg), [catalog snapshot](./prototype/catalog.json) and [superseded drawing policy](./prototype/drawing-policy.md).
-- Verification and limitations: [evaluation record](./evaluation.md).
-- Remaining tasks and owner-dependent follow-up: [GitHub Issue #7](https://github.com/ClydeShen/skills/issues/7).
-
-## Design choices
-
-The candidate is the relocatable runtime package. `SKILL.md` owns behavior; `references/` owns conditionally loaded notation and draw.io guidance; `scripts/` owns exact icon lookup and catalog regeneration; `assets/` contains generated metadata. Nothing at runtime imports the initiative's tools, evaluation files or repository guidance. The catalog implementation moved into the package; the old tool path is a compatibility entry for historical fixture generators, not a second implementation. The prototype catalog is retained as evidence at its original pin, not as a second current catalog.
-
-Keep evaluation scripts and saved evidence outside the candidate. Retire obsolete scratch work and duplicate instructions during iteration; preserve the frozen round-trip failures needed for comparison. Authorized release moves this directory to `skills/`, removes `metadata.internal: true`, and updates repository-side targets and discovery. It should not require runtime rewrites. The boolean marker is a verified skills CLI extension, not portable Agent Skills metadata. Package format and design standards are identical before and after release.
-
-Start from the four approved scenarios, not a new taxonomy. The prototype uses explicit synthetic resolutions for Scenario 01; these are fixture assumptions, not new owner approvals or a model interaction. It demonstrates exact catalog lookup, vendor-matching checks, typography, captions, auxiliary calls and a separate failure response.
-
-The catalog is generated from draw.io `v32.6.1`, commit `84487b4891cbc0f32d7e30f34cf878c87cb1f414`. It contains metadata and style strings for `aws4`, `azure2`, `gcp3` and `kubernetes`, not icon artwork. Four upstream Azure paths have case mismatches and are marked unusable. Palette titles are not a complete service-name alias map; duplicate titles require an explicit palette or entry ID. Unsupported vendor icons retain the accepted plain-box fallback.
-
-The owner's [boundary and label clarification](../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md#210-boundary-semantics-and-connector-labels-owner-2026-10-28) governs routing: domain meaning comes before readability and visual economy. Layout changes must preserve it. Connector labels interrupt their own lines; they do not require routing around the label.
-
-The earlier [annotation placement decision](../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md#211-annotation-placement-owner-2026-10-29) governs the preserved Scenario 01 prototype. The later [visual-expression correction](../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md#214-visual-information-before-explanatory-notes-owner-2026-10-29) narrows Note use: each explanatory Note is a visual-design cost, so prefer supported structure, local labels and genuine relational matrices. Do not replace distinct instances with prose merely because their symbols repeat. If a Note remains necessary, use the native `Misc > Note` preset with automatic text fitting; it is a comment, not a service or flow endpoint. Fixture assumptions and evaluation caveats remain in the evaluation record rather than the diagram.
-
-The XML checks validate the prototype's uncompressed format, declared references and route geometry. Both declared and rendered routes are checked against nested boundary membership: no shared-domain escape, unnecessary re-entry or unrelated-domain transit. Render checks also keep native inline labels on their host segments and off boundary outlines. Caption bounds are estimates; actual render inspection remains necessary. The local renderer uses Chromium with the pinned draw.io viewer, not draw.io Desktop. Generated SVG and render metrics are sanitized evaluation evidence, not a change to the `.drawio` product deliverable.
-
-## Reproduce
-
-Use Node.js 24 and run `npm ci` from the repository root. Core checks work without a draw.io installation or model key:
-
-```text
-node --test incubator/architecture-diagram/evals/checks.test.mjs
-npm run eval -- --suite incubator/architecture-diagram/evals/suite.mjs
-node incubator/architecture-diagram/tools/validate.mjs incubator/architecture-diagram/prototype/scenario-01.drawio
-```
-
-The suite is a clarification smoke test. Synthetic replay checks grading and input isolation, not model quality, and makes no model calls.
-
-The primary behavioral evaluation crosses L0/L2/L4 from two isolated description/diagram round trips. The first [host-agent pilot](./evals/roundtrip-pilot-2026-10-29/README.md) found detail loss from the existing prototype. The subsequent [four fresh full chains](./evals/full-roundtrip-2026-10-29/README.md) found no drift in extracted Scenario 01/04 facts, a critical unsupported VPN-account assertion in Scenario 02, and an internal response-format addition in Scenario 03. Engineering checks still pass for all eight diagrams; fidelity and local layout consistency are distinct. The app agent orchestrated the live workers; a standalone vision/generation adapter is not silently configured. See the [protocol](./evals/roundtrip.md) for input boundaries and limits.
-
-To regenerate, obtain a local checkout at the pinned upstream commit. Downloading upstream is a separate setup step; keep the checkout outside this repository. Extraction may need network access for missing Git objects in a partial clone. Generated metadata must not be manually edited.
-
-```text
-node incubator/architecture-diagram/candidate/architecture-diagram/scripts/catalog.mjs /path/to/pinned-drawio incubator/architecture-diagram/candidate/architecture-diagram/assets/catalog.json
-node incubator/architecture-diagram/candidate/architecture-diagram/scripts/find-icon.mjs --vendor AWS --title Lambda
-```
-
-For the optional local browser render, check out `src/main/webapp/js/viewer-static.min.js`, `src/main/webapp/js/stencils.min.js`, `src/main/webapp/shapes/mxAWS4.js` and `src/main/webapp/shapes/mxKubernetes.js` from that commit. Also check out any catalog-referenced SVG assets used by the diagram (for these Azure fixtures, under `src/main/webapp/img/lib/azure2/`). Chromium and loopback socket access are needed; set `DIAGRAM_BROWSER` to its executable if necessary. The renderer serves only local scripts, embeds allowlisted pinned SVG resources, respects bounded declared page sizes, uses a temporary browser profile and disables external/background networking. It does not install a browser or fetch missing runtime assets.
-
-```text
-node incubator/architecture-diagram/tools/render.mjs /path/to/pinned-drawio incubator/architecture-diagram/prototype/scenario-01.drawio incubator/architecture-diagram/prototype/scenario-01.svg /path/to/preview.png
-```
-
-## Next step
-
-Review the latest [Scenario 02/03 candidate-layout revisions](./evals/candidate-layout-2026-10-29/README.md), then test the candidate in fresh same-input generation/translation chains. Earlier ownership, hop-contract and edge-style repairs retain their provenance. The [remaining evaluation plan](./evals/full-roundtrip-2026-10-29/README.md#prioritized-improvement-plan) still calls for controlled comparisons, repetitions and held-out cases. Owner visual review, offline Desktop, GCP/Kubernetes rendering and standalone model-adapter integration remain open. Participating Azure symbols were actually browser-rendered. Scenario 05 stays deferred. The candidate is available for explicit internal discovery; it is not released or evidence of installed-client effectiveness.
+- [Active package](./candidate/architecture-diagram/SKILL.md): installed instructions and runtime resources.
+- [Evaluation record](./evaluation.md) and [round-trip protocol](./evals/roundtrip.md): findings and description/image fidelity testing.
+- [Authoring tools](./tools/README.md): local checks and rendering setup.
+- [Requirements](../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md) and [layout guidance](../../knowledge/diagrams/architecture-layout.md): design basis.

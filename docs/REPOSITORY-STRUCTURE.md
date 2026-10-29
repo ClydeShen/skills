@@ -67,7 +67,7 @@ The owner defined these stages on 2026-10-29. Record the current stage and its b
 | `init` | A new idea emerging from discussion | The idea and intended problem have been recorded. |
 | `plan` | Collecting information and discussing the idea | Research, requirements and design discussion are underway. |
 | `draft` | Information is substantially available; skill incubation begins | Enough context exists to start authoring the standard skill package. |
-| `internal` | The skill has been written and is undergoing internal evaluation | The package is written and evaluation work has started. Record fixture, model and host results separately; entering this stage does not mean evaluation has passed. |
+| `internal` | The skill has been written and internal evaluation is established | The package has runnable evaluation cases, grading criteria and a result-recording path. Until these exist, it remains `draft`. Record fixture, model and host results separately; entering this stage does not mean evaluation has passed. |
 | `public` | The candidate can be directly installed and tested | Its README provides usable installation and first-trial instructions. Completed external trials are not a prerequisite for this stage. |
 | `release` | The skill is published in the release tree | The package has moved into `skills/`, with applicable skills.sh configuration, package best practices and release checks completed. |
 

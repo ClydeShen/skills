@@ -107,7 +107,7 @@ For ADRs, the vision, architecture descriptions, research notes, the tech stack,
 - **Record a decision at once.** As soon as something is decided, write it where it applies: an ADR, the decision log of the issue, the glossary, the roadmap, or the standard that it changes. Commit it before you move to the next topic. Then search the related documents and update each reference.
 - **Use absolute dates only**, in the format `YYYY-MM-DD`. Do not write "yesterday", "last week", or "recently".
 - **Record the date and who confirmed each decision**, for example "(confirmed by the owner, 2026-10-13)". When the planner decides for the owner, write "planner's recommendation; the owner can change it".
-- **Revise without deleting**: add a "revised by …" note and a date to an overturned conclusion, and keep the original text.
+- **Separate current guidance from history**: replace superseded guidance in maintained documents. Preserve necessary decision history and frozen findings in their owning records, with dated corrections or superseding links. Use version control to recover retired wording; do not accumulate overturned rules in active instructions.
 
 ---
 
