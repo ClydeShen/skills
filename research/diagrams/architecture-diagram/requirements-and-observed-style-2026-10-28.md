@@ -231,6 +231,12 @@ Annotations explain the architecture; they are not services, boundaries or data-
 
 The owner specified the primary automated evaluation: description L0 generates diagram L1; a fresh image-only agent transcribes L1 into description L2; L2 alone generates diagram L3; another fresh image-only agent transcribes L3 into description L4. Cross-compare L0/L2, L2/L4 and L0/L4 for architectural drift. Compare elements, responsibilities, relationships, directions, protocols, boundary membership, critical conditions and architecture-bearing notes, not literal wording or visual resemblance. The owner confirmed these comparison dimensions. The [initiative protocol](../../../incubator/architecture-diagram/evals/roundtrip.md) owns the executable contract, isolation and grading rules. The [evaluation record](../../../incubator/architecture-diagram/evaluation.md) distinguishes actual runs from synthetic harness checks; the previous 4/4 clarification replay is not evidence that this chain ran.
 
+### 2.13 Fidelity, architecture validity and intuitive layout [owner, 2026-10-29]
+
+The owner clarified that repeated translation measures preservation of the same information. Architecture generation must also respect user intent, common sense and established practice. Repair real source/diagram defects first; record source corrections separately from fidelity measurements. Research accessible constraints rather than treating every inferred fact as either forbidden or automatically correct.
+
+The owner requested research into visual guidance, directions and house interiors after observing unnecessary folds and apparently arbitrary placement. Client-at-top and input-left/output-right were exploratory examples, not fixed requirements. Use [researched layout guidance](../../../knowledge/diagrams/architecture-layout.md) to choose a coherent direction, align related elements and reduce needless bends while preserving domains and architecture. The [research record](./layout-and-fidelity-2026-10-29.md) distinguishes evidence from project design defaults.
+
 ## 3. Style prototype
 
 A throwaway prototype draws a synthetic cross-cloud scenario in the style above. It shows nested zones with badges, icons with captions below, plain boxes, a person, a requirement note, step-numbered labels on lines, one dashed line, and a connector icon between two clouds. All icons are placeholders. They are not official vendor icons and use no vendor artwork.

@@ -4,6 +4,8 @@ Date: 2026-10-29. Scope: four fresh L0-to-L4 chains, one attempt per resolved sy
 
 ## Conclusion
 
+Follow-up, 2026-10-29: [official-source research and artifact repairs](../layout-revision-2026-10-29/README.md) refine F1's interpretation. AWS requires the VPN attachment in the Transit Gateway owner's account. The measured source/visual drift below remains unchanged; the later account placement is not thereby an invalid AWS architecture. The follow-up repairs source admission and diagrams without rewriting this run's inputs, images, readouts or judgments.
+
 The four full chains are complete. Scenarios 01 and 04 have no drift found among the extracted architectural facts. Scenario 02 has a critical unsupported account-membership assertion and an unresolved ruleset-attachment qualifier. Scenario 03 adds an unsupported internal response-format detail. The result is not an all-green quality assessment, despite all eight diagrams passing the current XML/rendered-geometry checks.
 
 The main lesson is that local diagram consistency does not establish source fidelity. A readout can introduce an ownership assumption, and a subsequent faithful redraw can turn that assumption into explicit geometry. A stable later round can preserve an earlier invention just as it can preserve an earlier omission.

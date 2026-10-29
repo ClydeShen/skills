@@ -1,0 +1,65 @@
+The image is titled “Dynamic diagram (deployment view): Partner amendment requests through SOAP to AWS validation.” Its stated purpose is to authenticate partner amendment requests, authorize the required user-profile role, validate in AWS, and return XML through the originating SOAP API.
+
+Boundaries and elements
+
+Two large deployment-node boundaries are shown: Azure Cloud and AWS Cloud. Two external software systems, “Existing partner integrators” and “New partner integrators,” sit outside Azure on the left. A “Site-to-site VPN” container, described as an “Azure ↔ AWS connection,” sits in the gap between the two cloud boundaries, outside both drawn boundaries.
+
+Azure contains an “Azure API Management (APIM)” deployment node. This contains three containers: “Legacy SOAP API” (SOAP API), “Partner SOAP API” (SOAP API), and “APIM policy processing” (Azure API Management).
+
+Azure also contains an “Inbound processing” software-system boundary. Inside it are “API-Route-Processor” and “Common-Authx-Handler,” both identified as Logic Apps workflow containers. Inbound processing further contains a nested “Sub-workflows” software-system boundary, enclosing two more Logic Apps workflow containers: “Amend-Order-Processor” and “Amend-Document-Processor.” The route processor and common authorization handler are outside the nested Sub-workflows boundary.
+
+Two other containers are inside Azure but outside the APIM deployment node and Inbound processing boundary: “Azure AD B2C” (Identity provider) and “Roles / permissions” (Azure Cosmos DB).
+
+AWS contains an “API Gateway” container of type AWS API Gateway. AWS also contains a “Core platform” software-system boundary with one “Validation engine” container of type AWS Lambda function. API Gateway is outside Core platform but inside AWS Cloud.
+
+There are two external-system boxes and twelve named containers in total: nine containers in Azure, the VPN between the clouds, and two containers in AWS. Of the nine Azure containers, four are Logic Apps workflows.
+
+Numbered flow and contracts
+
+1a. Existing partner integrators send “SOAP over HTTPS” to Legacy SOAP API. The same arrow label specifies “XML response.”
+
+1b. New partner integrators send “SOAP over HTTPS” to Partner SOAP API. The same arrow label specifies “XML response.”
+
+2a. Legacy SOAP API forwards to APIM policy processing, labeled “Enter APIM policy,” “[XML],” and “XML response.”
+
+2b. Partner SOAP API forwards separately to the same APIM policy processing container, with the same “Enter APIM policy,” “[XML],” and “XML response” contract.
+
+3. A dashed arrow from APIM policy processing points to Azure AD B2C. Its label is “Authenticate,” “[Identity],” and “Result.” A note says that authentication input is basic or bearer; APIM authenticates against Azure AD B2C; and the identity exchange implementation is unspecified.
+
+APIM request controls apply after authentication: check system-account roles, and require a user profile for both amendment methods.
+
+4. A solid arrow from APIM policy processing points to API-Route-Processor, labeled “Authenticated request after controls,” “[XML],” and “XML response.”
+
+5. API-Route-Processor points to Common-Authx-Handler with “Delegate authorization” and “[Workflow call]; role decision.”
+
+6. A dashed arrow from Common-Authx-Handler points to Roles / permissions. Its label says “Query system account name + user profile name,” “Required user-profile role result,” and “[Cosmos DB].”
+
+7a. API-Route-Processor points to Amend-Order-Processor. The label names method “amend_order,” says “Requires ManageOrders,” and specifies “[Workflow call]; XML response.”
+
+7b. API-Route-Processor separately points to Amend-Document-Processor. The label names method “amend_document,” says “Requires ManageDocuments,” and specifies “[Workflow call]; XML response.”
+
+8a. Amend-Order-Processor points to Site-to-site VPN, labeled “AWS amend API,” “[HTTPS/JSON],” and “JSON response.”
+
+8b. Amend-Document-Processor separately points to Site-to-site VPN, with the same “AWS amend API,” “[HTTPS/JSON],” and “JSON response” contract.
+
+9a and 9b. Two separate solid arrows from Site-to-site VPN point to API Gateway. Each says “Traffic routing,” “[HTTPS/JSON],” and “JSON response.” These retain the a/b method branches.
+
+10. API Gateway points to Validation engine. The label is “Invoke” and “[Lambda invocation].”
+
+Shared processing, authorization, and failure requirements
+
+A note applies to both amendment sub-workflows. They validate XML, method, and malformed base64; wrap decoded XML in JSON; transform the JSON response through a Liquid template into XML; and return XML through the originating SOAP API.
+
+The method-authorization table gives two rows. Method amend_order requires the user-profile role ManageOrders, and its user profile is Mandatory. Method amend_document requires the user-profile role ManageDocuments, and its user profile is also Mandatory. An accompanying note says the APIM system-account role checks and Common-Authx-Handler user-profile role checks are distinct controls.
+
+The failure-handling note says to hide internal errors, with an AWS-call timeout given as an example. Only a generic error response should be returned through the originating SOAP entry. The mapping is Legacy to existing integrators, and Partner to new integrators.
+
+A note inside AWS says the AWS amend operation and response schema are unspecified. It says the validation engine applies business-rule validation.
+
+Line semantics and limits of what is specified
+
+The legend explicitly says a solid single arrow means request / forwarding, with the normal response folded into its label. A dashed single arrow means auxiliary authentication or role query. Numbered steps are used, and a/b preserve the caller or method branches. The legend also says service icons are official Azure / AWS4 catalog entries, and boundaries show deployment or software-system domains.
+
+Thus the drawn arrows have the forward directions listed above; separately drawn reverse response arrows are not needed for the responses stated in the labels. The diagram explicitly leaves the identity exchange implementation, AWS amend operation, and AWS response schema unspecified. It does not provide further details of those contracts. The Lambda invocation arrow itself does not state a response format. The two method branches and two originating SOAP entries are shown, but no additional cloud behavior beyond the labeled elements, arrows, and notes is asserted here.
+
+Source attestation: I read only the raster image /tmp/layout-readout.jiC8aa/b.png, once through view_image at original resolution. This description is based solely on that visible image. I did not read any other file, directory listing, repository instructions, XML/SVG source, script, research source, or other agent's output.

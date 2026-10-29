@@ -23,6 +23,8 @@ The [Human-AI Meta Thinking research](./research/human-ai-interaction/meta-think
 
 No skill has been released yet.
 
+[Diagram design knowledge](./knowledge/diagrams/README.md) covers spatial grouping, reading direction and routing without changing architectural meaning.
+
 ## Shared delivery harness
 
 Use Node.js 24 and Git, run `npm ci`, `npm run git:setup`, then `npm run check`. Start each agent session with `npm run git:check`. Work on short-lived `work/<topic>` branches; use separate worktrees for concurrent tasks and squash PRs into `main`. See [Git strategy](./docs/HARNESS.md#git-strategy) for startup and cleanup. The shared gate checks Git policy, package layout, references, structured data, tool projections, harness tests and synthetic evaluation. See [the harness guide](./docs/HARNESS.md) for enforcement limits.
