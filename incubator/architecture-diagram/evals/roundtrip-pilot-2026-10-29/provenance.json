@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-29",
+  "case": "scenario-01",
+  "mode": "existing-L1-pilot",
+  "execution": "host-agent-pilot",
+  "source_commit": "db8d1258d61edcdf7a7dcd3d1077fedb176cf8cb",
+  "baseline": {
+    "source": "Owner-approved Scenario 01 input and expected structure, plus explicitly declared synthetic resolutions in the initiative evaluation record.",
+    "limitation": "L0 was normalized for this pilot after L1 already existed. L1 was not newly generated from this exact L0; the pilot cannot attribute L0-to-L2 loss to a new generator invocation.",
+    "description_location": "judged.json#/levels/0/description",
+    "sha256": "34e6891c3159b65d5a41fb60e397a7e106a3ef82fd04f99ddd4bcbf0f36600a9"
+  },
+  "renderer": {
+    "drawio_version": "32.6.1",
+    "upstream_commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+    "browser": "Chromium 154.0.8037.57",
+    "integration": "Pinned local browser runtime, not draw.io Desktop"
+  },
+  "levels": {
+    "1": {
+      "path_at_source_commit": "incubator/architecture-diagram/prototype/scenario-01.drawio",
+      "xml_sha256": "9ed170f4927bad424c9cff025891f8cddc252037f2d05de78a5634034ceb90cf",
+      "svg_sha256": "1a33cdf6afc38f8fee76a8b5912af20f12a85f9c5e31aa220aca86d09e165e2d",
+      "reader_png_sha256": "1a6c3bc129b255d07c03a2a678aa216f8aa06a15f3196ef39097f16da90a5667"
+    },
+    "2": {
+      "description_location": "judged.json#/levels/2/description",
+      "sha256": "718873e90daf8a0bc913499a6a46b99768cd8d21a25098e21bd820124a078276"
+    },
+    "3": {
+      "path": "l3.drawio",
+      "xml_sha256": "41cf4e4bc4756a06e85dfffa76507ac228379900cee60b37bb36d21e9371c83e",
+      "reader_png_sha256": "6335ac75f0a47f4355a858a7506cafdbf62d9159be23d0f03227e9f046a31ea8"
+    },
+    "4": {
+      "description_location": "judged.json#/levels/4/description",
+      "sha256": "44bc12b4fd104c85d102d3ab53491f242128c5f33b0c1bb49306650727310162"
+    }
+  },
+  "workers": [
+    { "id": "/root/roundtrip_reader_a", "role": "L2 reader", "fork_turns": "none", "scenario_input": "L1 raster only" },
+    { "id": "/root/roundtrip_generator", "role": "L3 generator", "fork_turns": "none", "scenario_input": "L2 only, plus generic drawing conventions/catalog/validator/renderer" },
+    { "id": "/root/roundtrip_reader_b", "role": "L4 reader", "fork_turns": "none", "scenario_input": "L3 raster only" },
+    { "id": "/root/roundtrip_judge", "role": "Semantic judge", "fork_turns": "none", "scenario_input": "L0/L2/L4 and generic grading contract only; later scope-calibration feedback" }
+  ],
+  "isolation": "Fresh conversation launches observed through host agent tools. Workers were instructed not to inspect other task artifacts and attested their sources. Shared filesystem access was not sandboxed per worker.",
+  "model": "Inherited host session model; exact identity and generation parameters were not exposed by the worker interface. No separately configured NVIDIA or other remote endpoint was invoked.",
+  "transcription": "Reader responses were serialized as plain UTF-8 text with normalized quotation marks/whitespace; artifact attestations were separated. No architectural content was edited. Judge source strings match those frozen files byte-for-byte.",
+  "calibration": "The first judge over-counted incidental comment placement, diagnostic absence observations and literal wording differences. Scope review removed those false positives and interpreted whole enumerations/examples semantically, without changing L0/L2/L4 or either diagram. Initial judgment remains in ignored task scratch; final grounded ledgers are selected evidence here.",
+  "automation_limit": "Workers were launched by the app agent tools. The reusable executeRoundTrip adapter contract is unit-tested, but this live pilot was host-orchestrated rather than run by a configured unattended local model adapter."
+}
