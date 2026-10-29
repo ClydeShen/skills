@@ -1,0 +1,3328 @@
+{
+  "levels": {
+    "0": {
+      "description": "Dynamic diagram (deployment view): Partner amendment requests through SOAP to AWS validation.\n\nTwo external software systems sit outside every cloud boundary: Existing partner integrators and New partner integrators. Existing integrators call a Legacy SOAP API in Azure API Management (APIM); new integrators call a Partner SOAP API in the same APIM service. These are separate entry branches 1a and 1b, using SOAP over HTTPS and returning XML responses. Preserve both entry points.\n\nAzure Cloud contains APIM and its two SOAP APIs, Azure AD B2C, Azure Cosmos DB for roles/permissions, and an Inbound processing software system boundary. Inbound processing contains API-Route-Processor and Common-Authx-Handler, both Logic Apps workflows, and a nested sub-workflows group containing Amend-Order-Processor and Amend-Document-Processor, also Logic Apps workflows. AWS Cloud contains API Gateway and a Core platform software system boundary containing Validation engine, an AWS Lambda function. An explicit site-to-site VPN joins the clouds; all stated Azure-to-AWS amend API traffic uses that connection.\n\nAPIM authenticates incoming requests against Azure AD B2C. The synthetic scenario specifies either basic or bearer authentication input; do not invent the token-exchange implementation or claim that Azure AD B2C natively exposes a Basic authentication protocol. APIM separately checks the system account's roles and the mandatory presence of a user profile for amend requests. It then passes the authenticated request to API-Route-Processor. API-Route-Processor delegates authorization to Common-Authx-Handler. The handler queries Cosmos DB using system account name and user profile name to check the required user-profile role. APIM's system-account role check and the handler's user-profile role check are distinct controls.\n\nAfter authorization, routing is by method: amend_order goes to Amend-Order-Processor and requires ManageOrders; amend_document goes to Amend-Document-Processor and requires ManageDocuments. A user profile is mandatory for both amendment methods. Show this method-to-role mapping as a small architectural authorization table. There is no universal ManageOrders requirement for amend_document.\n\nEach sub-workflow validates request XML, the method and malformed base64 content. It wraps decoded XML in JSON and calls the AWS amend API via API Gateway over the VPN using HTTPS/JSON. The exact AWS operation and response schema remain unspecified; preserve HTTPS/JSON without inventing an operation name or schema. API Gateway invokes Validation engine Lambda, which performs business-rule validation. The JSON response returns to the sub-workflow; the sub-workflow uses a Liquid template to convert JSON to XML, then returns the XML response through the SOAP entry path to the integrator. Fold normal responses into the corresponding request labels rather than drawing double-headed arrows.\n\nInternal errors, such as an AWS-call timeout, are hidden from integrators; only a generic error response is returned. A separate failure response may use bold labels and caller-appropriate branches. Authentication and role queries are auxiliary/dashed; main forwarding is solid. Preserve the two entry branches and the method-specific sub-workflow routing, without inventing extra endpoints.\n\nThe source's cancel-order wording has been resolved to amend requests. Struck-out retrieval of accessible registrations and the orders-existence/accessibility query are deleted scope and must not appear. The contradictory universal ManageOrders sentence is superseded by the per-method table. No actual deployed identity exchange or API schema is asserted by this synthetic test input.\n",
+      "facts": [
+        {
+          "id": "l0-existing",
+          "dimension": "elements",
+          "claim": "Existing partner integrators are an external software system.",
+          "critical": true,
+          "evidence": "Two external software systems sit outside every cloud boundary: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l0-new",
+          "dimension": "elements",
+          "claim": "New partner integrators are an external software system.",
+          "critical": true,
+          "evidence": "Two external software systems sit outside every cloud boundary: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l0-apim",
+          "dimension": "elements",
+          "claim": "Azure API Management is the shared API management service.",
+          "critical": true,
+          "evidence": "Existing integrators call a Legacy SOAP API in Azure API Management (APIM); new integrators call a Partner SOAP API in the same APIM service."
+        },
+        {
+          "id": "l0-legacy",
+          "dimension": "elements",
+          "claim": "Legacy SOAP API is a SOAP entry point.",
+          "critical": true,
+          "evidence": "Existing integrators call a Legacy SOAP API in Azure API Management (APIM)"
+        },
+        {
+          "id": "l0-partner",
+          "dimension": "elements",
+          "claim": "Partner SOAP API is a distinct SOAP entry point.",
+          "critical": true,
+          "evidence": "new integrators call a Partner SOAP API in the same APIM service."
+        },
+        {
+          "id": "l0-b2c",
+          "dimension": "elements",
+          "claim": "Azure AD B2C is the identity service.",
+          "critical": false,
+          "evidence": "APIM authenticates incoming requests against Azure AD B2C."
+        },
+        {
+          "id": "l0-cosmos",
+          "dimension": "elements",
+          "claim": "The roles and permissions store uses Azure Cosmos DB.",
+          "critical": false,
+          "evidence": "Azure Cosmos DB for roles/permissions"
+        },
+        {
+          "id": "l0-inbound",
+          "dimension": "elements",
+          "claim": "Inbound processing is a software system.",
+          "critical": true,
+          "evidence": "an Inbound processing software system boundary"
+        },
+        {
+          "id": "l0-route",
+          "dimension": "elements",
+          "claim": "API-Route-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "API-Route-Processor and Common-Authx-Handler, both Logic Apps workflows"
+        },
+        {
+          "id": "l0-authx",
+          "dimension": "elements",
+          "claim": "Common-Authx-Handler is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "API-Route-Processor and Common-Authx-Handler, both Logic Apps workflows"
+        },
+        {
+          "id": "l0-order",
+          "dimension": "elements",
+          "claim": "Amend-Order-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "Amend-Order-Processor and Amend-Document-Processor, also Logic Apps workflows"
+        },
+        {
+          "id": "l0-document",
+          "dimension": "elements",
+          "claim": "Amend-Document-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "Amend-Order-Processor and Amend-Document-Processor, also Logic Apps workflows"
+        },
+        {
+          "id": "l0-gateway",
+          "dimension": "elements",
+          "claim": "The AWS entry service is API Gateway.",
+          "critical": false,
+          "evidence": "AWS Cloud contains API Gateway"
+        },
+        {
+          "id": "l0-core",
+          "dimension": "elements",
+          "claim": "Core platform is a software system.",
+          "critical": true,
+          "evidence": "a Core platform software system boundary"
+        },
+        {
+          "id": "l0-lambda",
+          "dimension": "elements",
+          "claim": "Validation engine is an AWS Lambda function.",
+          "critical": false,
+          "evidence": "Validation engine, an AWS Lambda function"
+        },
+        {
+          "id": "l0-vpn",
+          "dimension": "elements",
+          "claim": "There is an explicit site-to-site VPN connection.",
+          "critical": true,
+          "evidence": "An explicit site-to-site VPN joins the clouds"
+        },
+        {
+          "id": "l0-azure-apim",
+          "dimension": "boundaries",
+          "claim": "APIM belongs to Azure Cloud.",
+          "critical": true,
+          "evidence": "Azure Cloud contains APIM"
+        },
+        {
+          "id": "l0-azure-b2c",
+          "dimension": "boundaries",
+          "claim": "Azure AD B2C belongs to Azure Cloud, alongside APIM and Inbound processing.",
+          "critical": true,
+          "evidence": "Azure Cloud contains APIM and its two SOAP APIs, Azure AD B2C, Azure Cosmos DB for roles/permissions, and an Inbound processing software system boundary."
+        },
+        {
+          "id": "l0-azure-cosmos",
+          "dimension": "boundaries",
+          "claim": "The Cosmos roles store belongs to Azure Cloud, alongside APIM and Inbound processing.",
+          "critical": true,
+          "evidence": "Azure Cloud contains APIM and its two SOAP APIs, Azure AD B2C, Azure Cosmos DB for roles/permissions, and an Inbound processing software system boundary."
+        },
+        {
+          "id": "l0-azure-inbound",
+          "dimension": "boundaries",
+          "claim": "Inbound processing belongs to Azure Cloud.",
+          "critical": true,
+          "evidence": "Azure Cloud contains APIM and its two SOAP APIs, Azure AD B2C, Azure Cosmos DB for roles/permissions, and an Inbound processing software system boundary."
+        },
+        {
+          "id": "l0-apim-apis",
+          "dimension": "boundaries",
+          "claim": "Both SOAP APIs belong to the same APIM service.",
+          "critical": true,
+          "evidence": "Existing integrators call a Legacy SOAP API in Azure API Management (APIM); new integrators call a Partner SOAP API in the same APIM service."
+        },
+        {
+          "id": "l0-inbound-workers",
+          "dimension": "boundaries",
+          "claim": "Inbound processing owns API-Route-Processor and Common-Authx-Handler.",
+          "critical": true,
+          "evidence": "Inbound processing contains API-Route-Processor and Common-Authx-Handler"
+        },
+        {
+          "id": "l0-subgroup",
+          "dimension": "boundaries",
+          "claim": "A nested sub-workflows group in Inbound processing contains the order and document workflows.",
+          "critical": true,
+          "evidence": "a nested sub-workflows group containing Amend-Order-Processor and Amend-Document-Processor"
+        },
+        {
+          "id": "l0-aws-gateway",
+          "dimension": "boundaries",
+          "claim": "API Gateway belongs to AWS Cloud outside Core platform.",
+          "critical": true,
+          "evidence": "AWS Cloud contains API Gateway and a Core platform software system boundary containing Validation engine"
+        },
+        {
+          "id": "l0-aws-core",
+          "dimension": "boundaries",
+          "claim": "Core platform belongs to AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud contains API Gateway and a Core platform software system boundary"
+        },
+        {
+          "id": "l0-core-engine",
+          "dimension": "boundaries",
+          "claim": "Core platform contains Validation engine.",
+          "critical": true,
+          "evidence": "a Core platform software system boundary containing Validation engine"
+        },
+        {
+          "id": "l0-external-boundaries",
+          "dimension": "boundaries",
+          "claim": "Both partner integrator systems are outside the cloud ownership boundaries.",
+          "critical": true,
+          "evidence": "Two external software systems sit outside every cloud boundary: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l0-vpn-join",
+          "dimension": "relationships",
+          "claim": "The site-to-site VPN connects Azure and AWS.",
+          "critical": true,
+          "evidence": "An explicit site-to-site VPN joins the clouds"
+        },
+        {
+          "id": "l0-existing-entry",
+          "dimension": "relationships",
+          "claim": "Existing integrators initiate requests at Legacy SOAP API.",
+          "critical": true,
+          "evidence": "Existing integrators call a Legacy SOAP API in Azure API Management (APIM)"
+        },
+        {
+          "id": "l0-new-entry",
+          "dimension": "relationships",
+          "claim": "New integrators initiate requests at Partner SOAP API.",
+          "critical": true,
+          "evidence": "new integrators call a Partner SOAP API in the same APIM service."
+        },
+        {
+          "id": "l0-soap-protocol",
+          "dimension": "protocols",
+          "claim": "Both entry branches use SOAP over HTTPS and return XML.",
+          "critical": false,
+          "evidence": "These are separate entry branches 1a and 1b, using SOAP over HTTPS and returning XML responses."
+        },
+        {
+          "id": "l0-authenticate",
+          "dimension": "relationships",
+          "claim": "APIM authenticates incoming requests against Azure AD B2C.",
+          "critical": true,
+          "evidence": "APIM authenticates incoming requests against Azure AD B2C."
+        },
+        {
+          "id": "l0-auth-input",
+          "dimension": "conditions",
+          "claim": "Authentication input can be basic or bearer.",
+          "critical": false,
+          "evidence": "The synthetic scenario specifies either basic or bearer authentication input"
+        },
+        {
+          "id": "l0-system-role",
+          "dimension": "responsibilities",
+          "claim": "APIM checks system-account roles.",
+          "critical": true,
+          "evidence": "APIM separately checks the system account's roles"
+        },
+        {
+          "id": "l0-profile",
+          "dimension": "conditions",
+          "claim": "A user profile is mandatory for both amendment methods.",
+          "critical": true,
+          "evidence": "A user profile is mandatory for both amendment methods."
+        },
+        {
+          "id": "l0-forward",
+          "dimension": "relationships",
+          "claim": "After authentication and APIM controls, APIM sends the authenticated request to API-Route-Processor.",
+          "critical": true,
+          "evidence": "It then passes the authenticated request to API-Route-Processor."
+        },
+        {
+          "id": "l0-delegate",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor delegates authorization to Common-Authx-Handler.",
+          "critical": true,
+          "evidence": "API-Route-Processor delegates authorization to Common-Authx-Handler."
+        },
+        {
+          "id": "l0-query",
+          "dimension": "relationships",
+          "claim": "Common-Authx-Handler queries Cosmos DB for the required user-profile role.",
+          "critical": true,
+          "evidence": "The handler queries Cosmos DB using system account name and user profile name to check the required user-profile role."
+        },
+        {
+          "id": "l0-query-keys",
+          "dimension": "protocols",
+          "claim": "The role query supplies both system account name and user profile name.",
+          "critical": false,
+          "evidence": "using system account name and user profile name"
+        },
+        {
+          "id": "l0-user-role",
+          "dimension": "responsibilities",
+          "claim": "Common-Authx-Handler checks the required user-profile role separately from APIM system-account role checking.",
+          "critical": true,
+          "evidence": "APIM's system-account role check and the handler's user-profile role check are distinct controls."
+        },
+        {
+          "id": "l0-route-order",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor routes amend_order to Amend-Order-Processor.",
+          "critical": true,
+          "evidence": "After authorization, routing is by method: amend_order goes to Amend-Order-Processor"
+        },
+        {
+          "id": "l0-route-document",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor routes amend_document to Amend-Document-Processor.",
+          "critical": true,
+          "evidence": "amend_document goes to Amend-Document-Processor"
+        },
+        {
+          "id": "l0-authorization-first",
+          "dimension": "conditions",
+          "claim": "Method-specific routing follows authorization.",
+          "critical": true,
+          "evidence": "After authorization, routing is by method"
+        },
+        {
+          "id": "l0-order-role",
+          "dimension": "conditions",
+          "claim": "amend_order requires the user-profile role ManageOrders.",
+          "critical": true,
+          "evidence": "amend_order goes to Amend-Order-Processor and requires ManageOrders"
+        },
+        {
+          "id": "l0-document-role",
+          "dimension": "conditions",
+          "claim": "amend_document requires the user-profile role ManageDocuments.",
+          "critical": true,
+          "evidence": "amend_document goes to Amend-Document-Processor and requires ManageDocuments"
+        },
+        {
+          "id": "l0-no-universal-orders",
+          "dimension": "conditions",
+          "claim": "The amendment role policy does not impose a universal ManageOrders requirement on amend_document.",
+          "critical": true,
+          "evidence": "There is no universal ManageOrders requirement for amend_document."
+        },
+        {
+          "id": "l0-xml-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow validates request XML.",
+          "critical": false,
+          "evidence": "Each sub-workflow validates request XML, the method and malformed base64 content."
+        },
+        {
+          "id": "l0-method-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow validates the method.",
+          "critical": false,
+          "evidence": "Each sub-workflow validates request XML, the method and malformed base64 content."
+        },
+        {
+          "id": "l0-base64-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow checks malformed base64 content.",
+          "critical": false,
+          "evidence": "Each sub-workflow validates request XML, the method and malformed base64 content."
+        },
+        {
+          "id": "l0-wrap-xml",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow wraps decoded XML in JSON.",
+          "critical": false,
+          "evidence": "It wraps decoded XML in JSON"
+        },
+        {
+          "id": "l0-aws-order",
+          "dimension": "relationships",
+          "claim": "Amend-Order-Processor calls the AWS amend API at API Gateway through the site-to-site VPN.",
+          "critical": true,
+          "evidence": "Each sub-workflow validates request XML, the method and malformed base64 content. It wraps decoded XML in JSON and calls the AWS amend API via API Gateway over the VPN using HTTPS/JSON."
+        },
+        {
+          "id": "l0-aws-document",
+          "dimension": "relationships",
+          "claim": "Amend-Document-Processor calls the AWS amend API at API Gateway through the site-to-site VPN.",
+          "critical": true,
+          "evidence": "Each sub-workflow validates request XML, the method and malformed base64 content. It wraps decoded XML in JSON and calls the AWS amend API via API Gateway over the VPN using HTTPS/JSON."
+        },
+        {
+          "id": "l0-aws-protocol",
+          "dimension": "protocols",
+          "claim": "Both workflow-to-AWS amend API branches use HTTPS/JSON.",
+          "critical": false,
+          "evidence": "calls the AWS amend API via API Gateway over the VPN using HTTPS/JSON"
+        },
+        {
+          "id": "l0-aws-operation",
+          "dimension": "notes",
+          "claim": "The exact AWS amend operation and response schema remain unspecified.",
+          "critical": false,
+          "evidence": "The exact AWS operation and response schema remain unspecified"
+        },
+        {
+          "id": "l0-gateway-invoke",
+          "dimension": "relationships",
+          "claim": "API Gateway invokes the Validation engine Lambda.",
+          "critical": true,
+          "evidence": "API Gateway invokes Validation engine Lambda"
+        },
+        {
+          "id": "l0-business-validation",
+          "dimension": "responsibilities",
+          "claim": "Validation engine performs business-rule validation.",
+          "critical": false,
+          "evidence": "which performs business-rule validation"
+        },
+        {
+          "id": "l0-json-return",
+          "dimension": "protocols",
+          "claim": "The AWS amend API returns a JSON response to each calling sub-workflow.",
+          "critical": false,
+          "evidence": "The JSON response returns to the sub-workflow"
+        },
+        {
+          "id": "l0-liquid",
+          "dimension": "responsibilities",
+          "claim": "Each sub-workflow uses a Liquid template to transform the JSON response into XML.",
+          "critical": false,
+          "evidence": "the sub-workflow uses a Liquid template to convert JSON to XML"
+        },
+        {
+          "id": "l0-xml-origin",
+          "dimension": "relationships",
+          "claim": "Each sub-workflow returns XML through the originating SOAP entry path to the corresponding integrator.",
+          "critical": true,
+          "evidence": "then returns the XML response through the SOAP entry path to the integrator."
+        },
+        {
+          "id": "l0-hide-errors",
+          "dimension": "conditions",
+          "claim": "Internal errors are hidden from integrators.",
+          "critical": true,
+          "evidence": "Internal errors, such as an AWS-call timeout, are hidden from integrators"
+        },
+        {
+          "id": "l0-generic-error",
+          "dimension": "conditions",
+          "claim": "Only a generic error response is returned to integrators when internal failures occur.",
+          "critical": true,
+          "evidence": "only a generic error response is returned."
+        },
+        {
+          "id": "l0-timeout",
+          "dimension": "notes",
+          "claim": "An AWS-call timeout is an example of an internal error handled generically.",
+          "critical": false,
+          "evidence": "Internal errors, such as an AWS-call timeout"
+        }
+      ]
+    },
+    "2": {
+      "description": "The diagram is titled “Dynamic diagram (deployment view): Partner amendment requests through SOAP to AWS validation.” Its stated purpose is to authenticate partner amendment requests, authorize the required user-profile role, validate in AWS, and return XML through the originating SOAP API.\n\nDeployment and system membership\n\nTwo external software systems appear outside the cloud boundaries: Existing partner integrators and New partner integrators.\n\nThe Azure Cloud deployment node contains an Azure API Management (APIM) deployment node, an Inbound processing software-system boundary, Azure AD B2C, and a Roles / permissions store. Azure AD B2C is a container of type Identity provider. Roles / permissions is a container using Azure Cosmos DB. These two containers are outside both the APIM deployment node and the Inbound processing boundary, while remaining inside Azure Cloud.\n\nThe APIM deployment node contains three containers: Legacy SOAP API, of type SOAP API; Partner SOAP API, also of type SOAP API; and APIM policy processing, of type Azure API Management.\n\nInbound processing contains API-Route-Processor and Common-Authx-Handler, each a Logic Apps workflow container. It also contains a nested Sub-workflows software-system boundary. Sub-workflows contains two Logic Apps workflow containers: Amend-Order-Processor and Amend-Document-Processor. Thus four Logic Apps workflow containers are depicted in Azure.\n\nA Site-to-site VPN container is shown between the Azure Cloud and AWS Cloud boundaries, outside both enclosing cloud boxes. Its type is “Azure ↔ AWS connection.”\n\nThe AWS Cloud deployment node contains an API Gateway container of type AWS API Gateway and a nested Core platform software-system boundary. Core platform contains a Validation engine container of type AWS Lambda function. API Gateway is inside AWS Cloud but outside Core platform.\n\nDirected request flow and associated responses\n\nThe diagram numbers the flow and uses a/b suffixes to preserve caller or method branches. A solid single arrow means a request or forwarding action; its label also describes the normal response, rather than drawing a separate response arrow. A dashed single arrow denotes an auxiliary authentication or role query.\n\n1a. Existing partner integrators initiate a SOAP over HTTPS request to Legacy SOAP API, crossing into Azure Cloud and the APIM deployment node. The response is XML.\n\n1b. New partner integrators initiate a SOAP over HTTPS request to Partner SOAP API, crossing the same deployment boundaries. The response is XML.\n\n2a. Legacy SOAP API forwards into APIM policy processing. The arrow is labeled “Enter APIM policy,” with XML as the request representation and an XML response.\n\n2b. Partner SOAP API likewise forwards into APIM policy processing, labeled “Enter APIM policy,” with XML and an XML response. Both originating SOAP APIs therefore enter the same policy-processing container.\n\n3. APIM policy processing initiates a dashed auxiliary “Authenticate” call to Azure AD B2C. Its qualifier is “[Identity]” and the response is labeled “Result.” This call leaves the APIM deployment node but stays within Azure Cloud. Authentication input may be basic or bearer. APIM authenticates against Azure AD B2C; the identity exchange implementation is explicitly unspecified.\n\nAPIM request controls apply after authentication: check system-account roles, and require a user profile for both amendment methods.\n\n4. APIM policy processing sends an “Authenticated request after controls” to API-Route-Processor. The label specifies XML and an XML response. This crosses from the APIM deployment node into the Inbound processing software-system boundary, within Azure Cloud.\n\n5. API-Route-Processor initiates a dashed “Delegate authorization” call to Common-Authx-Handler. It is a workflow call and returns a role decision.\n\n6. Common-Authx-Handler initiates a dashed query to Roles / permissions in Azure Cosmos DB. The query supplies “system account name + user profile name” and returns the “Required user-profile role result.” It crosses out of Inbound processing while remaining inside Azure Cloud.\n\n7a. API-Route-Processor calls Amend-Order-Processor inside the nested Sub-workflows boundary for the amend_order method. This workflow call requires ManageOrders and returns XML.\n\n7b. API-Route-Processor calls Amend-Document-Processor inside Sub-workflows for the amend_document method. This workflow call requires ManageDocuments and returns XML.\n\n8a. Amend-Order-Processor initiates an “AWS amend API” call toward the Site-to-site VPN, with HTTPS/JSON and a JSON response. This leaves the Sub-workflows and Inbound processing boundaries and Azure Cloud.\n\n8b. Amend-Document-Processor initiates the corresponding “AWS amend API” call toward the same Site-to-site VPN, also using HTTPS/JSON with a JSON response and leaving those Azure boundaries.\n\n9a and 9b. The VPN forwards the respective branches as “Traffic routing” to the single API Gateway in AWS Cloud. Both labels specify HTTPS/JSON and a JSON response. These routes enter the AWS Cloud boundary.\n\n10. API Gateway initiates an “Invoke” call to the Validation engine inside Core platform. The call is qualified as “Lambda invocation” and returns a JSON response.\n\nProcessing, authorization, and failure requirements\n\nBoth sub-workflows validate XML, the method, and malformed base64. They wrap decoded XML in JSON. Their response transformation is explicitly “JSON response → Liquid template → XML.” They return XML through the originating SOAP API.\n\nThe method-authorization table states that amend_order requires the user-profile role ManageOrders, with a mandatory user profile. It states that amend_document requires the user-profile role ManageDocuments, also with a mandatory user profile. APIM system-account role checks and Common-Authx-Handler user-profile role checks are distinct controls. No explicit denial status, denial payload, or separate denial route is shown for a failed role check or missing profile.\n\nFailure handling hides internal errors, with an AWS-call timeout given as an example. Only a generic error response is returned through the originating SOAP entry: Legacy SOAP API returns to existing integrators, and Partner SOAP API returns to new integrators. The generic error's exact schema or status is not specified.\n\nThe AWS amend operation and response schema are explicitly unspecified. The Validation engine applies business-rule validation. The diagram does not specify the individual business rules, call frequency, or an identity-exchange implementation.\n\nThe legend identifies the service icons as official Azure2 / AWS4 catalog entries and says that boundaries represent deployment or software-system domains. No additional behavior is implied by icon placement or by line routing beyond the labeled calls and boundary crossings.\n",
+      "facts": [
+        {
+          "id": "l2-existing",
+          "dimension": "elements",
+          "claim": "Existing partner integrators are an external software system.",
+          "critical": true,
+          "evidence": "Two external software systems appear outside the cloud boundaries: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l2-new",
+          "dimension": "elements",
+          "claim": "New partner integrators are an external software system.",
+          "critical": true,
+          "evidence": "Two external software systems appear outside the cloud boundaries: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l2-apim",
+          "dimension": "elements",
+          "claim": "Azure API Management is the shared API management service.",
+          "critical": true,
+          "evidence": "The Azure Cloud deployment node contains an Azure API Management (APIM) deployment node"
+        },
+        {
+          "id": "l2-legacy",
+          "dimension": "elements",
+          "claim": "Legacy SOAP API is a SOAP entry point.",
+          "critical": true,
+          "evidence": "Legacy SOAP API, of type SOAP API"
+        },
+        {
+          "id": "l2-partner",
+          "dimension": "elements",
+          "claim": "Partner SOAP API is a distinct SOAP entry point.",
+          "critical": true,
+          "evidence": "Partner SOAP API, also of type SOAP API"
+        },
+        {
+          "id": "l2-b2c",
+          "dimension": "elements",
+          "claim": "Azure AD B2C is the identity service.",
+          "critical": false,
+          "evidence": "Azure AD B2C is a container of type Identity provider."
+        },
+        {
+          "id": "l2-cosmos",
+          "dimension": "elements",
+          "claim": "The roles and permissions store uses Azure Cosmos DB.",
+          "critical": false,
+          "evidence": "Roles / permissions is a container using Azure Cosmos DB."
+        },
+        {
+          "id": "l2-inbound",
+          "dimension": "elements",
+          "claim": "Inbound processing is a software system.",
+          "critical": true,
+          "evidence": "an Inbound processing software-system boundary"
+        },
+        {
+          "id": "l2-route",
+          "dimension": "elements",
+          "claim": "API-Route-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "API-Route-Processor and Common-Authx-Handler, each a Logic Apps workflow container"
+        },
+        {
+          "id": "l2-authx",
+          "dimension": "elements",
+          "claim": "Common-Authx-Handler is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "API-Route-Processor and Common-Authx-Handler, each a Logic Apps workflow container"
+        },
+        {
+          "id": "l2-order",
+          "dimension": "elements",
+          "claim": "Amend-Order-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "two Logic Apps workflow containers: Amend-Order-Processor and Amend-Document-Processor"
+        },
+        {
+          "id": "l2-document",
+          "dimension": "elements",
+          "claim": "Amend-Document-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "two Logic Apps workflow containers: Amend-Order-Processor and Amend-Document-Processor"
+        },
+        {
+          "id": "l2-gateway",
+          "dimension": "elements",
+          "claim": "The AWS entry service is API Gateway.",
+          "critical": false,
+          "evidence": "an API Gateway container of type AWS API Gateway"
+        },
+        {
+          "id": "l2-core",
+          "dimension": "elements",
+          "claim": "Core platform is a software system.",
+          "critical": true,
+          "evidence": "a nested Core platform software-system boundary"
+        },
+        {
+          "id": "l2-lambda",
+          "dimension": "elements",
+          "claim": "Validation engine is an AWS Lambda function.",
+          "critical": false,
+          "evidence": "a Validation engine container of type AWS Lambda function"
+        },
+        {
+          "id": "l2-vpn",
+          "dimension": "elements",
+          "claim": "There is an explicit site-to-site VPN connection.",
+          "critical": true,
+          "evidence": "A Site-to-site VPN container is shown between the Azure Cloud and AWS Cloud boundaries"
+        },
+        {
+          "id": "l2-azure-apim",
+          "dimension": "boundaries",
+          "claim": "APIM belongs to Azure Cloud.",
+          "critical": true,
+          "evidence": "The Azure Cloud deployment node contains an Azure API Management (APIM) deployment node"
+        },
+        {
+          "id": "l2-azure-b2c",
+          "dimension": "boundaries",
+          "claim": "Azure AD B2C belongs to Azure Cloud, alongside APIM and Inbound processing.",
+          "critical": true,
+          "evidence": "These two containers are outside both the APIM deployment node and the Inbound processing boundary, while remaining inside Azure Cloud."
+        },
+        {
+          "id": "l2-azure-cosmos",
+          "dimension": "boundaries",
+          "claim": "The Cosmos roles store belongs to Azure Cloud, alongside APIM and Inbound processing.",
+          "critical": true,
+          "evidence": "These two containers are outside both the APIM deployment node and the Inbound processing boundary, while remaining inside Azure Cloud."
+        },
+        {
+          "id": "l2-azure-inbound",
+          "dimension": "boundaries",
+          "claim": "Inbound processing belongs to Azure Cloud.",
+          "critical": true,
+          "evidence": "The Azure Cloud deployment node contains an Azure API Management (APIM) deployment node, an Inbound processing software-system boundary"
+        },
+        {
+          "id": "l2-apim-apis",
+          "dimension": "boundaries",
+          "claim": "Both SOAP APIs belong to the same APIM service.",
+          "critical": true,
+          "evidence": "The APIM deployment node contains three containers: Legacy SOAP API, of type SOAP API; Partner SOAP API, also of type SOAP API; and APIM policy processing, of type Azure API Management."
+        },
+        {
+          "id": "l2-inbound-workers",
+          "dimension": "boundaries",
+          "claim": "Inbound processing owns API-Route-Processor and Common-Authx-Handler.",
+          "critical": true,
+          "evidence": "Inbound processing contains API-Route-Processor and Common-Authx-Handler"
+        },
+        {
+          "id": "l2-subgroup",
+          "dimension": "boundaries",
+          "claim": "A nested sub-workflows group in Inbound processing contains the order and document workflows.",
+          "critical": true,
+          "evidence": "It also contains a nested Sub-workflows software-system boundary. Sub-workflows contains two Logic Apps workflow containers: Amend-Order-Processor and Amend-Document-Processor."
+        },
+        {
+          "id": "l2-aws-gateway",
+          "dimension": "boundaries",
+          "claim": "API Gateway belongs to AWS Cloud outside Core platform.",
+          "critical": true,
+          "evidence": "API Gateway is inside AWS Cloud but outside Core platform."
+        },
+        {
+          "id": "l2-aws-core",
+          "dimension": "boundaries",
+          "claim": "Core platform belongs to AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an API Gateway container of type AWS API Gateway and a nested Core platform software-system boundary."
+        },
+        {
+          "id": "l2-core-engine",
+          "dimension": "boundaries",
+          "claim": "Core platform contains Validation engine.",
+          "critical": true,
+          "evidence": "Core platform contains a Validation engine container"
+        },
+        {
+          "id": "l2-external-boundaries",
+          "dimension": "boundaries",
+          "claim": "Both partner integrator systems are outside the cloud ownership boundaries.",
+          "critical": true,
+          "evidence": "Two external software systems appear outside the cloud boundaries: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l2-vpn-join",
+          "dimension": "relationships",
+          "claim": "The site-to-site VPN connects Azure and AWS.",
+          "critical": true,
+          "evidence": "Its type is “Azure ↔ AWS connection.”"
+        },
+        {
+          "id": "l2-existing-entry",
+          "dimension": "relationships",
+          "claim": "Existing integrators initiate requests at Legacy SOAP API.",
+          "critical": true,
+          "evidence": "Existing partner integrators initiate a SOAP over HTTPS request to Legacy SOAP API"
+        },
+        {
+          "id": "l2-new-entry",
+          "dimension": "relationships",
+          "claim": "New integrators initiate requests at Partner SOAP API.",
+          "critical": true,
+          "evidence": "New partner integrators initiate a SOAP over HTTPS request to Partner SOAP API"
+        },
+        {
+          "id": "l2-soap-protocol",
+          "dimension": "protocols",
+          "claim": "Both entry branches use SOAP over HTTPS and return XML.",
+          "critical": false,
+          "evidence": "1a. Existing partner integrators initiate a SOAP over HTTPS request to Legacy SOAP API, crossing into Azure Cloud and the APIM deployment node. The response is XML.\n\n1b. New partner integrators initiate a SOAP over HTTPS request to Partner SOAP API, crossing the same deployment boundaries. The response is XML."
+        },
+        {
+          "id": "l2-authenticate",
+          "dimension": "relationships",
+          "claim": "APIM authenticates incoming requests against Azure AD B2C.",
+          "critical": true,
+          "evidence": "APIM policy processing initiates a dashed auxiliary “Authenticate” call to Azure AD B2C."
+        },
+        {
+          "id": "l2-auth-input",
+          "dimension": "conditions",
+          "claim": "Authentication input can be basic or bearer.",
+          "critical": false,
+          "evidence": "Authentication input may be basic or bearer."
+        },
+        {
+          "id": "l2-system-role",
+          "dimension": "responsibilities",
+          "claim": "APIM checks system-account roles.",
+          "critical": true,
+          "evidence": "check system-account roles"
+        },
+        {
+          "id": "l2-profile",
+          "dimension": "conditions",
+          "claim": "A user profile is mandatory for both amendment methods.",
+          "critical": true,
+          "evidence": "require a user profile for both amendment methods."
+        },
+        {
+          "id": "l2-forward",
+          "dimension": "relationships",
+          "claim": "After authentication and APIM controls, APIM sends the authenticated request to API-Route-Processor.",
+          "critical": true,
+          "evidence": "APIM policy processing sends an “Authenticated request after controls” to API-Route-Processor."
+        },
+        {
+          "id": "l2-delegate",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor delegates authorization to Common-Authx-Handler.",
+          "critical": true,
+          "evidence": "API-Route-Processor initiates a dashed “Delegate authorization” call to Common-Authx-Handler."
+        },
+        {
+          "id": "l2-query",
+          "dimension": "relationships",
+          "claim": "Common-Authx-Handler queries Cosmos DB for the required user-profile role.",
+          "critical": true,
+          "evidence": "Common-Authx-Handler initiates a dashed query to Roles / permissions in Azure Cosmos DB."
+        },
+        {
+          "id": "l2-query-keys",
+          "dimension": "protocols",
+          "claim": "The role query supplies both system account name and user profile name.",
+          "critical": false,
+          "evidence": "The query supplies “system account name + user profile name”"
+        },
+        {
+          "id": "l2-user-role",
+          "dimension": "responsibilities",
+          "claim": "Common-Authx-Handler checks the required user-profile role separately from APIM system-account role checking.",
+          "critical": true,
+          "evidence": "APIM system-account role checks and Common-Authx-Handler user-profile role checks are distinct controls."
+        },
+        {
+          "id": "l2-route-order",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor routes amend_order to Amend-Order-Processor.",
+          "critical": true,
+          "evidence": "API-Route-Processor calls Amend-Order-Processor inside the nested Sub-workflows boundary for the amend_order method."
+        },
+        {
+          "id": "l2-route-document",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor routes amend_document to Amend-Document-Processor.",
+          "critical": true,
+          "evidence": "API-Route-Processor calls Amend-Document-Processor inside Sub-workflows for the amend_document method."
+        },
+        {
+          "id": "l2-authorization-first",
+          "dimension": "conditions",
+          "claim": "Method-specific routing follows authorization.",
+          "critical": true,
+          "evidence": "6. Common-Authx-Handler initiates a dashed query to Roles / permissions in Azure Cosmos DB. The query supplies “system account name + user profile name” and returns the “Required user-profile role result.” It crosses out of Inbound processing while remaining inside Azure Cloud.\n\n7a. API-Route-Processor calls Amend-Order-Processor"
+        },
+        {
+          "id": "l2-order-role",
+          "dimension": "conditions",
+          "claim": "amend_order requires the user-profile role ManageOrders.",
+          "critical": true,
+          "evidence": "The method-authorization table states that amend_order requires the user-profile role ManageOrders"
+        },
+        {
+          "id": "l2-document-role",
+          "dimension": "conditions",
+          "claim": "amend_document requires the user-profile role ManageDocuments.",
+          "critical": true,
+          "evidence": "It states that amend_document requires the user-profile role ManageDocuments"
+        },
+        {
+          "id": "l2-no-universal-orders",
+          "dimension": "conditions",
+          "claim": "The amendment role policy does not impose a universal ManageOrders requirement on amend_document.",
+          "critical": true,
+          "evidence": "The method-authorization table states that amend_order requires the user-profile role ManageOrders, with a mandatory user profile. It states that amend_document requires the user-profile role ManageDocuments, also with a mandatory user profile."
+        },
+        {
+          "id": "l2-xml-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow validates request XML.",
+          "critical": false,
+          "evidence": "Both sub-workflows validate XML, the method, and malformed base64."
+        },
+        {
+          "id": "l2-method-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow validates the method.",
+          "critical": false,
+          "evidence": "Both sub-workflows validate XML, the method, and malformed base64."
+        },
+        {
+          "id": "l2-base64-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow checks malformed base64 content.",
+          "critical": false,
+          "evidence": "Both sub-workflows validate XML, the method, and malformed base64."
+        },
+        {
+          "id": "l2-wrap-xml",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow wraps decoded XML in JSON.",
+          "critical": false,
+          "evidence": "They wrap decoded XML in JSON."
+        },
+        {
+          "id": "l2-aws-order",
+          "dimension": "relationships",
+          "claim": "Amend-Order-Processor calls the AWS amend API at API Gateway through the site-to-site VPN.",
+          "critical": true,
+          "evidence": "8a. Amend-Order-Processor initiates an “AWS amend API” call toward the Site-to-site VPN, with HTTPS/JSON and a JSON response. This leaves the Sub-workflows and Inbound processing boundaries and Azure Cloud.\n\n8b. Amend-Document-Processor initiates the corresponding “AWS amend API” call toward the same Site-to-site VPN, also using HTTPS/JSON with a JSON response and leaving those Azure boundaries.\n\n9a and 9b. The VPN forwards the respective branches as “Traffic routing” to the single API Gateway in AWS Cloud."
+        },
+        {
+          "id": "l2-aws-document",
+          "dimension": "relationships",
+          "claim": "Amend-Document-Processor calls the AWS amend API at API Gateway through the site-to-site VPN.",
+          "critical": true,
+          "evidence": "8b. Amend-Document-Processor initiates the corresponding “AWS amend API” call toward the same Site-to-site VPN, also using HTTPS/JSON with a JSON response and leaving those Azure boundaries.\n\n9a and 9b. The VPN forwards the respective branches as “Traffic routing” to the single API Gateway in AWS Cloud."
+        },
+        {
+          "id": "l2-aws-protocol",
+          "dimension": "protocols",
+          "claim": "Both workflow-to-AWS amend API branches use HTTPS/JSON.",
+          "critical": false,
+          "evidence": "Both labels specify HTTPS/JSON and a JSON response."
+        },
+        {
+          "id": "l2-aws-operation",
+          "dimension": "notes",
+          "claim": "The exact AWS amend operation and response schema remain unspecified.",
+          "critical": false,
+          "evidence": "The AWS amend operation and response schema are explicitly unspecified."
+        },
+        {
+          "id": "l2-gateway-invoke",
+          "dimension": "relationships",
+          "claim": "API Gateway invokes the Validation engine Lambda.",
+          "critical": true,
+          "evidence": "API Gateway initiates an “Invoke” call to the Validation engine inside Core platform."
+        },
+        {
+          "id": "l2-business-validation",
+          "dimension": "responsibilities",
+          "claim": "Validation engine performs business-rule validation.",
+          "critical": false,
+          "evidence": "The Validation engine applies business-rule validation."
+        },
+        {
+          "id": "l2-json-return",
+          "dimension": "protocols",
+          "claim": "The AWS amend API returns a JSON response to each calling sub-workflow.",
+          "critical": false,
+          "evidence": "8a. Amend-Order-Processor initiates an “AWS amend API” call toward the Site-to-site VPN, with HTTPS/JSON and a JSON response. This leaves the Sub-workflows and Inbound processing boundaries and Azure Cloud.\n\n8b. Amend-Document-Processor initiates the corresponding “AWS amend API” call toward the same Site-to-site VPN, also using HTTPS/JSON with a JSON response"
+        },
+        {
+          "id": "l2-liquid",
+          "dimension": "responsibilities",
+          "claim": "Each sub-workflow uses a Liquid template to transform the JSON response into XML.",
+          "critical": false,
+          "evidence": "Their response transformation is explicitly “JSON response → Liquid template → XML.”"
+        },
+        {
+          "id": "l2-xml-origin",
+          "dimension": "relationships",
+          "claim": "Each sub-workflow returns XML through the originating SOAP entry path to the corresponding integrator.",
+          "critical": true,
+          "evidence": "They return XML through the originating SOAP API."
+        },
+        {
+          "id": "l2-hide-errors",
+          "dimension": "conditions",
+          "claim": "Internal errors are hidden from integrators.",
+          "critical": true,
+          "evidence": "Failure handling hides internal errors"
+        },
+        {
+          "id": "l2-generic-error",
+          "dimension": "conditions",
+          "claim": "Only a generic error response is returned to integrators when internal failures occur.",
+          "critical": true,
+          "evidence": "Only a generic error response is returned through the originating SOAP entry"
+        },
+        {
+          "id": "l2-timeout",
+          "dimension": "notes",
+          "claim": "An AWS-call timeout is an example of an internal error handled generically.",
+          "critical": false,
+          "evidence": "with an AWS-call timeout given as an example"
+        },
+        {
+          "id": "l2-policy",
+          "dimension": "elements",
+          "claim": "APIM policy processing is the named container representation of the APIM policy-processing role within the same APIM service.",
+          "critical": false,
+          "evidence": "APIM policy processing, of type Azure API Management."
+        },
+        {
+          "id": "l2-legacy-policy",
+          "dimension": "relationships",
+          "claim": "Legacy SOAP API enters shared APIM policy processing.",
+          "critical": false,
+          "evidence": "Legacy SOAP API forwards into APIM policy processing."
+        },
+        {
+          "id": "l2-partner-policy",
+          "dimension": "relationships",
+          "claim": "Partner SOAP API enters shared APIM policy processing.",
+          "critical": false,
+          "evidence": "Partner SOAP API likewise forwards into APIM policy processing"
+        },
+        {
+          "id": "l2-lambda-json",
+          "dimension": "protocols",
+          "claim": "The API Gateway-to-Validation engine Lambda invocation itself returns JSON.",
+          "critical": false,
+          "evidence": "The call is qualified as “Lambda invocation” and returns a JSON response."
+        }
+      ]
+    },
+    "4": {
+      "description": "The diagram is titled “Dynamic diagram (deployment view): Partner amendment requests through SOAP to AWS validation.” Its stated purpose is to authenticate partner amendment requests, authorize the required user-profile role, validate in AWS, and return XML through the originating SOAP API.\n\nAn Azure Cloud deployment node contains an Azure API Management (APIM) deployment node, Azure AD B2C (a container and identity provider), a Roles / permissions container using Azure Cosmos DB, and an Inbound processing software-system boundary. The APIM deployment node contains Legacy SOAP API and Partner SOAP API, both containers of type SOAP API, and APIM policy processing, a container using Azure API Management. The Inbound processing boundary contains API-Route-Processor and Common-Authx-Handler, both Azure Logic Apps workflow containers, plus a nested “Sub-workflows — 2 workflows” software-system boundary containing Amend-Order-Processor and Amend-Document-Processor, also Azure Logic Apps workflow containers. Four Azure Logic Apps workflow containers are depicted in total.\n\nOutside Azure Cloud are two external software systems: Existing partner integrators and New partner integrators. A Site-to-site VPN container, labeled “Azure ↔ AWS connection,” is outside the depicted Azure and AWS cloud boundaries and connects the Azure workflows to AWS. An AWS Cloud deployment node contains an API Gateway container using AWS API Gateway and a nested Core platform software-system boundary. That Core platform boundary contains Validation engine, an AWS Lambda function container responsible for business-rule validation. API Gateway is within AWS Cloud but outside the Core platform boundary.\n\nThe numbered directed requests and their response annotations are:\n\n1a. Existing partner integrators initiate SOAP over HTTPS to Legacy SOAP API, crossing into Azure Cloud and APIM. The response is XML.\n1b. New partner integrators initiate SOAP over HTTPS to Partner SOAP API, crossing into Azure Cloud and APIM. The response is XML.\n2a. Legacy SOAP API enters APIM policy processing with XML. The response is XML.\n2b. Partner SOAP API enters APIM policy processing with XML. The response is XML.\n3. APIM policy processing initiates “Authenticate [Identity]” against Azure AD B2C, across the APIM deployment boundary but within Azure Cloud. The return annotation is “Result.” Authentication input may be basic or bearer. APIM authenticates against Azure AD B2C; the identity exchange implementation is unspecified.\n4. APIM policy processing forwards an “Authenticated request after controls” to API-Route-Processor, crossing from APIM into the Inbound processing boundary. The request is XML and the response is XML.\n5. API-Route-Processor delegates authorization to Common-Authx-Handler through a workflow call. The response is a role decision.\n6. Common-Authx-Handler queries Azure Cosmos DB, crossing out of the Inbound processing boundary while staying within Azure Cloud. The query supplies “system account name + user profile name”; the response is the required user-profile role result.\n7a. API-Route-Processor calls Amend-Order-Processor for amend_order through a workflow call, entering the nested sub-workflows boundary. This method requires ManageOrders. The response is XML.\n7b. API-Route-Processor calls Amend-Document-Processor for amend_document through a workflow call, entering the nested sub-workflows boundary. This method requires ManageDocuments. The response is XML.\n8a. Amend-Order-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, leaving the sub-workflows, Inbound processing, and Azure Cloud boundaries. The response is JSON.\n8b. Amend-Document-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, likewise leaving those Azure boundaries. The response is JSON.\n9a and 9b. The Site-to-site VPN routes each workflow's traffic to API Gateway inside AWS Cloud, over HTTPS/JSON. Each response is JSON.\n10. API Gateway invokes Validation engine across the Core platform boundary using “Lambda invocation.” The response is JSON.\n\nAPIM controls after authentication check system-account roles and require a user profile for both amendment methods. Common-Authx-Handler checks the user-profile role; this is distinct from APIM's system-account role checks. The method authorization table specifies that amend_order requires user-profile role ManageOrders and a mandatory user profile, while amend_document requires user-profile role ManageDocuments and a mandatory user profile. For a failed role check or missing profile, no explicit denial status, payload, or separate denial route is shown.\n\nBoth sub-workflows validate XML, method, and malformed base64. They wrap decoded XML in JSON. Their JSON response is transformed through a Liquid template into XML, and they return XML through the originating SOAP API.\n\nFailure handling hides internal errors, for example an AWS-call timeout. Only a generic error is returned through the originating SOAP entry: Legacy for existing integrators, Partner for new integrators. The exact error schema and status are unspecified.\n\nThe AWS amend operation and response schema are unspecified. Individual business rules and call frequency are unspecified.\n\nThe legend identifies official Azure2 / AWS4 catalog service icons and plain boxes where a service icon is inapplicable. Boundaries represent deployment or software-system domains. A solid filled arrow denotes a request or forwarding action; a dashed filled arrow denotes auxiliary authentication or a role query. Normal responses are folded into request labels rather than drawn as separate response paths. VPN legs are traffic routing. No additional behavior is implied by icon placement or line routing.\n",
+      "facts": [
+        {
+          "id": "l4-existing",
+          "dimension": "elements",
+          "claim": "Existing partner integrators are an external software system.",
+          "critical": true,
+          "evidence": "Outside Azure Cloud are two external software systems: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l4-new",
+          "dimension": "elements",
+          "claim": "New partner integrators are an external software system.",
+          "critical": true,
+          "evidence": "Outside Azure Cloud are two external software systems: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l4-apim",
+          "dimension": "elements",
+          "claim": "Azure API Management is the shared API management service.",
+          "critical": true,
+          "evidence": "An Azure Cloud deployment node contains an Azure API Management (APIM) deployment node"
+        },
+        {
+          "id": "l4-legacy",
+          "dimension": "elements",
+          "claim": "Legacy SOAP API is a SOAP entry point.",
+          "critical": true,
+          "evidence": "Legacy SOAP API and Partner SOAP API, both containers of type SOAP API"
+        },
+        {
+          "id": "l4-partner",
+          "dimension": "elements",
+          "claim": "Partner SOAP API is a distinct SOAP entry point.",
+          "critical": true,
+          "evidence": "Legacy SOAP API and Partner SOAP API, both containers of type SOAP API"
+        },
+        {
+          "id": "l4-b2c",
+          "dimension": "elements",
+          "claim": "Azure AD B2C is the identity service.",
+          "critical": false,
+          "evidence": "Azure AD B2C (a container and identity provider)"
+        },
+        {
+          "id": "l4-cosmos",
+          "dimension": "elements",
+          "claim": "The roles and permissions store uses Azure Cosmos DB.",
+          "critical": false,
+          "evidence": "a Roles / permissions container using Azure Cosmos DB"
+        },
+        {
+          "id": "l4-inbound",
+          "dimension": "elements",
+          "claim": "Inbound processing is a software system.",
+          "critical": true,
+          "evidence": "an Inbound processing software-system boundary"
+        },
+        {
+          "id": "l4-route",
+          "dimension": "elements",
+          "claim": "API-Route-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "API-Route-Processor and Common-Authx-Handler, both Azure Logic Apps workflow containers"
+        },
+        {
+          "id": "l4-authx",
+          "dimension": "elements",
+          "claim": "Common-Authx-Handler is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "API-Route-Processor and Common-Authx-Handler, both Azure Logic Apps workflow containers"
+        },
+        {
+          "id": "l4-order",
+          "dimension": "elements",
+          "claim": "Amend-Order-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "Amend-Order-Processor and Amend-Document-Processor, also Azure Logic Apps workflow containers"
+        },
+        {
+          "id": "l4-document",
+          "dimension": "elements",
+          "claim": "Amend-Document-Processor is a Logic Apps workflow.",
+          "critical": false,
+          "evidence": "Amend-Order-Processor and Amend-Document-Processor, also Azure Logic Apps workflow containers"
+        },
+        {
+          "id": "l4-gateway",
+          "dimension": "elements",
+          "claim": "The AWS entry service is API Gateway.",
+          "critical": false,
+          "evidence": "an API Gateway container using AWS API Gateway"
+        },
+        {
+          "id": "l4-core",
+          "dimension": "elements",
+          "claim": "Core platform is a software system.",
+          "critical": true,
+          "evidence": "a nested Core platform software-system boundary"
+        },
+        {
+          "id": "l4-lambda",
+          "dimension": "elements",
+          "claim": "Validation engine is an AWS Lambda function.",
+          "critical": false,
+          "evidence": "Validation engine, an AWS Lambda function container"
+        },
+        {
+          "id": "l4-vpn",
+          "dimension": "elements",
+          "claim": "There is an explicit site-to-site VPN connection.",
+          "critical": true,
+          "evidence": "A Site-to-site VPN container, labeled “Azure ↔ AWS connection,”"
+        },
+        {
+          "id": "l4-azure-apim",
+          "dimension": "boundaries",
+          "claim": "APIM belongs to Azure Cloud.",
+          "critical": true,
+          "evidence": "An Azure Cloud deployment node contains an Azure API Management (APIM) deployment node"
+        },
+        {
+          "id": "l4-azure-b2c",
+          "dimension": "boundaries",
+          "claim": "Azure AD B2C belongs to Azure Cloud, alongside APIM and Inbound processing.",
+          "critical": true,
+          "evidence": "An Azure Cloud deployment node contains an Azure API Management (APIM) deployment node, Azure AD B2C (a container and identity provider), a Roles / permissions container using Azure Cosmos DB, and an Inbound processing software-system boundary."
+        },
+        {
+          "id": "l4-azure-cosmos",
+          "dimension": "boundaries",
+          "claim": "The Cosmos roles store belongs to Azure Cloud, alongside APIM and Inbound processing.",
+          "critical": true,
+          "evidence": "An Azure Cloud deployment node contains an Azure API Management (APIM) deployment node, Azure AD B2C (a container and identity provider), a Roles / permissions container using Azure Cosmos DB, and an Inbound processing software-system boundary."
+        },
+        {
+          "id": "l4-azure-inbound",
+          "dimension": "boundaries",
+          "claim": "Inbound processing belongs to Azure Cloud.",
+          "critical": true,
+          "evidence": "An Azure Cloud deployment node contains an Azure API Management (APIM) deployment node, Azure AD B2C (a container and identity provider), a Roles / permissions container using Azure Cosmos DB, and an Inbound processing software-system boundary."
+        },
+        {
+          "id": "l4-apim-apis",
+          "dimension": "boundaries",
+          "claim": "Both SOAP APIs belong to the same APIM service.",
+          "critical": true,
+          "evidence": "The APIM deployment node contains Legacy SOAP API and Partner SOAP API, both containers of type SOAP API, and APIM policy processing, a container using Azure API Management."
+        },
+        {
+          "id": "l4-inbound-workers",
+          "dimension": "boundaries",
+          "claim": "Inbound processing owns API-Route-Processor and Common-Authx-Handler.",
+          "critical": true,
+          "evidence": "The Inbound processing boundary contains API-Route-Processor and Common-Authx-Handler"
+        },
+        {
+          "id": "l4-subgroup",
+          "dimension": "boundaries",
+          "claim": "A nested sub-workflows group in Inbound processing contains the order and document workflows.",
+          "critical": true,
+          "evidence": "plus a nested “Sub-workflows — 2 workflows” software-system boundary containing Amend-Order-Processor and Amend-Document-Processor"
+        },
+        {
+          "id": "l4-aws-gateway",
+          "dimension": "boundaries",
+          "claim": "API Gateway belongs to AWS Cloud outside Core platform.",
+          "critical": true,
+          "evidence": "API Gateway is within AWS Cloud but outside the Core platform boundary."
+        },
+        {
+          "id": "l4-aws-core",
+          "dimension": "boundaries",
+          "claim": "Core platform belongs to AWS Cloud.",
+          "critical": true,
+          "evidence": "An AWS Cloud deployment node contains an API Gateway container using AWS API Gateway and a nested Core platform software-system boundary."
+        },
+        {
+          "id": "l4-core-engine",
+          "dimension": "boundaries",
+          "claim": "Core platform contains Validation engine.",
+          "critical": true,
+          "evidence": "That Core platform boundary contains Validation engine"
+        },
+        {
+          "id": "l4-external-boundaries",
+          "dimension": "boundaries",
+          "claim": "Both partner integrator systems are outside the cloud ownership boundaries.",
+          "critical": true,
+          "evidence": "Outside Azure Cloud are two external software systems: Existing partner integrators and New partner integrators."
+        },
+        {
+          "id": "l4-vpn-join",
+          "dimension": "relationships",
+          "claim": "The site-to-site VPN connects Azure and AWS.",
+          "critical": true,
+          "evidence": "A Site-to-site VPN container, labeled “Azure ↔ AWS connection,” is outside the depicted Azure and AWS cloud boundaries and connects the Azure workflows to AWS."
+        },
+        {
+          "id": "l4-existing-entry",
+          "dimension": "relationships",
+          "claim": "Existing integrators initiate requests at Legacy SOAP API.",
+          "critical": true,
+          "evidence": "Existing partner integrators initiate SOAP over HTTPS to Legacy SOAP API"
+        },
+        {
+          "id": "l4-new-entry",
+          "dimension": "relationships",
+          "claim": "New integrators initiate requests at Partner SOAP API.",
+          "critical": true,
+          "evidence": "New partner integrators initiate SOAP over HTTPS to Partner SOAP API"
+        },
+        {
+          "id": "l4-soap-protocol",
+          "dimension": "protocols",
+          "claim": "Both entry branches use SOAP over HTTPS and return XML.",
+          "critical": false,
+          "evidence": "1a. Existing partner integrators initiate SOAP over HTTPS to Legacy SOAP API, crossing into Azure Cloud and APIM. The response is XML.\n1b. New partner integrators initiate SOAP over HTTPS to Partner SOAP API, crossing into Azure Cloud and APIM. The response is XML."
+        },
+        {
+          "id": "l4-authenticate",
+          "dimension": "relationships",
+          "claim": "APIM authenticates incoming requests against Azure AD B2C.",
+          "critical": true,
+          "evidence": "APIM policy processing initiates “Authenticate [Identity]” against Azure AD B2C"
+        },
+        {
+          "id": "l4-auth-input",
+          "dimension": "conditions",
+          "claim": "Authentication input can be basic or bearer.",
+          "critical": false,
+          "evidence": "Authentication input may be basic or bearer."
+        },
+        {
+          "id": "l4-system-role",
+          "dimension": "responsibilities",
+          "claim": "APIM checks system-account roles.",
+          "critical": true,
+          "evidence": "APIM controls after authentication check system-account roles"
+        },
+        {
+          "id": "l4-profile",
+          "dimension": "conditions",
+          "claim": "A user profile is mandatory for both amendment methods.",
+          "critical": true,
+          "evidence": "require a user profile for both amendment methods."
+        },
+        {
+          "id": "l4-forward",
+          "dimension": "relationships",
+          "claim": "After authentication and APIM controls, APIM sends the authenticated request to API-Route-Processor.",
+          "critical": true,
+          "evidence": "APIM policy processing forwards an “Authenticated request after controls” to API-Route-Processor"
+        },
+        {
+          "id": "l4-delegate",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor delegates authorization to Common-Authx-Handler.",
+          "critical": true,
+          "evidence": "API-Route-Processor delegates authorization to Common-Authx-Handler through a workflow call."
+        },
+        {
+          "id": "l4-query",
+          "dimension": "relationships",
+          "claim": "Common-Authx-Handler queries Cosmos DB for the required user-profile role.",
+          "critical": true,
+          "evidence": "Common-Authx-Handler queries Azure Cosmos DB"
+        },
+        {
+          "id": "l4-query-keys",
+          "dimension": "protocols",
+          "claim": "The role query supplies both system account name and user profile name.",
+          "critical": false,
+          "evidence": "The query supplies “system account name + user profile name”"
+        },
+        {
+          "id": "l4-user-role",
+          "dimension": "responsibilities",
+          "claim": "Common-Authx-Handler checks the required user-profile role separately from APIM system-account role checking.",
+          "critical": true,
+          "evidence": "Common-Authx-Handler checks the user-profile role; this is distinct from APIM's system-account role checks."
+        },
+        {
+          "id": "l4-route-order",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor routes amend_order to Amend-Order-Processor.",
+          "critical": true,
+          "evidence": "API-Route-Processor calls Amend-Order-Processor for amend_order through a workflow call"
+        },
+        {
+          "id": "l4-route-document",
+          "dimension": "relationships",
+          "claim": "API-Route-Processor routes amend_document to Amend-Document-Processor.",
+          "critical": true,
+          "evidence": "API-Route-Processor calls Amend-Document-Processor for amend_document through a workflow call"
+        },
+        {
+          "id": "l4-authorization-first",
+          "dimension": "conditions",
+          "claim": "Method-specific routing follows authorization.",
+          "critical": true,
+          "evidence": "6. Common-Authx-Handler queries Azure Cosmos DB, crossing out of the Inbound processing boundary while staying within Azure Cloud. The query supplies “system account name + user profile name”; the response is the required user-profile role result.\n7a. API-Route-Processor calls Amend-Order-Processor"
+        },
+        {
+          "id": "l4-order-role",
+          "dimension": "conditions",
+          "claim": "amend_order requires the user-profile role ManageOrders.",
+          "critical": true,
+          "evidence": "amend_order requires user-profile role ManageOrders"
+        },
+        {
+          "id": "l4-document-role",
+          "dimension": "conditions",
+          "claim": "amend_document requires the user-profile role ManageDocuments.",
+          "critical": true,
+          "evidence": "amend_document requires user-profile role ManageDocuments"
+        },
+        {
+          "id": "l4-no-universal-orders",
+          "dimension": "conditions",
+          "claim": "The amendment role policy does not impose a universal ManageOrders requirement on amend_document.",
+          "critical": true,
+          "evidence": "The method authorization table specifies that amend_order requires user-profile role ManageOrders and a mandatory user profile, while amend_document requires user-profile role ManageDocuments and a mandatory user profile."
+        },
+        {
+          "id": "l4-xml-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow validates request XML.",
+          "critical": false,
+          "evidence": "Both sub-workflows validate XML, method, and malformed base64."
+        },
+        {
+          "id": "l4-method-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow validates the method.",
+          "critical": false,
+          "evidence": "Both sub-workflows validate XML, method, and malformed base64."
+        },
+        {
+          "id": "l4-base64-validation",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow checks malformed base64 content.",
+          "critical": false,
+          "evidence": "Both sub-workflows validate XML, method, and malformed base64."
+        },
+        {
+          "id": "l4-wrap-xml",
+          "dimension": "responsibilities",
+          "claim": "Each amendment sub-workflow wraps decoded XML in JSON.",
+          "critical": false,
+          "evidence": "They wrap decoded XML in JSON."
+        },
+        {
+          "id": "l4-aws-order",
+          "dimension": "relationships",
+          "claim": "Amend-Order-Processor calls the AWS amend API at API Gateway through the site-to-site VPN.",
+          "critical": true,
+          "evidence": "8a. Amend-Order-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, leaving the sub-workflows, Inbound processing, and Azure Cloud boundaries. The response is JSON.\n8b. Amend-Document-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, likewise leaving those Azure boundaries. The response is JSON.\n9a and 9b. The Site-to-site VPN routes each workflow's traffic to API Gateway inside AWS Cloud"
+        },
+        {
+          "id": "l4-aws-document",
+          "dimension": "relationships",
+          "claim": "Amend-Document-Processor calls the AWS amend API at API Gateway through the site-to-site VPN.",
+          "critical": true,
+          "evidence": "8b. Amend-Document-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, likewise leaving those Azure boundaries. The response is JSON.\n9a and 9b. The Site-to-site VPN routes each workflow's traffic to API Gateway inside AWS Cloud"
+        },
+        {
+          "id": "l4-aws-protocol",
+          "dimension": "protocols",
+          "claim": "Both workflow-to-AWS amend API branches use HTTPS/JSON.",
+          "critical": false,
+          "evidence": "The Site-to-site VPN routes each workflow's traffic to API Gateway inside AWS Cloud, over HTTPS/JSON."
+        },
+        {
+          "id": "l4-aws-operation",
+          "dimension": "notes",
+          "claim": "The exact AWS amend operation and response schema remain unspecified.",
+          "critical": false,
+          "evidence": "The AWS amend operation and response schema are unspecified."
+        },
+        {
+          "id": "l4-gateway-invoke",
+          "dimension": "relationships",
+          "claim": "API Gateway invokes the Validation engine Lambda.",
+          "critical": true,
+          "evidence": "API Gateway invokes Validation engine across the Core platform boundary using “Lambda invocation.”"
+        },
+        {
+          "id": "l4-business-validation",
+          "dimension": "responsibilities",
+          "claim": "Validation engine performs business-rule validation.",
+          "critical": false,
+          "evidence": "responsible for business-rule validation"
+        },
+        {
+          "id": "l4-json-return",
+          "dimension": "protocols",
+          "claim": "The AWS amend API returns a JSON response to each calling sub-workflow.",
+          "critical": false,
+          "evidence": "8a. Amend-Order-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, leaving the sub-workflows, Inbound processing, and Azure Cloud boundaries. The response is JSON.\n8b. Amend-Document-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, likewise leaving those Azure boundaries. The response is JSON."
+        },
+        {
+          "id": "l4-liquid",
+          "dimension": "responsibilities",
+          "claim": "Each sub-workflow uses a Liquid template to transform the JSON response into XML.",
+          "critical": false,
+          "evidence": "Their JSON response is transformed through a Liquid template into XML"
+        },
+        {
+          "id": "l4-xml-origin",
+          "dimension": "relationships",
+          "claim": "Each sub-workflow returns XML through the originating SOAP entry path to the corresponding integrator.",
+          "critical": true,
+          "evidence": "they return XML through the originating SOAP API."
+        },
+        {
+          "id": "l4-hide-errors",
+          "dimension": "conditions",
+          "claim": "Internal errors are hidden from integrators.",
+          "critical": true,
+          "evidence": "Failure handling hides internal errors"
+        },
+        {
+          "id": "l4-generic-error",
+          "dimension": "conditions",
+          "claim": "Only a generic error response is returned to integrators when internal failures occur.",
+          "critical": true,
+          "evidence": "Only a generic error is returned through the originating SOAP entry"
+        },
+        {
+          "id": "l4-timeout",
+          "dimension": "notes",
+          "claim": "An AWS-call timeout is an example of an internal error handled generically.",
+          "critical": false,
+          "evidence": "for example an AWS-call timeout"
+        },
+        {
+          "id": "l4-policy",
+          "dimension": "elements",
+          "claim": "APIM policy processing is the named container representation of the APIM policy-processing role within the same APIM service.",
+          "critical": false,
+          "evidence": "APIM policy processing, a container using Azure API Management."
+        },
+        {
+          "id": "l4-legacy-policy",
+          "dimension": "relationships",
+          "claim": "Legacy SOAP API enters shared APIM policy processing.",
+          "critical": false,
+          "evidence": "Legacy SOAP API enters APIM policy processing with XML."
+        },
+        {
+          "id": "l4-partner-policy",
+          "dimension": "relationships",
+          "claim": "Partner SOAP API enters shared APIM policy processing.",
+          "critical": false,
+          "evidence": "Partner SOAP API enters APIM policy processing with XML."
+        },
+        {
+          "id": "l4-lambda-json",
+          "dimension": "protocols",
+          "claim": "The API Gateway-to-Validation engine Lambda invocation itself returns JSON.",
+          "critical": false,
+          "evidence": "API Gateway invokes Validation engine across the Core platform boundary using “Lambda invocation.” The response is JSON."
+        }
+      ]
+    }
+  },
+  "pairs": {
+    "0-2": [
+      {
+        "before": [
+          "l0-existing"
+        ],
+        "after": [
+          "l2-existing"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-new"
+        ],
+        "after": [
+          "l2-new"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-apim"
+        ],
+        "after": [
+          "l2-apim",
+          "l2-policy"
+        ],
+        "status": "preserved",
+        "reason": "The APIM service is retained. Naming its existing authentication/control/forwarding role as APIM policy processing inside that same service is faithful C4 decomposition; no separate hosting, independent lifecycle, third SOAP endpoint or changed responsibility is asserted."
+      },
+      {
+        "before": [
+          "l0-legacy"
+        ],
+        "after": [
+          "l2-legacy"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-partner"
+        ],
+        "after": [
+          "l2-partner"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-b2c"
+        ],
+        "after": [
+          "l2-b2c"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-cosmos"
+        ],
+        "after": [
+          "l2-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-inbound"
+        ],
+        "after": [
+          "l2-inbound"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-route"
+        ],
+        "after": [
+          "l2-route"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-authx"
+        ],
+        "after": [
+          "l2-authx"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-order"
+        ],
+        "after": [
+          "l2-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-document"
+        ],
+        "after": [
+          "l2-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-gateway"
+        ],
+        "after": [
+          "l2-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-core"
+        ],
+        "after": [
+          "l2-core"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-lambda"
+        ],
+        "after": [
+          "l2-lambda"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-vpn"
+        ],
+        "after": [
+          "l2-vpn"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-azure-apim"
+        ],
+        "after": [
+          "l2-azure-apim"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-azure-b2c"
+        ],
+        "after": [
+          "l2-azure-b2c"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-azure-cosmos"
+        ],
+        "after": [
+          "l2-azure-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-azure-inbound"
+        ],
+        "after": [
+          "l2-azure-inbound"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-apim-apis"
+        ],
+        "after": [
+          "l2-apim-apis"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-inbound-workers"
+        ],
+        "after": [
+          "l2-inbound-workers"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-subgroup"
+        ],
+        "after": [
+          "l2-subgroup"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-gateway"
+        ],
+        "after": [
+          "l2-aws-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-core"
+        ],
+        "after": [
+          "l2-aws-core"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-core-engine"
+        ],
+        "after": [
+          "l2-core-engine"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-external-boundaries"
+        ],
+        "after": [
+          "l2-external-boundaries"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-vpn-join"
+        ],
+        "after": [
+          "l2-vpn-join"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-existing-entry"
+        ],
+        "after": [
+          "l2-existing-entry",
+          "l2-legacy-policy"
+        ],
+        "status": "preserved",
+        "reason": "The same caller-specific SOAP entry into APIM is retained and expanded into entry plus the same APIM service's existing policy processing. This introduces no independently addressed endpoint or new connectivity beyond the source APIM entry."
+      },
+      {
+        "before": [
+          "l0-new-entry"
+        ],
+        "after": [
+          "l2-new-entry",
+          "l2-partner-policy"
+        ],
+        "status": "preserved",
+        "reason": "The same caller-specific SOAP entry into APIM is retained and expanded into entry plus the same APIM service's existing policy processing. This introduces no independently addressed endpoint or new connectivity beyond the source APIM entry."
+      },
+      {
+        "before": [
+          "l0-soap-protocol"
+        ],
+        "after": [
+          "l2-soap-protocol"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-authenticate"
+        ],
+        "after": [
+          "l2-authenticate"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-auth-input"
+        ],
+        "after": [
+          "l2-auth-input"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-system-role"
+        ],
+        "after": [
+          "l2-system-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-profile"
+        ],
+        "after": [
+          "l2-profile"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-forward"
+        ],
+        "after": [
+          "l2-forward"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-delegate"
+        ],
+        "after": [
+          "l2-delegate"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-query"
+        ],
+        "after": [
+          "l2-query"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-query-keys"
+        ],
+        "after": [
+          "l2-query-keys"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-user-role"
+        ],
+        "after": [
+          "l2-user-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-route-order"
+        ],
+        "after": [
+          "l2-route-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-route-document"
+        ],
+        "after": [
+          "l2-route-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-authorization-first"
+        ],
+        "after": [
+          "l2-authorization-first"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-order-role"
+        ],
+        "after": [
+          "l2-order-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-document-role"
+        ],
+        "after": [
+          "l2-document-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-no-universal-orders"
+        ],
+        "after": [
+          "l2-no-universal-orders"
+        ],
+        "status": "preserved",
+        "reason": "The complete method-specific table assigns ManageOrders to amend_order and ManageDocuments to amend_document. In context this retains the absence of a universal ManageOrders requirement for amend_document; the exact negative sentence need not be repeated. It does not assert that every other system-account role check disappears."
+      },
+      {
+        "before": [
+          "l0-xml-validation"
+        ],
+        "after": [
+          "l2-xml-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-method-validation"
+        ],
+        "after": [
+          "l2-method-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-base64-validation"
+        ],
+        "after": [
+          "l2-base64-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-wrap-xml"
+        ],
+        "after": [
+          "l2-wrap-xml"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-order"
+        ],
+        "after": [
+          "l2-aws-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-document"
+        ],
+        "after": [
+          "l2-aws-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-protocol"
+        ],
+        "after": [
+          "l2-aws-protocol"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-operation"
+        ],
+        "after": [
+          "l2-aws-operation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-gateway-invoke"
+        ],
+        "after": [
+          "l2-gateway-invoke"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-business-validation"
+        ],
+        "after": [
+          "l2-business-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-json-return"
+        ],
+        "after": [
+          "l2-json-return"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-liquid"
+        ],
+        "after": [
+          "l2-liquid"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-xml-origin"
+        ],
+        "after": [
+          "l2-xml-origin"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-hide-errors"
+        ],
+        "after": [
+          "l2-hide-errors"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-generic-error"
+        ],
+        "after": [
+          "l2-generic-error"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-timeout"
+        ],
+        "after": [
+          "l2-timeout"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [],
+        "after": [
+          "l2-lambda-json"
+        ],
+        "status": "added",
+        "reason": "L0 specifies the JSON response returned by the AWS amend API to a sub-workflow, but does not specify the response representation on the internal API Gateway-to-Lambda invocation. Assigning JSON specifically to that internal leg adds a subordinate protocol/payload detail; it does not invent the invocation or an endpoint."
+      }
+    ],
+    "2-4": [
+      {
+        "before": [
+          "l2-existing"
+        ],
+        "after": [
+          "l4-existing"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-new"
+        ],
+        "after": [
+          "l4-new"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-apim"
+        ],
+        "after": [
+          "l4-apim"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-legacy"
+        ],
+        "after": [
+          "l4-legacy"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-partner"
+        ],
+        "after": [
+          "l4-partner"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-b2c"
+        ],
+        "after": [
+          "l4-b2c"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-cosmos"
+        ],
+        "after": [
+          "l4-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-inbound"
+        ],
+        "after": [
+          "l4-inbound"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-route"
+        ],
+        "after": [
+          "l4-route"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-authx"
+        ],
+        "after": [
+          "l4-authx"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-order"
+        ],
+        "after": [
+          "l4-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-document"
+        ],
+        "after": [
+          "l4-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-gateway"
+        ],
+        "after": [
+          "l4-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-core"
+        ],
+        "after": [
+          "l4-core"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-lambda"
+        ],
+        "after": [
+          "l4-lambda"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-vpn"
+        ],
+        "after": [
+          "l4-vpn"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-azure-apim"
+        ],
+        "after": [
+          "l4-azure-apim"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-azure-b2c"
+        ],
+        "after": [
+          "l4-azure-b2c"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-azure-cosmos"
+        ],
+        "after": [
+          "l4-azure-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-azure-inbound"
+        ],
+        "after": [
+          "l4-azure-inbound"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-apim-apis"
+        ],
+        "after": [
+          "l4-apim-apis"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-inbound-workers"
+        ],
+        "after": [
+          "l4-inbound-workers"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-subgroup"
+        ],
+        "after": [
+          "l4-subgroup"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-aws-gateway"
+        ],
+        "after": [
+          "l4-aws-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-aws-core"
+        ],
+        "after": [
+          "l4-aws-core"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-core-engine"
+        ],
+        "after": [
+          "l4-core-engine"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-external-boundaries"
+        ],
+        "after": [
+          "l4-external-boundaries"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-vpn-join"
+        ],
+        "after": [
+          "l4-vpn-join"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-existing-entry"
+        ],
+        "after": [
+          "l4-existing-entry"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-new-entry"
+        ],
+        "after": [
+          "l4-new-entry"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-soap-protocol"
+        ],
+        "after": [
+          "l4-soap-protocol"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-authenticate"
+        ],
+        "after": [
+          "l4-authenticate"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-auth-input"
+        ],
+        "after": [
+          "l4-auth-input"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-system-role"
+        ],
+        "after": [
+          "l4-system-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-profile"
+        ],
+        "after": [
+          "l4-profile"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-forward"
+        ],
+        "after": [
+          "l4-forward"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-delegate"
+        ],
+        "after": [
+          "l4-delegate"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-query"
+        ],
+        "after": [
+          "l4-query"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-query-keys"
+        ],
+        "after": [
+          "l4-query-keys"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-user-role"
+        ],
+        "after": [
+          "l4-user-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-route-order"
+        ],
+        "after": [
+          "l4-route-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-route-document"
+        ],
+        "after": [
+          "l4-route-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-authorization-first"
+        ],
+        "after": [
+          "l4-authorization-first"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-order-role"
+        ],
+        "after": [
+          "l4-order-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-document-role"
+        ],
+        "after": [
+          "l4-document-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-no-universal-orders"
+        ],
+        "after": [
+          "l4-no-universal-orders"
+        ],
+        "status": "preserved",
+        "reason": "The complete method-specific table assigns ManageOrders to amend_order and ManageDocuments to amend_document. In context this retains the absence of a universal ManageOrders requirement for amend_document; the exact negative sentence need not be repeated. It does not assert that every other system-account role check disappears."
+      },
+      {
+        "before": [
+          "l2-xml-validation"
+        ],
+        "after": [
+          "l4-xml-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-method-validation"
+        ],
+        "after": [
+          "l4-method-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-base64-validation"
+        ],
+        "after": [
+          "l4-base64-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-wrap-xml"
+        ],
+        "after": [
+          "l4-wrap-xml"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-aws-order"
+        ],
+        "after": [
+          "l4-aws-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-aws-document"
+        ],
+        "after": [
+          "l4-aws-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-aws-protocol"
+        ],
+        "after": [
+          "l4-aws-protocol"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-aws-operation"
+        ],
+        "after": [
+          "l4-aws-operation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-gateway-invoke"
+        ],
+        "after": [
+          "l4-gateway-invoke"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-business-validation"
+        ],
+        "after": [
+          "l4-business-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-json-return"
+        ],
+        "after": [
+          "l4-json-return"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-liquid"
+        ],
+        "after": [
+          "l4-liquid"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-xml-origin"
+        ],
+        "after": [
+          "l4-xml-origin"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-hide-errors"
+        ],
+        "after": [
+          "l4-hide-errors"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-generic-error"
+        ],
+        "after": [
+          "l4-generic-error"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-timeout"
+        ],
+        "after": [
+          "l4-timeout"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l2-policy"
+        ],
+        "after": [
+          "l4-policy"
+        ],
+        "status": "preserved",
+        "reason": "The same within-APIM policy-processing representation is retained."
+      },
+      {
+        "before": [
+          "l2-legacy-policy"
+        ],
+        "after": [
+          "l4-legacy-policy"
+        ],
+        "status": "preserved",
+        "reason": "The same within-APIM policy-processing representation is retained."
+      },
+      {
+        "before": [
+          "l2-partner-policy"
+        ],
+        "after": [
+          "l4-partner-policy"
+        ],
+        "status": "preserved",
+        "reason": "The same within-APIM policy-processing representation is retained."
+      },
+      {
+        "before": [
+          "l2-lambda-json"
+        ],
+        "after": [
+          "l4-lambda-json"
+        ],
+        "status": "preserved",
+        "reason": "The explicitly JSON response on the Gateway-to-Lambda invocation persists."
+      }
+    ],
+    "0-4": [
+      {
+        "before": [
+          "l0-existing"
+        ],
+        "after": [
+          "l4-existing"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-new"
+        ],
+        "after": [
+          "l4-new"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-apim"
+        ],
+        "after": [
+          "l4-apim",
+          "l4-policy"
+        ],
+        "status": "preserved",
+        "reason": "The APIM service is retained. Naming its existing authentication/control/forwarding role as APIM policy processing inside that same service is faithful C4 decomposition; no separate hosting, independent lifecycle, third SOAP endpoint or changed responsibility is asserted."
+      },
+      {
+        "before": [
+          "l0-legacy"
+        ],
+        "after": [
+          "l4-legacy"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-partner"
+        ],
+        "after": [
+          "l4-partner"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-b2c"
+        ],
+        "after": [
+          "l4-b2c"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-cosmos"
+        ],
+        "after": [
+          "l4-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-inbound"
+        ],
+        "after": [
+          "l4-inbound"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-route"
+        ],
+        "after": [
+          "l4-route"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-authx"
+        ],
+        "after": [
+          "l4-authx"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-order"
+        ],
+        "after": [
+          "l4-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-document"
+        ],
+        "after": [
+          "l4-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-gateway"
+        ],
+        "after": [
+          "l4-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-core"
+        ],
+        "after": [
+          "l4-core"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-lambda"
+        ],
+        "after": [
+          "l4-lambda"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-vpn"
+        ],
+        "after": [
+          "l4-vpn"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-azure-apim"
+        ],
+        "after": [
+          "l4-azure-apim"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-azure-b2c"
+        ],
+        "after": [
+          "l4-azure-b2c"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-azure-cosmos"
+        ],
+        "after": [
+          "l4-azure-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-azure-inbound"
+        ],
+        "after": [
+          "l4-azure-inbound"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-apim-apis"
+        ],
+        "after": [
+          "l4-apim-apis"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-inbound-workers"
+        ],
+        "after": [
+          "l4-inbound-workers"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-subgroup"
+        ],
+        "after": [
+          "l4-subgroup"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-gateway"
+        ],
+        "after": [
+          "l4-aws-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-core"
+        ],
+        "after": [
+          "l4-aws-core"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-core-engine"
+        ],
+        "after": [
+          "l4-core-engine"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-external-boundaries"
+        ],
+        "after": [
+          "l4-external-boundaries"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-vpn-join"
+        ],
+        "after": [
+          "l4-vpn-join"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-existing-entry"
+        ],
+        "after": [
+          "l4-existing-entry",
+          "l4-legacy-policy"
+        ],
+        "status": "preserved",
+        "reason": "The same caller-specific SOAP entry into APIM is retained and expanded into entry plus the same APIM service's existing policy processing. This introduces no independently addressed endpoint or new connectivity beyond the source APIM entry."
+      },
+      {
+        "before": [
+          "l0-new-entry"
+        ],
+        "after": [
+          "l4-new-entry",
+          "l4-partner-policy"
+        ],
+        "status": "preserved",
+        "reason": "The same caller-specific SOAP entry into APIM is retained and expanded into entry plus the same APIM service's existing policy processing. This introduces no independently addressed endpoint or new connectivity beyond the source APIM entry."
+      },
+      {
+        "before": [
+          "l0-soap-protocol"
+        ],
+        "after": [
+          "l4-soap-protocol"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-authenticate"
+        ],
+        "after": [
+          "l4-authenticate"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-auth-input"
+        ],
+        "after": [
+          "l4-auth-input"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-system-role"
+        ],
+        "after": [
+          "l4-system-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-profile"
+        ],
+        "after": [
+          "l4-profile"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-forward"
+        ],
+        "after": [
+          "l4-forward"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-delegate"
+        ],
+        "after": [
+          "l4-delegate"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-query"
+        ],
+        "after": [
+          "l4-query"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-query-keys"
+        ],
+        "after": [
+          "l4-query-keys"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-user-role"
+        ],
+        "after": [
+          "l4-user-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-route-order"
+        ],
+        "after": [
+          "l4-route-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-route-document"
+        ],
+        "after": [
+          "l4-route-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-authorization-first"
+        ],
+        "after": [
+          "l4-authorization-first"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-order-role"
+        ],
+        "after": [
+          "l4-order-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-document-role"
+        ],
+        "after": [
+          "l4-document-role"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-no-universal-orders"
+        ],
+        "after": [
+          "l4-no-universal-orders"
+        ],
+        "status": "preserved",
+        "reason": "The complete method-specific table assigns ManageOrders to amend_order and ManageDocuments to amend_document. In context this retains the absence of a universal ManageOrders requirement for amend_document; the exact negative sentence need not be repeated. It does not assert that every other system-account role check disappears."
+      },
+      {
+        "before": [
+          "l0-xml-validation"
+        ],
+        "after": [
+          "l4-xml-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-method-validation"
+        ],
+        "after": [
+          "l4-method-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-base64-validation"
+        ],
+        "after": [
+          "l4-base64-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-wrap-xml"
+        ],
+        "after": [
+          "l4-wrap-xml"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-order"
+        ],
+        "after": [
+          "l4-aws-order"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-document"
+        ],
+        "after": [
+          "l4-aws-document"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-protocol"
+        ],
+        "after": [
+          "l4-aws-protocol"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-aws-operation"
+        ],
+        "after": [
+          "l4-aws-operation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-gateway-invoke"
+        ],
+        "after": [
+          "l4-gateway-invoke"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-business-validation"
+        ],
+        "after": [
+          "l4-business-validation"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-json-return"
+        ],
+        "after": [
+          "l4-json-return"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-liquid"
+        ],
+        "after": [
+          "l4-liquid"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-xml-origin"
+        ],
+        "after": [
+          "l4-xml-origin"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-hide-errors"
+        ],
+        "after": [
+          "l4-hide-errors"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-generic-error"
+        ],
+        "after": [
+          "l4-generic-error"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [
+          "l0-timeout"
+        ],
+        "after": [
+          "l4-timeout"
+        ],
+        "status": "preserved",
+        "reason": "The same proposition, including the actors, scope and stated qualifiers, is retained in context."
+      },
+      {
+        "before": [],
+        "after": [
+          "l4-lambda-json"
+        ],
+        "status": "added",
+        "reason": "L0 specifies the JSON response returned by the AWS amend API to a sub-workflow, but does not specify the response representation on the internal API Gateway-to-Lambda invocation. Assigning JSON specifically to that internal leg adds a subordinate protocol/payload detail; it does not invent the invocation or an endpoint."
+      }
+    ]
+  },
+  "judgeNotes": [
+    "Atomic propositions are assigned to a single dimension; directed relationships carry their call direction rather than duplicating that information in the directions dimension. Compound sentences are split where they assert different responsibilities or controls. Shared memberships and repeated branch protocols are grouped only when semantically identical.",
+    "Source authoring instructions, deleted scope, superseded universal ManageOrders wording, synthetic-test caveats, diagram presentation instructions, titles, legends and icon catalog choices are excluded from architecture facts. The prohibition on inventing token exchange is not extracted as a system proposition. L2/L4 explicitly keeping that implementation unspecified adds no implementation or real-system constraint, and their readout-only identity-implementation absence is likewise excluded.",
+    "C4 type/technology annotations, count summaries of the same four workflows, the connection representation for the VPN and policy-processing representation of the same APIM service are accepted as faithful notation. No separate APIM hosting/lifecycle or third SOAP endpoint is asserted. The nested Sub-workflows software-system label is treated as a grouping of the same two existing workflows inside the same Inbound owner, with no independent owner or lifecycle asserted.",
+    "Readout-only absences about denial payloads/status/routes, business-rule lists, call frequency, and exact generic error schemas are not new system facts. Their absence does not prove an allow/deny outcome or a real-system constraint. No unstated vendor behavior is inferred.",
+    "L4 describes the integrators as external software systems outside Azure; its whole topology places AWS elsewhere and gives them only Azure entry branches. I read this as the same external actors, not newly AWS-owned integrators. VPN placement outside boxes expresses a cross-cloud connection without changing its owner.",
+    "Workflow-call and Lambda-invocation labels describe already-stated calls to workflows and a Lambda. XML on the within-APIM / APIM-forwarding path and role-decision/result labels faithfully elaborate the source XML request/response and authorization flow. The one distinct extra payload assertion is JSON on the internal Lambda response, separated from the source JSON response returned to each sub-workflow.",
+    "No explicit denial behavior is inferred from mandatory-profile and role prerequisites. Authorization-first sequencing remains in the numbered query-then-routing flow. Both method-role mappings remain distinct and no universal ManageOrders control is asserted."
+  ],
+  "sourceAttestation": {
+    "allowedInputs": [
+      "/tmp/diagram-full-roundtrip.RZnmyG/l0-03.txt",
+      "/tmp/diagram-full-roundtrip.RZnmyG/case-03/l2.txt",
+      "/tmp/diagram-full-roundtrip.RZnmyG/case-03/l4.txt",
+      "/workspace/skills/incubator/architecture-diagram/evals/roundtrip.md",
+      "/workspace/skills/incubator/architecture-diagram/evals/roundtrip.mjs"
+    ],
+    "actualSources": "Read only the three permitted frozen description files and the two permitted generic protocol/code files. Did not inspect images, SVG, XML, diagram sources, links, other cases, pilot results, reports or other agents. No model endpoint calls.",
+    "descriptionPreservation": "Descriptions are loaded as UTF-8 from the original input files and embedded without trimming or rewriting.",
+    "limits": "Semantic judgments are conditional on description-only evidence and extraction completeness. Coverage/evidence validation does not validate the architecture or prove the ledger exhaustive. APIM and sub-workflow C4 renderings are interpreted under the specified faithful-notation allowance; no independent lifecycle is inferred."
+  }
+}

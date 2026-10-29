@@ -1,0 +1,3395 @@
+{
+  "levels": {
+    "0": {
+      "description": "Dynamic diagram (deployment view): Private cross-cloud API access from Azure to AWS.\nRequirement: Azure integration workloads privately call internal AWS API Gateway REST APIs. DNS resolution and API traffic are distinct flows, labeled A and B.\n\nAzure Cloud contains three spoke VNets, one each for dev, test and prod. Callers are Azure Function Apps or Logic Apps in those spokes. Show a representative Function App with the Logic Apps alternative and all three environments stated; this does not mean three extra application flows. Spokes connect to a hub VNet containing Azure Firewall and Azure VPN Gateway, and to a separate DNS extension VNet containing Azure DNS Private Resolver inbound and outbound endpoints. The outbound endpoint has a DNS forwarding ruleset for *.execute-api.{region}.amazonaws.com targeting the IP addresses of the AWS Route 53 Resolver inbound endpoint.\n\nAn IPsec site-to-site VPN joins Azure VPN Gateway to AWS Site-to-Site VPN attached to AWS Transit Gateway. Draw the VPN connection explicitly between the clouds. AWS Cloud and a Region contain a network services account and three workload accounts, one per environment (dev, test, prod). Transit Gateway is an infrastructure node in the network services account, attached to three VPCs: ingress VPC 10.1.0.0/20, inspection VPC 10.2.0.0/24, and egress VPC 10.3.0.0/20. Ingress contains Route 53 Resolver inbound endpoint and the private hosted zone execute-api.{region}.amazonaws.com, associated with the ingress VPC, not attached to the resolver endpoint. Inspection contains AWS Network Firewall performing IDPS. Egress contains an execute-api interface VPC endpoint. Each workload account contains a private API Gateway REST API protected by a resource policy and backed by Lambda; Lambda runtime remains unspecified, so use AWS Lambda as its technology. The VPC endpoint is the private entry to the API Gateway APIs.\n\nFlow A, DNS: the representative Azure caller queries the Private Resolver inbound endpoint. Private Resolver uses its outbound endpoint/ruleset to forward the execute-api query toward the Route 53 inbound endpoint over DNS port 53. The stated traffic path traverses Azure Firewall, Azure VPN Gateway, the IPsec VPN, Transit Gateway and AWS Network Firewall before reaching the ingress resolver. The resolver uses the private hosted zone and returns the execute-api interface endpoint's private IP; fold that response into the query label. Describe traffic-forwarding legs as DNS routing, not software calls initiated by the transit devices. DNS queries also pass AWS Network Firewall in this synthetic fixture. The Transit Gateway/VPC routing details beyond that specified forwarding path are not given; do not invent route tables.\n\nFlow B, API call: the Azure caller sends HTTPS port 443 traffic through Azure Firewall and Azure VPN Gateway, across the IPsec VPN to Transit Gateway, through Network Firewall inspection and toward the execute-api interface endpoint. The endpoint provides access to the private API Gateway in the corresponding workload account, subject to its resource policy; API Gateway invokes Lambda. Route 53 Resolver outbound endpoints do not forward HTTPS requests and no Route 53 outbound endpoint is retained in this fixture. Preserve the distinct roles of DNS and application routing.\n\nArchitecture notes/tables: the forwarding rule and its target resolver IPs; environment list dev/test/prod; firewall allowances per environment from spoke subnet to Route 53 inbound endpoint IPs on port 53 and from spoke subnet to *.execute-api.{region}.amazonaws.com on port 443, applying to Azure Firewall and AWS Network Firewall. Region and actual resolver IPs are parameters, not fixed values to invent. Number flow A and B independently and explain their colors and dashed DNS/solid HTTPS notation in a legend. Model VPCs and accounts as deployment nodes and network devices/endpoints as infrastructure nodes.\n",
+      "facts": [
+        {
+          "id": "L0-elements-01",
+          "dimension": "elements",
+          "claim": "Azure integration callers use Function Apps or Logic Apps.",
+          "critical": false,
+          "evidence": "Callers are Azure Function Apps or Logic Apps in those spokes."
+        },
+        {
+          "id": "L0-elements-02",
+          "dimension": "elements",
+          "claim": "There are exactly three Azure spoke VNets, one per dev, test and prod environment.",
+          "critical": false,
+          "evidence": "three spoke VNets, one each for dev, test and prod"
+        },
+        {
+          "id": "L0-elements-03",
+          "dimension": "elements",
+          "claim": "The hub has Azure Firewall and Azure VPN Gateway network infrastructure.",
+          "critical": false,
+          "evidence": "hub VNet containing Azure Firewall and Azure VPN Gateway"
+        },
+        {
+          "id": "L0-elements-04",
+          "dimension": "elements",
+          "claim": "Azure DNS Private Resolver has inbound and outbound endpoints.",
+          "critical": false,
+          "evidence": "Azure DNS Private Resolver inbound and outbound endpoints"
+        },
+        {
+          "id": "L0-elements-05",
+          "dimension": "elements",
+          "claim": "AWS has Site-to-Site VPN and Transit Gateway infrastructure.",
+          "critical": false,
+          "evidence": "AWS Site-to-Site VPN attached to AWS Transit Gateway"
+        },
+        {
+          "id": "L0-elements-06",
+          "dimension": "elements",
+          "claim": "Ingress VPC has CIDR 10.1.0.0/20.",
+          "critical": false,
+          "evidence": "ingress VPC 10.1.0.0/20"
+        },
+        {
+          "id": "L0-elements-07",
+          "dimension": "elements",
+          "claim": "Inspection VPC has CIDR 10.2.0.0/24.",
+          "critical": false,
+          "evidence": "inspection VPC 10.2.0.0/24"
+        },
+        {
+          "id": "L0-elements-08",
+          "dimension": "elements",
+          "claim": "Egress VPC has CIDR 10.3.0.0/20.",
+          "critical": false,
+          "evidence": "egress VPC 10.3.0.0/20"
+        },
+        {
+          "id": "L0-elements-09",
+          "dimension": "elements",
+          "claim": "AWS DNS uses a Route 53 Resolver inbound endpoint.",
+          "critical": false,
+          "evidence": "Route 53 Resolver inbound endpoint"
+        },
+        {
+          "id": "L0-elements-10",
+          "dimension": "elements",
+          "claim": "The private hosted zone is execute-api.{region}.amazonaws.com.",
+          "critical": false,
+          "evidence": "private hosted zone execute-api.{region}.amazonaws.com"
+        },
+        {
+          "id": "L0-elements-11",
+          "dimension": "elements",
+          "claim": "AWS has an execute-api interface VPC endpoint.",
+          "critical": false,
+          "evidence": "an execute-api interface VPC endpoint"
+        },
+        {
+          "id": "L0-elements-12",
+          "dimension": "elements",
+          "claim": "There are three environment-specific private API Gateway REST APIs, each backed by AWS Lambda.",
+          "critical": false,
+          "evidence": "Each workload account contains a private API Gateway REST API protected by a resource policy and backed by Lambda"
+        },
+        {
+          "id": "L0-elements-13",
+          "dimension": "elements",
+          "claim": "Lambda is the backend technology; its runtime is unspecified.",
+          "critical": false,
+          "evidence": "Lambda runtime remains unspecified, so use AWS Lambda as its technology."
+        },
+        {
+          "id": "L0-boundaries-01",
+          "dimension": "boundaries",
+          "claim": "Azure Cloud contains its three spoke VNets.",
+          "critical": true,
+          "evidence": "Azure Cloud contains three spoke VNets"
+        },
+        {
+          "id": "L0-boundaries-02",
+          "dimension": "boundaries",
+          "claim": "The integration workloads belong to their environment-specific Azure spoke VNets.",
+          "critical": true,
+          "evidence": "Callers are Azure Function Apps or Logic Apps in those spokes."
+        },
+        {
+          "id": "L0-boundaries-03",
+          "dimension": "boundaries",
+          "claim": "The Azure hub VNet contains Azure Firewall and Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "a hub VNet containing Azure Firewall and Azure VPN Gateway"
+        },
+        {
+          "id": "L0-boundaries-04",
+          "dimension": "boundaries",
+          "claim": "Azure DNS resolver endpoints belong to a DNS extension VNet separate from the hub VNet.",
+          "critical": true,
+          "evidence": "a separate DNS extension VNet containing Azure DNS Private Resolver inbound and outbound endpoints"
+        },
+        {
+          "id": "L0-boundaries-05",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud contains a Region containing one network services account and dev/test/prod workload accounts.",
+          "critical": true,
+          "evidence": "AWS Cloud and a Region contain a network services account and three workload accounts, one per environment (dev, test, prod)."
+        },
+        {
+          "id": "L0-boundaries-06",
+          "dimension": "boundaries",
+          "claim": "Transit Gateway belongs to the network services account.",
+          "critical": true,
+          "evidence": "Transit Gateway is an infrastructure node in the network services account"
+        },
+        {
+          "id": "L0-boundaries-07",
+          "dimension": "boundaries",
+          "claim": "The ingress, inspection and egress VPCs belong to the network services account.",
+          "critical": true,
+          "evidence": "Transit Gateway is an infrastructure node in the network services account, attached to three VPCs: ingress VPC 10.1.0.0/20, inspection VPC 10.2.0.0/24, and egress VPC 10.3.0.0/20."
+        },
+        {
+          "id": "L0-boundaries-08",
+          "dimension": "boundaries",
+          "claim": "Ingress VPC contains the Route 53 inbound endpoint and private hosted zone.",
+          "critical": true,
+          "evidence": "Ingress contains Route 53 Resolver inbound endpoint and the private hosted zone"
+        },
+        {
+          "id": "L0-boundaries-09",
+          "dimension": "boundaries",
+          "claim": "Inspection VPC contains AWS Network Firewall.",
+          "critical": true,
+          "evidence": "Inspection contains AWS Network Firewall"
+        },
+        {
+          "id": "L0-boundaries-10",
+          "dimension": "boundaries",
+          "claim": "Egress VPC contains the execute-api interface endpoint.",
+          "critical": true,
+          "evidence": "Egress contains an execute-api interface VPC endpoint."
+        },
+        {
+          "id": "L0-boundaries-11",
+          "dimension": "boundaries",
+          "claim": "Each environment workload account owns its corresponding private REST API and Lambda backend.",
+          "critical": true,
+          "evidence": "Each workload account contains a private API Gateway REST API protected by a resource policy and backed by Lambda"
+        },
+        {
+          "id": "L0-relationships-01",
+          "dimension": "relationships",
+          "claim": "All three spokes connect to the hub VNet.",
+          "critical": true,
+          "evidence": "Spokes connect to a hub VNet"
+        },
+        {
+          "id": "L0-relationships-02",
+          "dimension": "relationships",
+          "claim": "All three spokes connect to the separate DNS extension VNet.",
+          "critical": true,
+          "evidence": "Spokes connect to a hub VNet containing Azure Firewall and Azure VPN Gateway, and to a separate DNS extension VNet"
+        },
+        {
+          "id": "L0-relationships-03",
+          "dimension": "relationships",
+          "claim": "A VPN connection joins Azure VPN Gateway and AWS Site-to-Site VPN across the cloud boundary.",
+          "critical": true,
+          "evidence": "An IPsec site-to-site VPN joins Azure VPN Gateway to AWS Site-to-Site VPN"
+        },
+        {
+          "id": "L0-relationships-04",
+          "dimension": "relationships",
+          "claim": "AWS Site-to-Site VPN attaches to Transit Gateway.",
+          "critical": true,
+          "evidence": "AWS Site-to-Site VPN attached to AWS Transit Gateway"
+        },
+        {
+          "id": "L0-relationships-05",
+          "dimension": "relationships",
+          "claim": "Transit Gateway attaches to ingress, inspection and egress VPCs.",
+          "critical": true,
+          "evidence": "attached to three VPCs: ingress VPC 10.1.0.0/20, inspection VPC 10.2.0.0/24, and egress VPC 10.3.0.0/20"
+        },
+        {
+          "id": "L0-relationships-06",
+          "dimension": "relationships",
+          "claim": "The private hosted zone is associated with ingress VPC rather than attached to the resolver endpoint.",
+          "critical": true,
+          "evidence": "associated with the ingress VPC, not attached to the resolver endpoint"
+        },
+        {
+          "id": "L0-responsibilities-01",
+          "dimension": "responsibilities",
+          "claim": "The Azure outbound resolver endpoint owns the execute-api forwarding ruleset targeting Route 53 inbound endpoint IPs.",
+          "critical": false,
+          "evidence": "The outbound endpoint has a DNS forwarding ruleset for *.execute-api.{region}.amazonaws.com targeting the IP addresses of the AWS Route 53 Resolver inbound endpoint."
+        },
+        {
+          "id": "L0-responsibilities-02",
+          "dimension": "responsibilities",
+          "claim": "AWS Network Firewall performs IDPS inspection.",
+          "critical": false,
+          "evidence": "AWS Network Firewall performing IDPS"
+        },
+        {
+          "id": "L0-responsibilities-03",
+          "dimension": "responsibilities",
+          "claim": "The execute-api interface endpoint is the private entry to API Gateway APIs.",
+          "critical": true,
+          "evidence": "The VPC endpoint is the private entry to the API Gateway APIs."
+        },
+        {
+          "id": "L0-responsibilities-04",
+          "dimension": "responsibilities",
+          "claim": "Route 53 resolver endpoints perform DNS resolution and do not forward HTTPS requests.",
+          "critical": true,
+          "evidence": "Route 53 Resolver outbound endpoints do not forward HTTPS requests"
+        },
+        {
+          "id": "L0-responsibilities-05",
+          "dimension": "responsibilities",
+          "claim": "Transit devices forward DNS traffic rather than originate software calls.",
+          "critical": false,
+          "evidence": "Describe traffic-forwarding legs as DNS routing, not software calls initiated by the transit devices."
+        },
+        {
+          "id": "L0-directions-01",
+          "dimension": "directions",
+          "claim": "For DNS flow A, the Azure caller queries the Private Resolver inbound endpoint.",
+          "critical": true,
+          "evidence": "the representative Azure caller queries the Private Resolver inbound endpoint"
+        },
+        {
+          "id": "L0-directions-02",
+          "dimension": "directions",
+          "claim": "The Azure inbound resolver passes the execute-api query to its outbound endpoint.",
+          "critical": true,
+          "evidence": "Private Resolver uses its outbound endpoint/ruleset to forward the execute-api query"
+        },
+        {
+          "id": "L0-directions-03",
+          "dimension": "directions",
+          "claim": "DNS traffic forwards from the Azure outbound resolver toward Azure Firewall.",
+          "critical": true,
+          "evidence": "Private Resolver uses its outbound endpoint/ruleset to forward the execute-api query toward the Route 53 inbound endpoint over DNS port 53. The stated traffic path traverses Azure Firewall"
+        },
+        {
+          "id": "L0-directions-04",
+          "dimension": "directions",
+          "claim": "DNS forwards from Azure Firewall to Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "The stated traffic path traverses Azure Firewall, Azure VPN Gateway"
+        },
+        {
+          "id": "L0-directions-05",
+          "dimension": "directions",
+          "claim": "DNS forwards from Azure VPN Gateway over the VPN to AWS Site-to-Site VPN.",
+          "critical": true,
+          "evidence": "The stated traffic path traverses Azure Firewall, Azure VPN Gateway, the IPsec VPN, Transit Gateway"
+        },
+        {
+          "id": "L0-directions-06",
+          "dimension": "directions",
+          "claim": "DNS forwards from AWS Site-to-Site VPN to Transit Gateway.",
+          "critical": true,
+          "evidence": "the IPsec VPN, Transit Gateway and AWS Network Firewall"
+        },
+        {
+          "id": "L0-directions-07",
+          "dimension": "directions",
+          "claim": "DNS forwards from Transit Gateway to AWS Network Firewall.",
+          "critical": true,
+          "evidence": "Transit Gateway and AWS Network Firewall before reaching the ingress resolver"
+        },
+        {
+          "id": "L0-directions-08",
+          "dimension": "directions",
+          "claim": "DNS forwards from AWS Network Firewall to the ingress Route 53 inbound resolver.",
+          "critical": true,
+          "evidence": "AWS Network Firewall before reaching the ingress resolver"
+        },
+        {
+          "id": "L0-directions-09",
+          "dimension": "directions",
+          "claim": "The Route 53 inbound resolver resolves against the private hosted zone.",
+          "critical": true,
+          "evidence": "The resolver uses the private hosted zone"
+        },
+        {
+          "id": "L0-directions-10",
+          "dimension": "directions",
+          "claim": "For API flow B, the Azure caller sends its request to Azure Firewall.",
+          "critical": true,
+          "evidence": "the Azure caller sends HTTPS port 443 traffic through Azure Firewall"
+        },
+        {
+          "id": "L0-directions-11",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Azure Firewall to Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "traffic through Azure Firewall and Azure VPN Gateway"
+        },
+        {
+          "id": "L0-directions-12",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Azure VPN Gateway over the VPN to AWS Site-to-Site VPN.",
+          "critical": true,
+          "evidence": "Azure VPN Gateway, across the IPsec VPN to Transit Gateway"
+        },
+        {
+          "id": "L0-directions-13",
+          "dimension": "directions",
+          "claim": "API traffic forwards from AWS Site-to-Site VPN to Transit Gateway.",
+          "critical": true,
+          "evidence": "across the IPsec VPN to Transit Gateway"
+        },
+        {
+          "id": "L0-directions-14",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Transit Gateway through AWS Network Firewall inspection.",
+          "critical": true,
+          "evidence": "to Transit Gateway, through Network Firewall inspection"
+        },
+        {
+          "id": "L0-directions-15",
+          "dimension": "directions",
+          "claim": "API traffic forwards from AWS Network Firewall to the execute-api interface endpoint.",
+          "critical": true,
+          "evidence": "through Network Firewall inspection and toward the execute-api interface endpoint"
+        },
+        {
+          "id": "L0-directions-16",
+          "dimension": "directions",
+          "claim": "The interface endpoint forwards API requests to the corresponding environment API Gateway REST API.",
+          "critical": true,
+          "evidence": "The endpoint provides access to the private API Gateway in the corresponding workload account"
+        },
+        {
+          "id": "L0-directions-17",
+          "dimension": "directions",
+          "claim": "Each API Gateway invokes its own environment Lambda backend.",
+          "critical": true,
+          "evidence": "API Gateway invokes Lambda."
+        },
+        {
+          "id": "L0-protocols-01",
+          "dimension": "protocols",
+          "claim": "The DNS flow uses DNS port 53.",
+          "critical": false,
+          "evidence": "over DNS port 53"
+        },
+        {
+          "id": "L0-protocols-02",
+          "dimension": "protocols",
+          "claim": "The API request path uses HTTPS port 443.",
+          "critical": false,
+          "evidence": "the Azure caller sends HTTPS port 443 traffic"
+        },
+        {
+          "id": "L0-protocols-03",
+          "dimension": "protocols",
+          "claim": "Cross-cloud connectivity is an IPsec site-to-site VPN.",
+          "critical": false,
+          "evidence": "An IPsec site-to-site VPN"
+        },
+        {
+          "id": "L0-conditions-01",
+          "dimension": "conditions",
+          "claim": "API access is subject to the corresponding API resource policy.",
+          "critical": true,
+          "evidence": "subject to its resource policy"
+        },
+        {
+          "id": "L0-conditions-02",
+          "dimension": "conditions",
+          "claim": "A request uses its corresponding environment rather than fanning out to all three environments.",
+          "critical": true,
+          "evidence": "The endpoint provides access to the private API Gateway in the corresponding workload account"
+        },
+        {
+          "id": "L0-conditions-03",
+          "dimension": "conditions",
+          "claim": "For each dev/test/prod environment, firewall rules allow its spoke subnet to Route 53 inbound endpoint IPs on port 53.",
+          "critical": true,
+          "evidence": "firewall allowances per environment from spoke subnet to Route 53 inbound endpoint IPs on port 53"
+        },
+        {
+          "id": "L0-conditions-04",
+          "dimension": "conditions",
+          "claim": "For each dev/test/prod environment, firewall rules allow its spoke subnet to *.execute-api.{region}.amazonaws.com on port 443.",
+          "critical": true,
+          "evidence": "from spoke subnet to *.execute-api.{region}.amazonaws.com on port 443"
+        },
+        {
+          "id": "L0-conditions-05",
+          "dimension": "conditions",
+          "claim": "The firewall allowances apply to both Azure Firewall and AWS Network Firewall.",
+          "critical": true,
+          "evidence": "applying to Azure Firewall and AWS Network Firewall"
+        },
+        {
+          "id": "L0-notes-01",
+          "dimension": "notes",
+          "claim": "The representative caller/flow stands for all three environments, retaining Function Apps and Logic Apps alternatives without adding independent application flows.",
+          "critical": false,
+          "evidence": "Show a representative Function App with the Logic Apps alternative and all three environments stated; this does not mean three extra application flows."
+        },
+        {
+          "id": "L0-notes-02",
+          "dimension": "notes",
+          "claim": "DNS flow A returns the execute-api interface endpoint private IP; the reply is folded into the query.",
+          "critical": false,
+          "evidence": "returns the execute-api interface endpoint's private IP; fold that response into the query label"
+        },
+        {
+          "id": "L0-notes-03",
+          "dimension": "notes",
+          "claim": "DNS flow A and API traffic flow B are distinct.",
+          "critical": false,
+          "evidence": "DNS resolution and API traffic are distinct flows, labeled A and B."
+        },
+        {
+          "id": "L0-notes-04",
+          "dimension": "notes",
+          "claim": "Transit Gateway/VPC routing beyond the specified forwarding path is unspecified.",
+          "critical": false,
+          "evidence": "The Transit Gateway/VPC routing details beyond that specified forwarding path are not given"
+        },
+        {
+          "id": "L0-notes-05",
+          "dimension": "notes",
+          "claim": "Region and resolver IP addresses are parameters, not fixed actual values.",
+          "critical": false,
+          "evidence": "Region and actual resolver IPs are parameters, not fixed values to invent."
+        }
+      ]
+    },
+    "2": {
+      "description": "The diagram is titled “Dynamic diagram (deployment view): Private cross-cloud API access from Azure to AWS.” Azure integration workloads privately call internal AWS API Gateway REST APIs. Flow A resolves DNS; flow B carries the corresponding environment’s API request.\n\nThe Azure Cloud deployment boundary contains a DNS extension VNet, a hub VNet, and three spoke VNets for dev, test, and prod. The dev spoke VNet is marked representative and contains a representative integration caller, a container using Azure Function Apps. Logic Apps is an alternative caller. The test and prod spoke VNets each state that their integration workload uses Function Apps or Logic Apps and follows the same representative A/B flow. All three spoke VNets connect to the hub VNet and the separate DNS extension VNet. A single depicted caller represents the environment-specific integration workload and selects its corresponding AWS workload account.\n\nThe DNS extension VNet contains two infrastructure nodes: a Private Resolver inbound endpoint and a Private Resolver outbound endpoint, both using Azure DNS Private Resolver. Its outbound endpoint has a DNS forwarding ruleset: *.execute-api.{region}.amazonaws.com forwards to {Route 53 inbound endpoint IPs}. DNS uses port 53, and the resolver IPs are parameters. The hub VNet contains an Azure Firewall infrastructure node and an Azure VPN Gateway infrastructure node.\n\nThe AWS Cloud deployment boundary contains a Region: {region} deployment boundary. Within that region are one network services account and separate dev, test, and prod workload accounts, all depicted as deployment nodes. The network services account contains an AWS Site-to-Site VPN infrastructure node, an AWS Transit Gateway infrastructure node, and three VPCs: ingress VPC 10.1.0.0/20, inspection VPC 10.2.0.0/24, and egress VPC 10.3.0.0/20. The ingress VPC contains a Route 53 inbound endpoint, using Amazon Route 53 Resolver, and a private hosted zone using Amazon Route 53. The private hosted zone is execute-api.{region}.amazonaws.com and is associated with the ingress VPC. The inspection VPC contains an AWS Network Firewall — IDPS infrastructure node, using AWS Network Firewall. The egress VPC contains an execute-api interface VPC endpoint, using AWS VPC endpoint.\n\nThe AWS Transit Gateway has attachments to the ingress, inspection, and egress VPCs. Transit Gateway/VPC routing details beyond the depicted forwarding path are unspecified. Azure VPN Gateway and AWS Site-to-Site VPN are joined by an IPsec site-to-site VPN across the Azure/AWS boundary.\n\nEach of the dev, test, and prod AWS workload accounts contains an “Internal API” software system boundary. Each Internal API boundary contains two containers: that environment’s private REST API, implemented with Amazon API Gateway and marked “Resource policy protected,” and that environment’s API backend, implemented with AWS Lambda. There are three private REST APIs and three Lambda backends in total. Lambda runtime is unspecified.\n\nFlow A is drawn with blue dashed directed arrows for DNS queries and DNS traffic routing on port 53. Its numbered path is:\nA1: The representative integration caller sends a query to the Azure Private Resolver inbound endpoint, labeled “query [DNS 53]; reply: private endpoint IP.”\nA2: The inbound endpoint sends an execute-api query to the Azure Private Resolver outbound endpoint, labeled “execute-api query [DNS 53].”\nA3: The outbound endpoint routes DNS traffic to Azure Firewall, labeled “DNS routing [53].”\nA4: Azure Firewall routes DNS traffic to Azure VPN Gateway, labeled “DNS routing [53].”\nA5: Azure VPN Gateway routes DNS traffic across the cloud boundary to AWS Site-to-Site VPN, labeled “DNS routing [53 / IPsec VPN].”\nA6: AWS Site-to-Site VPN routes DNS traffic to Transit Gateway, labeled “DNS routing [53].”\nA7: Transit Gateway routes DNS traffic to AWS Network Firewall — IDPS, labeled “DNS routing [53 / IDPS].”\nA8: AWS Network Firewall routes DNS traffic to the Route 53 inbound endpoint in the ingress VPC, labeled “DNS routing [53].”\nA9: The Route 53 inbound endpoint resolves against the private hosted zone, labeled “resolve [DNS]; endpoint private IP.”\n\nFlow B is drawn with orange solid directed arrows for HTTPS requests and routing on port 443, followed by API invocation. Its numbered path is:\nB1: The representative integration caller sends an HTTPS request to Azure Firewall, labeled “HTTPS request [443].”\nB2: Azure Firewall routes HTTPS traffic to Azure VPN Gateway, labeled “HTTPS routing [443].”\nB3: Azure VPN Gateway routes HTTPS traffic to AWS Site-to-Site VPN across the cloud boundary, labeled “HTTPS routing [443 / IPsec VPN].”\nB4: AWS Site-to-Site VPN routes HTTPS traffic to Transit Gateway, labeled “HTTPS routing [443].”\nB5: Transit Gateway routes HTTPS traffic to AWS Network Firewall — IDPS, labeled “HTTPS routing [443 / IDPS].”\nB6: AWS Network Firewall routes traffic to the execute-api interface VPC endpoint in the egress VPC, labeled “routing [HTTPS 443].”\nB7a, B7b, and B7c: The interface VPC endpoint sends HTTPS traffic on port 443 into, respectively, the dev, test, or prod workload account’s private REST API. One environment is selected per request.\nB8a, B8b, and B8c: The corresponding dev, test, or prod API Gateway invokes its own environment’s API backend, labeled “invoke [AWS Lambda].”\n\nThe interface VPC endpoint is the private entry to the API Gateway APIs. Route 53 performs DNS resolution; no Route 53 outbound endpoint is retained. Route 53 resolver endpoints do not forward HTTPS. DNS queries pass through AWS Network Firewall in this fixture. API access remains subject to each API’s resource policy; the policy rules are not specified.\n\nA firewall allowance table applies to both Azure Firewall AND AWS Network Firewall. Its columns are Environment, Source, Destination, and Port. The rows are: dev, dev spoke subnet, Route 53 inbound endpoint IPs, 53; test, test spoke subnet, Route 53 inbound endpoint IPs, 53; prod, prod spoke subnet, Route 53 inbound endpoint IPs, 53; and dev/test/prod, corresponding spoke subnet, *.execute-api.{region}.amazonaws.com, 443. The architecture parameters {region} and {Route 53 inbound endpoint IPs} are supplied parameters.\n\nThe legend states that numbering is independent for each flow and that a/b/c selects dev/test/prod, with one environment per request. A filled arrow means caller to callee or explicitly labeled infrastructure traffic routing. Normal responses are folded into request labels. Boundaries identify architectural domains. No call frequency, detailed authentication mechanism, specific denial/error response, or additional routing behavior is specified.\n",
+      "facts": [
+        {
+          "id": "L2-elements-01",
+          "dimension": "elements",
+          "claim": "Azure integration callers use Function Apps or Logic Apps.",
+          "critical": false,
+          "evidence": "a container using Azure Function Apps. Logic Apps is an alternative caller."
+        },
+        {
+          "id": "L2-elements-02",
+          "dimension": "elements",
+          "claim": "There are exactly three Azure spoke VNets, one per dev, test and prod environment.",
+          "critical": false,
+          "evidence": "three spoke VNets for dev, test, and prod"
+        },
+        {
+          "id": "L2-elements-03",
+          "dimension": "elements",
+          "claim": "The hub has Azure Firewall and Azure VPN Gateway network infrastructure.",
+          "critical": false,
+          "evidence": "The hub VNet contains an Azure Firewall infrastructure node and an Azure VPN Gateway infrastructure node."
+        },
+        {
+          "id": "L2-elements-04",
+          "dimension": "elements",
+          "claim": "Azure DNS Private Resolver has inbound and outbound endpoints.",
+          "critical": false,
+          "evidence": "a Private Resolver inbound endpoint and a Private Resolver outbound endpoint, both using Azure DNS Private Resolver"
+        },
+        {
+          "id": "L2-elements-05",
+          "dimension": "elements",
+          "claim": "AWS has Site-to-Site VPN and Transit Gateway infrastructure.",
+          "critical": false,
+          "evidence": "an AWS Site-to-Site VPN infrastructure node, an AWS Transit Gateway infrastructure node"
+        },
+        {
+          "id": "L2-elements-06",
+          "dimension": "elements",
+          "claim": "Ingress VPC has CIDR 10.1.0.0/20.",
+          "critical": false,
+          "evidence": "ingress VPC 10.1.0.0/20"
+        },
+        {
+          "id": "L2-elements-07",
+          "dimension": "elements",
+          "claim": "Inspection VPC has CIDR 10.2.0.0/24.",
+          "critical": false,
+          "evidence": "inspection VPC 10.2.0.0/24"
+        },
+        {
+          "id": "L2-elements-08",
+          "dimension": "elements",
+          "claim": "Egress VPC has CIDR 10.3.0.0/20.",
+          "critical": false,
+          "evidence": "egress VPC 10.3.0.0/20"
+        },
+        {
+          "id": "L2-elements-09",
+          "dimension": "elements",
+          "claim": "AWS DNS uses a Route 53 Resolver inbound endpoint.",
+          "critical": false,
+          "evidence": "a Route 53 inbound endpoint, using Amazon Route 53 Resolver"
+        },
+        {
+          "id": "L2-elements-10",
+          "dimension": "elements",
+          "claim": "The private hosted zone is execute-api.{region}.amazonaws.com.",
+          "critical": false,
+          "evidence": "The private hosted zone is execute-api.{region}.amazonaws.com"
+        },
+        {
+          "id": "L2-elements-11",
+          "dimension": "elements",
+          "claim": "AWS has an execute-api interface VPC endpoint.",
+          "critical": false,
+          "evidence": "an execute-api interface VPC endpoint"
+        },
+        {
+          "id": "L2-elements-12",
+          "dimension": "elements",
+          "claim": "There are three environment-specific private API Gateway REST APIs, each backed by AWS Lambda.",
+          "critical": false,
+          "evidence": "There are three private REST APIs and three Lambda backends in total."
+        },
+        {
+          "id": "L2-elements-13",
+          "dimension": "elements",
+          "claim": "Lambda is the backend technology; its runtime is unspecified.",
+          "critical": false,
+          "evidence": "implemented with AWS Lambda. There are three private REST APIs and three Lambda backends in total. Lambda runtime is unspecified."
+        },
+        {
+          "id": "L2-boundaries-01",
+          "dimension": "boundaries",
+          "claim": "Azure Cloud contains its three spoke VNets.",
+          "critical": true,
+          "evidence": "The Azure Cloud deployment boundary contains a DNS extension VNet, a hub VNet, and three spoke VNets"
+        },
+        {
+          "id": "L2-boundaries-02",
+          "dimension": "boundaries",
+          "claim": "The integration workloads belong to their environment-specific Azure spoke VNets.",
+          "critical": true,
+          "evidence": "The dev spoke VNet is marked representative and contains a representative integration caller, a container using Azure Function Apps. Logic Apps is an alternative caller. The test and prod spoke VNets each state that their integration workload uses Function Apps or Logic Apps"
+        },
+        {
+          "id": "L2-boundaries-03",
+          "dimension": "boundaries",
+          "claim": "The Azure hub VNet contains Azure Firewall and Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "The hub VNet contains an Azure Firewall infrastructure node and an Azure VPN Gateway infrastructure node."
+        },
+        {
+          "id": "L2-boundaries-04",
+          "dimension": "boundaries",
+          "claim": "Azure DNS resolver endpoints belong to a DNS extension VNet separate from the hub VNet.",
+          "critical": true,
+          "evidence": "The DNS extension VNet contains two infrastructure nodes: a Private Resolver inbound endpoint and a Private Resolver outbound endpoint"
+        },
+        {
+          "id": "L2-boundaries-05",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud contains a Region containing one network services account and dev/test/prod workload accounts.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment boundary contains a Region: {region} deployment boundary. Within that region are one network services account and separate dev, test, and prod workload accounts"
+        },
+        {
+          "id": "L2-boundaries-06",
+          "dimension": "boundaries",
+          "claim": "Transit Gateway belongs to the network services account.",
+          "critical": true,
+          "evidence": "The network services account contains an AWS Site-to-Site VPN infrastructure node, an AWS Transit Gateway infrastructure node"
+        },
+        {
+          "id": "L2-boundaries-07",
+          "dimension": "boundaries",
+          "claim": "The ingress, inspection and egress VPCs belong to the network services account.",
+          "critical": true,
+          "evidence": "The network services account contains an AWS Site-to-Site VPN infrastructure node, an AWS Transit Gateway infrastructure node, and three VPCs: ingress VPC 10.1.0.0/20, inspection VPC 10.2.0.0/24, and egress VPC 10.3.0.0/20."
+        },
+        {
+          "id": "L2-boundaries-08",
+          "dimension": "boundaries",
+          "claim": "Ingress VPC contains the Route 53 inbound endpoint and private hosted zone.",
+          "critical": true,
+          "evidence": "The ingress VPC contains a Route 53 inbound endpoint, using Amazon Route 53 Resolver, and a private hosted zone"
+        },
+        {
+          "id": "L2-boundaries-09",
+          "dimension": "boundaries",
+          "claim": "Inspection VPC contains AWS Network Firewall.",
+          "critical": true,
+          "evidence": "The inspection VPC contains an AWS Network Firewall"
+        },
+        {
+          "id": "L2-boundaries-10",
+          "dimension": "boundaries",
+          "claim": "Egress VPC contains the execute-api interface endpoint.",
+          "critical": true,
+          "evidence": "The egress VPC contains an execute-api interface VPC endpoint"
+        },
+        {
+          "id": "L2-boundaries-11",
+          "dimension": "boundaries",
+          "claim": "Each environment workload account owns its corresponding private REST API and Lambda backend.",
+          "critical": true,
+          "evidence": "Each of the dev, test, and prod AWS workload accounts contains an “Internal API” software system boundary. Each Internal API boundary contains two containers: that environment’s private REST API, implemented with Amazon API Gateway and marked “Resource policy protected,” and that environment’s API backend, implemented with AWS Lambda."
+        },
+        {
+          "id": "L2-boundaries-12",
+          "dimension": "boundaries",
+          "claim": "AWS Site-to-Site VPN belongs to the network services account.",
+          "critical": true,
+          "evidence": "The network services account contains an AWS Site-to-Site VPN infrastructure node"
+        },
+        {
+          "id": "L2-relationships-01",
+          "dimension": "relationships",
+          "claim": "All three spokes connect to the hub VNet.",
+          "critical": true,
+          "evidence": "All three spoke VNets connect to the hub VNet"
+        },
+        {
+          "id": "L2-relationships-02",
+          "dimension": "relationships",
+          "claim": "All three spokes connect to the separate DNS extension VNet.",
+          "critical": true,
+          "evidence": "All three spoke VNets connect to the hub VNet and the separate DNS extension VNet."
+        },
+        {
+          "id": "L2-relationships-03",
+          "dimension": "relationships",
+          "claim": "A VPN connection joins Azure VPN Gateway and AWS Site-to-Site VPN across the cloud boundary.",
+          "critical": true,
+          "evidence": "Azure VPN Gateway and AWS Site-to-Site VPN are joined by an IPsec site-to-site VPN across the Azure/AWS boundary."
+        },
+        {
+          "id": "L2-relationships-04",
+          "dimension": "relationships",
+          "claim": "AWS Site-to-Site VPN attaches to Transit Gateway.",
+          "critical": true,
+          "evidence": "A6: AWS Site-to-Site VPN routes DNS traffic to Transit Gateway"
+        },
+        {
+          "id": "L2-relationships-05",
+          "dimension": "relationships",
+          "claim": "Transit Gateway attaches to ingress, inspection and egress VPCs.",
+          "critical": true,
+          "evidence": "The AWS Transit Gateway has attachments to the ingress, inspection, and egress VPCs."
+        },
+        {
+          "id": "L2-relationships-06",
+          "dimension": "relationships",
+          "claim": "The private hosted zone is associated with ingress VPC rather than attached to the resolver endpoint.",
+          "critical": true,
+          "evidence": "The private hosted zone is execute-api.{region}.amazonaws.com and is associated with the ingress VPC."
+        },
+        {
+          "id": "L2-responsibilities-01",
+          "dimension": "responsibilities",
+          "claim": "The Azure outbound resolver endpoint owns the execute-api forwarding ruleset targeting Route 53 inbound endpoint IPs.",
+          "critical": false,
+          "evidence": "Its outbound endpoint has a DNS forwarding ruleset: *.execute-api.{region}.amazonaws.com forwards to {Route 53 inbound endpoint IPs}."
+        },
+        {
+          "id": "L2-responsibilities-02",
+          "dimension": "responsibilities",
+          "claim": "AWS Network Firewall performs IDPS inspection.",
+          "critical": false,
+          "evidence": "AWS Network Firewall — IDPS"
+        },
+        {
+          "id": "L2-responsibilities-03",
+          "dimension": "responsibilities",
+          "claim": "The execute-api interface endpoint is the private entry to API Gateway APIs.",
+          "critical": true,
+          "evidence": "The interface VPC endpoint is the private entry to the API Gateway APIs."
+        },
+        {
+          "id": "L2-responsibilities-04",
+          "dimension": "responsibilities",
+          "claim": "Route 53 resolver endpoints perform DNS resolution and do not forward HTTPS requests.",
+          "critical": true,
+          "evidence": "Route 53 performs DNS resolution; no Route 53 outbound endpoint is retained. Route 53 resolver endpoints do not forward HTTPS."
+        },
+        {
+          "id": "L2-responsibilities-05",
+          "dimension": "responsibilities",
+          "claim": "Transit devices forward DNS traffic rather than originate software calls.",
+          "critical": false,
+          "evidence": "Flow A is drawn with blue dashed directed arrows for DNS queries and DNS traffic routing on port 53."
+        },
+        {
+          "id": "L2-directions-01",
+          "dimension": "directions",
+          "claim": "For DNS flow A, the Azure caller queries the Private Resolver inbound endpoint.",
+          "critical": true,
+          "evidence": "A1: The representative integration caller sends a query to the Azure Private Resolver inbound endpoint"
+        },
+        {
+          "id": "L2-directions-02",
+          "dimension": "directions",
+          "claim": "The Azure inbound resolver passes the execute-api query to its outbound endpoint.",
+          "critical": true,
+          "evidence": "A2: The inbound endpoint sends an execute-api query to the Azure Private Resolver outbound endpoint"
+        },
+        {
+          "id": "L2-directions-03",
+          "dimension": "directions",
+          "claim": "DNS traffic forwards from the Azure outbound resolver toward Azure Firewall.",
+          "critical": true,
+          "evidence": "A3: The outbound endpoint routes DNS traffic to Azure Firewall"
+        },
+        {
+          "id": "L2-directions-04",
+          "dimension": "directions",
+          "claim": "DNS forwards from Azure Firewall to Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "A4: Azure Firewall routes DNS traffic to Azure VPN Gateway"
+        },
+        {
+          "id": "L2-directions-05",
+          "dimension": "directions",
+          "claim": "DNS forwards from Azure VPN Gateway over the VPN to AWS Site-to-Site VPN.",
+          "critical": true,
+          "evidence": "A5: Azure VPN Gateway routes DNS traffic across the cloud boundary to AWS Site-to-Site VPN"
+        },
+        {
+          "id": "L2-directions-06",
+          "dimension": "directions",
+          "claim": "DNS forwards from AWS Site-to-Site VPN to Transit Gateway.",
+          "critical": true,
+          "evidence": "A6: AWS Site-to-Site VPN routes DNS traffic to Transit Gateway"
+        },
+        {
+          "id": "L2-directions-07",
+          "dimension": "directions",
+          "claim": "DNS forwards from Transit Gateway to AWS Network Firewall.",
+          "critical": true,
+          "evidence": "A7: Transit Gateway routes DNS traffic to AWS Network Firewall — IDPS"
+        },
+        {
+          "id": "L2-directions-08",
+          "dimension": "directions",
+          "claim": "DNS forwards from AWS Network Firewall to the ingress Route 53 inbound resolver.",
+          "critical": true,
+          "evidence": "A8: AWS Network Firewall routes DNS traffic to the Route 53 inbound endpoint in the ingress VPC"
+        },
+        {
+          "id": "L2-directions-09",
+          "dimension": "directions",
+          "claim": "The Route 53 inbound resolver resolves against the private hosted zone.",
+          "critical": true,
+          "evidence": "A9: The Route 53 inbound endpoint resolves against the private hosted zone"
+        },
+        {
+          "id": "L2-directions-10",
+          "dimension": "directions",
+          "claim": "For API flow B, the Azure caller sends its request to Azure Firewall.",
+          "critical": true,
+          "evidence": "B1: The representative integration caller sends an HTTPS request to Azure Firewall"
+        },
+        {
+          "id": "L2-directions-11",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Azure Firewall to Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "B2: Azure Firewall routes HTTPS traffic to Azure VPN Gateway"
+        },
+        {
+          "id": "L2-directions-12",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Azure VPN Gateway over the VPN to AWS Site-to-Site VPN.",
+          "critical": true,
+          "evidence": "B3: Azure VPN Gateway routes HTTPS traffic to AWS Site-to-Site VPN across the cloud boundary"
+        },
+        {
+          "id": "L2-directions-13",
+          "dimension": "directions",
+          "claim": "API traffic forwards from AWS Site-to-Site VPN to Transit Gateway.",
+          "critical": true,
+          "evidence": "B4: AWS Site-to-Site VPN routes HTTPS traffic to Transit Gateway"
+        },
+        {
+          "id": "L2-directions-14",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Transit Gateway through AWS Network Firewall inspection.",
+          "critical": true,
+          "evidence": "B5: Transit Gateway routes HTTPS traffic to AWS Network Firewall — IDPS"
+        },
+        {
+          "id": "L2-directions-15",
+          "dimension": "directions",
+          "claim": "API traffic forwards from AWS Network Firewall to the execute-api interface endpoint.",
+          "critical": true,
+          "evidence": "B6: AWS Network Firewall routes traffic to the execute-api interface VPC endpoint in the egress VPC"
+        },
+        {
+          "id": "L2-directions-16",
+          "dimension": "directions",
+          "claim": "The interface endpoint forwards API requests to the corresponding environment API Gateway REST API.",
+          "critical": true,
+          "evidence": "B7a, B7b, and B7c: The interface VPC endpoint sends HTTPS traffic on port 443 into, respectively, the dev, test, or prod workload account’s private REST API."
+        },
+        {
+          "id": "L2-directions-17",
+          "dimension": "directions",
+          "claim": "Each API Gateway invokes its own environment Lambda backend.",
+          "critical": true,
+          "evidence": "B8a, B8b, and B8c: The corresponding dev, test, or prod API Gateway invokes its own environment’s API backend"
+        },
+        {
+          "id": "L2-protocols-01",
+          "dimension": "protocols",
+          "claim": "The DNS flow uses DNS port 53.",
+          "critical": false,
+          "evidence": "Flow A is drawn with blue dashed directed arrows for DNS queries and DNS traffic routing on port 53."
+        },
+        {
+          "id": "L2-protocols-02",
+          "dimension": "protocols",
+          "claim": "The API request path uses HTTPS port 443.",
+          "critical": false,
+          "evidence": "Flow B is drawn with orange solid directed arrows for HTTPS requests and routing on port 443"
+        },
+        {
+          "id": "L2-protocols-03",
+          "dimension": "protocols",
+          "claim": "Cross-cloud connectivity is an IPsec site-to-site VPN.",
+          "critical": false,
+          "evidence": "an IPsec site-to-site VPN across the Azure/AWS boundary"
+        },
+        {
+          "id": "L2-conditions-01",
+          "dimension": "conditions",
+          "claim": "API access is subject to the corresponding API resource policy.",
+          "critical": true,
+          "evidence": "API access remains subject to each API’s resource policy"
+        },
+        {
+          "id": "L2-conditions-02",
+          "dimension": "conditions",
+          "claim": "A request uses its corresponding environment rather than fanning out to all three environments.",
+          "critical": true,
+          "evidence": "One environment is selected per request."
+        },
+        {
+          "id": "L2-conditions-03",
+          "dimension": "conditions",
+          "claim": "For each dev/test/prod environment, firewall rules allow its spoke subnet to Route 53 inbound endpoint IPs on port 53.",
+          "critical": true,
+          "evidence": "dev, dev spoke subnet, Route 53 inbound endpoint IPs, 53; test, test spoke subnet, Route 53 inbound endpoint IPs, 53; prod, prod spoke subnet, Route 53 inbound endpoint IPs, 53"
+        },
+        {
+          "id": "L2-conditions-04",
+          "dimension": "conditions",
+          "claim": "For each dev/test/prod environment, firewall rules allow its spoke subnet to *.execute-api.{region}.amazonaws.com on port 443.",
+          "critical": true,
+          "evidence": "dev/test/prod, corresponding spoke subnet, *.execute-api.{region}.amazonaws.com, 443"
+        },
+        {
+          "id": "L2-conditions-05",
+          "dimension": "conditions",
+          "claim": "The firewall allowances apply to both Azure Firewall and AWS Network Firewall.",
+          "critical": true,
+          "evidence": "A firewall allowance table applies to both Azure Firewall AND AWS Network Firewall."
+        },
+        {
+          "id": "L2-notes-01",
+          "dimension": "notes",
+          "claim": "The representative caller/flow stands for all three environments, retaining Function Apps and Logic Apps alternatives without adding independent application flows.",
+          "critical": false,
+          "evidence": "The test and prod spoke VNets each state that their integration workload uses Function Apps or Logic Apps and follows the same representative A/B flow."
+        },
+        {
+          "id": "L2-notes-02",
+          "dimension": "notes",
+          "claim": "DNS flow A returns the execute-api interface endpoint private IP; the reply is folded into the query.",
+          "critical": false,
+          "evidence": "A1: The representative integration caller sends a query to the Azure Private Resolver inbound endpoint, labeled “query [DNS 53]; reply: private endpoint IP.”"
+        },
+        {
+          "id": "L2-notes-03",
+          "dimension": "notes",
+          "claim": "DNS flow A and API traffic flow B are distinct.",
+          "critical": false,
+          "evidence": "Flow A resolves DNS; flow B carries the corresponding environment’s API request."
+        },
+        {
+          "id": "L2-notes-04",
+          "dimension": "notes",
+          "claim": "Transit Gateway/VPC routing beyond the specified forwarding path is unspecified.",
+          "critical": false,
+          "evidence": "Transit Gateway/VPC routing details beyond the depicted forwarding path are unspecified."
+        },
+        {
+          "id": "L2-notes-05",
+          "dimension": "notes",
+          "claim": "Region and resolver IP addresses are parameters, not fixed actual values.",
+          "critical": false,
+          "evidence": "The architecture parameters {region} and {Route 53 inbound endpoint IPs} are supplied parameters."
+        }
+      ]
+    },
+    "4": {
+      "description": "The dynamic deployment diagram describes private cross-cloud API access from Azure to AWS. Azure integration workloads privately call internal AWS API Gateway REST APIs. Flow A resolves DNS; flow B carries the corresponding environment's API request. The architecture has dev, test, and prod environments, and one environment is selected per request.\n\nAzure Cloud is a deployment node containing a DNS extension VNet, a hub VNet, and three separate spoke VNets: dev, test, and prod. Each VNet is a deployment node. The dev spoke is the representative example. It contains a representative integration caller, a container implemented with Azure Function Apps; Logic Apps is an alternative caller. This represents the environment-specific integration workload and selects the corresponding AWS workload account. The dev spoke connects to the hub VNet and to the separate DNS extension VNet. The test and prod spokes each have an integration workload implemented with Function Apps or Logic Apps, use the same representative A/B flow, and connect to the hub VNet and separate DNS extension VNet.\n\nThe DNS extension VNet contains a Private Resolver inbound endpoint and a Private Resolver outbound endpoint, both infrastructure nodes of Azure DNS Private Resolver. Its DNS forwarding ruleset is *.execute-api.{region}.amazonaws.com directed to {Route 53 inbound endpoint IPs}. DNS uses port 53, and resolver IPs are parameters. The hub VNet contains Azure Firewall and Azure VPN Gateway, both infrastructure nodes with their corresponding Azure technologies.\n\nAWS Cloud is a deployment node containing a deployment node named Region: {region}. This region contains a network services account and separate dev, test, and prod workload accounts, all deployment nodes.\n\nThe network services account contains an Ingress VPC with CIDR 10.1.0.0/20, an Inspection VPC with CIDR 10.2.0.0/24, and an Egress VPC with CIDR 10.3.0.0/20, each a deployment node. The Ingress VPC contains a Route 53 inbound endpoint, an infrastructure node implemented with Amazon Route 53 Resolver, and a private hosted zone, an infrastructure node implemented with Amazon Route 53. The private hosted zone is execute-api.{region}.amazonaws.com and is associated with the ingress VPC. The Inspection VPC contains AWS Network Firewall — IDPS, an infrastructure node implemented with AWS Network Firewall. The Egress VPC contains an execute-api interface VPC endpoint, an infrastructure node implemented with AWS VPC endpoint. This endpoint is the private entry to the API Gateway APIs, with one environment selected per request. The network services account also contains infrastructure nodes AWS Site-to-Site VPN and AWS Transit Gateway, using their corresponding AWS technologies; these are depicted outside the three VPC boundaries.\n\nTransit Gateway attachments are the ingress, inspection, and egress VPCs. Transit Gateway/VPC routing beyond the depicted forwarding path is unspecified. Route 53 performs DNS resolution. No Route 53 outbound endpoint is retained. Resolver endpoints do not forward HTTPS. DNS queries pass through AWS Network Firewall in this fixture.\n\nEach of the dev, test, and prod workload accounts contains its own Internal API software system boundary. Each such boundary contains two containers: an environment-specific private REST API implemented with Amazon API Gateway, and the corresponding environment-specific API backend implemented with AWS Lambda. All three REST APIs are resource policy protected. The Lambda runtimes are unspecified. There are three private REST APIs and three Lambda backends in total. API access remains subject to each API's resource policy; policy rules are not specified.\n\nFlow A is the directed DNS query and DNS routing path, using port 53. The depicted representative caller initiates it from the dev spoke, with the same representative flow applying to the other environments:\n\n1. A1: The representative integration caller queries the Azure Private Resolver inbound endpoint using DNS port 53. The label also includes the reply: private endpoint IP.\n2. A2: The Private Resolver inbound endpoint sends an execute-api query to the Private Resolver outbound endpoint using DNS port 53.\n3. A3: The Private Resolver outbound endpoint routes DNS on port 53 to Azure Firewall in the hub VNet.\n4. A4: Azure Firewall routes DNS on port 53 to Azure VPN Gateway.\n5. A5: Azure VPN Gateway routes DNS on port 53 over an IPsec VPN to AWS Site-to-Site VPN, crossing from Azure Cloud into the AWS region's network services account.\n6. A6: AWS Site-to-Site VPN routes DNS on port 53 to AWS Transit Gateway.\n7. A7: AWS Transit Gateway routes DNS on port 53 through IDPS to AWS Network Firewall in the Inspection VPC.\n8. A8: AWS Network Firewall routes DNS on port 53 to the Route 53 inbound endpoint in the Ingress VPC.\n9. A9: The Route 53 inbound endpoint sends a resolve operation to the private hosted zone, labeled DNS and endpoint private IP. Together with A1, the diagram identifies the private endpoint IP as the DNS result.\n\nFlow B is the directed HTTPS request/routing path on port 443 followed by API invocation. It starts at the representative Azure integration caller and travels independently of the resolver endpoints:\n\n1. B1: The integration caller makes an HTTPS request on port 443 to Azure Firewall in the hub VNet.\n2. B2: Azure Firewall routes HTTPS on port 443 to Azure VPN Gateway.\n3. B3: Azure VPN Gateway routes HTTPS on port 443 over an IPsec VPN to AWS Site-to-Site VPN, crossing the cloud boundary into the network services account.\n4. B4: AWS Site-to-Site VPN routes HTTPS on port 443 to AWS Transit Gateway.\n5. B5: AWS Transit Gateway routes HTTPS on port 443 through IDPS to AWS Network Firewall in the Inspection VPC.\n6. B6: AWS Network Firewall performs routing labeled HTTPS 443 to the execute-api interface VPC endpoint in the Egress VPC.\n7. B7a, B7b, and B7c are alternative environment-specific HTTPS port 443 calls from that endpoint to the dev, test, and prod private REST APIs respectively. These cross from the network services account into the corresponding workload account and its Internal API boundary. One environment is selected per request.\n8. B8a: The dev private REST API invokes the dev API backend using AWS Lambda. B8b: The test private REST API invokes the test API backend using AWS Lambda. B8c: The prod private REST API invokes the prod API backend using AWS Lambda.\n\nThe firewall allowance table applies to both Azure Firewall and AWS Network Firewall. Its entries are: dev environment, source dev spoke subnet, destination Route 53 inbound endpoint IPs, port 53; test environment, source test spoke subnet, destination Route 53 inbound endpoint IPs, port 53; prod environment, source prod spoke subnet, destination Route 53 inbound endpoint IPs, port 53; and dev/test/prod, source corresponding spoke subnet, destination *.execute-api.{region}.amazonaws.com, port 443.\n\nThe legend distinguishes A as blue dashed DNS queries and DNS traffic routing on port 53, and B as orange solid HTTPS requests/routing on port 443 followed by API invocation. Numbering is independent per flow. Suffixes a/b/c select dev/test/prod, with one environment per request. Filled arrows mean caller to callee or explicitly labeled infrastructure traffic routing. Normal responses are folded into request labels. Boundaries identify architectural domains.\n\nArchitecture parameters are {region} and {Route 53 inbound endpoint IPs}. No call frequency, detailed authentication mechanism, specific denial/error response, or additional routing behavior is specified.\n",
+      "facts": [
+        {
+          "id": "L4-elements-01",
+          "dimension": "elements",
+          "claim": "Azure integration callers use Function Apps or Logic Apps.",
+          "critical": false,
+          "evidence": "a container implemented with Azure Function Apps; Logic Apps is an alternative caller."
+        },
+        {
+          "id": "L4-elements-02",
+          "dimension": "elements",
+          "claim": "There are exactly three Azure spoke VNets, one per dev, test and prod environment.",
+          "critical": false,
+          "evidence": "three separate spoke VNets: dev, test, and prod"
+        },
+        {
+          "id": "L4-elements-03",
+          "dimension": "elements",
+          "claim": "The hub has Azure Firewall and Azure VPN Gateway network infrastructure.",
+          "critical": false,
+          "evidence": "The hub VNet contains Azure Firewall and Azure VPN Gateway, both infrastructure nodes with their corresponding Azure technologies."
+        },
+        {
+          "id": "L4-elements-04",
+          "dimension": "elements",
+          "claim": "Azure DNS Private Resolver has inbound and outbound endpoints.",
+          "critical": false,
+          "evidence": "a Private Resolver inbound endpoint and a Private Resolver outbound endpoint, both infrastructure nodes of Azure DNS Private Resolver"
+        },
+        {
+          "id": "L4-elements-05",
+          "dimension": "elements",
+          "claim": "AWS has Site-to-Site VPN and Transit Gateway infrastructure.",
+          "critical": false,
+          "evidence": "infrastructure nodes AWS Site-to-Site VPN and AWS Transit Gateway"
+        },
+        {
+          "id": "L4-elements-06",
+          "dimension": "elements",
+          "claim": "Ingress VPC has CIDR 10.1.0.0/20.",
+          "critical": false,
+          "evidence": "Ingress VPC with CIDR 10.1.0.0/20"
+        },
+        {
+          "id": "L4-elements-07",
+          "dimension": "elements",
+          "claim": "Inspection VPC has CIDR 10.2.0.0/24.",
+          "critical": false,
+          "evidence": "Inspection VPC with CIDR 10.2.0.0/24"
+        },
+        {
+          "id": "L4-elements-08",
+          "dimension": "elements",
+          "claim": "Egress VPC has CIDR 10.3.0.0/20.",
+          "critical": false,
+          "evidence": "Egress VPC with CIDR 10.3.0.0/20"
+        },
+        {
+          "id": "L4-elements-09",
+          "dimension": "elements",
+          "claim": "AWS DNS uses a Route 53 Resolver inbound endpoint.",
+          "critical": false,
+          "evidence": "a Route 53 inbound endpoint, an infrastructure node implemented with Amazon Route 53 Resolver"
+        },
+        {
+          "id": "L4-elements-10",
+          "dimension": "elements",
+          "claim": "The private hosted zone is execute-api.{region}.amazonaws.com.",
+          "critical": false,
+          "evidence": "The private hosted zone is execute-api.{region}.amazonaws.com"
+        },
+        {
+          "id": "L4-elements-11",
+          "dimension": "elements",
+          "claim": "AWS has an execute-api interface VPC endpoint.",
+          "critical": false,
+          "evidence": "an execute-api interface VPC endpoint"
+        },
+        {
+          "id": "L4-elements-12",
+          "dimension": "elements",
+          "claim": "There are three environment-specific private API Gateway REST APIs, each backed by AWS Lambda.",
+          "critical": false,
+          "evidence": "There are three private REST APIs and three Lambda backends in total."
+        },
+        {
+          "id": "L4-elements-13",
+          "dimension": "elements",
+          "claim": "Lambda is the backend technology; its runtime is unspecified.",
+          "critical": false,
+          "evidence": "implemented with AWS Lambda. All three REST APIs are resource policy protected. The Lambda runtimes are unspecified."
+        },
+        {
+          "id": "L4-boundaries-01",
+          "dimension": "boundaries",
+          "claim": "Azure Cloud contains its three spoke VNets.",
+          "critical": true,
+          "evidence": "Azure Cloud is a deployment node containing a DNS extension VNet, a hub VNet, and three separate spoke VNets"
+        },
+        {
+          "id": "L4-boundaries-02",
+          "dimension": "boundaries",
+          "claim": "The integration workloads belong to their environment-specific Azure spoke VNets.",
+          "critical": true,
+          "evidence": "The dev spoke is the representative example. It contains a representative integration caller, a container implemented with Azure Function Apps; Logic Apps is an alternative caller. This represents the environment-specific integration workload and selects the corresponding AWS workload account. The dev spoke connects to the hub VNet and to the separate DNS extension VNet. The test and prod spokes each have an integration workload implemented with Function Apps or Logic Apps"
+        },
+        {
+          "id": "L4-boundaries-03",
+          "dimension": "boundaries",
+          "claim": "The Azure hub VNet contains Azure Firewall and Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "The hub VNet contains Azure Firewall and Azure VPN Gateway"
+        },
+        {
+          "id": "L4-boundaries-04",
+          "dimension": "boundaries",
+          "claim": "Azure DNS resolver endpoints belong to a DNS extension VNet separate from the hub VNet.",
+          "critical": true,
+          "evidence": "The DNS extension VNet contains a Private Resolver inbound endpoint and a Private Resolver outbound endpoint"
+        },
+        {
+          "id": "L4-boundaries-05",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud contains a Region containing one network services account and dev/test/prod workload accounts.",
+          "critical": true,
+          "evidence": "AWS Cloud is a deployment node containing a deployment node named Region: {region}. This region contains a network services account and separate dev, test, and prod workload accounts"
+        },
+        {
+          "id": "L4-boundaries-06",
+          "dimension": "boundaries",
+          "claim": "Transit Gateway belongs to the network services account.",
+          "critical": true,
+          "evidence": "The network services account also contains infrastructure nodes AWS Site-to-Site VPN and AWS Transit Gateway"
+        },
+        {
+          "id": "L4-boundaries-07",
+          "dimension": "boundaries",
+          "claim": "The ingress, inspection and egress VPCs belong to the network services account.",
+          "critical": true,
+          "evidence": "The network services account contains an Ingress VPC with CIDR 10.1.0.0/20, an Inspection VPC with CIDR 10.2.0.0/24, and an Egress VPC with CIDR 10.3.0.0/20"
+        },
+        {
+          "id": "L4-boundaries-08",
+          "dimension": "boundaries",
+          "claim": "Ingress VPC contains the Route 53 inbound endpoint and private hosted zone.",
+          "critical": true,
+          "evidence": "The Ingress VPC contains a Route 53 inbound endpoint, an infrastructure node implemented with Amazon Route 53 Resolver, and a private hosted zone"
+        },
+        {
+          "id": "L4-boundaries-09",
+          "dimension": "boundaries",
+          "claim": "Inspection VPC contains AWS Network Firewall.",
+          "critical": true,
+          "evidence": "The Inspection VPC contains AWS Network Firewall"
+        },
+        {
+          "id": "L4-boundaries-10",
+          "dimension": "boundaries",
+          "claim": "Egress VPC contains the execute-api interface endpoint.",
+          "critical": true,
+          "evidence": "The Egress VPC contains an execute-api interface VPC endpoint"
+        },
+        {
+          "id": "L4-boundaries-11",
+          "dimension": "boundaries",
+          "claim": "Each environment workload account owns its corresponding private REST API and Lambda backend.",
+          "critical": true,
+          "evidence": "Each of the dev, test, and prod workload accounts contains its own Internal API software system boundary. Each such boundary contains two containers: an environment-specific private REST API implemented with Amazon API Gateway, and the corresponding environment-specific API backend implemented with AWS Lambda."
+        },
+        {
+          "id": "L4-boundaries-12",
+          "dimension": "boundaries",
+          "claim": "AWS Site-to-Site VPN belongs to the network services account.",
+          "critical": true,
+          "evidence": "The network services account also contains infrastructure nodes AWS Site-to-Site VPN and AWS Transit Gateway"
+        },
+        {
+          "id": "L4-relationships-01",
+          "dimension": "relationships",
+          "claim": "All three spokes connect to the hub VNet.",
+          "critical": true,
+          "evidence": "The dev spoke connects to the hub VNet and to the separate DNS extension VNet. The test and prod spokes each have an integration workload implemented with Function Apps or Logic Apps, use the same representative A/B flow, and connect to the hub VNet"
+        },
+        {
+          "id": "L4-relationships-02",
+          "dimension": "relationships",
+          "claim": "All three spokes connect to the separate DNS extension VNet.",
+          "critical": true,
+          "evidence": "The dev spoke connects to the hub VNet and to the separate DNS extension VNet. The test and prod spokes each have an integration workload implemented with Function Apps or Logic Apps, use the same representative A/B flow, and connect to the hub VNet and separate DNS extension VNet."
+        },
+        {
+          "id": "L4-relationships-03",
+          "dimension": "relationships",
+          "claim": "A VPN connection joins Azure VPN Gateway and AWS Site-to-Site VPN across the cloud boundary.",
+          "critical": true,
+          "evidence": "Azure VPN Gateway routes DNS on port 53 over an IPsec VPN to AWS Site-to-Site VPN, crossing from Azure Cloud into the AWS region's network services account."
+        },
+        {
+          "id": "L4-relationships-04",
+          "dimension": "relationships",
+          "claim": "AWS Site-to-Site VPN attaches to Transit Gateway.",
+          "critical": true,
+          "evidence": "A6: AWS Site-to-Site VPN routes DNS on port 53 to AWS Transit Gateway."
+        },
+        {
+          "id": "L4-relationships-05",
+          "dimension": "relationships",
+          "claim": "Transit Gateway attaches to ingress, inspection and egress VPCs.",
+          "critical": true,
+          "evidence": "Transit Gateway attachments are the ingress, inspection, and egress VPCs."
+        },
+        {
+          "id": "L4-relationships-06",
+          "dimension": "relationships",
+          "claim": "The private hosted zone is associated with ingress VPC rather than attached to the resolver endpoint.",
+          "critical": true,
+          "evidence": "The private hosted zone is execute-api.{region}.amazonaws.com and is associated with the ingress VPC."
+        },
+        {
+          "id": "L4-responsibilities-01",
+          "dimension": "responsibilities",
+          "claim": "The DNS extension resolver arrangement has the execute-api forwarding ruleset targeting Route 53 inbound endpoint IPs; its precise attachment to the outbound endpoint is ambiguous.",
+          "critical": false,
+          "evidence": "Its DNS forwarding ruleset is *.execute-api.{region}.amazonaws.com directed to {Route 53 inbound endpoint IPs}."
+        },
+        {
+          "id": "L4-responsibilities-02",
+          "dimension": "responsibilities",
+          "claim": "AWS Network Firewall performs IDPS inspection.",
+          "critical": false,
+          "evidence": "AWS Network Firewall — IDPS"
+        },
+        {
+          "id": "L4-responsibilities-03",
+          "dimension": "responsibilities",
+          "claim": "The execute-api interface endpoint is the private entry to API Gateway APIs.",
+          "critical": true,
+          "evidence": "This endpoint is the private entry to the API Gateway APIs"
+        },
+        {
+          "id": "L4-responsibilities-04",
+          "dimension": "responsibilities",
+          "claim": "Route 53 resolver endpoints perform DNS resolution and do not forward HTTPS requests.",
+          "critical": true,
+          "evidence": "Route 53 performs DNS resolution. No Route 53 outbound endpoint is retained. Resolver endpoints do not forward HTTPS."
+        },
+        {
+          "id": "L4-responsibilities-05",
+          "dimension": "responsibilities",
+          "claim": "Transit devices forward DNS traffic rather than originate software calls.",
+          "critical": false,
+          "evidence": "Flow A is the directed DNS query and DNS routing path, using port 53."
+        },
+        {
+          "id": "L4-directions-01",
+          "dimension": "directions",
+          "claim": "For DNS flow A, the Azure caller queries the Private Resolver inbound endpoint.",
+          "critical": true,
+          "evidence": "A1: The representative integration caller queries the Azure Private Resolver inbound endpoint"
+        },
+        {
+          "id": "L4-directions-02",
+          "dimension": "directions",
+          "claim": "The Azure inbound resolver passes the execute-api query to its outbound endpoint.",
+          "critical": true,
+          "evidence": "A2: The Private Resolver inbound endpoint sends an execute-api query to the Private Resolver outbound endpoint"
+        },
+        {
+          "id": "L4-directions-03",
+          "dimension": "directions",
+          "claim": "DNS traffic forwards from the Azure outbound resolver toward Azure Firewall.",
+          "critical": true,
+          "evidence": "A3: The Private Resolver outbound endpoint routes DNS on port 53 to Azure Firewall"
+        },
+        {
+          "id": "L4-directions-04",
+          "dimension": "directions",
+          "claim": "DNS forwards from Azure Firewall to Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "A4: Azure Firewall routes DNS on port 53 to Azure VPN Gateway."
+        },
+        {
+          "id": "L4-directions-05",
+          "dimension": "directions",
+          "claim": "DNS forwards from Azure VPN Gateway over the VPN to AWS Site-to-Site VPN.",
+          "critical": true,
+          "evidence": "A5: Azure VPN Gateway routes DNS on port 53 over an IPsec VPN to AWS Site-to-Site VPN"
+        },
+        {
+          "id": "L4-directions-06",
+          "dimension": "directions",
+          "claim": "DNS forwards from AWS Site-to-Site VPN to Transit Gateway.",
+          "critical": true,
+          "evidence": "A6: AWS Site-to-Site VPN routes DNS on port 53 to AWS Transit Gateway."
+        },
+        {
+          "id": "L4-directions-07",
+          "dimension": "directions",
+          "claim": "DNS forwards from Transit Gateway to AWS Network Firewall.",
+          "critical": true,
+          "evidence": "A7: AWS Transit Gateway routes DNS on port 53 through IDPS to AWS Network Firewall"
+        },
+        {
+          "id": "L4-directions-08",
+          "dimension": "directions",
+          "claim": "DNS forwards from AWS Network Firewall to the ingress Route 53 inbound resolver.",
+          "critical": true,
+          "evidence": "A8: AWS Network Firewall routes DNS on port 53 to the Route 53 inbound endpoint in the Ingress VPC."
+        },
+        {
+          "id": "L4-directions-09",
+          "dimension": "directions",
+          "claim": "The Route 53 inbound resolver resolves against the private hosted zone.",
+          "critical": true,
+          "evidence": "A9: The Route 53 inbound endpoint sends a resolve operation to the private hosted zone"
+        },
+        {
+          "id": "L4-directions-10",
+          "dimension": "directions",
+          "claim": "For API flow B, the Azure caller sends its request to Azure Firewall.",
+          "critical": true,
+          "evidence": "B1: The integration caller makes an HTTPS request on port 443 to Azure Firewall"
+        },
+        {
+          "id": "L4-directions-11",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Azure Firewall to Azure VPN Gateway.",
+          "critical": true,
+          "evidence": "B2: Azure Firewall routes HTTPS on port 443 to Azure VPN Gateway."
+        },
+        {
+          "id": "L4-directions-12",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Azure VPN Gateway over the VPN to AWS Site-to-Site VPN.",
+          "critical": true,
+          "evidence": "B3: Azure VPN Gateway routes HTTPS on port 443 over an IPsec VPN to AWS Site-to-Site VPN"
+        },
+        {
+          "id": "L4-directions-13",
+          "dimension": "directions",
+          "claim": "API traffic forwards from AWS Site-to-Site VPN to Transit Gateway.",
+          "critical": true,
+          "evidence": "B4: AWS Site-to-Site VPN routes HTTPS on port 443 to AWS Transit Gateway."
+        },
+        {
+          "id": "L4-directions-14",
+          "dimension": "directions",
+          "claim": "API traffic forwards from Transit Gateway through AWS Network Firewall inspection.",
+          "critical": true,
+          "evidence": "B5: AWS Transit Gateway routes HTTPS on port 443 through IDPS to AWS Network Firewall"
+        },
+        {
+          "id": "L4-directions-15",
+          "dimension": "directions",
+          "claim": "API traffic forwards from AWS Network Firewall to the execute-api interface endpoint.",
+          "critical": true,
+          "evidence": "B6: AWS Network Firewall performs routing labeled HTTPS 443 to the execute-api interface VPC endpoint in the Egress VPC."
+        },
+        {
+          "id": "L4-directions-16",
+          "dimension": "directions",
+          "claim": "The interface endpoint forwards API requests to the corresponding environment API Gateway REST API.",
+          "critical": true,
+          "evidence": "B7a, B7b, and B7c are alternative environment-specific HTTPS port 443 calls from that endpoint to the dev, test, and prod private REST APIs respectively."
+        },
+        {
+          "id": "L4-directions-17",
+          "dimension": "directions",
+          "claim": "Each API Gateway invokes its own environment Lambda backend.",
+          "critical": true,
+          "evidence": "B8a: The dev private REST API invokes the dev API backend using AWS Lambda. B8b: The test private REST API invokes the test API backend using AWS Lambda. B8c: The prod private REST API invokes the prod API backend using AWS Lambda."
+        },
+        {
+          "id": "L4-protocols-01",
+          "dimension": "protocols",
+          "claim": "The DNS flow uses DNS port 53.",
+          "critical": false,
+          "evidence": "Flow A is the directed DNS query and DNS routing path, using port 53."
+        },
+        {
+          "id": "L4-protocols-02",
+          "dimension": "protocols",
+          "claim": "The API request path uses HTTPS port 443.",
+          "critical": false,
+          "evidence": "Flow B is the directed HTTPS request/routing path on port 443"
+        },
+        {
+          "id": "L4-protocols-03",
+          "dimension": "protocols",
+          "claim": "Cross-cloud connectivity is an IPsec site-to-site VPN.",
+          "critical": false,
+          "evidence": "over an IPsec VPN to AWS Site-to-Site VPN"
+        },
+        {
+          "id": "L4-conditions-01",
+          "dimension": "conditions",
+          "claim": "API access is subject to the corresponding API resource policy.",
+          "critical": true,
+          "evidence": "API access remains subject to each API's resource policy"
+        },
+        {
+          "id": "L4-conditions-02",
+          "dimension": "conditions",
+          "claim": "A request uses its corresponding environment rather than fanning out to all three environments.",
+          "critical": true,
+          "evidence": "one environment is selected per request."
+        },
+        {
+          "id": "L4-conditions-03",
+          "dimension": "conditions",
+          "claim": "For each dev/test/prod environment, firewall rules allow its spoke subnet to Route 53 inbound endpoint IPs on port 53.",
+          "critical": true,
+          "evidence": "dev environment, source dev spoke subnet, destination Route 53 inbound endpoint IPs, port 53; test environment, source test spoke subnet, destination Route 53 inbound endpoint IPs, port 53; prod environment, source prod spoke subnet, destination Route 53 inbound endpoint IPs, port 53"
+        },
+        {
+          "id": "L4-conditions-04",
+          "dimension": "conditions",
+          "claim": "For each dev/test/prod environment, firewall rules allow its spoke subnet to *.execute-api.{region}.amazonaws.com on port 443.",
+          "critical": true,
+          "evidence": "dev/test/prod, source corresponding spoke subnet, destination *.execute-api.{region}.amazonaws.com, port 443"
+        },
+        {
+          "id": "L4-conditions-05",
+          "dimension": "conditions",
+          "claim": "The firewall allowances apply to both Azure Firewall and AWS Network Firewall.",
+          "critical": true,
+          "evidence": "The firewall allowance table applies to both Azure Firewall and AWS Network Firewall."
+        },
+        {
+          "id": "L4-notes-01",
+          "dimension": "notes",
+          "claim": "The representative caller/flow stands for all three environments, retaining Function Apps and Logic Apps alternatives without adding independent application flows.",
+          "critical": false,
+          "evidence": "The test and prod spokes each have an integration workload implemented with Function Apps or Logic Apps, use the same representative A/B flow"
+        },
+        {
+          "id": "L4-notes-02",
+          "dimension": "notes",
+          "claim": "DNS flow A returns the execute-api interface endpoint private IP; the reply is folded into the query.",
+          "critical": false,
+          "evidence": "A9: The Route 53 inbound endpoint sends a resolve operation to the private hosted zone, labeled DNS and endpoint private IP. Together with A1, the diagram identifies the private endpoint IP as the DNS result."
+        },
+        {
+          "id": "L4-notes-03",
+          "dimension": "notes",
+          "claim": "DNS flow A and API traffic flow B are distinct.",
+          "critical": false,
+          "evidence": "Flow A resolves DNS; flow B carries the corresponding environment's API request."
+        },
+        {
+          "id": "L4-notes-04",
+          "dimension": "notes",
+          "claim": "Transit Gateway/VPC routing beyond the specified forwarding path is unspecified.",
+          "critical": false,
+          "evidence": "Transit Gateway/VPC routing beyond the depicted forwarding path is unspecified."
+        },
+        {
+          "id": "L4-notes-05",
+          "dimension": "notes",
+          "claim": "Region and resolver IP addresses are parameters, not fixed actual values.",
+          "critical": false,
+          "evidence": "Architecture parameters are {region} and {Route 53 inbound endpoint IPs}."
+        }
+      ]
+    }
+  },
+  "pairs": {
+    "0-2": [
+      {
+        "before": [
+          "L0-elements-01"
+        ],
+        "after": [
+          "L2-elements-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-02"
+        ],
+        "after": [
+          "L2-elements-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-03"
+        ],
+        "after": [
+          "L2-elements-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-04"
+        ],
+        "after": [
+          "L2-elements-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-05"
+        ],
+        "after": [
+          "L2-elements-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-06"
+        ],
+        "after": [
+          "L2-elements-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-07"
+        ],
+        "after": [
+          "L2-elements-07"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-08"
+        ],
+        "after": [
+          "L2-elements-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-09"
+        ],
+        "after": [
+          "L2-elements-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-10"
+        ],
+        "after": [
+          "L2-elements-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-11"
+        ],
+        "after": [
+          "L2-elements-11"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-12"
+        ],
+        "after": [
+          "L2-elements-12"
+        ],
+        "status": "preserved",
+        "reason": "The per-account API/Lambda pair, together with the explicit dev/test/prod account enumeration, preserves all three pairs. The later explicit total is an unpacking of the source enumeration, not a new multiplicity."
+      },
+      {
+        "before": [
+          "L0-elements-13"
+        ],
+        "after": [
+          "L2-elements-13"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-01"
+        ],
+        "after": [
+          "L2-boundaries-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-02"
+        ],
+        "after": [
+          "L2-boundaries-02"
+        ],
+        "status": "preserved",
+        "reason": "All three environment workloads retain their spoke ownership. Choosing dev as the illustrated representative does not relocate the other workloads."
+      },
+      {
+        "before": [
+          "L0-boundaries-03"
+        ],
+        "after": [
+          "L2-boundaries-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-04"
+        ],
+        "after": [
+          "L2-boundaries-04"
+        ],
+        "status": "preserved",
+        "reason": "The descriptions keep DNS endpoints in the separate DNS extension VNet and firewall/VPN in the hub; the whole VNet enumeration supplies the separation."
+      },
+      {
+        "before": [
+          "L0-boundaries-05"
+        ],
+        "after": [
+          "L2-boundaries-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-06"
+        ],
+        "after": [
+          "L2-boundaries-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-07"
+        ],
+        "after": [
+          "L2-boundaries-07"
+        ],
+        "status": "preserved",
+        "reason": "The source introduces the three networking VPCs in the network services account paragraph; the targets make this ownership explicit. No account transfer is asserted."
+      },
+      {
+        "before": [
+          "L0-boundaries-08"
+        ],
+        "after": [
+          "L2-boundaries-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-09"
+        ],
+        "after": [
+          "L2-boundaries-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-10"
+        ],
+        "after": [
+          "L2-boundaries-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-11"
+        ],
+        "after": [
+          "L2-boundaries-11"
+        ],
+        "status": "preserved",
+        "reason": "The Internal API system/container notation groups precisely the already described per-account API and its backend. It does not add another owner, hosting environment, lifecycle or service scope; all pairs remain in their own workload account."
+      },
+      {
+        "before": [],
+        "after": [
+          "L2-boundaries-12"
+        ],
+        "status": "added",
+        "reason": "The source does not assign the AWS Site-to-Site VPN to an account. The target explicitly assigns it to the network services account. Attachment to Transit Gateway does not establish account ownership without an unstated inference."
+      },
+      {
+        "before": [
+          "L0-relationships-01"
+        ],
+        "after": [
+          "L2-relationships-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-relationships-02"
+        ],
+        "after": [
+          "L2-relationships-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-relationships-03"
+        ],
+        "after": [
+          "L2-relationships-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-relationships-04"
+        ],
+        "after": [
+          "L2-relationships-04"
+        ],
+        "status": "preserved",
+        "reason": "The explicit adjacent VPN-to-Transit Gateway forwarding leg retains the attachment needed for the specified path; it is not inferred from vendor defaults."
+      },
+      {
+        "before": [
+          "L0-relationships-05"
+        ],
+        "after": [
+          "L2-relationships-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-relationships-06"
+        ],
+        "after": [
+          "L2-relationships-06"
+        ],
+        "status": "preserved",
+        "reason": "The explicit VPC association remains. A separate DNS resolve operation uses the zone and does not assert a replacement zone attachment to the resolver."
+      },
+      {
+        "before": [
+          "L0-responsibilities-01"
+        ],
+        "after": [
+          "L2-responsibilities-01"
+        ],
+        "status": "preserved",
+        "reason": "The ruleset and exact wildcard/target survive. In L4, its follows the immediately identified inbound/outbound resolver pair; A2/A3 continue to put forwarding at the outbound endpoint, preserving ownership in context."
+      },
+      {
+        "before": [
+          "L0-responsibilities-02"
+        ],
+        "after": [
+          "L2-responsibilities-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-responsibilities-03"
+        ],
+        "after": [
+          "L2-responsibilities-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-responsibilities-04"
+        ],
+        "after": [
+          "L2-responsibilities-04"
+        ],
+        "status": "preserved",
+        "reason": "The meaningful DNS-versus-application role is unchanged. The target generalizes the prose prohibition to resolver endpoints, but its explicit separate HTTPS path already excludes them; no new network access outcome is asserted."
+      },
+      {
+        "before": [
+          "L0-responsibilities-05"
+        ],
+        "after": [
+          "L2-responsibilities-05"
+        ],
+        "status": "preserved",
+        "reason": "Although phrased as a drawing direction in L0, the distinction specifies the infrastructure role. All transit legs remain explicitly routing, and only the caller/resolver interactions are described as queries."
+      },
+      {
+        "before": [
+          "L0-directions-01"
+        ],
+        "after": [
+          "L2-directions-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-02"
+        ],
+        "after": [
+          "L2-directions-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-03"
+        ],
+        "after": [
+          "L2-directions-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-04"
+        ],
+        "after": [
+          "L2-directions-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-05"
+        ],
+        "after": [
+          "L2-directions-05"
+        ],
+        "status": "preserved",
+        "reason": "The source names the VPN endpoints in its VPN paragraph and specifies this DNS path across that connection. The target expands the AWS VPN endpoint explicitly without inventing another leg."
+      },
+      {
+        "before": [
+          "L0-directions-06"
+        ],
+        "after": [
+          "L2-directions-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-07"
+        ],
+        "after": [
+          "L2-directions-07"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-08"
+        ],
+        "after": [
+          "L2-directions-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-09"
+        ],
+        "after": [
+          "L2-directions-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-10"
+        ],
+        "after": [
+          "L2-directions-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-11"
+        ],
+        "after": [
+          "L2-directions-11"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-12"
+        ],
+        "after": [
+          "L2-directions-12"
+        ],
+        "status": "preserved",
+        "reason": "The source VPN definition supplies the AWS endpoint for its application path across the IPsec VPN; the target merely expands that stated connection."
+      },
+      {
+        "before": [
+          "L0-directions-13"
+        ],
+        "after": [
+          "L2-directions-13"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-14"
+        ],
+        "after": [
+          "L2-directions-14"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-15"
+        ],
+        "after": [
+          "L2-directions-15"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-16"
+        ],
+        "after": [
+          "L2-directions-16"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-17"
+        ],
+        "after": [
+          "L2-directions-17"
+        ],
+        "status": "preserved",
+        "reason": "The per-workload-account API/backing Lambda arrangement supplies environment correspondence in L0. The expanded dev/test/prod invocation list preserves it."
+      },
+      {
+        "before": [
+          "L0-protocols-01"
+        ],
+        "after": [
+          "L2-protocols-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-protocols-02"
+        ],
+        "after": [
+          "L2-protocols-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-protocols-03"
+        ],
+        "after": [
+          "L2-protocols-03"
+        ],
+        "status": "preserved",
+        "reason": "IPsec and the site-to-site VPN endpoint remain explicit. The later shorter label does not turn the endpoint into a different connectivity mechanism."
+      },
+      {
+        "before": [
+          "L0-conditions-01"
+        ],
+        "after": [
+          "L2-conditions-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-conditions-02"
+        ],
+        "after": [
+          "L2-conditions-02"
+        ],
+        "status": "preserved",
+        "reason": "The explicit one-environment language unpacks the singular corresponding workload account condition in L0; it does not add a routing alternative."
+      },
+      {
+        "before": [
+          "L0-conditions-03"
+        ],
+        "after": [
+          "L2-conditions-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-conditions-04"
+        ],
+        "after": [
+          "L2-conditions-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-conditions-05"
+        ],
+        "after": [
+          "L2-conditions-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-notes-01"
+        ],
+        "after": [
+          "L2-notes-01"
+        ],
+        "status": "preserved",
+        "reason": "The architectural cardinality of the representative depiction survives. Selecting dev as the displayed exemplar is a notation choice, not additional dev-only behavior."
+      },
+      {
+        "before": [
+          "L0-notes-02"
+        ],
+        "after": [
+          "L2-notes-02"
+        ],
+        "status": "preserved",
+        "reason": "The returned private endpoint IP remains the DNS result, not a reversed call; the sole execute-api interface endpoint and A9/A1 context preserve which endpoint is meant."
+      },
+      {
+        "before": [
+          "L0-notes-03"
+        ],
+        "after": [
+          "L2-notes-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-notes-04"
+        ],
+        "after": [
+          "L2-notes-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-notes-05"
+        ],
+        "after": [
+          "L2-notes-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      }
+    ],
+    "2-4": [
+      {
+        "before": [
+          "L2-elements-01"
+        ],
+        "after": [
+          "L4-elements-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-02"
+        ],
+        "after": [
+          "L4-elements-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-03"
+        ],
+        "after": [
+          "L4-elements-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-04"
+        ],
+        "after": [
+          "L4-elements-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-05"
+        ],
+        "after": [
+          "L4-elements-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-06"
+        ],
+        "after": [
+          "L4-elements-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-07"
+        ],
+        "after": [
+          "L4-elements-07"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-08"
+        ],
+        "after": [
+          "L4-elements-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-09"
+        ],
+        "after": [
+          "L4-elements-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-10"
+        ],
+        "after": [
+          "L4-elements-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-11"
+        ],
+        "after": [
+          "L4-elements-11"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-elements-12"
+        ],
+        "after": [
+          "L4-elements-12"
+        ],
+        "status": "preserved",
+        "reason": "The per-account API/Lambda pair, together with the explicit dev/test/prod account enumeration, preserves all three pairs. The later explicit total is an unpacking of the source enumeration, not a new multiplicity."
+      },
+      {
+        "before": [
+          "L2-elements-13"
+        ],
+        "after": [
+          "L4-elements-13"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-boundaries-01"
+        ],
+        "after": [
+          "L4-boundaries-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-boundaries-02"
+        ],
+        "after": [
+          "L4-boundaries-02"
+        ],
+        "status": "preserved",
+        "reason": "All three environment workloads retain their spoke ownership. Choosing dev as the illustrated representative does not relocate the other workloads."
+      },
+      {
+        "before": [
+          "L2-boundaries-03"
+        ],
+        "after": [
+          "L4-boundaries-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-boundaries-04"
+        ],
+        "after": [
+          "L4-boundaries-04"
+        ],
+        "status": "preserved",
+        "reason": "The descriptions keep DNS endpoints in the separate DNS extension VNet and firewall/VPN in the hub; the whole VNet enumeration supplies the separation."
+      },
+      {
+        "before": [
+          "L2-boundaries-05"
+        ],
+        "after": [
+          "L4-boundaries-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-boundaries-06"
+        ],
+        "after": [
+          "L4-boundaries-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-boundaries-07"
+        ],
+        "after": [
+          "L4-boundaries-07"
+        ],
+        "status": "preserved",
+        "reason": "The source introduces the three networking VPCs in the network services account paragraph; the targets make this ownership explicit. No account transfer is asserted."
+      },
+      {
+        "before": [
+          "L2-boundaries-08"
+        ],
+        "after": [
+          "L4-boundaries-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-boundaries-09"
+        ],
+        "after": [
+          "L4-boundaries-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-boundaries-10"
+        ],
+        "after": [
+          "L4-boundaries-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-boundaries-11"
+        ],
+        "after": [
+          "L4-boundaries-11"
+        ],
+        "status": "preserved",
+        "reason": "The Internal API system/container notation groups precisely the already described per-account API and its backend. It does not add another owner, hosting environment, lifecycle or service scope; all pairs remain in their own workload account."
+      },
+      {
+        "before": [
+          "L2-boundaries-12"
+        ],
+        "after": [
+          "L4-boundaries-12"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-relationships-01"
+        ],
+        "after": [
+          "L4-relationships-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-relationships-02"
+        ],
+        "after": [
+          "L4-relationships-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-relationships-03"
+        ],
+        "after": [
+          "L4-relationships-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-relationships-04"
+        ],
+        "after": [
+          "L4-relationships-04"
+        ],
+        "status": "preserved",
+        "reason": "The explicit adjacent VPN-to-Transit Gateway forwarding leg retains the attachment needed for the specified path; it is not inferred from vendor defaults."
+      },
+      {
+        "before": [
+          "L2-relationships-05"
+        ],
+        "after": [
+          "L4-relationships-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-relationships-06"
+        ],
+        "after": [
+          "L4-relationships-06"
+        ],
+        "status": "preserved",
+        "reason": "The explicit VPC association remains. A separate DNS resolve operation uses the zone and does not assert a replacement zone attachment to the resolver."
+      },
+      {
+        "before": [
+          "L2-responsibilities-01"
+        ],
+        "after": [
+          "L4-responsibilities-01"
+        ],
+        "status": "uncertain",
+        "reason": "The source explicitly assigns the forwarding ruleset to the outbound endpoint. L4 says Its DNS forwarding ruleset after describing the DNS extension VNet and both endpoints. The wildcard and target IPs survive, but Its can refer to the VNet/resolver arrangement rather than the outbound endpoint. A2/A3 preserve outbound forwarding without unambiguously retaining ruleset attachment. This is unresolved attachment precision, not an asserted transfer inferred from vendor behavior."
+      },
+      {
+        "before": [
+          "L2-responsibilities-02"
+        ],
+        "after": [
+          "L4-responsibilities-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-responsibilities-03"
+        ],
+        "after": [
+          "L4-responsibilities-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-responsibilities-04"
+        ],
+        "after": [
+          "L4-responsibilities-04"
+        ],
+        "status": "preserved",
+        "reason": "The meaningful DNS-versus-application role is unchanged. The target generalizes the prose prohibition to resolver endpoints, but its explicit separate HTTPS path already excludes them; no new network access outcome is asserted."
+      },
+      {
+        "before": [
+          "L2-responsibilities-05"
+        ],
+        "after": [
+          "L4-responsibilities-05"
+        ],
+        "status": "preserved",
+        "reason": "Although phrased as a drawing direction in L0, the distinction specifies the infrastructure role. All transit legs remain explicitly routing, and only the caller/resolver interactions are described as queries."
+      },
+      {
+        "before": [
+          "L2-directions-01"
+        ],
+        "after": [
+          "L4-directions-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-02"
+        ],
+        "after": [
+          "L4-directions-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-03"
+        ],
+        "after": [
+          "L4-directions-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-04"
+        ],
+        "after": [
+          "L4-directions-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-05"
+        ],
+        "after": [
+          "L4-directions-05"
+        ],
+        "status": "preserved",
+        "reason": "The source names the VPN endpoints in its VPN paragraph and specifies this DNS path across that connection. The target expands the AWS VPN endpoint explicitly without inventing another leg."
+      },
+      {
+        "before": [
+          "L2-directions-06"
+        ],
+        "after": [
+          "L4-directions-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-07"
+        ],
+        "after": [
+          "L4-directions-07"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-08"
+        ],
+        "after": [
+          "L4-directions-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-09"
+        ],
+        "after": [
+          "L4-directions-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-10"
+        ],
+        "after": [
+          "L4-directions-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-11"
+        ],
+        "after": [
+          "L4-directions-11"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-12"
+        ],
+        "after": [
+          "L4-directions-12"
+        ],
+        "status": "preserved",
+        "reason": "The source VPN definition supplies the AWS endpoint for its application path across the IPsec VPN; the target merely expands that stated connection."
+      },
+      {
+        "before": [
+          "L2-directions-13"
+        ],
+        "after": [
+          "L4-directions-13"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-14"
+        ],
+        "after": [
+          "L4-directions-14"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-15"
+        ],
+        "after": [
+          "L4-directions-15"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-16"
+        ],
+        "after": [
+          "L4-directions-16"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-directions-17"
+        ],
+        "after": [
+          "L4-directions-17"
+        ],
+        "status": "preserved",
+        "reason": "The per-workload-account API/backing Lambda arrangement supplies environment correspondence in L0. The expanded dev/test/prod invocation list preserves it."
+      },
+      {
+        "before": [
+          "L2-protocols-01"
+        ],
+        "after": [
+          "L4-protocols-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-protocols-02"
+        ],
+        "after": [
+          "L4-protocols-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-protocols-03"
+        ],
+        "after": [
+          "L4-protocols-03"
+        ],
+        "status": "preserved",
+        "reason": "IPsec and the site-to-site VPN endpoint remain explicit. The later shorter label does not turn the endpoint into a different connectivity mechanism."
+      },
+      {
+        "before": [
+          "L2-conditions-01"
+        ],
+        "after": [
+          "L4-conditions-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-conditions-02"
+        ],
+        "after": [
+          "L4-conditions-02"
+        ],
+        "status": "preserved",
+        "reason": "The explicit one-environment language unpacks the singular corresponding workload account condition in L0; it does not add a routing alternative."
+      },
+      {
+        "before": [
+          "L2-conditions-03"
+        ],
+        "after": [
+          "L4-conditions-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-conditions-04"
+        ],
+        "after": [
+          "L4-conditions-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-conditions-05"
+        ],
+        "after": [
+          "L4-conditions-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-notes-01"
+        ],
+        "after": [
+          "L4-notes-01"
+        ],
+        "status": "preserved",
+        "reason": "The architectural cardinality of the representative depiction survives. Selecting dev as the displayed exemplar is a notation choice, not additional dev-only behavior."
+      },
+      {
+        "before": [
+          "L2-notes-02"
+        ],
+        "after": [
+          "L4-notes-02"
+        ],
+        "status": "preserved",
+        "reason": "The returned private endpoint IP remains the DNS result, not a reversed call; the sole execute-api interface endpoint and A9/A1 context preserve which endpoint is meant."
+      },
+      {
+        "before": [
+          "L2-notes-03"
+        ],
+        "after": [
+          "L4-notes-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-notes-04"
+        ],
+        "after": [
+          "L4-notes-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-notes-05"
+        ],
+        "after": [
+          "L4-notes-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      }
+    ],
+    "0-4": [
+      {
+        "before": [
+          "L0-elements-01"
+        ],
+        "after": [
+          "L4-elements-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-02"
+        ],
+        "after": [
+          "L4-elements-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-03"
+        ],
+        "after": [
+          "L4-elements-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-04"
+        ],
+        "after": [
+          "L4-elements-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-05"
+        ],
+        "after": [
+          "L4-elements-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-06"
+        ],
+        "after": [
+          "L4-elements-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-07"
+        ],
+        "after": [
+          "L4-elements-07"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-08"
+        ],
+        "after": [
+          "L4-elements-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-09"
+        ],
+        "after": [
+          "L4-elements-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-10"
+        ],
+        "after": [
+          "L4-elements-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-11"
+        ],
+        "after": [
+          "L4-elements-11"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-elements-12"
+        ],
+        "after": [
+          "L4-elements-12"
+        ],
+        "status": "preserved",
+        "reason": "The per-account API/Lambda pair, together with the explicit dev/test/prod account enumeration, preserves all three pairs. The later explicit total is an unpacking of the source enumeration, not a new multiplicity."
+      },
+      {
+        "before": [
+          "L0-elements-13"
+        ],
+        "after": [
+          "L4-elements-13"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-01"
+        ],
+        "after": [
+          "L4-boundaries-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-02"
+        ],
+        "after": [
+          "L4-boundaries-02"
+        ],
+        "status": "preserved",
+        "reason": "All three environment workloads retain their spoke ownership. Choosing dev as the illustrated representative does not relocate the other workloads."
+      },
+      {
+        "before": [
+          "L0-boundaries-03"
+        ],
+        "after": [
+          "L4-boundaries-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-04"
+        ],
+        "after": [
+          "L4-boundaries-04"
+        ],
+        "status": "preserved",
+        "reason": "The descriptions keep DNS endpoints in the separate DNS extension VNet and firewall/VPN in the hub; the whole VNet enumeration supplies the separation."
+      },
+      {
+        "before": [
+          "L0-boundaries-05"
+        ],
+        "after": [
+          "L4-boundaries-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-06"
+        ],
+        "after": [
+          "L4-boundaries-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-07"
+        ],
+        "after": [
+          "L4-boundaries-07"
+        ],
+        "status": "preserved",
+        "reason": "The source introduces the three networking VPCs in the network services account paragraph; the targets make this ownership explicit. No account transfer is asserted."
+      },
+      {
+        "before": [
+          "L0-boundaries-08"
+        ],
+        "after": [
+          "L4-boundaries-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-09"
+        ],
+        "after": [
+          "L4-boundaries-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-10"
+        ],
+        "after": [
+          "L4-boundaries-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-boundaries-11"
+        ],
+        "after": [
+          "L4-boundaries-11"
+        ],
+        "status": "preserved",
+        "reason": "The Internal API system/container notation groups precisely the already described per-account API and its backend. It does not add another owner, hosting environment, lifecycle or service scope; all pairs remain in their own workload account."
+      },
+      {
+        "before": [],
+        "after": [
+          "L4-boundaries-12"
+        ],
+        "status": "added",
+        "reason": "The source does not assign the AWS Site-to-Site VPN to an account. The target explicitly assigns it to the network services account. Attachment to Transit Gateway does not establish account ownership without an unstated inference."
+      },
+      {
+        "before": [
+          "L0-relationships-01"
+        ],
+        "after": [
+          "L4-relationships-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-relationships-02"
+        ],
+        "after": [
+          "L4-relationships-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-relationships-03"
+        ],
+        "after": [
+          "L4-relationships-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-relationships-04"
+        ],
+        "after": [
+          "L4-relationships-04"
+        ],
+        "status": "preserved",
+        "reason": "The explicit adjacent VPN-to-Transit Gateway forwarding leg retains the attachment needed for the specified path; it is not inferred from vendor defaults."
+      },
+      {
+        "before": [
+          "L0-relationships-05"
+        ],
+        "after": [
+          "L4-relationships-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-relationships-06"
+        ],
+        "after": [
+          "L4-relationships-06"
+        ],
+        "status": "preserved",
+        "reason": "The explicit VPC association remains. A separate DNS resolve operation uses the zone and does not assert a replacement zone attachment to the resolver."
+      },
+      {
+        "before": [
+          "L0-responsibilities-01"
+        ],
+        "after": [
+          "L4-responsibilities-01"
+        ],
+        "status": "uncertain",
+        "reason": "The source explicitly assigns the forwarding ruleset to the outbound endpoint. L4 says Its DNS forwarding ruleset after describing the DNS extension VNet and both endpoints. The wildcard and target IPs survive, but Its can refer to the VNet/resolver arrangement rather than the outbound endpoint. A2/A3 preserve outbound forwarding without unambiguously retaining ruleset attachment. This is unresolved attachment precision, not an asserted transfer inferred from vendor behavior."
+      },
+      {
+        "before": [
+          "L0-responsibilities-02"
+        ],
+        "after": [
+          "L4-responsibilities-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-responsibilities-03"
+        ],
+        "after": [
+          "L4-responsibilities-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-responsibilities-04"
+        ],
+        "after": [
+          "L4-responsibilities-04"
+        ],
+        "status": "preserved",
+        "reason": "The meaningful DNS-versus-application role is unchanged. The target generalizes the prose prohibition to resolver endpoints, but its explicit separate HTTPS path already excludes them; no new network access outcome is asserted."
+      },
+      {
+        "before": [
+          "L0-responsibilities-05"
+        ],
+        "after": [
+          "L4-responsibilities-05"
+        ],
+        "status": "preserved",
+        "reason": "Although phrased as a drawing direction in L0, the distinction specifies the infrastructure role. All transit legs remain explicitly routing, and only the caller/resolver interactions are described as queries."
+      },
+      {
+        "before": [
+          "L0-directions-01"
+        ],
+        "after": [
+          "L4-directions-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-02"
+        ],
+        "after": [
+          "L4-directions-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-03"
+        ],
+        "after": [
+          "L4-directions-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-04"
+        ],
+        "after": [
+          "L4-directions-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-05"
+        ],
+        "after": [
+          "L4-directions-05"
+        ],
+        "status": "preserved",
+        "reason": "The source names the VPN endpoints in its VPN paragraph and specifies this DNS path across that connection. The target expands the AWS VPN endpoint explicitly without inventing another leg."
+      },
+      {
+        "before": [
+          "L0-directions-06"
+        ],
+        "after": [
+          "L4-directions-06"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-07"
+        ],
+        "after": [
+          "L4-directions-07"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-08"
+        ],
+        "after": [
+          "L4-directions-08"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-09"
+        ],
+        "after": [
+          "L4-directions-09"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-10"
+        ],
+        "after": [
+          "L4-directions-10"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-11"
+        ],
+        "after": [
+          "L4-directions-11"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-12"
+        ],
+        "after": [
+          "L4-directions-12"
+        ],
+        "status": "preserved",
+        "reason": "The source VPN definition supplies the AWS endpoint for its application path across the IPsec VPN; the target merely expands that stated connection."
+      },
+      {
+        "before": [
+          "L0-directions-13"
+        ],
+        "after": [
+          "L4-directions-13"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-14"
+        ],
+        "after": [
+          "L4-directions-14"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-15"
+        ],
+        "after": [
+          "L4-directions-15"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-16"
+        ],
+        "after": [
+          "L4-directions-16"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-directions-17"
+        ],
+        "after": [
+          "L4-directions-17"
+        ],
+        "status": "preserved",
+        "reason": "The per-workload-account API/backing Lambda arrangement supplies environment correspondence in L0. The expanded dev/test/prod invocation list preserves it."
+      },
+      {
+        "before": [
+          "L0-protocols-01"
+        ],
+        "after": [
+          "L4-protocols-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-protocols-02"
+        ],
+        "after": [
+          "L4-protocols-02"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-protocols-03"
+        ],
+        "after": [
+          "L4-protocols-03"
+        ],
+        "status": "preserved",
+        "reason": "IPsec and the site-to-site VPN endpoint remain explicit. The later shorter label does not turn the endpoint into a different connectivity mechanism."
+      },
+      {
+        "before": [
+          "L0-conditions-01"
+        ],
+        "after": [
+          "L4-conditions-01"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-conditions-02"
+        ],
+        "after": [
+          "L4-conditions-02"
+        ],
+        "status": "preserved",
+        "reason": "The explicit one-environment language unpacks the singular corresponding workload account condition in L0; it does not add a routing alternative."
+      },
+      {
+        "before": [
+          "L0-conditions-03"
+        ],
+        "after": [
+          "L4-conditions-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-conditions-04"
+        ],
+        "after": [
+          "L4-conditions-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-conditions-05"
+        ],
+        "after": [
+          "L4-conditions-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-notes-01"
+        ],
+        "after": [
+          "L4-notes-01"
+        ],
+        "status": "preserved",
+        "reason": "The architectural cardinality of the representative depiction survives. Selecting dev as the displayed exemplar is a notation choice, not additional dev-only behavior."
+      },
+      {
+        "before": [
+          "L0-notes-02"
+        ],
+        "after": [
+          "L4-notes-02"
+        ],
+        "status": "preserved",
+        "reason": "The returned private endpoint IP remains the DNS result, not a reversed call; the sole execute-api interface endpoint and A9/A1 context preserve which endpoint is meant."
+      },
+      {
+        "before": [
+          "L0-notes-03"
+        ],
+        "after": [
+          "L4-notes-03"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-notes-04"
+        ],
+        "after": [
+          "L4-notes-04"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-notes-05"
+        ],
+        "after": [
+          "L4-notes-05"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is stated in both descriptions; wording and notation do not change its meaning."
+      }
+    ]
+  },
+  "judgeNotes": {
+    "allowedSources": [
+      "/tmp/diagram-full-roundtrip.RZnmyG/l0-02.txt",
+      "/tmp/diagram-full-roundtrip.RZnmyG/case-02/l2.txt",
+      "/tmp/diagram-full-roundtrip.RZnmyG/case-02/l4.txt",
+      "/workspace/skills/incubator/architecture-diagram/evals/roundtrip.md",
+      "/workspace/skills/incubator/architecture-diagram/evals/roundtrip.mjs"
+    ],
+    "sourceAttestation": "I read only the three authorized descriptions and the generic roundtrip.md/roundtrip.mjs protocol/code. I did not inspect diagrams, XML, SVG, images, other cases, prior reports or model endpoints. The JSON builder and grading outputs are my own derived artifacts.",
+    "exclusions": "Excluded authoring-only instructions (drawing geometry, numbering/color/legend conventions and requested C4 node types), the removed Route 53 outbound endpoint scope, and readout-only statements about absent call frequency/authentication/error details. Retained architecture-bearing forwarding-versus-origination roles, the representative environment multiplicity, the private-IP DNS response, parameter and routing unknowns, and firewall allowances. Faithful C4 type/technology labels and the per-account Internal API grouping do not change the service scope, ownership or hosting.",
+    "findings": "L2 explicitly assigns AWS Site-to-Site VPN to the network services account although L0 only assigns Transit Gateway to that account. This added account ownership is critical. L4 preserves it. L4 retains the forwarding wildcard and target IPs but its possessive ruleset wording is ambiguous about attachment to the outbound endpoint; comparisons to L4 mark this uncertain. No other semantic drift was found in the extracted ledger. Assignment of the three network VPCs to the network services account is read from the whole L0 networking paragraph; this extraction judgment is stated rather than obtained from vendor behavior.",
+    "limitations": "Evidence and coverage validation cannot prove extraction completeness. The account-placement finding depends on treating unstated VPN ownership as unknown rather than inferring it from a Transit Gateway attachment. No diagrams or architecture-validity evidence were inspected."
+  }
+}

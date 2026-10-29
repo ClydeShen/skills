@@ -1,0 +1,32 @@
+The diagram is titled “Dynamic diagram (deployment view): Partner amendment requests through SOAP to AWS validation.” Its stated purpose is to authenticate partner amendment requests, authorize the required user-profile role, validate in AWS, and return XML through the originating SOAP API.
+
+An Azure Cloud deployment node contains an Azure API Management (APIM) deployment node, Azure AD B2C (a container and identity provider), a Roles / permissions container using Azure Cosmos DB, and an Inbound processing software-system boundary. The APIM deployment node contains Legacy SOAP API and Partner SOAP API, both containers of type SOAP API, and APIM policy processing, a container using Azure API Management. The Inbound processing boundary contains API-Route-Processor and Common-Authx-Handler, both Azure Logic Apps workflow containers, plus a nested “Sub-workflows — 2 workflows” software-system boundary containing Amend-Order-Processor and Amend-Document-Processor, also Azure Logic Apps workflow containers. Four Azure Logic Apps workflow containers are depicted in total.
+
+Outside Azure Cloud are two external software systems: Existing partner integrators and New partner integrators. A Site-to-site VPN container, labeled “Azure ↔ AWS connection,” is outside the depicted Azure and AWS cloud boundaries and connects the Azure workflows to AWS. An AWS Cloud deployment node contains an API Gateway container using AWS API Gateway and a nested Core platform software-system boundary. That Core platform boundary contains Validation engine, an AWS Lambda function container responsible for business-rule validation. API Gateway is within AWS Cloud but outside the Core platform boundary.
+
+The numbered directed requests and their response annotations are:
+
+1a. Existing partner integrators initiate SOAP over HTTPS to Legacy SOAP API, crossing into Azure Cloud and APIM. The response is XML.
+1b. New partner integrators initiate SOAP over HTTPS to Partner SOAP API, crossing into Azure Cloud and APIM. The response is XML.
+2a. Legacy SOAP API enters APIM policy processing with XML. The response is XML.
+2b. Partner SOAP API enters APIM policy processing with XML. The response is XML.
+3. APIM policy processing initiates “Authenticate [Identity]” against Azure AD B2C, across the APIM deployment boundary but within Azure Cloud. The return annotation is “Result.” Authentication input may be basic or bearer. APIM authenticates against Azure AD B2C; the identity exchange implementation is unspecified.
+4. APIM policy processing forwards an “Authenticated request after controls” to API-Route-Processor, crossing from APIM into the Inbound processing boundary. The request is XML and the response is XML.
+5. API-Route-Processor delegates authorization to Common-Authx-Handler through a workflow call. The response is a role decision.
+6. Common-Authx-Handler queries Azure Cosmos DB, crossing out of the Inbound processing boundary while staying within Azure Cloud. The query supplies “system account name + user profile name”; the response is the required user-profile role result.
+7a. API-Route-Processor calls Amend-Order-Processor for amend_order through a workflow call, entering the nested sub-workflows boundary. This method requires ManageOrders. The response is XML.
+7b. API-Route-Processor calls Amend-Document-Processor for amend_document through a workflow call, entering the nested sub-workflows boundary. This method requires ManageDocuments. The response is XML.
+8a. Amend-Order-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, leaving the sub-workflows, Inbound processing, and Azure Cloud boundaries. The response is JSON.
+8b. Amend-Document-Processor calls the AWS amend API over HTTPS/JSON via the Site-to-site VPN, likewise leaving those Azure boundaries. The response is JSON.
+9a and 9b. The Site-to-site VPN routes each workflow's traffic to API Gateway inside AWS Cloud, over HTTPS/JSON. Each response is JSON.
+10. API Gateway invokes Validation engine across the Core platform boundary using “Lambda invocation.” The response is JSON.
+
+APIM controls after authentication check system-account roles and require a user profile for both amendment methods. Common-Authx-Handler checks the user-profile role; this is distinct from APIM's system-account role checks. The method authorization table specifies that amend_order requires user-profile role ManageOrders and a mandatory user profile, while amend_document requires user-profile role ManageDocuments and a mandatory user profile. For a failed role check or missing profile, no explicit denial status, payload, or separate denial route is shown.
+
+Both sub-workflows validate XML, method, and malformed base64. They wrap decoded XML in JSON. Their JSON response is transformed through a Liquid template into XML, and they return XML through the originating SOAP API.
+
+Failure handling hides internal errors, for example an AWS-call timeout. Only a generic error is returned through the originating SOAP entry: Legacy for existing integrators, Partner for new integrators. The exact error schema and status are unspecified.
+
+The AWS amend operation and response schema are unspecified. Individual business rules and call frequency are unspecified.
+
+The legend identifies official Azure2 / AWS4 catalog service icons and plain boxes where a service icon is inapplicable. Boundaries represent deployment or software-system domains. A solid filled arrow denotes a request or forwarding action; a dashed filled arrow denotes auxiliary authentication or a role query. Normal responses are folded into request labels rather than drawn as separate response paths. VPN legs are traffic routing. No additional behavior is implied by icon placement or line routing.

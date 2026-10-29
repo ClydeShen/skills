@@ -1,0 +1,27 @@
+The diagram is titled “Dynamic diagram (deployment view): Token-based API authorization.” Its requirement is to authenticate users and authorize each API request. One element of each kind is depicted; no instance multiplicities are specified.
+
+There is a User, typed as a Person, and a Web sign-in page, typed as a Container with technology Web app. The sign-in page collects and submits credentials and does not verify the password. Both are outside the AWS Cloud deployment node.
+
+The AWS Cloud deployment node contains an Amazon Cognito user pool, an API enforcement software system boundary, Amazon Verified Permissions, and Backend APIs. The Amazon Cognito user pool is a Container with technology Amazon Cognito. It verifies the password, authenticates the user, and issues tokens. The API enforcement boundary contains Amazon API Gateway and a Lambda authorizer. Amazon API Gateway is a Container with technology AWS managed service and enforces the authorization result. The Lambda authorizer is a Container with technology AWS Lambda and verifies the token and queries policy. Amazon Verified Permissions is a Container with technology AWS managed service, described as a decision endpoint that makes policy decisions. Backend APIs is a Container with technology REST API. Cognito, Verified Permissions, and Backend APIs are within AWS Cloud but outside the API enforcement boundary.
+
+The directed interactions are:
+
+0. The User calls the Web sign-in page to use the sign-in page, providing username and password. The protocol is not stated.
+
+1. The Web sign-in page calls the Amazon Cognito user pool to authenticate with username and password over HTTPS. This interaction crosses into AWS Cloud. It returns tokens; the normal token return is folded into Step 1 rather than shown as a separate return arrow.
+
+2. The Web sign-in page sends an API request with token to Amazon API Gateway over HTTPS, on each request. This interaction enters both AWS Cloud and the API enforcement boundary.
+
+3. Amazon API Gateway passes the token to the Lambda authorizer for authorization, through a “Generic AWS invocation.” Both endpoints are inside the API enforcement boundary.
+
+4. The Lambda authorizer queries Amazon Verified Permissions: “is request allowed?” This uses HTTPS and crosses out of the API enforcement boundary while remaining inside AWS Cloud. The query is drawn as a dashed arrow, denoting an auxiliary policy query.
+
+5. If allowed, Amazon API Gateway forwards the allowed request to Backend APIs over HTTPS. This crosses out of the API enforcement boundary while remaining inside AWS Cloud.
+
+5′. As an alternative failure response, if authorization fails, Amazon API Gateway sends HTTP 403 plus an authorization error message to the Web sign-in page over HTTPS. This crosses out of both the API enforcement boundary and AWS Cloud. The authorization error message text is not specified.
+
+A Step 1 note gives example ID token attributes: cognito:username = alex; custom:tenantId = T-001; custom:type = Customer; cognito:groups = [Customers].
+
+The token-verification method and policy rules are not specified. No separate return from the policy decision service or the authorizer is specified.
+
+The legend says that “[Type: technology]” is the C4 element caption and outlined groups are architectural domains. Step 0 is user sign-in; Steps 1–5 are the request sequence; Step 5′ is the alternative failure response. Solid filled arrows run from caller to callee; the dashed arrow is an auxiliary policy query. Yellow notes convey example ID token attributes or architectural comments. All relationships have one caller-to-callee arrowhead.

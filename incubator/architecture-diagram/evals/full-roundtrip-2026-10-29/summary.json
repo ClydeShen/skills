@@ -1,0 +1,1084 @@
+{
+  "version": 1,
+  "policySha256": "7e66a3ef969e3be6709d5ac5917a1be3129606d724122eeb35b860f0ad956a07",
+  "cases": {
+    "01": {
+      "mode": "full-chain",
+      "status": "no-drift-found",
+      "evidence": {
+        "0": {
+          "sha256": "34e6891c3159b65d5a41fb60e397a7e106a3ef82fd04f99ddd4bcbf0f36600a9",
+          "facts": 52
+        },
+        "1": {
+          "xmlSha256": "67b928d049afe3d858dcfa7c46d7cc1eac17333f236ed0b77ca905c19d4f8722",
+          "pngSha256": "8b7d3024a78d8f9f5cf6574e356b96b7bc960a992a41339ea58d1dc2c0d7a7d8",
+          "svgSha256": "f1070402b0df5afcc8c590eee2985f14062388165518236f6c4561783de6a103",
+          "browser": "Chrome/154.0.8037.57",
+          "drawioVersion": "32.6.1",
+          "checks": {
+            "staticErrors": [],
+            "renderErrors": [],
+            "nativeNoteFindings": []
+          }
+        },
+        "2": {
+          "sha256": "99448eeded599a1a3438a243a8cdf8c6c9a73962a411be64a651ffd3c6a60dba",
+          "facts": 52
+        },
+        "3": {
+          "xmlSha256": "1fcb87dcf884490b42a31b96e5579a7a38ad870136482b24bc661b1b64793d09",
+          "pngSha256": "06eabdbd2a0a8237053a3253ae91a70d27d2ef63c535139fb5f16b04a4a148d3",
+          "svgSha256": "ef97f47ab174cdfdacd477fe117f94ff081daf89502fd554da6764a7939fe57b",
+          "browser": "Chrome/154.0.8037.57",
+          "drawioVersion": "32.6.1",
+          "checks": {
+            "staticErrors": [],
+            "renderErrors": [],
+            "nativeNoteFindings": []
+          }
+        },
+        "4": {
+          "sha256": "c0baac7d6b3b9d6a2ef2c99f9ddbaaa0f2722148bc360de7c8e168c1a0884f6c",
+          "facts": 52
+        }
+      },
+      "pairs": {
+        "0-2": {
+          "status": "no-drift-found",
+          "omitted": 0,
+          "added": 0,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 9,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 2,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 7,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 11,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": []
+        },
+        "2-4": {
+          "status": "no-drift-found",
+          "omitted": 0,
+          "added": 0,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 9,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 2,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 7,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 11,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": []
+        },
+        "0-4": {
+          "status": "no-drift-found",
+          "omitted": 0,
+          "added": 0,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 9,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 2,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 7,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 11,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": []
+        }
+      }
+    },
+    "02": {
+      "mode": "full-chain",
+      "status": "hard-fail",
+      "evidence": {
+        "0": {
+          "sha256": "dadabe6ca4951a0b6846d48fa62f40653f7649c01d064f61a7c23bb97b6747cd",
+          "facts": 65
+        },
+        "1": {
+          "xmlSha256": "c573992e3b5980fa9edee15dbab92cfc3f5734b8863d0aa74c2fa8a10dee541c",
+          "pngSha256": "ee26bf6fa6c3921165f6ee1ff4399d4353176e47aeacd8b63336836e2d4fa090",
+          "svgSha256": "548994b6fc242d141d375f2c4a4147c16cf662c7847f80d508bce7c4e52a7c42",
+          "browser": "Chrome/154.0.8037.57",
+          "drawioVersion": "32.6.1",
+          "checks": {
+            "staticErrors": [],
+            "renderErrors": [],
+            "nativeNoteFindings": []
+          }
+        },
+        "2": {
+          "sha256": "dfa8deea84d811acb667d36734de28a94e771f917ab98105158fc07e17ad2afd",
+          "facts": 66
+        },
+        "3": {
+          "xmlSha256": "37c0f97ddf098f65671e73d92819eeaa3669d2cc9fd63b87544351ed4f79f652",
+          "pngSha256": "2085b4b9fdf01ad0e7a97c30ec283aca329111624613b6687ff09a0647f5094f",
+          "svgSha256": "03c7a0f94c1cef6c4616cabdaf5a253a05b8ce87277b8b6eb620521224a112f4",
+          "browser": "Chrome/154.0.8037.57",
+          "drawioVersion": "32.6.1",
+          "checks": {
+            "staticErrors": [],
+            "renderErrors": [],
+            "nativeNoteFindings": []
+          }
+        },
+        "4": {
+          "sha256": "72b34bbe1c1b9d25eee84bc07ff87010e2de701ec7e817c69d748e5f265b8a65",
+          "facts": 66
+        }
+      },
+      "pairs": {
+        "0-2": {
+          "status": "hard-fail",
+          "omitted": 0,
+          "added": 1,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 1,
+          "dimensions": {
+            "elements": {
+              "preserved": 13,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 17,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 11,
+              "omitted": 0,
+              "added": 1,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": [
+            {
+              "before": [],
+              "after": [
+                "L2-boundaries-12"
+              ],
+              "status": "added",
+              "reason": "The source does not assign the AWS Site-to-Site VPN to an account. The target explicitly assigns it to the network services account. Attachment to Transit Gateway does not establish account ownership without an unstated inference.",
+              "dimension": "boundaries",
+              "critical": true,
+              "beforeClaims": [],
+              "afterClaims": [
+                "AWS Site-to-Site VPN belongs to the network services account."
+              ]
+            }
+          ]
+        },
+        "2-4": {
+          "status": "incomplete",
+          "omitted": 0,
+          "added": 0,
+          "changed": 0,
+          "uncertain": 1,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 13,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 4,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 1
+            },
+            "relationships": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 17,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 12,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": [
+            {
+              "before": [
+                "L2-responsibilities-01"
+              ],
+              "after": [
+                "L4-responsibilities-01"
+              ],
+              "status": "uncertain",
+              "reason": "The source explicitly assigns the forwarding ruleset to the outbound endpoint. L4 says Its DNS forwarding ruleset after describing the DNS extension VNet and both endpoints. The wildcard and target IPs survive, but Its can refer to the VNet/resolver arrangement rather than the outbound endpoint. A2/A3 preserve outbound forwarding without unambiguously retaining ruleset attachment. This is unresolved attachment precision, not an asserted transfer inferred from vendor behavior.",
+              "dimension": "responsibilities",
+              "critical": false,
+              "beforeClaims": [
+                "The Azure outbound resolver endpoint owns the execute-api forwarding ruleset targeting Route 53 inbound endpoint IPs."
+              ],
+              "afterClaims": [
+                "The DNS extension resolver arrangement has the execute-api forwarding ruleset targeting Route 53 inbound endpoint IPs; its precise attachment to the outbound endpoint is ambiguous."
+              ]
+            }
+          ]
+        },
+        "0-4": {
+          "status": "hard-fail",
+          "omitted": 0,
+          "added": 1,
+          "changed": 0,
+          "uncertain": 1,
+          "hardFailures": 1,
+          "dimensions": {
+            "elements": {
+              "preserved": 13,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 4,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 1
+            },
+            "relationships": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 17,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 11,
+              "omitted": 0,
+              "added": 1,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": [
+            {
+              "before": [],
+              "after": [
+                "L4-boundaries-12"
+              ],
+              "status": "added",
+              "reason": "The source does not assign the AWS Site-to-Site VPN to an account. The target explicitly assigns it to the network services account. Attachment to Transit Gateway does not establish account ownership without an unstated inference.",
+              "dimension": "boundaries",
+              "critical": true,
+              "beforeClaims": [],
+              "afterClaims": [
+                "AWS Site-to-Site VPN belongs to the network services account."
+              ]
+            },
+            {
+              "before": [
+                "L0-responsibilities-01"
+              ],
+              "after": [
+                "L4-responsibilities-01"
+              ],
+              "status": "uncertain",
+              "reason": "The source explicitly assigns the forwarding ruleset to the outbound endpoint. L4 says Its DNS forwarding ruleset after describing the DNS extension VNet and both endpoints. The wildcard and target IPs survive, but Its can refer to the VNet/resolver arrangement rather than the outbound endpoint. A2/A3 preserve outbound forwarding without unambiguously retaining ruleset attachment. This is unresolved attachment precision, not an asserted transfer inferred from vendor behavior.",
+              "dimension": "responsibilities",
+              "critical": false,
+              "beforeClaims": [
+                "The Azure outbound resolver endpoint owns the execute-api forwarding ruleset targeting Route 53 inbound endpoint IPs."
+              ],
+              "afterClaims": [
+                "The DNS extension resolver arrangement has the execute-api forwarding ruleset targeting Route 53 inbound endpoint IPs; its precise attachment to the outbound endpoint is ambiguous."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "03": {
+      "mode": "full-chain",
+      "status": "drift",
+      "evidence": {
+        "0": {
+          "sha256": "cab16c359a9b7fe7cb5f3aa37df0fe5dd502e7b70b6f03220a11fb719b932ea1",
+          "facts": 62
+        },
+        "1": {
+          "xmlSha256": "16bd635d1ed3a134b55a65a54cc42079b91e133123068787d55e9b11daf4e6cf",
+          "pngSha256": "0b44346abc98018c4870a8d9786743cef52df65d3a7cf3ff84162514dd9b0e9e",
+          "svgSha256": "e231df5ab7a9c1e44aa5af7c1d1b24119f6a2403f41fcb7eac72058ad65f82a2",
+          "browser": "Chrome/154.0.8037.57",
+          "drawioVersion": "32.6.1",
+          "checks": {
+            "staticErrors": [],
+            "renderErrors": [],
+            "nativeNoteFindings": []
+          }
+        },
+        "2": {
+          "sha256": "d60abfde0d57efd475f6c4155f6e5785f282cd4a5c1144eca7596be3aee3013b",
+          "facts": 66
+        },
+        "3": {
+          "xmlSha256": "a8bd84c4e08eadb852c4a5156626f1aaf9e37a924e6ff3fbcd89fb70251dc2e5",
+          "pngSha256": "d603ca80b6f4a925a06167e4f7489fd4e8475475f0fa34634df1c503aa559164",
+          "svgSha256": "fdd007546919e819dc9a50796c7c4feac51543b7ab9f33c65fa5c399c8196a80",
+          "browser": "Chrome/154.0.8037.57",
+          "drawioVersion": "32.6.1",
+          "checks": {
+            "staticErrors": [],
+            "renderErrors": [],
+            "nativeNoteFindings": []
+          }
+        },
+        "4": {
+          "sha256": "1b1ff41d45d73e9c39d3eacedf6bef6dacd650457f26c631413995409991270f",
+          "facts": 66
+        }
+      },
+      "pairs": {
+        "0-2": {
+          "status": "drift",
+          "omitted": 0,
+          "added": 1,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 16,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 13,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 0,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 4,
+              "omitted": 0,
+              "added": 1,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 11,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 2,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": [
+            {
+              "before": [],
+              "after": [
+                "l2-lambda-json"
+              ],
+              "status": "added",
+              "reason": "L0 specifies the JSON response returned by the AWS amend API to a sub-workflow, but does not specify the response representation on the internal API Gateway-to-Lambda invocation. Assigning JSON specifically to that internal leg adds a subordinate protocol/payload detail; it does not invent the invocation or an endpoint.",
+              "dimension": "protocols",
+              "critical": false,
+              "beforeClaims": [],
+              "afterClaims": [
+                "The API Gateway-to-Validation engine Lambda invocation itself returns JSON."
+              ]
+            }
+          ]
+        },
+        "2-4": {
+          "status": "no-drift-found",
+          "omitted": 0,
+          "added": 0,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 17,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 15,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 0,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 11,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 2,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": []
+        },
+        "0-4": {
+          "status": "drift",
+          "omitted": 0,
+          "added": 1,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 16,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 13,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 0,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 4,
+              "omitted": 0,
+              "added": 1,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 11,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 8,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 2,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": [
+            {
+              "before": [],
+              "after": [
+                "l4-lambda-json"
+              ],
+              "status": "added",
+              "reason": "L0 specifies the JSON response returned by the AWS amend API to a sub-workflow, but does not specify the response representation on the internal API Gateway-to-Lambda invocation. Assigning JSON specifically to that internal leg adds a subordinate protocol/payload detail; it does not invent the invocation or an endpoint.",
+              "dimension": "protocols",
+              "critical": false,
+              "beforeClaims": [],
+              "afterClaims": [
+                "The API Gateway-to-Validation engine Lambda invocation itself returns JSON."
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "04": {
+      "mode": "full-chain",
+      "status": "no-drift-found",
+      "evidence": {
+        "0": {
+          "sha256": "9005028dac1eeb71bd5120e52993afcdbe5ad656539f83e72d00c4b839ff764d",
+          "facts": 40
+        },
+        "1": {
+          "xmlSha256": "8d4230076c7c9bb34d14ef621c0fdcf8cb051f771e7550938b2ae47f86e69216",
+          "pngSha256": "c415d6a2c0bcfa9ed3837dc077ac13bfa976c64aeb216d21d09bed5a9721dc5a",
+          "svgSha256": "5231661832d88590299f047d5b53f680fe8410b1146a207a97ebc448e20fc4fc",
+          "browser": "Chrome/154.0.8037.57",
+          "drawioVersion": "32.6.1",
+          "checks": {
+            "staticErrors": [],
+            "renderErrors": [],
+            "nativeNoteFindings": []
+          }
+        },
+        "2": {
+          "sha256": "18faedd11fb176d6013b9376cb8c1f9d0eb4cdc861f910218fa0ec5320728467",
+          "facts": 40
+        },
+        "3": {
+          "xmlSha256": "0b5178e22e3582c30440ee86e5e46cca1430dff902d743df3ac2be7bfcf8e027",
+          "pngSha256": "6ccbc7f5e76553f5e461443c7fb42d66da952f6689e862be2429a322187c1d4f",
+          "svgSha256": "24e0dfedf6273b18e95cad3a187331b6a90a3278d43076380a309485672ec693",
+          "browser": "Chrome/154.0.8037.57",
+          "drawioVersion": "32.6.1",
+          "checks": {
+            "staticErrors": [],
+            "renderErrors": [],
+            "nativeNoteFindings": []
+          }
+        },
+        "4": {
+          "sha256": "4c921b41479ef82c9655d4826d58201fd16f78e2aebd6d9e086cca6b98fd6423",
+          "facts": 40
+        }
+      },
+      "pairs": {
+        "0-2": {
+          "status": "no-drift-found",
+          "omitted": 0,
+          "added": 0,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 10,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 4,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": []
+        },
+        "2-4": {
+          "status": "no-drift-found",
+          "omitted": 0,
+          "added": 0,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 10,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 4,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": []
+        },
+        "0-4": {
+          "status": "no-drift-found",
+          "omitted": 0,
+          "added": 0,
+          "changed": 0,
+          "uncertain": 0,
+          "hardFailures": 0,
+          "dimensions": {
+            "elements": {
+              "preserved": 10,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "responsibilities": {
+              "preserved": 4,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "relationships": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "directions": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "protocols": {
+              "preserved": 5,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "boundaries": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "conditions": {
+              "preserved": 6,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            },
+            "notes": {
+              "preserved": 3,
+              "omitted": 0,
+              "added": 0,
+              "changed": 0,
+              "uncertain": 0
+            }
+          },
+          "findings": []
+        }
+      }
+    }
+  },
+  "limitation": "One host-agent chain per case, conditional on frozen synthetic inputs and reviewed semantic judgments; engineering checks and fact counts do not establish general reliability."
+}

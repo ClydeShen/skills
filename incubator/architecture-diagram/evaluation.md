@@ -1,6 +1,6 @@
 # Architecture Diagram evaluation
 
-Date: 2026-10-28. Updated: 2026-10-29. Status: prototype, deterministic checks and an existing-L1 host-agent round-trip pilot implemented; full-chain coverage, Desktop integration and candidate behavior remain unverified.
+Date: 2026-10-28. Updated: 2026-10-29. Status: prototype, deterministic checks, an existing-L1 pilot and four fresh full chains completed; critical/noncritical semantic drift found, Desktop integration and candidate behavior unverified.
 
 ## Scope and target
 
@@ -74,13 +74,27 @@ Judge calibration removed false positives about comment placement, readout-only 
 
 Local implementation verification passed the repository gate with 44 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and both loopback provider contracts. These engineering checks correctly preserve the pilot's negative drift result; they do not turn it into an all-green architecture-quality test. [measured]
 
+## Four fresh full chains, 2026-10-29
+
+The [completed report](./evals/full-roundtrip-2026-10-29/README.md) contains the four L0-to-L4 chains, problems and prioritized proposed improvements. Twenty fresh host-agent contexts were used: eight generators, eight raster-only readers and four semantic judges. Frozen L0 fixtures and one common authoring policy preceded generation. Both generations are new for each case; this is not the earlier existing-L1 pilot. Exact model identity/parameters were not exposed, workers shared filesystem access, and no separately configured NVIDIA/external endpoint was invoked.
+
+Scenarios 01/04 have no drift found among extracted facts in all three comparisons. Scenario 02 introduces a critical account-membership assertion for AWS Site-to-Site VPN in L2 and carries it into L3/L4; the later readout also makes the forwarding-ruleset attachment ambiguous. Scenario 03 adds JSON to the internal Gateway-to-Lambda response contract, absent from L0, and carries it forward. These negative/uncertain outcomes remain in the frozen records. The parent audited the relevant XML after judgment: the VPN changes from `region` parent in L1 to `network` in L3; the Lambda internal-response JSON qualifier is already present in L1. No measured artifact was repaired in response. [measured host-agent chains]
+
+The parent also identified a fixture-admission gap: the raw Scenario 03 draft's explicit solid authorization-delegation expectation was not clearly retained in normalized L0, so a clean L0 ledger would not prove raw-draft conformance. The report distinguishes that benchmark gap, source-fidelity findings, bounded engineering checks and unresolved real-world architecture validation.
+
+All eight diagrams pass current static and actual rendered-geometry checks; checked native Note preset properties match. Azure SVG rendering and bounded variable page sizes were implemented and smoke-tested so readers received real portable raster/vector output rather than missing icons or a fixed-size clipped canvas. Exact-match catalog gaps use truthful fallbacks. The [collector](./evals/collect-roundtrips.mjs) verifies immutable descriptions/raster signatures and regenerates [hashes, findings and check results](./evals/full-roundtrip-2026-10-29/summary.json) without model calls. A saved-result test must reproduce the mixed/negative outcomes, not reinterpret engineering success as semantic success.
+
+Only one chain per case was run. No pass percentage, population reliability, cross-model robustness, actual deployed correctness or candidate/release effectiveness is inferred. The app agent performed live orchestration; a standalone one-command model adapter remains unconfigured. Proposed runtime changes are ownership admission, explicit unknowns and exact-hop contracts; proposed evaluation changes are raw-to-L0 auditing, controlled mutations, repeats and held-out coverage. The full report owns the detailed plan and acceptance criteria.
+
+Local verification passed 47 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and both loopback provider contracts. The new collection checks preserve exact description/image hashes and the mixed semantic outcomes, including critical failure and uncertainty. These engineering passes are not four architecture-quality passes. [measured]
+
 ## Open verification
 
 - Owner acceptance of icon size, element descriptions and layout density.
 - Offline draw.io Desktop at the pinned version; browser evidence does not settle Desktop support.
-- Real rendering of Azure, GCP3 and Kubernetes styles, including viewer/version differences.
-- Fresh complete L0 generation and repeated isolated round trips; Scenario 01 has only the existing-L1 pilot so far.
-- Resolve and run Scenarios 02-04 through the primary protocol, not just clarification fixtures.
+- Broader Azure catalog/viewer coverage and actual GCP3/Kubernetes rendering; participating Azure symbols are verified for these browser runs only.
+- Repeated isolated full chains and held-out/controlled-mutation cases; four fresh chains now exist, one per Scenario 01-04.
+- Verify proposed fixes for observed ownership/contract drift and strengthen raw-draft-to-L0 admission.
 - Actual unattended generation/vision adapter integration, with explicit service authority and budget.
 - Coverage of Docker/Argo CD/Red Hat and adopted F1-F6 criteria beyond the explicit fallback; no separate icon service is built.
 - Scenario 05 when the owner is available.

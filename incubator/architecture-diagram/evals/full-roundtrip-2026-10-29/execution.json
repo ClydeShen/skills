@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-29",
+  "mode": "full-chain",
+  "execution": "host-agent-orchestrated",
+  "source_base_commit": "ae1a9fd3bbb914424693d8740f999967054104c3",
+  "cases": ["01", "02", "03", "04"],
+  "attempts_per_case": 1,
+  "stages": [
+    { "level": 1, "worker_pattern": "/root/full{case}_l1", "input": "inputs/l0-{case}.txt plus inputs/policy.txt and the policy's allowed generic resources" },
+    { "level": 2, "worker_pattern": "/root/full{case}_l2", "input": "Only a neutral-named copy of case-{case}/l1.png and a generic transcription instruction" },
+    { "level": 3, "worker_pattern": "/root/full{case}_l3", "input": "Only case-{case}/l2.txt plus the same generic policy/resources; no L0, L1 or comparison feedback" },
+    { "level": 4, "worker_pattern": "/root/full{case}_l4", "input": "Only a neutral-named copy of case-{case}/l3.png and the same generic transcription instruction" }
+  ],
+  "judges": { "worker_pattern": "/root/full{case}_judge", "input": "Only the three frozen descriptions and generic semantic protocol/validator; no images or original source cases" },
+  "worker_count": 20,
+  "fork_turns": "none for every worker",
+  "isolation": "No inherited task conversation. Input restrictions and source attestations were recorded through the host tools; per-worker filesystem access was not sandboxed. Ordinary standing model/host instructions still existed.",
+  "policy": "inputs/policy.txt was frozen before generation; its hash is in summary.json. No scenario-specific comparison findings were fed back to any generator or reader.",
+  "authoring_repairs": "Generators could inspect their own PNG and repair layout before freezing. No diagram or description was repaired after reading/judgment. One measured chain per case, not one low-level render attempt.",
+  "judge_calibration": "Judges for 01/04 received a scope clarification that faithful added C4 labels are allowed notation. The same clarification was included in the generic protocol for 02/03. Added hosting/ownership/lifecycle/scope remains drift. No desired outcome or hidden source diagram was supplied.",
+  "renderer": {
+    "drawio_version": "32.6.1",
+    "upstream_commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+    "browser": "Chromium 154.0.8037.57",
+    "integration": "Pinned local viewer/stencils with catalog-allowlisted SVG resources embedded into rendered evidence; no Desktop test",
+    "external_browser_networking": "Background networking disabled; external DNS blocked; runtime scripts local; SVG assets read from the pinned local checkout"
+  },
+  "model": "Inherited host-session model. Exact identity and sampling parameters were not exposed by the worker interface; no cross-model diversity is claimed.",
+  "provider_authority": "No separately configured NVIDIA or other external model API endpoint was invoked. Workers ran using the existing app agent capability.",
+  "input_status": "Resolved client-neutral synthetic fixtures, with declared choices and retained unknowns; not owner-confirmed deployed architectures. Original raw-case clarification behavior is not the subject of these full-chain runs.",
+  "artifact_privacy": "The retained PNGs/SVGs are model-generated synthetic test diagrams, not private client sample images or real deployment screenshots.",
+  "automation_limit": "The app agent orchestrated live worker launches. The repository does not yet contain a configured standalone model adapter that launches this full chain from one npm command."
+}

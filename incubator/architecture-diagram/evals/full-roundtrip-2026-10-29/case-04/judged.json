@@ -1,0 +1,2079 @@
+{
+  "levels": {
+    "0": {
+      "description": "Dynamic diagram (deployment view): AWS document metadata sync and Azure on-demand retrieval.\nRequirement: Cosmos DB in Azure decouples document discovery from AWS availability. If cross-cloud connectivity fails, metadata-based requests such as finding documents can still be served. The described live S3 retrieval path still depends on access to S3.\n\nAWS Cloud contains a Document publishing service [Software system] as a truthful generic plain box, Amazon S3 as the document store, and Amazon SQS queues (x3: documents, templates, bundles). The producer's actual product/name is unknown; do not invent one. Azure Cloud contains Cosmos DB (NoSQL document metadata store), Azure Blob Storage (temporary document storage with a retention policy; no duration specified), and an Outbound workflows software system boundary. That boundary contains SQS listener workflows (x3), a Processing workflow and a Retrieving workflow, all Azure Logic Apps. The three listeners correspond to SQS-Document-Cosmos, SQS-Template-Cosmos and SQS-Bundle-Cosmos, one per record type/queue.\n\nNetwork resolution for this synthetic fixture: use public HTTPS service endpoints between Azure and S3/SQS, not an assumed private connection or VPN. S3 requests use AWS Signature authentication. The exact producer identity, cloud region and retention duration are unspecified.\n\nFlow A, write/metadata sync: when a document is published or a template version approved, the publishing service saves the document in S3 and publishes a metadata event asynchronously to the appropriate SQS queue. There is one queue per record type, not one combined queue. Azure's corresponding SQS listener polls SQS for messages using the SQS API over HTTPS; arrows point from listener to queue because the listener initiates polling, with returned events in the label. Each listener inserts or updates metadata in Cosmos DB by the record's identity. Preserve the three queue/listener types and the distinction between document content in S3 and metadata in Cosmos DB. Show A1 producer->S3 Save document [HTTPS], A2 producer->SQS Publish metadata event [async, SQS], A3 listener->SQS Poll [SQS API/HTTPS], returns events, and A4 listener->Cosmos DB Upsert metadata by record ID.\n\nFlow B, read/retrieval: Processing workflow queries Cosmos DB for metadata and gets the S3 reference. It passes that reference to Retrieving workflow. Retrieving workflow gets the document from S3 over HTTPS using AWS Signature, saves it once to temporary Azure Blob Storage under its retention policy, and returns the blob reference to Processing workflow. Show B1 Processing->Cosmos DB as a dashed auxiliary query returning the S3 reference; B2 Processing->Retrieving passing the S3 reference and returning the blob reference on the same caller-to-callee relationship; B3 Retrieving->S3 Get document [HTTPS, AWS Signature]; B4 Retrieving->Blob Storage Save document temporarily. Do not duplicate the save-to-blob step or invent a direct Blob Storage->Processing callback.\n\nFlow A and B are independently numbered/color-coded and explained in the legend; async is a label qualifier, not a new line style. Put the decoupling purpose in a concise requirement/comment. Business-specific publication/withdrawal/replacement status rules, database/container/key schemas, sample records and the retry/alarm table are intentionally outside this architectural diagram's scope and absent from this resolved L0. No producer identity or private network access is owner-confirmed by these test choices.\n",
+      "facts": [
+        {
+          "id": "L0-publisher",
+          "dimension": "elements",
+          "claim": "A Document publishing service is a software system.",
+          "critical": false,
+          "evidence": "Document publishing service [Software system]"
+        },
+        {
+          "id": "L0-s3",
+          "dimension": "elements",
+          "claim": "Amazon S3 is present.",
+          "critical": false,
+          "evidence": "Amazon S3 as the document store"
+        },
+        {
+          "id": "L0-queues",
+          "dimension": "elements",
+          "claim": "There are three separate Amazon SQS queues, for documents, templates and bundles.",
+          "critical": false,
+          "evidence": "Amazon SQS queues (x3: documents, templates, bundles)"
+        },
+        {
+          "id": "L0-cosmos",
+          "dimension": "elements",
+          "claim": "Cosmos DB uses NoSQL.",
+          "critical": false,
+          "evidence": "Cosmos DB (NoSQL document metadata store)"
+        },
+        {
+          "id": "L0-blob",
+          "dimension": "elements",
+          "claim": "Azure Blob Storage is present.",
+          "critical": false,
+          "evidence": "Azure Blob Storage (temporary document storage"
+        },
+        {
+          "id": "L0-outbound",
+          "dimension": "elements",
+          "claim": "Outbound workflows is a software system boundary.",
+          "critical": false,
+          "evidence": "an Outbound workflows software system boundary"
+        },
+        {
+          "id": "L0-listeners",
+          "dimension": "elements",
+          "claim": "There are three listeners named SQS-Document-Cosmos, SQS-Template-Cosmos and SQS-Bundle-Cosmos.",
+          "critical": false,
+          "evidence": "The three listeners correspond to SQS-Document-Cosmos, SQS-Template-Cosmos and SQS-Bundle-Cosmos"
+        },
+        {
+          "id": "L0-processing",
+          "dimension": "elements",
+          "claim": "There is a Processing workflow.",
+          "critical": false,
+          "evidence": "a Processing workflow"
+        },
+        {
+          "id": "L0-retrieving",
+          "dimension": "elements",
+          "claim": "There is a Retrieving workflow.",
+          "critical": false,
+          "evidence": "a Retrieving workflow"
+        },
+        {
+          "id": "L0-logicapps",
+          "dimension": "elements",
+          "claim": "All five workflows use Azure Logic Apps.",
+          "critical": false,
+          "evidence": "SQS listener workflows (x3), a Processing workflow and a Retrieving workflow, all Azure Logic Apps"
+        },
+        {
+          "id": "L0-aws-membership",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud owns the publisher, S3 and all three SQS queues.",
+          "critical": true,
+          "evidence": "AWS Cloud contains a Document publishing service [Software system] as a truthful generic plain box, Amazon S3 as the document store, and Amazon SQS queues (x3: documents, templates, bundles)."
+        },
+        {
+          "id": "L0-azure-membership",
+          "dimension": "boundaries",
+          "claim": "Azure Cloud contains Outbound workflows, Cosmos DB and Blob Storage, with both stores outside the workflow boundary.",
+          "critical": true,
+          "evidence": "Azure Cloud contains Cosmos DB (NoSQL document metadata store), Azure Blob Storage (temporary document storage with a retention policy; no duration specified), and an Outbound workflows software system boundary."
+        },
+        {
+          "id": "L0-workflow-membership",
+          "dimension": "boundaries",
+          "claim": "Outbound workflows contains the three listeners, Processing workflow and Retrieving workflow.",
+          "critical": true,
+          "evidence": "That boundary contains SQS listener workflows (x3), a Processing workflow and a Retrieving workflow"
+        },
+        {
+          "id": "L0-content-store",
+          "dimension": "responsibilities",
+          "claim": "S3 stores document content.",
+          "critical": false,
+          "evidence": "the distinction between document content in S3 and metadata in Cosmos DB"
+        },
+        {
+          "id": "L0-metadata-store",
+          "dimension": "responsibilities",
+          "claim": "Cosmos DB stores document metadata.",
+          "critical": false,
+          "evidence": "Cosmos DB (NoSQL document metadata store)"
+        },
+        {
+          "id": "L0-temporary-store",
+          "dimension": "responsibilities",
+          "claim": "Blob Storage temporarily holds document content.",
+          "critical": false,
+          "evidence": "Azure Blob Storage (temporary document storage with a retention policy; no duration specified)"
+        },
+        {
+          "id": "L0-publish-trigger",
+          "dimension": "conditions",
+          "claim": "Publication occurs on document publication or template-version approval.",
+          "critical": false,
+          "evidence": "when a document is published or a template version approved"
+        },
+        {
+          "id": "L0-publisher-save",
+          "dimension": "relationships",
+          "claim": "The publisher saves documents to S3.",
+          "critical": true,
+          "evidence": "the publishing service saves the document in S3"
+        },
+        {
+          "id": "L0-publisher-events",
+          "dimension": "relationships",
+          "claim": "The publisher sends metadata events to the appropriate documents, templates or bundles queue.",
+          "critical": true,
+          "evidence": "publishes a metadata event asynchronously to the appropriate SQS queue. There is one queue per record type, not one combined queue."
+        },
+        {
+          "id": "L0-async",
+          "dimension": "conditions",
+          "claim": "Metadata event publication is asynchronous.",
+          "critical": false,
+          "evidence": "publishes a metadata event asynchronously"
+        },
+        {
+          "id": "L0-listener-poll",
+          "dimension": "directions",
+          "claim": "Each listener initiates polling of its matching SQS queue and receives metadata events in the response.",
+          "critical": true,
+          "evidence": "Azure's corresponding SQS listener polls SQS for messages using the SQS API over HTTPS; arrows point from listener to queue because the listener initiates polling, with returned events in the label."
+        },
+        {
+          "id": "L0-upsert",
+          "dimension": "relationships",
+          "claim": "Each listener inserts or updates metadata in Cosmos DB.",
+          "critical": true,
+          "evidence": "Each listener inserts or updates metadata in Cosmos DB"
+        },
+        {
+          "id": "L0-upsert-identity",
+          "dimension": "responsibilities",
+          "claim": "Metadata upserts identify records by record ID.",
+          "critical": false,
+          "evidence": "Each listener inserts or updates metadata in Cosmos DB by the record's identity."
+        },
+        {
+          "id": "L0-metadata-query",
+          "dimension": "relationships",
+          "claim": "Processing queries Cosmos DB for metadata and receives an S3 reference.",
+          "critical": true,
+          "evidence": "Processing workflow queries Cosmos DB for metadata and gets the S3 reference."
+        },
+        {
+          "id": "L0-query-auxiliary",
+          "dimension": "relationships",
+          "claim": "The Processing-to-Cosmos query is auxiliary.",
+          "critical": false,
+          "evidence": "Processing->Cosmos DB as a dashed auxiliary query"
+        },
+        {
+          "id": "L0-retrieve-workflow-call",
+          "dimension": "directions",
+          "claim": "Processing calls Retrieving with the S3 reference and receives the blob reference as that call response.",
+          "critical": true,
+          "evidence": "Processing->Retrieving passing the S3 reference and returning the blob reference on the same caller-to-callee relationship"
+        },
+        {
+          "id": "L0-get-document",
+          "dimension": "directions",
+          "claim": "Retrieving calls S3 to obtain document content.",
+          "critical": true,
+          "evidence": "Retrieving workflow gets the document from S3"
+        },
+        {
+          "id": "L0-save-blob",
+          "dimension": "relationships",
+          "claim": "Retrieving saves the retrieved document to Blob Storage.",
+          "critical": true,
+          "evidence": "Retrieving->Blob Storage Save document temporarily"
+        },
+        {
+          "id": "L0-save-once",
+          "dimension": "conditions",
+          "claim": "The retrieval flow saves document content to Blob Storage once.",
+          "critical": false,
+          "evidence": "saves it once to temporary Azure Blob Storage"
+        },
+        {
+          "id": "L0-save-https",
+          "dimension": "protocols",
+          "claim": "Publisher-to-S3 document saving uses HTTPS.",
+          "critical": false,
+          "evidence": "A1 producer->S3 Save document [HTTPS]"
+        },
+        {
+          "id": "L0-publish-sqs",
+          "dimension": "protocols",
+          "claim": "Metadata publication uses SQS.",
+          "critical": false,
+          "evidence": "A2 producer->SQS Publish metadata event [async, SQS]"
+        },
+        {
+          "id": "L0-poll-api",
+          "dimension": "protocols",
+          "claim": "Queue polling uses the SQS API over HTTPS.",
+          "critical": false,
+          "evidence": "polls SQS for messages using the SQS API over HTTPS"
+        },
+        {
+          "id": "L0-public-endpoints",
+          "dimension": "protocols",
+          "claim": "Azure-to-S3/SQS cross-cloud connectivity uses public HTTPS service endpoints.",
+          "critical": false,
+          "evidence": "use public HTTPS service endpoints between Azure and S3/SQS"
+        },
+        {
+          "id": "L0-s3-signature",
+          "dimension": "protocols",
+          "claim": "S3 requests use AWS Signature authentication.",
+          "critical": false,
+          "evidence": "S3 requests use AWS Signature authentication."
+        },
+        {
+          "id": "L0-retention",
+          "dimension": "conditions",
+          "claim": "A retention policy applies to temporary Blob Storage.",
+          "critical": false,
+          "evidence": "Azure Blob Storage (temporary document storage with a retention policy; no duration specified)"
+        },
+        {
+          "id": "L0-retention-unknown",
+          "dimension": "notes",
+          "claim": "The temporary storage retention duration is unspecified.",
+          "critical": false,
+          "evidence": "no duration specified"
+        },
+        {
+          "id": "L0-producer-unknown",
+          "dimension": "notes",
+          "claim": "The producer product/name is unspecified.",
+          "critical": false,
+          "evidence": "The producer's actual product/name is unknown"
+        },
+        {
+          "id": "L0-region-unknown",
+          "dimension": "notes",
+          "claim": "Cloud regions are unspecified.",
+          "critical": false,
+          "evidence": "cloud region and retention duration are unspecified"
+        },
+        {
+          "id": "L0-discovery-resilience",
+          "dimension": "conditions",
+          "claim": "Cosmos DB keeps metadata-based discovery available if cross-cloud connectivity fails.",
+          "critical": true,
+          "evidence": "If cross-cloud connectivity fails, metadata-based requests such as finding documents can still be served."
+        },
+        {
+          "id": "L0-retrieval-dependency",
+          "dimension": "conditions",
+          "claim": "Live retrieval requires access to S3.",
+          "critical": true,
+          "evidence": "The described live S3 retrieval path still depends on access to S3."
+        }
+      ]
+    },
+    "2": {
+      "description": "The diagram is titled “Dynamic diagram (deployment view): AWS document metadata sync and Azure on-demand retrieval.” It describes two independently numbered flows: A, write and metadata synchronization; and B, read and retrieval. The stated requirement is that Cosmos DB keeps metadata-based discovery available when cross-cloud connectivity fails. Live document retrieval still requires access to S3.\n\nThere are two deployment nodes, AWS Cloud and Azure Cloud. The cloud region is unspecified for each. AWS Cloud contains a Document publishing service, three individual Amazon SQS queues, and Amazon S3. The Document publishing service is a software system that publishes document content and metadata events. Its producer product/name is unspecified. A note identifies document publication or template-version approval as the occasion for publication.\n\nThe three AWS queues are “Amazon SQS — documents queue,” “Amazon SQS — templates queue,” and “Amazon SQS — bundles queue.” Each is a container using Amazon SQS and holds metadata events. Amazon S3 is a container using Amazon S3 and is the document content store.\n\nAzure Cloud contains a software system boundary named “Outbound workflows.” Inside that boundary are five containers using Azure Logic Apps: three listener workflows named SQS-Document-Cosmos, SQS-Template-Cosmos, and SQS-Bundle-Cosmos; a Processing workflow; and a Retrieving workflow. Also inside Azure Cloud, but outside the Outbound workflows boundary, are Cosmos DB and Azure Blob Storage. Cosmos DB is a container using Azure Cosmos DB / NoSQL and is the document metadata store. Azure Blob Storage is a container using Azure Blob Storage and provides temporary document storage. A retention policy applies to the temporary storage, with duration unspecified.\n\nFlow A is the write/metadata-sync flow, described as publishing content and metadata events, polling, and upserting. Its calls are:\n\n1. A1: The Document publishing service calls Amazon S3 to “Save document [HTTPS].” This stays within AWS Cloud.\n2. A2a: The Document publishing service publishes a metadata event to the documents SQS queue, labeled “[async, SQS] — documents.”\n3. A2b: The Document publishing service publishes a metadata event to the templates SQS queue, labeled “[async, SQS] — templates.”\n4. A2c: The Document publishing service publishes a metadata event to the bundles SQS queue, labeled “[async, SQS] — bundles.”\n5. A3a: The SQS-Document-Cosmos listener initiates a poll of the AWS documents queue, labeled “Poll [SQS API / public HTTPS].” The response returns metadata events.\n6. A3b: The SQS-Template-Cosmos listener initiates the same kind of poll of the AWS templates queue, using SQS API / public HTTPS and returning metadata events.\n7. A3c: The SQS-Bundle-Cosmos listener initiates the same kind of poll of the AWS bundles queue, using SQS API / public HTTPS and returning metadata events.\n8. A4a, A4b, and A4c: Respectively, SQS-Document-Cosmos, SQS-Template-Cosmos, and SQS-Bundle-Cosmos call Cosmos DB to “Upsert metadata by record ID [Cosmos DB].”\n\nThe three poll calls cross the Outbound workflows boundary and the Azure/AWS cloud boundaries, with each Azure listener as caller and its AWS queue as callee. The three upsert calls leave the Outbound workflows boundary but remain within Azure Cloud. The diagram explicitly shows three separate queues and their three corresponding listeners. No polling interval is specified. “Async” qualifies metadata publication; it does not change the line style.\n\nFlow B is the read/retrieval flow, described as querying metadata, retrieving S3 content, saving once, and returning a blob reference. Its calls are:\n\n1. B1: The Processing workflow queries Cosmos DB for metadata, labeled “Query metadata [Cosmos DB].” The response returns an S3 reference. This is an auxiliary query, drawn as a dashed line, from the Processing workflow inside Outbound workflows to Cosmos DB outside that boundary but within Azure Cloud.\n2. B2: The Processing workflow calls the Retrieving workflow, labeled “Pass S3 reference [workflow call].” The response returns a blob reference. Both workflows are inside Outbound workflows.\n3. B3: The Retrieving workflow calls Amazon S3 to “Get document [public HTTPS, AWS Signature].” The response returns document content. This crosses the Outbound workflows boundary and the Azure/AWS cloud boundaries, with the Azure Retrieving workflow initiating the call to S3.\n4. B4: The Retrieving workflow calls Azure Blob Storage to “Save document temporarily [Azure Blob Storage].” This leaves Outbound workflows but stays within Azure Cloud. The temporary storage is subject to the retention policy whose duration is unspecified.\n\nA connectivity note states that cross-cloud connectivity uses public HTTPS service endpoints and that S3 requests use AWS Signature. No more specific authentication mechanism is given for the other calls. The diagram provides no explicit initiating actor or trigger for the Processing workflow, and no detailed error code, retry rule, or allow/deny condition. Its explicit failure qualification is that metadata discovery remains available through Cosmos DB when cross-cloud connectivity fails, whereas live retrieval still depends on access to S3.\n\nThe legend says that a filled arrow means caller to callee. Normal responses are folded into the request labels rather than shown as separate response arrows. Dashed means the auxiliary query B1; solid means a main call. Cosmos DB stores metadata, while S3 and temporary Blob Storage hold document content. The A and B flow numbering is independent.\n",
+      "facts": [
+        {
+          "id": "L2-publisher",
+          "dimension": "elements",
+          "claim": "A Document publishing service is a software system.",
+          "critical": false,
+          "evidence": "The Document publishing service is a software system"
+        },
+        {
+          "id": "L2-s3",
+          "dimension": "elements",
+          "claim": "Amazon S3 is present.",
+          "critical": false,
+          "evidence": "Amazon S3 is a container using Amazon S3"
+        },
+        {
+          "id": "L2-queues",
+          "dimension": "elements",
+          "claim": "There are three separate Amazon SQS queues, for documents, templates and bundles.",
+          "critical": false,
+          "evidence": "The three AWS queues are “Amazon SQS — documents queue,” “Amazon SQS — templates queue,” and “Amazon SQS — bundles queue.”"
+        },
+        {
+          "id": "L2-cosmos",
+          "dimension": "elements",
+          "claim": "Cosmos DB uses NoSQL.",
+          "critical": false,
+          "evidence": "Cosmos DB is a container using Azure Cosmos DB / NoSQL"
+        },
+        {
+          "id": "L2-blob",
+          "dimension": "elements",
+          "claim": "Azure Blob Storage is present.",
+          "critical": false,
+          "evidence": "Azure Blob Storage is a container using Azure Blob Storage"
+        },
+        {
+          "id": "L2-outbound",
+          "dimension": "elements",
+          "claim": "Outbound workflows is a software system boundary.",
+          "critical": false,
+          "evidence": "a software system boundary named “Outbound workflows.”"
+        },
+        {
+          "id": "L2-listeners",
+          "dimension": "elements",
+          "claim": "There are three listeners named SQS-Document-Cosmos, SQS-Template-Cosmos and SQS-Bundle-Cosmos.",
+          "critical": false,
+          "evidence": "three listener workflows named SQS-Document-Cosmos, SQS-Template-Cosmos, and SQS-Bundle-Cosmos"
+        },
+        {
+          "id": "L2-processing",
+          "dimension": "elements",
+          "claim": "There is a Processing workflow.",
+          "critical": false,
+          "evidence": "a Processing workflow"
+        },
+        {
+          "id": "L2-retrieving",
+          "dimension": "elements",
+          "claim": "There is a Retrieving workflow.",
+          "critical": false,
+          "evidence": "a Retrieving workflow"
+        },
+        {
+          "id": "L2-logicapps",
+          "dimension": "elements",
+          "claim": "All five workflows use Azure Logic Apps.",
+          "critical": false,
+          "evidence": "five containers using Azure Logic Apps: three listener workflows named SQS-Document-Cosmos, SQS-Template-Cosmos, and SQS-Bundle-Cosmos; a Processing workflow; and a Retrieving workflow"
+        },
+        {
+          "id": "L2-aws-membership",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud owns the publisher, S3 and all three SQS queues.",
+          "critical": true,
+          "evidence": "AWS Cloud contains a Document publishing service, three individual Amazon SQS queues, and Amazon S3."
+        },
+        {
+          "id": "L2-azure-membership",
+          "dimension": "boundaries",
+          "claim": "Azure Cloud contains Outbound workflows, Cosmos DB and Blob Storage, with both stores outside the workflow boundary.",
+          "critical": true,
+          "evidence": "Also inside Azure Cloud, but outside the Outbound workflows boundary, are Cosmos DB and Azure Blob Storage."
+        },
+        {
+          "id": "L2-workflow-membership",
+          "dimension": "boundaries",
+          "claim": "Outbound workflows contains the three listeners, Processing workflow and Retrieving workflow.",
+          "critical": true,
+          "evidence": "Inside that boundary are five containers using Azure Logic Apps: three listener workflows named SQS-Document-Cosmos, SQS-Template-Cosmos, and SQS-Bundle-Cosmos; a Processing workflow; and a Retrieving workflow."
+        },
+        {
+          "id": "L2-content-store",
+          "dimension": "responsibilities",
+          "claim": "S3 stores document content.",
+          "critical": false,
+          "evidence": "Amazon S3 is a container using Amazon S3 and is the document content store."
+        },
+        {
+          "id": "L2-metadata-store",
+          "dimension": "responsibilities",
+          "claim": "Cosmos DB stores document metadata.",
+          "critical": false,
+          "evidence": "Cosmos DB is a container using Azure Cosmos DB / NoSQL and is the document metadata store."
+        },
+        {
+          "id": "L2-temporary-store",
+          "dimension": "responsibilities",
+          "claim": "Blob Storage temporarily holds document content.",
+          "critical": false,
+          "evidence": "Azure Blob Storage is a container using Azure Blob Storage and provides temporary document storage."
+        },
+        {
+          "id": "L2-publish-trigger",
+          "dimension": "conditions",
+          "claim": "Publication occurs on document publication or template-version approval.",
+          "critical": false,
+          "evidence": "A note identifies document publication or template-version approval as the occasion for publication."
+        },
+        {
+          "id": "L2-publisher-save",
+          "dimension": "relationships",
+          "claim": "The publisher saves documents to S3.",
+          "critical": true,
+          "evidence": "The Document publishing service calls Amazon S3 to “Save document [HTTPS].”"
+        },
+        {
+          "id": "L2-publisher-events",
+          "dimension": "relationships",
+          "claim": "The publisher sends metadata events to the appropriate documents, templates or bundles queue.",
+          "critical": true,
+          "evidence": "A2a: The Document publishing service publishes a metadata event to the documents SQS queue, labeled “[async, SQS] — documents.”\n3. A2b: The Document publishing service publishes a metadata event to the templates SQS queue, labeled “[async, SQS] — templates.”\n4. A2c: The Document publishing service publishes a metadata event to the bundles SQS queue, labeled “[async, SQS] — bundles.”"
+        },
+        {
+          "id": "L2-async",
+          "dimension": "conditions",
+          "claim": "Metadata event publication is asynchronous.",
+          "critical": false,
+          "evidence": "“Async” qualifies metadata publication"
+        },
+        {
+          "id": "L2-listener-poll",
+          "dimension": "directions",
+          "claim": "Each listener initiates polling of its matching SQS queue and receives metadata events in the response.",
+          "critical": true,
+          "evidence": "A3a: The SQS-Document-Cosmos listener initiates a poll of the AWS documents queue, labeled “Poll [SQS API / public HTTPS].” The response returns metadata events.\n6. A3b: The SQS-Template-Cosmos listener initiates the same kind of poll of the AWS templates queue, using SQS API / public HTTPS and returning metadata events.\n7. A3c: The SQS-Bundle-Cosmos listener initiates the same kind of poll of the AWS bundles queue, using SQS API / public HTTPS and returning metadata events."
+        },
+        {
+          "id": "L2-upsert",
+          "dimension": "relationships",
+          "claim": "Each listener inserts or updates metadata in Cosmos DB.",
+          "critical": true,
+          "evidence": "A4a, A4b, and A4c: Respectively, SQS-Document-Cosmos, SQS-Template-Cosmos, and SQS-Bundle-Cosmos call Cosmos DB to “Upsert metadata by record ID [Cosmos DB].”"
+        },
+        {
+          "id": "L2-upsert-identity",
+          "dimension": "responsibilities",
+          "claim": "Metadata upserts identify records by record ID.",
+          "critical": false,
+          "evidence": "Upsert metadata by record ID"
+        },
+        {
+          "id": "L2-metadata-query",
+          "dimension": "relationships",
+          "claim": "Processing queries Cosmos DB for metadata and receives an S3 reference.",
+          "critical": true,
+          "evidence": "The Processing workflow queries Cosmos DB for metadata, labeled “Query metadata [Cosmos DB].” The response returns an S3 reference."
+        },
+        {
+          "id": "L2-query-auxiliary",
+          "dimension": "relationships",
+          "claim": "The Processing-to-Cosmos query is auxiliary.",
+          "critical": false,
+          "evidence": "This is an auxiliary query"
+        },
+        {
+          "id": "L2-retrieve-workflow-call",
+          "dimension": "directions",
+          "claim": "Processing calls Retrieving with the S3 reference and receives the blob reference as that call response.",
+          "critical": true,
+          "evidence": "The Processing workflow calls the Retrieving workflow, labeled “Pass S3 reference [workflow call].” The response returns a blob reference."
+        },
+        {
+          "id": "L2-get-document",
+          "dimension": "directions",
+          "claim": "Retrieving calls S3 to obtain document content.",
+          "critical": true,
+          "evidence": "The Retrieving workflow calls Amazon S3 to “Get document [public HTTPS, AWS Signature].” The response returns document content."
+        },
+        {
+          "id": "L2-save-blob",
+          "dimension": "relationships",
+          "claim": "Retrieving saves the retrieved document to Blob Storage.",
+          "critical": true,
+          "evidence": "The Retrieving workflow calls Azure Blob Storage to “Save document temporarily [Azure Blob Storage].”"
+        },
+        {
+          "id": "L2-save-once",
+          "dimension": "conditions",
+          "claim": "The retrieval flow saves document content to Blob Storage once.",
+          "critical": false,
+          "evidence": "Flow B is the read/retrieval flow, described as querying metadata, retrieving S3 content, saving once, and returning a blob reference."
+        },
+        {
+          "id": "L2-save-https",
+          "dimension": "protocols",
+          "claim": "Publisher-to-S3 document saving uses HTTPS.",
+          "critical": false,
+          "evidence": "Save document [HTTPS]"
+        },
+        {
+          "id": "L2-publish-sqs",
+          "dimension": "protocols",
+          "claim": "Metadata publication uses SQS.",
+          "critical": false,
+          "evidence": "[async, SQS]"
+        },
+        {
+          "id": "L2-poll-api",
+          "dimension": "protocols",
+          "claim": "Queue polling uses the SQS API over HTTPS.",
+          "critical": false,
+          "evidence": "Poll [SQS API / public HTTPS]"
+        },
+        {
+          "id": "L2-public-endpoints",
+          "dimension": "protocols",
+          "claim": "Azure-to-S3/SQS cross-cloud connectivity uses public HTTPS service endpoints.",
+          "critical": false,
+          "evidence": "cross-cloud connectivity uses public HTTPS service endpoints"
+        },
+        {
+          "id": "L2-s3-signature",
+          "dimension": "protocols",
+          "claim": "S3 requests use AWS Signature authentication.",
+          "critical": false,
+          "evidence": "S3 requests use AWS Signature."
+        },
+        {
+          "id": "L2-retention",
+          "dimension": "conditions",
+          "claim": "A retention policy applies to temporary Blob Storage.",
+          "critical": false,
+          "evidence": "A retention policy applies to the temporary storage"
+        },
+        {
+          "id": "L2-retention-unknown",
+          "dimension": "notes",
+          "claim": "The temporary storage retention duration is unspecified.",
+          "critical": false,
+          "evidence": "with duration unspecified"
+        },
+        {
+          "id": "L2-producer-unknown",
+          "dimension": "notes",
+          "claim": "The producer product/name is unspecified.",
+          "critical": false,
+          "evidence": "Its producer product/name is unspecified."
+        },
+        {
+          "id": "L2-region-unknown",
+          "dimension": "notes",
+          "claim": "Cloud regions are unspecified.",
+          "critical": false,
+          "evidence": "The cloud region is unspecified for each."
+        },
+        {
+          "id": "L2-discovery-resilience",
+          "dimension": "conditions",
+          "claim": "Cosmos DB keeps metadata-based discovery available if cross-cloud connectivity fails.",
+          "critical": true,
+          "evidence": "The stated requirement is that Cosmos DB keeps metadata-based discovery available when cross-cloud connectivity fails."
+        },
+        {
+          "id": "L2-retrieval-dependency",
+          "dimension": "conditions",
+          "claim": "Live retrieval requires access to S3.",
+          "critical": true,
+          "evidence": "Live document retrieval still requires access to S3."
+        }
+      ]
+    },
+    "4": {
+      "description": "The image is titled “Dynamic diagram (deployment view): AWS document metadata sync and Azure on-demand retrieval.” Its stated requirement is that Cosmos DB keeps metadata-based discovery available when cross-cloud connectivity fails; live document retrieval still requires access to S3.\n\nThere are two deployment-node boundaries: “AWS Cloud — region unspecified” and “Azure Cloud — region unspecified.” The AWS boundary contains a Document publishing service, three separate Amazon SQS queues, and Amazon S3. The Azure boundary contains a nested software-system boundary named “Outbound workflows — 5 workflows,” plus Cosmos DB and Azure Blob Storage outside that nested workflow boundary but inside Azure. The five workflows within the nested boundary are three SQS listener workflows, a Processing workflow, and a Retrieving workflow. All five are containers using Azure Logic Apps.\n\nThe Document publishing service is a software system that publishes document content and metadata events. Its producer product/name is unspecified. A publication occasion is document publication or template-version approval. Amazon S3 is a container using Amazon S3 and is the document content store. Each of the three SQS containers uses Amazon SQS and holds metadata events. They are named “Amazon SQS — documents queue,” “Amazon SQS — templates queue,” and “Amazon SQS — bundles queue.”\n\nThe metadata listeners are named “SQS-Document-Cosmos,” “SQS-Template-Cosmos,” and “SQS-Bundle-Cosmos.” Each is labeled a Listener workflow. There are three separate queues and three corresponding listeners, and the polling interval is unspecified. Cosmos DB is a container using Azure Cosmos DB / NoSQL and is the document metadata store. Azure Blob Storage is a container using Azure Blob Storage and provides temporary document storage. A temporary storage retention policy applies, but its duration is unspecified.\n\nThe A flow is the write / metadata sync flow, shown in blue. It publishes content and metadata events, polls, and upserts:\n\n1. A1: The Document publishing service calls Amazon S3 to “Save document [HTTPS].” This call stays within AWS.\n2. A2a: The Document publishing service publishes a metadata event to the documents queue, labeled “Publish metadata event [async, SQS] — documents.”\n3. A2b: The Document publishing service publishes a metadata event to the templates queue, labeled “Publish metadata event [async, SQS] — templates.”\n4. A2c: The Document publishing service publishes a metadata event to the bundles queue, labeled “Publish metadata event [async, SQS] — bundles.” These three publications stay within AWS and are asynchronous calls.\n5. A3a: SQS-Document-Cosmos initiates a poll of the documents queue using “SQS API / public HTTPS.” The queue returns metadata events.\n6. A3b: SQS-Template-Cosmos initiates a poll of the templates queue using “SQS API / public HTTPS.” The queue returns metadata events.\n7. A3c: SQS-Bundle-Cosmos initiates a poll of the bundles queue using “SQS API / public HTTPS.” The queue returns metadata events. These polling calls cross from the Azure workflow boundary and Azure deployment into AWS; the arrows point toward the queues, expressing the listeners as callers.\n8. A4a: SQS-Document-Cosmos calls Cosmos DB to “Upsert metadata by record ID [Cosmos DB].”\n9. A4b: SQS-Template-Cosmos calls Cosmos DB to “Upsert metadata by record ID [Cosmos DB].”\n10. A4c: SQS-Bundle-Cosmos calls Cosmos DB to “Upsert metadata by record ID [Cosmos DB].” Each upsert leaves the nested workflow boundary but stays within Azure.\n\nThe B flow is the read / retrieval flow, shown in orange. It queries metadata, retrieves S3 content, saves it once, and returns a blob reference. The Processing workflow’s initiating actor or trigger is not explicitly provided.\n\n1. B1: The Processing workflow initiates “Query metadata [Cosmos DB]” against Cosmos DB and receives an S3 reference. This is an auxiliary query, shown with a dashed arrow from Processing workflow to Cosmos DB. It leaves the workflow system boundary while remaining inside Azure.\n2. B2: The Processing workflow calls the Retrieving workflow to “Pass S3 reference [workflow call].” This call returns a blob reference. Both caller and callee are inside the five-workflow boundary.\n3. B3: The Retrieving workflow calls Amazon S3 to “Get document [public HTTPS, AWS Signature].” S3 returns document content. This call crosses from the nested Azure workflow boundary, out of Azure, and into AWS.\n4. B4: The Retrieving workflow calls Azure Blob Storage to “Save document temporarily [Azure Blob Storage] — save once.” This call crosses out of the nested workflow boundary while remaining inside Azure. Blob Storage holds the retrieved document content temporarily; the B2 workflow-call response supplies the blob reference to the Processing workflow.\n\nCross-cloud connectivity uses public HTTPS service endpoints. S3 requests use AWS Signature. Other authentication mechanisms are not specified. No detailed error code, retry rule, or allow/deny condition is provided. In a cross-cloud connectivity failure, metadata discovery remains available through Cosmos DB, while live retrieval still depends on access to S3.\n\nThe legend specifies that filled arrows mean caller to callee, with normal responses folded into the request labels rather than drawn as separate response arrows. Solid lines indicate main calls, including asynchronous publication; the dashed B1 line indicates an auxiliary query. The A and B numberings are independent. Cosmos DB stores metadata, whereas S3 and temporary Blob Storage hold document content.\n",
+      "facts": [
+        {
+          "id": "L4-publisher",
+          "dimension": "elements",
+          "claim": "A Document publishing service is a software system.",
+          "critical": false,
+          "evidence": "The Document publishing service is a software system"
+        },
+        {
+          "id": "L4-s3",
+          "dimension": "elements",
+          "claim": "Amazon S3 is present.",
+          "critical": false,
+          "evidence": "Amazon S3 is a container using Amazon S3"
+        },
+        {
+          "id": "L4-queues",
+          "dimension": "elements",
+          "claim": "There are three separate Amazon SQS queues, for documents, templates and bundles.",
+          "critical": false,
+          "evidence": "Each of the three SQS containers uses Amazon SQS and holds metadata events. They are named “Amazon SQS — documents queue,” “Amazon SQS — templates queue,” and “Amazon SQS — bundles queue.”"
+        },
+        {
+          "id": "L4-cosmos",
+          "dimension": "elements",
+          "claim": "Cosmos DB uses NoSQL.",
+          "critical": false,
+          "evidence": "Cosmos DB is a container using Azure Cosmos DB / NoSQL"
+        },
+        {
+          "id": "L4-blob",
+          "dimension": "elements",
+          "claim": "Azure Blob Storage is present.",
+          "critical": false,
+          "evidence": "Azure Blob Storage is a container using Azure Blob Storage"
+        },
+        {
+          "id": "L4-outbound",
+          "dimension": "elements",
+          "claim": "Outbound workflows is a software system boundary.",
+          "critical": false,
+          "evidence": "a nested software-system boundary named “Outbound workflows — 5 workflows,”"
+        },
+        {
+          "id": "L4-listeners",
+          "dimension": "elements",
+          "claim": "There are three listeners named SQS-Document-Cosmos, SQS-Template-Cosmos and SQS-Bundle-Cosmos.",
+          "critical": false,
+          "evidence": "The metadata listeners are named “SQS-Document-Cosmos,” “SQS-Template-Cosmos,” and “SQS-Bundle-Cosmos.” Each is labeled a Listener workflow. There are three separate queues and three corresponding listeners"
+        },
+        {
+          "id": "L4-processing",
+          "dimension": "elements",
+          "claim": "There is a Processing workflow.",
+          "critical": false,
+          "evidence": "a Processing workflow"
+        },
+        {
+          "id": "L4-retrieving",
+          "dimension": "elements",
+          "claim": "There is a Retrieving workflow.",
+          "critical": false,
+          "evidence": "a Retrieving workflow"
+        },
+        {
+          "id": "L4-logicapps",
+          "dimension": "elements",
+          "claim": "All five workflows use Azure Logic Apps.",
+          "critical": false,
+          "evidence": "The five workflows within the nested boundary are three SQS listener workflows, a Processing workflow, and a Retrieving workflow. All five are containers using Azure Logic Apps."
+        },
+        {
+          "id": "L4-aws-membership",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud owns the publisher, S3 and all three SQS queues.",
+          "critical": true,
+          "evidence": "The AWS boundary contains a Document publishing service, three separate Amazon SQS queues, and Amazon S3."
+        },
+        {
+          "id": "L4-azure-membership",
+          "dimension": "boundaries",
+          "claim": "Azure Cloud contains Outbound workflows, Cosmos DB and Blob Storage, with both stores outside the workflow boundary.",
+          "critical": true,
+          "evidence": "The Azure boundary contains a nested software-system boundary named “Outbound workflows — 5 workflows,” plus Cosmos DB and Azure Blob Storage outside that nested workflow boundary but inside Azure."
+        },
+        {
+          "id": "L4-workflow-membership",
+          "dimension": "boundaries",
+          "claim": "Outbound workflows contains the three listeners, Processing workflow and Retrieving workflow.",
+          "critical": true,
+          "evidence": "The five workflows within the nested boundary are three SQS listener workflows, a Processing workflow, and a Retrieving workflow."
+        },
+        {
+          "id": "L4-content-store",
+          "dimension": "responsibilities",
+          "claim": "S3 stores document content.",
+          "critical": false,
+          "evidence": "Amazon S3 is a container using Amazon S3 and is the document content store."
+        },
+        {
+          "id": "L4-metadata-store",
+          "dimension": "responsibilities",
+          "claim": "Cosmos DB stores document metadata.",
+          "critical": false,
+          "evidence": "Cosmos DB is a container using Azure Cosmos DB / NoSQL and is the document metadata store."
+        },
+        {
+          "id": "L4-temporary-store",
+          "dimension": "responsibilities",
+          "claim": "Blob Storage temporarily holds document content.",
+          "critical": false,
+          "evidence": "Blob Storage holds the retrieved document content temporarily"
+        },
+        {
+          "id": "L4-publish-trigger",
+          "dimension": "conditions",
+          "claim": "Publication occurs on document publication or template-version approval.",
+          "critical": false,
+          "evidence": "A publication occasion is document publication or template-version approval."
+        },
+        {
+          "id": "L4-publisher-save",
+          "dimension": "relationships",
+          "claim": "The publisher saves documents to S3.",
+          "critical": true,
+          "evidence": "The Document publishing service calls Amazon S3 to “Save document [HTTPS].”"
+        },
+        {
+          "id": "L4-publisher-events",
+          "dimension": "relationships",
+          "claim": "The publisher sends metadata events to the appropriate documents, templates or bundles queue.",
+          "critical": true,
+          "evidence": "A2a: The Document publishing service publishes a metadata event to the documents queue, labeled “Publish metadata event [async, SQS] — documents.”\n3. A2b: The Document publishing service publishes a metadata event to the templates queue, labeled “Publish metadata event [async, SQS] — templates.”\n4. A2c: The Document publishing service publishes a metadata event to the bundles queue, labeled “Publish metadata event [async, SQS] — bundles.”"
+        },
+        {
+          "id": "L4-async",
+          "dimension": "conditions",
+          "claim": "Metadata event publication is asynchronous.",
+          "critical": false,
+          "evidence": "These three publications stay within AWS and are asynchronous calls."
+        },
+        {
+          "id": "L4-listener-poll",
+          "dimension": "directions",
+          "claim": "Each listener initiates polling of its matching SQS queue and receives metadata events in the response.",
+          "critical": true,
+          "evidence": "A3a: SQS-Document-Cosmos initiates a poll of the documents queue using “SQS API / public HTTPS.” The queue returns metadata events.\n6. A3b: SQS-Template-Cosmos initiates a poll of the templates queue using “SQS API / public HTTPS.” The queue returns metadata events.\n7. A3c: SQS-Bundle-Cosmos initiates a poll of the bundles queue using “SQS API / public HTTPS.” The queue returns metadata events."
+        },
+        {
+          "id": "L4-upsert",
+          "dimension": "relationships",
+          "claim": "Each listener inserts or updates metadata in Cosmos DB.",
+          "critical": true,
+          "evidence": "A4a: SQS-Document-Cosmos calls Cosmos DB to “Upsert metadata by record ID [Cosmos DB].”\n9. A4b: SQS-Template-Cosmos calls Cosmos DB to “Upsert metadata by record ID [Cosmos DB].”\n10. A4c: SQS-Bundle-Cosmos calls Cosmos DB to “Upsert metadata by record ID [Cosmos DB].”"
+        },
+        {
+          "id": "L4-upsert-identity",
+          "dimension": "responsibilities",
+          "claim": "Metadata upserts identify records by record ID.",
+          "critical": false,
+          "evidence": "Upsert metadata by record ID"
+        },
+        {
+          "id": "L4-metadata-query",
+          "dimension": "relationships",
+          "claim": "Processing queries Cosmos DB for metadata and receives an S3 reference.",
+          "critical": true,
+          "evidence": "The Processing workflow initiates “Query metadata [Cosmos DB]” against Cosmos DB and receives an S3 reference."
+        },
+        {
+          "id": "L4-query-auxiliary",
+          "dimension": "relationships",
+          "claim": "The Processing-to-Cosmos query is auxiliary.",
+          "critical": false,
+          "evidence": "This is an auxiliary query"
+        },
+        {
+          "id": "L4-retrieve-workflow-call",
+          "dimension": "directions",
+          "claim": "Processing calls Retrieving with the S3 reference and receives the blob reference as that call response.",
+          "critical": true,
+          "evidence": "The Processing workflow calls the Retrieving workflow to “Pass S3 reference [workflow call].” This call returns a blob reference."
+        },
+        {
+          "id": "L4-get-document",
+          "dimension": "directions",
+          "claim": "Retrieving calls S3 to obtain document content.",
+          "critical": true,
+          "evidence": "The Retrieving workflow calls Amazon S3 to “Get document [public HTTPS, AWS Signature].” S3 returns document content."
+        },
+        {
+          "id": "L4-save-blob",
+          "dimension": "relationships",
+          "claim": "Retrieving saves the retrieved document to Blob Storage.",
+          "critical": true,
+          "evidence": "The Retrieving workflow calls Azure Blob Storage to “Save document temporarily [Azure Blob Storage] — save once.”"
+        },
+        {
+          "id": "L4-save-once",
+          "dimension": "conditions",
+          "claim": "The retrieval flow saves document content to Blob Storage once.",
+          "critical": false,
+          "evidence": "Save document temporarily [Azure Blob Storage] — save once."
+        },
+        {
+          "id": "L4-save-https",
+          "dimension": "protocols",
+          "claim": "Publisher-to-S3 document saving uses HTTPS.",
+          "critical": false,
+          "evidence": "Save document [HTTPS]"
+        },
+        {
+          "id": "L4-publish-sqs",
+          "dimension": "protocols",
+          "claim": "Metadata publication uses SQS.",
+          "critical": false,
+          "evidence": "[async, SQS]"
+        },
+        {
+          "id": "L4-poll-api",
+          "dimension": "protocols",
+          "claim": "Queue polling uses the SQS API over HTTPS.",
+          "critical": false,
+          "evidence": "initiates a poll of the documents queue using “SQS API / public HTTPS.”"
+        },
+        {
+          "id": "L4-public-endpoints",
+          "dimension": "protocols",
+          "claim": "Azure-to-S3/SQS cross-cloud connectivity uses public HTTPS service endpoints.",
+          "critical": false,
+          "evidence": "Cross-cloud connectivity uses public HTTPS service endpoints."
+        },
+        {
+          "id": "L4-s3-signature",
+          "dimension": "protocols",
+          "claim": "S3 requests use AWS Signature authentication.",
+          "critical": false,
+          "evidence": "S3 requests use AWS Signature."
+        },
+        {
+          "id": "L4-retention",
+          "dimension": "conditions",
+          "claim": "A retention policy applies to temporary Blob Storage.",
+          "critical": false,
+          "evidence": "A temporary storage retention policy applies"
+        },
+        {
+          "id": "L4-retention-unknown",
+          "dimension": "notes",
+          "claim": "The temporary storage retention duration is unspecified.",
+          "critical": false,
+          "evidence": "but its duration is unspecified"
+        },
+        {
+          "id": "L4-producer-unknown",
+          "dimension": "notes",
+          "claim": "The producer product/name is unspecified.",
+          "critical": false,
+          "evidence": "Its producer product/name is unspecified."
+        },
+        {
+          "id": "L4-region-unknown",
+          "dimension": "notes",
+          "claim": "Cloud regions are unspecified.",
+          "critical": false,
+          "evidence": "“AWS Cloud — region unspecified” and “Azure Cloud — region unspecified.”"
+        },
+        {
+          "id": "L4-discovery-resilience",
+          "dimension": "conditions",
+          "claim": "Cosmos DB keeps metadata-based discovery available if cross-cloud connectivity fails.",
+          "critical": true,
+          "evidence": "Its stated requirement is that Cosmos DB keeps metadata-based discovery available when cross-cloud connectivity fails"
+        },
+        {
+          "id": "L4-retrieval-dependency",
+          "dimension": "conditions",
+          "claim": "Live retrieval requires access to S3.",
+          "critical": true,
+          "evidence": "live document retrieval still requires access to S3."
+        }
+      ]
+    }
+  },
+  "pairs": {
+    "0-2": [
+      {
+        "before": [
+          "L0-publisher"
+        ],
+        "after": [
+          "L2-publisher"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-s3"
+        ],
+        "after": [
+          "L2-s3"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-queues"
+        ],
+        "after": [
+          "L2-queues"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L0-cosmos"
+        ],
+        "after": [
+          "L2-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-blob"
+        ],
+        "after": [
+          "L2-blob"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-outbound"
+        ],
+        "after": [
+          "L2-outbound"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-listeners"
+        ],
+        "after": [
+          "L2-listeners"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-processing"
+        ],
+        "after": [
+          "L2-processing"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retrieving"
+        ],
+        "after": [
+          "L2-retrieving"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-logicapps"
+        ],
+        "after": [
+          "L2-logicapps"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-aws-membership"
+        ],
+        "after": [
+          "L2-aws-membership"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-azure-membership"
+        ],
+        "after": [
+          "L2-azure-membership"
+        ],
+        "status": "preserved",
+        "reason": "The source lists the two stores and workflow boundary as Azure siblings; the readouts make that nesting explicit."
+      },
+      {
+        "before": [
+          "L0-workflow-membership"
+        ],
+        "after": [
+          "L2-workflow-membership"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-content-store"
+        ],
+        "after": [
+          "L2-content-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-metadata-store"
+        ],
+        "after": [
+          "L2-metadata-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-temporary-store"
+        ],
+        "after": [
+          "L2-temporary-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-publish-trigger"
+        ],
+        "after": [
+          "L2-publish-trigger"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-publisher-save"
+        ],
+        "after": [
+          "L2-publisher-save"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-publisher-events"
+        ],
+        "after": [
+          "L2-publisher-events"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-async"
+        ],
+        "after": [
+          "L2-async"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-listener-poll"
+        ],
+        "after": [
+          "L2-listener-poll"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L0-upsert"
+        ],
+        "after": [
+          "L2-upsert"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L0-upsert-identity"
+        ],
+        "after": [
+          "L2-upsert-identity"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-metadata-query"
+        ],
+        "after": [
+          "L2-metadata-query"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-query-auxiliary"
+        ],
+        "after": [
+          "L2-query-auxiliary"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retrieve-workflow-call"
+        ],
+        "after": [
+          "L2-retrieve-workflow-call"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-get-document"
+        ],
+        "after": [
+          "L2-get-document"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-save-blob"
+        ],
+        "after": [
+          "L2-save-blob"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-save-once"
+        ],
+        "after": [
+          "L2-save-once"
+        ],
+        "status": "preserved",
+        "reason": "The flow-wide saving-once qualifier in L2 and the explicit B4 qualifier in L4 preserve the same frequency."
+      },
+      {
+        "before": [
+          "L0-save-https"
+        ],
+        "after": [
+          "L2-save-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-publish-sqs"
+        ],
+        "after": [
+          "L2-publish-sqs"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-poll-api"
+        ],
+        "after": [
+          "L2-poll-api"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-public-endpoints"
+        ],
+        "after": [
+          "L2-public-endpoints"
+        ],
+        "status": "preserved",
+        "reason": "Public HTTPS endpoints preserve the stated connectivity choice; no private link or VPN is introduced."
+      },
+      {
+        "before": [
+          "L0-s3-signature"
+        ],
+        "after": [
+          "L2-s3-signature"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retention"
+        ],
+        "after": [
+          "L2-retention"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retention-unknown"
+        ],
+        "after": [
+          "L2-retention-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-producer-unknown"
+        ],
+        "after": [
+          "L2-producer-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-region-unknown"
+        ],
+        "after": [
+          "L2-region-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-discovery-resilience"
+        ],
+        "after": [
+          "L2-discovery-resilience"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retrieval-dependency"
+        ],
+        "after": [
+          "L2-retrieval-dependency"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      }
+    ],
+    "2-4": [
+      {
+        "before": [
+          "L2-publisher"
+        ],
+        "after": [
+          "L4-publisher"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-s3"
+        ],
+        "after": [
+          "L4-s3"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-queues"
+        ],
+        "after": [
+          "L4-queues"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L2-cosmos"
+        ],
+        "after": [
+          "L4-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-blob"
+        ],
+        "after": [
+          "L4-blob"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-outbound"
+        ],
+        "after": [
+          "L4-outbound"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-listeners"
+        ],
+        "after": [
+          "L4-listeners"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-processing"
+        ],
+        "after": [
+          "L4-processing"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-retrieving"
+        ],
+        "after": [
+          "L4-retrieving"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-logicapps"
+        ],
+        "after": [
+          "L4-logicapps"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-aws-membership"
+        ],
+        "after": [
+          "L4-aws-membership"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-azure-membership"
+        ],
+        "after": [
+          "L4-azure-membership"
+        ],
+        "status": "preserved",
+        "reason": "The source lists the two stores and workflow boundary as Azure siblings; the readouts make that nesting explicit."
+      },
+      {
+        "before": [
+          "L2-workflow-membership"
+        ],
+        "after": [
+          "L4-workflow-membership"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-content-store"
+        ],
+        "after": [
+          "L4-content-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-metadata-store"
+        ],
+        "after": [
+          "L4-metadata-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-temporary-store"
+        ],
+        "after": [
+          "L4-temporary-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-publish-trigger"
+        ],
+        "after": [
+          "L4-publish-trigger"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-publisher-save"
+        ],
+        "after": [
+          "L4-publisher-save"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-publisher-events"
+        ],
+        "after": [
+          "L4-publisher-events"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-async"
+        ],
+        "after": [
+          "L4-async"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-listener-poll"
+        ],
+        "after": [
+          "L4-listener-poll"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L2-upsert"
+        ],
+        "after": [
+          "L4-upsert"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L2-upsert-identity"
+        ],
+        "after": [
+          "L4-upsert-identity"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-metadata-query"
+        ],
+        "after": [
+          "L4-metadata-query"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-query-auxiliary"
+        ],
+        "after": [
+          "L4-query-auxiliary"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-retrieve-workflow-call"
+        ],
+        "after": [
+          "L4-retrieve-workflow-call"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-get-document"
+        ],
+        "after": [
+          "L4-get-document"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-save-blob"
+        ],
+        "after": [
+          "L4-save-blob"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-save-once"
+        ],
+        "after": [
+          "L4-save-once"
+        ],
+        "status": "preserved",
+        "reason": "The flow-wide saving-once qualifier in L2 and the explicit B4 qualifier in L4 preserve the same frequency."
+      },
+      {
+        "before": [
+          "L2-save-https"
+        ],
+        "after": [
+          "L4-save-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-publish-sqs"
+        ],
+        "after": [
+          "L4-publish-sqs"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-poll-api"
+        ],
+        "after": [
+          "L4-poll-api"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-public-endpoints"
+        ],
+        "after": [
+          "L4-public-endpoints"
+        ],
+        "status": "preserved",
+        "reason": "Public HTTPS endpoints preserve the stated connectivity choice; no private link or VPN is introduced."
+      },
+      {
+        "before": [
+          "L2-s3-signature"
+        ],
+        "after": [
+          "L4-s3-signature"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-retention"
+        ],
+        "after": [
+          "L4-retention"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-retention-unknown"
+        ],
+        "after": [
+          "L4-retention-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-producer-unknown"
+        ],
+        "after": [
+          "L4-producer-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-region-unknown"
+        ],
+        "after": [
+          "L4-region-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-discovery-resilience"
+        ],
+        "after": [
+          "L4-discovery-resilience"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L2-retrieval-dependency"
+        ],
+        "after": [
+          "L4-retrieval-dependency"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      }
+    ],
+    "0-4": [
+      {
+        "before": [
+          "L0-publisher"
+        ],
+        "after": [
+          "L4-publisher"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-s3"
+        ],
+        "after": [
+          "L4-s3"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-queues"
+        ],
+        "after": [
+          "L4-queues"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L0-cosmos"
+        ],
+        "after": [
+          "L4-cosmos"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-blob"
+        ],
+        "after": [
+          "L4-blob"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-outbound"
+        ],
+        "after": [
+          "L4-outbound"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-listeners"
+        ],
+        "after": [
+          "L4-listeners"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-processing"
+        ],
+        "after": [
+          "L4-processing"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retrieving"
+        ],
+        "after": [
+          "L4-retrieving"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-logicapps"
+        ],
+        "after": [
+          "L4-logicapps"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-aws-membership"
+        ],
+        "after": [
+          "L4-aws-membership"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-azure-membership"
+        ],
+        "after": [
+          "L4-azure-membership"
+        ],
+        "status": "preserved",
+        "reason": "The source lists the two stores and workflow boundary as Azure siblings; the readouts make that nesting explicit."
+      },
+      {
+        "before": [
+          "L0-workflow-membership"
+        ],
+        "after": [
+          "L4-workflow-membership"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-content-store"
+        ],
+        "after": [
+          "L4-content-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-metadata-store"
+        ],
+        "after": [
+          "L4-metadata-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-temporary-store"
+        ],
+        "after": [
+          "L4-temporary-store"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-publish-trigger"
+        ],
+        "after": [
+          "L4-publish-trigger"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-publisher-save"
+        ],
+        "after": [
+          "L4-publisher-save"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-publisher-events"
+        ],
+        "after": [
+          "L4-publisher-events"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-async"
+        ],
+        "after": [
+          "L4-async"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-listener-poll"
+        ],
+        "after": [
+          "L4-listener-poll"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L0-upsert"
+        ],
+        "after": [
+          "L4-upsert"
+        ],
+        "status": "preserved",
+        "reason": "The complete typed enumeration preserves all three queue/listener mappings and the stated action."
+      },
+      {
+        "before": [
+          "L0-upsert-identity"
+        ],
+        "after": [
+          "L4-upsert-identity"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-metadata-query"
+        ],
+        "after": [
+          "L4-metadata-query"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-query-auxiliary"
+        ],
+        "after": [
+          "L4-query-auxiliary"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retrieve-workflow-call"
+        ],
+        "after": [
+          "L4-retrieve-workflow-call"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-get-document"
+        ],
+        "after": [
+          "L4-get-document"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-save-blob"
+        ],
+        "after": [
+          "L4-save-blob"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-save-once"
+        ],
+        "after": [
+          "L4-save-once"
+        ],
+        "status": "preserved",
+        "reason": "The flow-wide saving-once qualifier in L2 and the explicit B4 qualifier in L4 preserve the same frequency."
+      },
+      {
+        "before": [
+          "L0-save-https"
+        ],
+        "after": [
+          "L4-save-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-publish-sqs"
+        ],
+        "after": [
+          "L4-publish-sqs"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-poll-api"
+        ],
+        "after": [
+          "L4-poll-api"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-public-endpoints"
+        ],
+        "after": [
+          "L4-public-endpoints"
+        ],
+        "status": "preserved",
+        "reason": "Public HTTPS endpoints preserve the stated connectivity choice; no private link or VPN is introduced."
+      },
+      {
+        "before": [
+          "L0-s3-signature"
+        ],
+        "after": [
+          "L4-s3-signature"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retention"
+        ],
+        "after": [
+          "L4-retention"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retention-unknown"
+        ],
+        "after": [
+          "L4-retention-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-producer-unknown"
+        ],
+        "after": [
+          "L4-producer-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-region-unknown"
+        ],
+        "after": [
+          "L4-region-unknown"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-discovery-resilience"
+        ],
+        "after": [
+          "L4-discovery-resilience"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      },
+      {
+        "before": [
+          "L0-retrieval-dependency"
+        ],
+        "after": [
+          "L4-retrieval-dependency"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition is present; changes in wording or generic C4 notation do not change its meaning."
+      }
+    ]
+  },
+  "judgmentNotes": {
+    "scope": "One independent judgment of the frozen description chain; no diagrams, XML, SVG, other cases, pilots, reports or model endpoints consulted.",
+    "interpretation": "Generic C4 container/deployment labels, main-call/response legend phrasing, title, numbering, color and line-style explanations are representational. Added generic container labels do not change ownership, hosting, lifecycle or scope. Architectural auxiliary-query meaning is retained as a fact. Metadata discovery paraphrases the finding-documents example. Nested enumerations preserve the three queue/listener types. Readout-only observations about absent trigger, retry/error/allow-deny rules, polling interval or other authentication are excluded. L0 authoring prohibitions and intentionally excluded scope are excluded.",
+    "limitation": "Complete mapping coverage validates only this extracted ledger; it does not establish exhaustive extraction, architectural validity or round-trip reliability. Parent supplied a general drawing-policy clarification allowing faithful generic C4 type notation; no desired outcome was supplied.",
+    "sources": [
+      "/tmp/diagram-full-roundtrip.RZnmyG/l0-04.txt",
+      "/tmp/diagram-full-roundtrip.RZnmyG/case-04/l2.txt",
+      "/tmp/diagram-full-roundtrip.RZnmyG/case-04/l4.txt",
+      "/workspace/skills/incubator/architecture-diagram/evals/roundtrip.md",
+      "/workspace/skills/incubator/architecture-diagram/evals/roundtrip.mjs"
+    ]
+  }
+}

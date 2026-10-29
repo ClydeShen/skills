@@ -1,0 +1,31 @@
+The diagram is titled “Dynamic diagram (deployment view): AWS document metadata sync and Azure on-demand retrieval.” It describes two independently numbered flows: A, write and metadata synchronization; and B, read and retrieval. The stated requirement is that Cosmos DB keeps metadata-based discovery available when cross-cloud connectivity fails. Live document retrieval still requires access to S3.
+
+There are two deployment nodes, AWS Cloud and Azure Cloud. The cloud region is unspecified for each. AWS Cloud contains a Document publishing service, three individual Amazon SQS queues, and Amazon S3. The Document publishing service is a software system that publishes document content and metadata events. Its producer product/name is unspecified. A note identifies document publication or template-version approval as the occasion for publication.
+
+The three AWS queues are “Amazon SQS — documents queue,” “Amazon SQS — templates queue,” and “Amazon SQS — bundles queue.” Each is a container using Amazon SQS and holds metadata events. Amazon S3 is a container using Amazon S3 and is the document content store.
+
+Azure Cloud contains a software system boundary named “Outbound workflows.” Inside that boundary are five containers using Azure Logic Apps: three listener workflows named SQS-Document-Cosmos, SQS-Template-Cosmos, and SQS-Bundle-Cosmos; a Processing workflow; and a Retrieving workflow. Also inside Azure Cloud, but outside the Outbound workflows boundary, are Cosmos DB and Azure Blob Storage. Cosmos DB is a container using Azure Cosmos DB / NoSQL and is the document metadata store. Azure Blob Storage is a container using Azure Blob Storage and provides temporary document storage. A retention policy applies to the temporary storage, with duration unspecified.
+
+Flow A is the write/metadata-sync flow, described as publishing content and metadata events, polling, and upserting. Its calls are:
+
+1. A1: The Document publishing service calls Amazon S3 to “Save document [HTTPS].” This stays within AWS Cloud.
+2. A2a: The Document publishing service publishes a metadata event to the documents SQS queue, labeled “[async, SQS] — documents.”
+3. A2b: The Document publishing service publishes a metadata event to the templates SQS queue, labeled “[async, SQS] — templates.”
+4. A2c: The Document publishing service publishes a metadata event to the bundles SQS queue, labeled “[async, SQS] — bundles.”
+5. A3a: The SQS-Document-Cosmos listener initiates a poll of the AWS documents queue, labeled “Poll [SQS API / public HTTPS].” The response returns metadata events.
+6. A3b: The SQS-Template-Cosmos listener initiates the same kind of poll of the AWS templates queue, using SQS API / public HTTPS and returning metadata events.
+7. A3c: The SQS-Bundle-Cosmos listener initiates the same kind of poll of the AWS bundles queue, using SQS API / public HTTPS and returning metadata events.
+8. A4a, A4b, and A4c: Respectively, SQS-Document-Cosmos, SQS-Template-Cosmos, and SQS-Bundle-Cosmos call Cosmos DB to “Upsert metadata by record ID [Cosmos DB].”
+
+The three poll calls cross the Outbound workflows boundary and the Azure/AWS cloud boundaries, with each Azure listener as caller and its AWS queue as callee. The three upsert calls leave the Outbound workflows boundary but remain within Azure Cloud. The diagram explicitly shows three separate queues and their three corresponding listeners. No polling interval is specified. “Async” qualifies metadata publication; it does not change the line style.
+
+Flow B is the read/retrieval flow, described as querying metadata, retrieving S3 content, saving once, and returning a blob reference. Its calls are:
+
+1. B1: The Processing workflow queries Cosmos DB for metadata, labeled “Query metadata [Cosmos DB].” The response returns an S3 reference. This is an auxiliary query, drawn as a dashed line, from the Processing workflow inside Outbound workflows to Cosmos DB outside that boundary but within Azure Cloud.
+2. B2: The Processing workflow calls the Retrieving workflow, labeled “Pass S3 reference [workflow call].” The response returns a blob reference. Both workflows are inside Outbound workflows.
+3. B3: The Retrieving workflow calls Amazon S3 to “Get document [public HTTPS, AWS Signature].” The response returns document content. This crosses the Outbound workflows boundary and the Azure/AWS cloud boundaries, with the Azure Retrieving workflow initiating the call to S3.
+4. B4: The Retrieving workflow calls Azure Blob Storage to “Save document temporarily [Azure Blob Storage].” This leaves Outbound workflows but stays within Azure Cloud. The temporary storage is subject to the retention policy whose duration is unspecified.
+
+A connectivity note states that cross-cloud connectivity uses public HTTPS service endpoints and that S3 requests use AWS Signature. No more specific authentication mechanism is given for the other calls. The diagram provides no explicit initiating actor or trigger for the Processing workflow, and no detailed error code, retry rule, or allow/deny condition. Its explicit failure qualification is that metadata discovery remains available through Cosmos DB when cross-cloud connectivity fails, whereas live retrieval still depends on access to S3.
+
+The legend says that a filled arrow means caller to callee. Normal responses are folded into the request labels rather than shown as separate response arrows. Dashed means the auxiliary query B1; solid means a main call. Cosmos DB stores metadata, while S3 and temporary Blob Storage hold document content. The A and B flow numbering is independent.

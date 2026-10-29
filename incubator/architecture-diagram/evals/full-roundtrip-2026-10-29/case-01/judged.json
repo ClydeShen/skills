@@ -1,0 +1,2706 @@
+{
+  "levels": {
+    "0": {
+      "description": "Dynamic diagram (deployment view): Token-based API authorization.\nRequirement: Authenticate users and authorize each API request.\n\nA User [Person] signs in through a Web sign-in page [Container: Web app] with a username and password. Both the User and Web sign-in page are outside AWS Cloud. The page collects and submits the credentials to Amazon Cognito user pool over HTTPS; the page does not verify the password. Cognito verifies the password, authenticates the user and issues tokens. The ID token carries user attributes, for example cognito:username = alex; custom:tenantId = T-001; custom:type = Customer; cognito:groups = [Customers].\n\nAWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]. API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]. API Gateway enforces the authorization result; Lambda authorizer verifies the token and queries policy; Amazon Verified Permissions makes policy decisions.\n\nThe Web sign-in page sends the token with each API request to Amazon API Gateway over HTTPS. API Gateway passes the token to the Lambda authorizer using a generic AWS invocation. The authorizer verifies the token and asks the Amazon Verified Permissions decision endpoint over HTTPS whether the request is allowed. If allowed, API Gateway forwards the request to Backend APIs over HTTPS. If authorization fails, API Gateway returns HTTP 403 with an authorization error message to the Web sign-in page over HTTPS.\n\nRepresent the main sequence as 1. Authenticate (returns tokens); 2. API request with token; 3. Pass token for authorization; 4. Query policy; 5. Forward allowed request. A separate bold 5' relationship represents the HTTP 403 failure response. Policy query is auxiliary and dashed; main calls are solid. Arrows point from caller to callee; return tokens are folded into the authentication label, rather than a second return arrow. User uses the Web sign-in page. Show the token example in a local comment near Step 1 and explain the notation in a legend. All calls remain inside shared enclosing domains and cross only required boundaries.\n",
+      "facts": [
+        {
+          "id": "l0-user",
+          "dimension": "elements",
+          "claim": "There is one depicted User, typed Person.",
+          "critical": false,
+          "evidence": "A User [Person]"
+        },
+        {
+          "id": "l0-page",
+          "dimension": "elements",
+          "claim": "There is a Web sign-in page Container implemented as a Web app.",
+          "critical": false,
+          "evidence": "Web sign-in page [Container: Web app]"
+        },
+        {
+          "id": "l0-cloud",
+          "dimension": "elements",
+          "claim": "AWS Cloud is a deployment node.",
+          "critical": false,
+          "evidence": "AWS Cloud [Deployment node]"
+        },
+        {
+          "id": "l0-cognito",
+          "dimension": "elements",
+          "claim": "There is an Amazon Cognito user pool Container using Amazon Cognito.",
+          "critical": false,
+          "evidence": "Amazon Cognito user pool [Container: Amazon Cognito]"
+        },
+        {
+          "id": "l0-avp",
+          "dimension": "elements",
+          "claim": "There is an Amazon Verified Permissions Container using an AWS managed service.",
+          "critical": false,
+          "evidence": "Amazon Verified Permissions [Container: AWS managed service]"
+        },
+        {
+          "id": "l0-backend",
+          "dimension": "elements",
+          "claim": "There is a Backend APIs Container implemented as a REST API.",
+          "critical": false,
+          "evidence": "Backend APIs [Container: REST API]"
+        },
+        {
+          "id": "l0-enforcement",
+          "dimension": "elements",
+          "claim": "API enforcement is a software system boundary.",
+          "critical": false,
+          "evidence": "API enforcement [Software system boundary]"
+        },
+        {
+          "id": "l0-gateway",
+          "dimension": "elements",
+          "claim": "There is an Amazon API Gateway Container using an AWS managed service.",
+          "critical": false,
+          "evidence": "Amazon API Gateway [Container: AWS managed service]"
+        },
+        {
+          "id": "l0-lambda",
+          "dimension": "elements",
+          "claim": "There is a Lambda authorizer Container implemented with AWS Lambda.",
+          "critical": false,
+          "evidence": "Lambda authorizer [Container: AWS Lambda]"
+        },
+        {
+          "id": "l0-collect",
+          "dimension": "responsibilities",
+          "claim": "The sign-in page collects credentials.",
+          "critical": false,
+          "evidence": "The page collects and submits the credentials"
+        },
+        {
+          "id": "l0-no-page-verify",
+          "dimension": "responsibilities",
+          "claim": "The sign-in page does not verify the password.",
+          "critical": true,
+          "evidence": "the page does not verify the password"
+        },
+        {
+          "id": "l0-cognito-verify",
+          "dimension": "responsibilities",
+          "claim": "Cognito verifies the password.",
+          "critical": true,
+          "evidence": "Cognito verifies the password"
+        },
+        {
+          "id": "l0-cognito-auth",
+          "dimension": "responsibilities",
+          "claim": "Cognito authenticates the user.",
+          "critical": true,
+          "evidence": "authenticates the user"
+        },
+        {
+          "id": "l0-cognito-issue",
+          "dimension": "responsibilities",
+          "claim": "Cognito issues tokens.",
+          "critical": false,
+          "evidence": "issues tokens"
+        },
+        {
+          "id": "l0-gateway-enforce",
+          "dimension": "responsibilities",
+          "claim": "API Gateway enforces the authorization result.",
+          "critical": true,
+          "evidence": "API Gateway enforces the authorization result"
+        },
+        {
+          "id": "l0-lambda-verify",
+          "dimension": "responsibilities",
+          "claim": "The Lambda authorizer verifies the token.",
+          "critical": true,
+          "evidence": "Lambda authorizer verifies the token"
+        },
+        {
+          "id": "l0-avp-decision",
+          "dimension": "responsibilities",
+          "claim": "Amazon Verified Permissions makes policy decisions at the decision endpoint.",
+          "critical": true,
+          "evidence": "Amazon Verified Permissions makes policy decisions.\n\nThe Web sign-in page sends the token with each API request to Amazon API Gateway over HTTPS. API Gateway passes the token to the Lambda authorizer using a generic AWS invocation. The authorizer verifies the token and asks the Amazon Verified Permissions decision endpoint over HTTPS whether the request is allowed."
+        },
+        {
+          "id": "l0-user-out",
+          "dimension": "boundaries",
+          "claim": "The User is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Both the User and Web sign-in page are outside AWS Cloud."
+        },
+        {
+          "id": "l0-page-out",
+          "dimension": "boundaries",
+          "claim": "The Web sign-in page is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Both the User and Web sign-in page are outside AWS Cloud."
+        },
+        {
+          "id": "l0-cognito-aws",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]."
+        },
+        {
+          "id": "l0-avp-aws",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]."
+        },
+        {
+          "id": "l0-backend-aws",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]."
+        },
+        {
+          "id": "l0-enforcement-aws",
+          "dimension": "boundaries",
+          "claim": "API enforcement boundary is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]."
+        },
+        {
+          "id": "l0-gateway-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon API Gateway is inside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "l0-lambda-enforcement",
+          "dimension": "boundaries",
+          "claim": "Lambda authorizer is inside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "l0-cognito-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is outside API enforcement.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]. API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "l0-avp-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is outside API enforcement.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]. API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "l0-backend-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is outside API enforcement.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]. API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "l0-use",
+          "dimension": "directions",
+          "claim": "The User initiates sign-in at the Web sign-in page with username and password.",
+          "critical": true,
+          "evidence": "A User [Person] signs in through a Web sign-in page [Container: Web app] with a username and password."
+        },
+        {
+          "id": "l0-authenticate",
+          "dimension": "directions",
+          "claim": "The Web sign-in page calls Cognito to authenticate with username and password.",
+          "critical": true,
+          "evidence": "The page collects and submits the credentials to Amazon Cognito user pool over HTTPS"
+        },
+        {
+          "id": "l0-api-request",
+          "dimension": "directions",
+          "claim": "The Web sign-in page sends an API request carrying a token to API Gateway.",
+          "critical": true,
+          "evidence": "The Web sign-in page sends the token with each API request to Amazon API Gateway"
+        },
+        {
+          "id": "l0-pass-token",
+          "dimension": "directions",
+          "claim": "API Gateway passes the token to the Lambda authorizer for authorization.",
+          "critical": true,
+          "evidence": "API Gateway passes the token to the Lambda authorizer"
+        },
+        {
+          "id": "l0-query",
+          "dimension": "directions",
+          "claim": "The Lambda authorizer queries the Amazon Verified Permissions decision endpoint to ask whether the request is allowed.",
+          "critical": true,
+          "evidence": "The authorizer verifies the token and asks the Amazon Verified Permissions decision endpoint over HTTPS whether the request is allowed."
+        },
+        {
+          "id": "l0-forward",
+          "dimension": "directions",
+          "claim": "API Gateway forwards a request to Backend APIs.",
+          "critical": true,
+          "evidence": "API Gateway forwards the request to Backend APIs"
+        },
+        {
+          "id": "l0-failure",
+          "dimension": "directions",
+          "claim": "API Gateway sends HTTP 403 with an authorization error message back to the Web sign-in page.",
+          "critical": true,
+          "evidence": "API Gateway returns HTTP 403 with an authorization error message to the Web sign-in page"
+        },
+        {
+          "id": "l0-tokens-return",
+          "dimension": "relationships",
+          "claim": "The authentication interaction returns tokens to the calling Web sign-in page.",
+          "critical": false,
+          "evidence": "1. Authenticate (returns tokens)"
+        },
+        {
+          "id": "l0-aux",
+          "dimension": "relationships",
+          "claim": "The policy query is auxiliary to the main request sequence.",
+          "critical": false,
+          "evidence": "Policy query is auxiliary and dashed"
+        },
+        {
+          "id": "l0-each-token",
+          "dimension": "conditions",
+          "claim": "The sign-in page includes a token with each API request.",
+          "critical": false,
+          "evidence": "sends the token with each API request"
+        },
+        {
+          "id": "l0-allow",
+          "dimension": "conditions",
+          "claim": "Forwarding to Backend APIs is conditional on an allowed authorization decision.",
+          "critical": true,
+          "evidence": "If allowed, API Gateway forwards the request to Backend APIs"
+        },
+        {
+          "id": "l0-deny",
+          "dimension": "conditions",
+          "claim": "Authorization failure takes the alternative HTTP 403 error-response path.",
+          "critical": true,
+          "evidence": "If authorization fails, API Gateway returns HTTP 403 with an authorization error message"
+        },
+        {
+          "id": "l0-auth-https",
+          "dimension": "protocols",
+          "claim": "The sign-in-page-to-Cognito authentication call uses HTTPS.",
+          "critical": false,
+          "evidence": "submits the credentials to Amazon Cognito user pool over HTTPS"
+        },
+        {
+          "id": "l0-request-https",
+          "dimension": "protocols",
+          "claim": "The API request from the sign-in page to API Gateway uses HTTPS.",
+          "critical": false,
+          "evidence": "sends the token with each API request to Amazon API Gateway over HTTPS"
+        },
+        {
+          "id": "l0-invoke",
+          "dimension": "protocols",
+          "claim": "API Gateway invokes the Lambda authorizer using a generic AWS invocation.",
+          "critical": false,
+          "evidence": "API Gateway passes the token to the Lambda authorizer using a generic AWS invocation."
+        },
+        {
+          "id": "l0-query-https",
+          "dimension": "protocols",
+          "claim": "The Lambda authorizer policy query to Verified Permissions uses HTTPS.",
+          "critical": false,
+          "evidence": "asks the Amazon Verified Permissions decision endpoint over HTTPS"
+        },
+        {
+          "id": "l0-backend-https",
+          "dimension": "protocols",
+          "claim": "The API Gateway call to Backend APIs uses HTTPS.",
+          "critical": false,
+          "evidence": "API Gateway forwards the request to Backend APIs over HTTPS"
+        },
+        {
+          "id": "l0-failure-https",
+          "dimension": "protocols",
+          "claim": "The HTTP 403 response to the Web sign-in page is sent over HTTPS.",
+          "critical": false,
+          "evidence": "API Gateway returns HTTP 403 with an authorization error message to the Web sign-in page over HTTPS"
+        },
+        {
+          "id": "l0-requirement",
+          "dimension": "notes",
+          "claim": "The requirement is to authenticate users and authorize every API request.",
+          "critical": false,
+          "evidence": "Requirement: Authenticate users and authorize each API request."
+        },
+        {
+          "id": "l0-attribute-username",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute cognito:username = alex.",
+          "critical": false,
+          "evidence": "cognito:username = alex"
+        },
+        {
+          "id": "l0-attribute-tenant",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute custom:tenantId = T-001.",
+          "critical": false,
+          "evidence": "custom:tenantId = T-001"
+        },
+        {
+          "id": "l0-attribute-type",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute custom:type = Customer.",
+          "critical": false,
+          "evidence": "custom:type = Customer"
+        },
+        {
+          "id": "l0-attribute-groups",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute cognito:groups = [Customers].",
+          "critical": false,
+          "evidence": "cognito:groups = [Customers]"
+        },
+        {
+          "id": "l0-sequence",
+          "dimension": "notes",
+          "claim": "The main sequence is authenticate, API request with token, pass token for authorization, query policy, then forward the allowed request.",
+          "critical": false,
+          "evidence": "1. Authenticate (returns tokens); 2. API request with token; 3. Pass token for authorization; 4. Query policy; 5. Forward allowed request."
+        }
+      ]
+    },
+    "2": {
+      "description": "The diagram is titled “Dynamic diagram (deployment view): Token-based API authorization.” Its requirement is to authenticate users and authorize each API request.\n\nThe architecture contains a User, typed as a Person, and a Web sign-in page, typed as a Container implemented as a Web app. Both are outside the AWS Cloud deployment node. The Web sign-in page collects and submits credentials; it does not verify the password.\n\nThe AWS Cloud deployment node contains an Amazon Cognito user pool, Backend APIs, Amazon Verified Permissions, and an API enforcement software system boundary. The API enforcement boundary contains Amazon API Gateway and a Lambda authorizer. Cognito, Backend APIs, and Amazon Verified Permissions are inside AWS Cloud but outside the API enforcement boundary. One element of each of these kinds is depicted; no instance multiplicities are specified.\n\nThe Amazon Cognito user pool is a Container using Amazon Cognito. It verifies the password, authenticates the user, and issues tokens. Amazon API Gateway is a Container using an AWS managed service and enforces the authorization result. The Lambda authorizer is a Container using AWS Lambda; it verifies the token and queries policy. Amazon Verified Permissions is a Container using an AWS managed service; it is the decision endpoint and makes policy decisions. Backend APIs is a Container implemented as a REST API.\n\nThe directed interaction sequence is:\n\n0. The User uses the Web sign-in page, providing username and password. The arrow runs from the User to the Web sign-in page. No protocol is stated for this step.\n\n1. The Web sign-in page calls the Amazon Cognito user pool to authenticate using username and password over HTTPS. This call crosses into AWS Cloud and is labeled “Authenticate (returns tokens).” The normal token return is folded into this step rather than drawn as a separate return arrow.\n\n2. The Web sign-in page sends an API request with a token to Amazon API Gateway over HTTPS, on each request. This crosses into AWS Cloud and into the API enforcement boundary.\n\n3. Amazon API Gateway passes the token to the Lambda authorizer for authorization. This is labeled a “Generic AWS invocation” and stays within the API enforcement boundary.\n\n4. The Lambda authorizer queries Amazon Verified Permissions with “Query policy: is request allowed?” over HTTPS. This is a dashed arrow denoting an auxiliary policy query. It crosses out of the API enforcement boundary while remaining inside AWS Cloud.\n\n5. If allowed, Amazon API Gateway forwards the allowed request to Backend APIs over HTTPS. This crosses out of the API enforcement boundary while remaining inside AWS Cloud.\n\n5′. As the alternative failure response, if authorization fails, Amazon API Gateway sends HTTP 403 plus an authorization error message to the Web sign-in page over HTTPS. This crosses out of both the API enforcement boundary and AWS Cloud. The diagram does not specify the error message text.\n\nAn ID token example associated with Step 1 lists these attributes exactly:\ncognito:username = alex\ncustom:tenantId = T-001\ncustom:type = Customer\ncognito:groups = [Customers]\n\nThe legend identifies “[Type: technology]” as the C4 element caption and says outlined groups represent architectural domains. It defines 1–5 as the request sequence, with 5′ as the alternative failure response. A solid filled arrow means caller to callee; a dashed arrow means an auxiliary policy query. The yellow note supplies example ID token attributes. No separate return from the policy decision service or the authorizer, no token-verification method, and no policy rules are specified.\n",
+      "facts": [
+        {
+          "id": "l2-user",
+          "dimension": "elements",
+          "claim": "There is one depicted User, typed Person.",
+          "critical": false,
+          "evidence": "a User, typed as a Person"
+        },
+        {
+          "id": "l2-page",
+          "dimension": "elements",
+          "claim": "There is a Web sign-in page Container implemented as a Web app.",
+          "critical": false,
+          "evidence": "a Web sign-in page, typed as a Container implemented as a Web app"
+        },
+        {
+          "id": "l2-cloud",
+          "dimension": "elements",
+          "claim": "AWS Cloud is a deployment node.",
+          "critical": false,
+          "evidence": "AWS Cloud deployment node"
+        },
+        {
+          "id": "l2-cognito",
+          "dimension": "elements",
+          "claim": "There is an Amazon Cognito user pool Container using Amazon Cognito.",
+          "critical": false,
+          "evidence": "The Amazon Cognito user pool is a Container using Amazon Cognito."
+        },
+        {
+          "id": "l2-avp",
+          "dimension": "elements",
+          "claim": "There is an Amazon Verified Permissions Container using an AWS managed service.",
+          "critical": false,
+          "evidence": "Amazon Verified Permissions is a Container using an AWS managed service"
+        },
+        {
+          "id": "l2-backend",
+          "dimension": "elements",
+          "claim": "There is a Backend APIs Container implemented as a REST API.",
+          "critical": false,
+          "evidence": "Backend APIs is a Container implemented as a REST API."
+        },
+        {
+          "id": "l2-enforcement",
+          "dimension": "elements",
+          "claim": "API enforcement is a software system boundary.",
+          "critical": false,
+          "evidence": "an API enforcement software system boundary"
+        },
+        {
+          "id": "l2-gateway",
+          "dimension": "elements",
+          "claim": "There is an Amazon API Gateway Container using an AWS managed service.",
+          "critical": false,
+          "evidence": "Amazon API Gateway is a Container using an AWS managed service"
+        },
+        {
+          "id": "l2-lambda",
+          "dimension": "elements",
+          "claim": "There is a Lambda authorizer Container implemented with AWS Lambda.",
+          "critical": false,
+          "evidence": "The Lambda authorizer is a Container using AWS Lambda"
+        },
+        {
+          "id": "l2-collect",
+          "dimension": "responsibilities",
+          "claim": "The sign-in page collects credentials.",
+          "critical": false,
+          "evidence": "The Web sign-in page collects and submits credentials"
+        },
+        {
+          "id": "l2-no-page-verify",
+          "dimension": "responsibilities",
+          "claim": "The sign-in page does not verify the password.",
+          "critical": true,
+          "evidence": "it does not verify the password"
+        },
+        {
+          "id": "l2-cognito-verify",
+          "dimension": "responsibilities",
+          "claim": "Cognito verifies the password.",
+          "critical": true,
+          "evidence": "It verifies the password"
+        },
+        {
+          "id": "l2-cognito-auth",
+          "dimension": "responsibilities",
+          "claim": "Cognito authenticates the user.",
+          "critical": true,
+          "evidence": "authenticates the user"
+        },
+        {
+          "id": "l2-cognito-issue",
+          "dimension": "responsibilities",
+          "claim": "Cognito issues tokens.",
+          "critical": false,
+          "evidence": "issues tokens"
+        },
+        {
+          "id": "l2-gateway-enforce",
+          "dimension": "responsibilities",
+          "claim": "API Gateway enforces the authorization result.",
+          "critical": true,
+          "evidence": "Amazon API Gateway is a Container using an AWS managed service and enforces the authorization result"
+        },
+        {
+          "id": "l2-lambda-verify",
+          "dimension": "responsibilities",
+          "claim": "The Lambda authorizer verifies the token.",
+          "critical": true,
+          "evidence": "The Lambda authorizer is a Container using AWS Lambda; it verifies the token"
+        },
+        {
+          "id": "l2-avp-decision",
+          "dimension": "responsibilities",
+          "claim": "Amazon Verified Permissions makes policy decisions at the decision endpoint.",
+          "critical": true,
+          "evidence": "Amazon Verified Permissions is a Container using an AWS managed service; it is the decision endpoint and makes policy decisions."
+        },
+        {
+          "id": "l2-user-out",
+          "dimension": "boundaries",
+          "claim": "The User is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Both are outside the AWS Cloud deployment node."
+        },
+        {
+          "id": "l2-page-out",
+          "dimension": "boundaries",
+          "claim": "The Web sign-in page is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Both are outside the AWS Cloud deployment node."
+        },
+        {
+          "id": "l2-cognito-aws",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an Amazon Cognito user pool, Backend APIs, Amazon Verified Permissions, and an API enforcement software system boundary."
+        },
+        {
+          "id": "l2-avp-aws",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an Amazon Cognito user pool, Backend APIs, Amazon Verified Permissions, and an API enforcement software system boundary."
+        },
+        {
+          "id": "l2-backend-aws",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an Amazon Cognito user pool, Backend APIs, Amazon Verified Permissions, and an API enforcement software system boundary."
+        },
+        {
+          "id": "l2-enforcement-aws",
+          "dimension": "boundaries",
+          "claim": "API enforcement boundary is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an Amazon Cognito user pool, Backend APIs, Amazon Verified Permissions, and an API enforcement software system boundary."
+        },
+        {
+          "id": "l2-gateway-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon API Gateway is inside API enforcement.",
+          "critical": true,
+          "evidence": "The API enforcement boundary contains Amazon API Gateway and a Lambda authorizer."
+        },
+        {
+          "id": "l2-lambda-enforcement",
+          "dimension": "boundaries",
+          "claim": "Lambda authorizer is inside API enforcement.",
+          "critical": true,
+          "evidence": "The API enforcement boundary contains Amazon API Gateway and a Lambda authorizer."
+        },
+        {
+          "id": "l2-cognito-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is outside API enforcement.",
+          "critical": true,
+          "evidence": "Cognito, Backend APIs, and Amazon Verified Permissions are inside AWS Cloud but outside the API enforcement boundary."
+        },
+        {
+          "id": "l2-avp-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is outside API enforcement.",
+          "critical": true,
+          "evidence": "Cognito, Backend APIs, and Amazon Verified Permissions are inside AWS Cloud but outside the API enforcement boundary."
+        },
+        {
+          "id": "l2-backend-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is outside API enforcement.",
+          "critical": true,
+          "evidence": "Cognito, Backend APIs, and Amazon Verified Permissions are inside AWS Cloud but outside the API enforcement boundary."
+        },
+        {
+          "id": "l2-use",
+          "dimension": "directions",
+          "claim": "The User initiates sign-in at the Web sign-in page with username and password.",
+          "critical": true,
+          "evidence": "The User uses the Web sign-in page, providing username and password. The arrow runs from the User to the Web sign-in page."
+        },
+        {
+          "id": "l2-authenticate",
+          "dimension": "directions",
+          "claim": "The Web sign-in page calls Cognito to authenticate with username and password.",
+          "critical": true,
+          "evidence": "The Web sign-in page calls the Amazon Cognito user pool to authenticate using username and password over HTTPS."
+        },
+        {
+          "id": "l2-api-request",
+          "dimension": "directions",
+          "claim": "The Web sign-in page sends an API request carrying a token to API Gateway.",
+          "critical": true,
+          "evidence": "The Web sign-in page sends an API request with a token to Amazon API Gateway"
+        },
+        {
+          "id": "l2-pass-token",
+          "dimension": "directions",
+          "claim": "API Gateway passes the token to the Lambda authorizer for authorization.",
+          "critical": true,
+          "evidence": "Amazon API Gateway passes the token to the Lambda authorizer for authorization."
+        },
+        {
+          "id": "l2-query",
+          "dimension": "directions",
+          "claim": "The Lambda authorizer queries the Amazon Verified Permissions decision endpoint to ask whether the request is allowed.",
+          "critical": true,
+          "evidence": "The Lambda authorizer queries Amazon Verified Permissions with “Query policy: is request allowed?”"
+        },
+        {
+          "id": "l2-forward",
+          "dimension": "directions",
+          "claim": "API Gateway forwards a request to Backend APIs.",
+          "critical": true,
+          "evidence": "Amazon API Gateway forwards the allowed request to Backend APIs"
+        },
+        {
+          "id": "l2-failure",
+          "dimension": "directions",
+          "claim": "API Gateway sends HTTP 403 with an authorization error message back to the Web sign-in page.",
+          "critical": true,
+          "evidence": "Amazon API Gateway sends HTTP 403 plus an authorization error message to the Web sign-in page"
+        },
+        {
+          "id": "l2-tokens-return",
+          "dimension": "relationships",
+          "claim": "The authentication interaction returns tokens to the calling Web sign-in page.",
+          "critical": false,
+          "evidence": "The Web sign-in page calls the Amazon Cognito user pool to authenticate using username and password over HTTPS. This call crosses into AWS Cloud and is labeled “Authenticate (returns tokens).”"
+        },
+        {
+          "id": "l2-aux",
+          "dimension": "relationships",
+          "claim": "The policy query is auxiliary to the main request sequence.",
+          "critical": false,
+          "evidence": "a dashed arrow denoting an auxiliary policy query"
+        },
+        {
+          "id": "l2-each-token",
+          "dimension": "conditions",
+          "claim": "The sign-in page includes a token with each API request.",
+          "critical": false,
+          "evidence": "sends an API request with a token to Amazon API Gateway over HTTPS, on each request"
+        },
+        {
+          "id": "l2-allow",
+          "dimension": "conditions",
+          "claim": "Forwarding to Backend APIs is conditional on an allowed authorization decision.",
+          "critical": true,
+          "evidence": "If allowed, Amazon API Gateway forwards the allowed request to Backend APIs"
+        },
+        {
+          "id": "l2-deny",
+          "dimension": "conditions",
+          "claim": "Authorization failure takes the alternative HTTP 403 error-response path.",
+          "critical": true,
+          "evidence": "As the alternative failure response, if authorization fails, Amazon API Gateway sends HTTP 403 plus an authorization error message"
+        },
+        {
+          "id": "l2-auth-https",
+          "dimension": "protocols",
+          "claim": "The sign-in-page-to-Cognito authentication call uses HTTPS.",
+          "critical": false,
+          "evidence": "calls the Amazon Cognito user pool to authenticate using username and password over HTTPS"
+        },
+        {
+          "id": "l2-request-https",
+          "dimension": "protocols",
+          "claim": "The API request from the sign-in page to API Gateway uses HTTPS.",
+          "critical": false,
+          "evidence": "sends an API request with a token to Amazon API Gateway over HTTPS"
+        },
+        {
+          "id": "l2-invoke",
+          "dimension": "protocols",
+          "claim": "API Gateway invokes the Lambda authorizer using a generic AWS invocation.",
+          "critical": false,
+          "evidence": "Amazon API Gateway passes the token to the Lambda authorizer for authorization. This is labeled a “Generic AWS invocation”"
+        },
+        {
+          "id": "l2-query-https",
+          "dimension": "protocols",
+          "claim": "The Lambda authorizer policy query to Verified Permissions uses HTTPS.",
+          "critical": false,
+          "evidence": "The Lambda authorizer queries Amazon Verified Permissions with “Query policy: is request allowed?” over HTTPS."
+        },
+        {
+          "id": "l2-backend-https",
+          "dimension": "protocols",
+          "claim": "The API Gateway call to Backend APIs uses HTTPS.",
+          "critical": false,
+          "evidence": "Amazon API Gateway forwards the allowed request to Backend APIs over HTTPS"
+        },
+        {
+          "id": "l2-failure-https",
+          "dimension": "protocols",
+          "claim": "The HTTP 403 response to the Web sign-in page is sent over HTTPS.",
+          "critical": false,
+          "evidence": "Amazon API Gateway sends HTTP 403 plus an authorization error message to the Web sign-in page over HTTPS"
+        },
+        {
+          "id": "l2-requirement",
+          "dimension": "notes",
+          "claim": "The requirement is to authenticate users and authorize every API request.",
+          "critical": false,
+          "evidence": "Its requirement is to authenticate users and authorize each API request."
+        },
+        {
+          "id": "l2-attribute-username",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute cognito:username = alex.",
+          "critical": false,
+          "evidence": "cognito:username = alex"
+        },
+        {
+          "id": "l2-attribute-tenant",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute custom:tenantId = T-001.",
+          "critical": false,
+          "evidence": "custom:tenantId = T-001"
+        },
+        {
+          "id": "l2-attribute-type",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute custom:type = Customer.",
+          "critical": false,
+          "evidence": "custom:type = Customer"
+        },
+        {
+          "id": "l2-attribute-groups",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute cognito:groups = [Customers].",
+          "critical": false,
+          "evidence": "cognito:groups = [Customers]"
+        },
+        {
+          "id": "l2-sequence",
+          "dimension": "notes",
+          "claim": "The main sequence is authenticate, API request with token, pass token for authorization, query policy, then forward the allowed request.",
+          "critical": false,
+          "evidence": "1. The Web sign-in page calls the Amazon Cognito user pool to authenticate using username and password over HTTPS. This call crosses into AWS Cloud and is labeled “Authenticate (returns tokens).” The normal token return is folded into this step rather than drawn as a separate return arrow.\n\n2. The Web sign-in page sends an API request with a token to Amazon API Gateway over HTTPS, on each request. This crosses into AWS Cloud and into the API enforcement boundary.\n\n3. Amazon API Gateway passes the token to the Lambda authorizer for authorization. This is labeled a “Generic AWS invocation” and stays within the API enforcement boundary.\n\n4. The Lambda authorizer queries Amazon Verified Permissions with “Query policy: is request allowed?” over HTTPS. This is a dashed arrow denoting an auxiliary policy query. It crosses out of the API enforcement boundary while remaining inside AWS Cloud.\n\n5. If allowed, Amazon API Gateway forwards the allowed request to Backend APIs over HTTPS."
+        }
+      ]
+    },
+    "4": {
+      "description": "The diagram is titled “Dynamic diagram (deployment view): Token-based API authorization.” Its requirement is to authenticate users and authorize each API request. One element of each kind is depicted; no instance multiplicities are specified.\n\nThere is a User, typed as a Person, and a Web sign-in page, typed as a Container with technology Web app. The sign-in page collects and submits credentials and does not verify the password. Both are outside the AWS Cloud deployment node.\n\nThe AWS Cloud deployment node contains an Amazon Cognito user pool, an API enforcement software system boundary, Amazon Verified Permissions, and Backend APIs. The Amazon Cognito user pool is a Container with technology Amazon Cognito. It verifies the password, authenticates the user, and issues tokens. The API enforcement boundary contains Amazon API Gateway and a Lambda authorizer. Amazon API Gateway is a Container with technology AWS managed service and enforces the authorization result. The Lambda authorizer is a Container with technology AWS Lambda and verifies the token and queries policy. Amazon Verified Permissions is a Container with technology AWS managed service, described as a decision endpoint that makes policy decisions. Backend APIs is a Container with technology REST API. Cognito, Verified Permissions, and Backend APIs are within AWS Cloud but outside the API enforcement boundary.\n\nThe directed interactions are:\n\n0. The User calls the Web sign-in page to use the sign-in page, providing username and password. The protocol is not stated.\n\n1. The Web sign-in page calls the Amazon Cognito user pool to authenticate with username and password over HTTPS. This interaction crosses into AWS Cloud. It returns tokens; the normal token return is folded into Step 1 rather than shown as a separate return arrow.\n\n2. The Web sign-in page sends an API request with token to Amazon API Gateway over HTTPS, on each request. This interaction enters both AWS Cloud and the API enforcement boundary.\n\n3. Amazon API Gateway passes the token to the Lambda authorizer for authorization, through a “Generic AWS invocation.” Both endpoints are inside the API enforcement boundary.\n\n4. The Lambda authorizer queries Amazon Verified Permissions: “is request allowed?” This uses HTTPS and crosses out of the API enforcement boundary while remaining inside AWS Cloud. The query is drawn as a dashed arrow, denoting an auxiliary policy query.\n\n5. If allowed, Amazon API Gateway forwards the allowed request to Backend APIs over HTTPS. This crosses out of the API enforcement boundary while remaining inside AWS Cloud.\n\n5′. As an alternative failure response, if authorization fails, Amazon API Gateway sends HTTP 403 plus an authorization error message to the Web sign-in page over HTTPS. This crosses out of both the API enforcement boundary and AWS Cloud. The authorization error message text is not specified.\n\nA Step 1 note gives example ID token attributes: cognito:username = alex; custom:tenantId = T-001; custom:type = Customer; cognito:groups = [Customers].\n\nThe token-verification method and policy rules are not specified. No separate return from the policy decision service or the authorizer is specified.\n\nThe legend says that “[Type: technology]” is the C4 element caption and outlined groups are architectural domains. Step 0 is user sign-in; Steps 1–5 are the request sequence; Step 5′ is the alternative failure response. Solid filled arrows run from caller to callee; the dashed arrow is an auxiliary policy query. Yellow notes convey example ID token attributes or architectural comments. All relationships have one caller-to-callee arrowhead.\n",
+      "facts": [
+        {
+          "id": "l4-user",
+          "dimension": "elements",
+          "claim": "There is one depicted User, typed Person.",
+          "critical": false,
+          "evidence": "a User, typed as a Person"
+        },
+        {
+          "id": "l4-page",
+          "dimension": "elements",
+          "claim": "There is a Web sign-in page Container implemented as a Web app.",
+          "critical": false,
+          "evidence": "a Web sign-in page, typed as a Container with technology Web app"
+        },
+        {
+          "id": "l4-cloud",
+          "dimension": "elements",
+          "claim": "AWS Cloud is a deployment node.",
+          "critical": false,
+          "evidence": "AWS Cloud deployment node"
+        },
+        {
+          "id": "l4-cognito",
+          "dimension": "elements",
+          "claim": "There is an Amazon Cognito user pool Container using Amazon Cognito.",
+          "critical": false,
+          "evidence": "The Amazon Cognito user pool is a Container with technology Amazon Cognito."
+        },
+        {
+          "id": "l4-avp",
+          "dimension": "elements",
+          "claim": "There is an Amazon Verified Permissions Container using an AWS managed service.",
+          "critical": false,
+          "evidence": "Amazon Verified Permissions is a Container with technology AWS managed service"
+        },
+        {
+          "id": "l4-backend",
+          "dimension": "elements",
+          "claim": "There is a Backend APIs Container implemented as a REST API.",
+          "critical": false,
+          "evidence": "Backend APIs is a Container with technology REST API."
+        },
+        {
+          "id": "l4-enforcement",
+          "dimension": "elements",
+          "claim": "API enforcement is a software system boundary.",
+          "critical": false,
+          "evidence": "an API enforcement software system boundary"
+        },
+        {
+          "id": "l4-gateway",
+          "dimension": "elements",
+          "claim": "There is an Amazon API Gateway Container using an AWS managed service.",
+          "critical": false,
+          "evidence": "Amazon API Gateway is a Container with technology AWS managed service"
+        },
+        {
+          "id": "l4-lambda",
+          "dimension": "elements",
+          "claim": "There is a Lambda authorizer Container implemented with AWS Lambda.",
+          "critical": false,
+          "evidence": "The Lambda authorizer is a Container with technology AWS Lambda"
+        },
+        {
+          "id": "l4-collect",
+          "dimension": "responsibilities",
+          "claim": "The sign-in page collects credentials.",
+          "critical": false,
+          "evidence": "The sign-in page collects and submits credentials"
+        },
+        {
+          "id": "l4-no-page-verify",
+          "dimension": "responsibilities",
+          "claim": "The sign-in page does not verify the password.",
+          "critical": true,
+          "evidence": "does not verify the password"
+        },
+        {
+          "id": "l4-cognito-verify",
+          "dimension": "responsibilities",
+          "claim": "Cognito verifies the password.",
+          "critical": true,
+          "evidence": "It verifies the password"
+        },
+        {
+          "id": "l4-cognito-auth",
+          "dimension": "responsibilities",
+          "claim": "Cognito authenticates the user.",
+          "critical": true,
+          "evidence": "authenticates the user"
+        },
+        {
+          "id": "l4-cognito-issue",
+          "dimension": "responsibilities",
+          "claim": "Cognito issues tokens.",
+          "critical": false,
+          "evidence": "issues tokens"
+        },
+        {
+          "id": "l4-gateway-enforce",
+          "dimension": "responsibilities",
+          "claim": "API Gateway enforces the authorization result.",
+          "critical": true,
+          "evidence": "Amazon API Gateway is a Container with technology AWS managed service and enforces the authorization result"
+        },
+        {
+          "id": "l4-lambda-verify",
+          "dimension": "responsibilities",
+          "claim": "The Lambda authorizer verifies the token.",
+          "critical": true,
+          "evidence": "The Lambda authorizer is a Container with technology AWS Lambda and verifies the token"
+        },
+        {
+          "id": "l4-avp-decision",
+          "dimension": "responsibilities",
+          "claim": "Amazon Verified Permissions makes policy decisions at the decision endpoint.",
+          "critical": true,
+          "evidence": "Amazon Verified Permissions is a Container with technology AWS managed service, described as a decision endpoint that makes policy decisions."
+        },
+        {
+          "id": "l4-user-out",
+          "dimension": "boundaries",
+          "claim": "The User is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Both are outside the AWS Cloud deployment node."
+        },
+        {
+          "id": "l4-page-out",
+          "dimension": "boundaries",
+          "claim": "The Web sign-in page is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Both are outside the AWS Cloud deployment node."
+        },
+        {
+          "id": "l4-cognito-aws",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an Amazon Cognito user pool, an API enforcement software system boundary, Amazon Verified Permissions, and Backend APIs."
+        },
+        {
+          "id": "l4-avp-aws",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an Amazon Cognito user pool, an API enforcement software system boundary, Amazon Verified Permissions, and Backend APIs."
+        },
+        {
+          "id": "l4-backend-aws",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an Amazon Cognito user pool, an API enforcement software system boundary, Amazon Verified Permissions, and Backend APIs."
+        },
+        {
+          "id": "l4-enforcement-aws",
+          "dimension": "boundaries",
+          "claim": "API enforcement boundary is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The AWS Cloud deployment node contains an Amazon Cognito user pool, an API enforcement software system boundary, Amazon Verified Permissions, and Backend APIs."
+        },
+        {
+          "id": "l4-gateway-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon API Gateway is inside API enforcement.",
+          "critical": true,
+          "evidence": "The API enforcement boundary contains Amazon API Gateway and a Lambda authorizer."
+        },
+        {
+          "id": "l4-lambda-enforcement",
+          "dimension": "boundaries",
+          "claim": "Lambda authorizer is inside API enforcement.",
+          "critical": true,
+          "evidence": "The API enforcement boundary contains Amazon API Gateway and a Lambda authorizer."
+        },
+        {
+          "id": "l4-cognito-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is outside API enforcement.",
+          "critical": true,
+          "evidence": "Cognito, Verified Permissions, and Backend APIs are within AWS Cloud but outside the API enforcement boundary."
+        },
+        {
+          "id": "l4-avp-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is outside API enforcement.",
+          "critical": true,
+          "evidence": "Cognito, Verified Permissions, and Backend APIs are within AWS Cloud but outside the API enforcement boundary."
+        },
+        {
+          "id": "l4-backend-not-enforcement",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is outside API enforcement.",
+          "critical": true,
+          "evidence": "Cognito, Verified Permissions, and Backend APIs are within AWS Cloud but outside the API enforcement boundary."
+        },
+        {
+          "id": "l4-use",
+          "dimension": "directions",
+          "claim": "The User initiates sign-in at the Web sign-in page with username and password.",
+          "critical": true,
+          "evidence": "The User calls the Web sign-in page to use the sign-in page, providing username and password."
+        },
+        {
+          "id": "l4-authenticate",
+          "dimension": "directions",
+          "claim": "The Web sign-in page calls Cognito to authenticate with username and password.",
+          "critical": true,
+          "evidence": "The Web sign-in page calls the Amazon Cognito user pool to authenticate with username and password over HTTPS."
+        },
+        {
+          "id": "l4-api-request",
+          "dimension": "directions",
+          "claim": "The Web sign-in page sends an API request carrying a token to API Gateway.",
+          "critical": true,
+          "evidence": "The Web sign-in page sends an API request with token to Amazon API Gateway"
+        },
+        {
+          "id": "l4-pass-token",
+          "dimension": "directions",
+          "claim": "API Gateway passes the token to the Lambda authorizer for authorization.",
+          "critical": true,
+          "evidence": "Amazon API Gateway passes the token to the Lambda authorizer for authorization"
+        },
+        {
+          "id": "l4-query",
+          "dimension": "directions",
+          "claim": "The Lambda authorizer queries the Amazon Verified Permissions decision endpoint to ask whether the request is allowed.",
+          "critical": true,
+          "evidence": "The Lambda authorizer queries Amazon Verified Permissions: “is request allowed?”"
+        },
+        {
+          "id": "l4-forward",
+          "dimension": "directions",
+          "claim": "API Gateway forwards a request to Backend APIs.",
+          "critical": true,
+          "evidence": "Amazon API Gateway forwards the allowed request to Backend APIs"
+        },
+        {
+          "id": "l4-failure",
+          "dimension": "directions",
+          "claim": "API Gateway sends HTTP 403 with an authorization error message back to the Web sign-in page.",
+          "critical": true,
+          "evidence": "Amazon API Gateway sends HTTP 403 plus an authorization error message to the Web sign-in page"
+        },
+        {
+          "id": "l4-tokens-return",
+          "dimension": "relationships",
+          "claim": "The authentication interaction returns tokens to the calling Web sign-in page.",
+          "critical": false,
+          "evidence": "The Web sign-in page calls the Amazon Cognito user pool to authenticate with username and password over HTTPS. This interaction crosses into AWS Cloud. It returns tokens;"
+        },
+        {
+          "id": "l4-aux",
+          "dimension": "relationships",
+          "claim": "The policy query is auxiliary to the main request sequence.",
+          "critical": false,
+          "evidence": "a dashed arrow, denoting an auxiliary policy query"
+        },
+        {
+          "id": "l4-each-token",
+          "dimension": "conditions",
+          "claim": "The sign-in page includes a token with each API request.",
+          "critical": false,
+          "evidence": "sends an API request with token to Amazon API Gateway over HTTPS, on each request"
+        },
+        {
+          "id": "l4-allow",
+          "dimension": "conditions",
+          "claim": "Forwarding to Backend APIs is conditional on an allowed authorization decision.",
+          "critical": true,
+          "evidence": "If allowed, Amazon API Gateway forwards the allowed request to Backend APIs"
+        },
+        {
+          "id": "l4-deny",
+          "dimension": "conditions",
+          "claim": "Authorization failure takes the alternative HTTP 403 error-response path.",
+          "critical": true,
+          "evidence": "As an alternative failure response, if authorization fails, Amazon API Gateway sends HTTP 403 plus an authorization error message"
+        },
+        {
+          "id": "l4-auth-https",
+          "dimension": "protocols",
+          "claim": "The sign-in-page-to-Cognito authentication call uses HTTPS.",
+          "critical": false,
+          "evidence": "calls the Amazon Cognito user pool to authenticate with username and password over HTTPS"
+        },
+        {
+          "id": "l4-request-https",
+          "dimension": "protocols",
+          "claim": "The API request from the sign-in page to API Gateway uses HTTPS.",
+          "critical": false,
+          "evidence": "sends an API request with token to Amazon API Gateway over HTTPS"
+        },
+        {
+          "id": "l4-invoke",
+          "dimension": "protocols",
+          "claim": "API Gateway invokes the Lambda authorizer using a generic AWS invocation.",
+          "critical": false,
+          "evidence": "Amazon API Gateway passes the token to the Lambda authorizer for authorization, through a “Generic AWS invocation.”"
+        },
+        {
+          "id": "l4-query-https",
+          "dimension": "protocols",
+          "claim": "The Lambda authorizer policy query to Verified Permissions uses HTTPS.",
+          "critical": false,
+          "evidence": "The Lambda authorizer queries Amazon Verified Permissions: “is request allowed?” This uses HTTPS"
+        },
+        {
+          "id": "l4-backend-https",
+          "dimension": "protocols",
+          "claim": "The API Gateway call to Backend APIs uses HTTPS.",
+          "critical": false,
+          "evidence": "Amazon API Gateway forwards the allowed request to Backend APIs over HTTPS"
+        },
+        {
+          "id": "l4-failure-https",
+          "dimension": "protocols",
+          "claim": "The HTTP 403 response to the Web sign-in page is sent over HTTPS.",
+          "critical": false,
+          "evidence": "Amazon API Gateway sends HTTP 403 plus an authorization error message to the Web sign-in page over HTTPS"
+        },
+        {
+          "id": "l4-requirement",
+          "dimension": "notes",
+          "claim": "The requirement is to authenticate users and authorize every API request.",
+          "critical": false,
+          "evidence": "Its requirement is to authenticate users and authorize each API request."
+        },
+        {
+          "id": "l4-attribute-username",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute cognito:username = alex.",
+          "critical": false,
+          "evidence": "cognito:username = alex"
+        },
+        {
+          "id": "l4-attribute-tenant",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute custom:tenantId = T-001.",
+          "critical": false,
+          "evidence": "custom:tenantId = T-001"
+        },
+        {
+          "id": "l4-attribute-type",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute custom:type = Customer.",
+          "critical": false,
+          "evidence": "custom:type = Customer"
+        },
+        {
+          "id": "l4-attribute-groups",
+          "dimension": "notes",
+          "claim": "The example ID token carries the user attribute cognito:groups = [Customers].",
+          "critical": false,
+          "evidence": "cognito:groups = [Customers]"
+        },
+        {
+          "id": "l4-sequence",
+          "dimension": "notes",
+          "claim": "The main sequence is authenticate, API request with token, pass token for authorization, query policy, then forward the allowed request.",
+          "critical": false,
+          "evidence": "1. The Web sign-in page calls the Amazon Cognito user pool to authenticate with username and password over HTTPS. This interaction crosses into AWS Cloud. It returns tokens; the normal token return is folded into Step 1 rather than shown as a separate return arrow.\n\n2. The Web sign-in page sends an API request with token to Amazon API Gateway over HTTPS, on each request. This interaction enters both AWS Cloud and the API enforcement boundary.\n\n3. Amazon API Gateway passes the token to the Lambda authorizer for authorization, through a “Generic AWS invocation.” Both endpoints are inside the API enforcement boundary.\n\n4. The Lambda authorizer queries Amazon Verified Permissions: “is request allowed?” This uses HTTPS and crosses out of the API enforcement boundary while remaining inside AWS Cloud. The query is drawn as a dashed arrow, denoting an auxiliary policy query.\n\n5. If allowed, Amazon API Gateway forwards the allowed request to Backend APIs over HTTPS."
+        }
+      ]
+    }
+  },
+  "pairs": {
+    "0-2": [
+      {
+        "before": [
+          "l0-user"
+        ],
+        "after": [
+          "l2-user"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-page"
+        ],
+        "after": [
+          "l2-page"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-cloud"
+        ],
+        "after": [
+          "l2-cloud"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-cognito"
+        ],
+        "after": [
+          "l2-cognito"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-avp"
+        ],
+        "after": [
+          "l2-avp"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-backend"
+        ],
+        "after": [
+          "l2-backend"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-enforcement"
+        ],
+        "after": [
+          "l2-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-gateway"
+        ],
+        "after": [
+          "l2-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-lambda"
+        ],
+        "after": [
+          "l2-lambda"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-collect"
+        ],
+        "after": [
+          "l2-collect"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-no-page-verify"
+        ],
+        "after": [
+          "l2-no-page-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-cognito-verify"
+        ],
+        "after": [
+          "l2-cognito-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-cognito-auth"
+        ],
+        "after": [
+          "l2-cognito-auth"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-cognito-issue"
+        ],
+        "after": [
+          "l2-cognito-issue"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-gateway-enforce"
+        ],
+        "after": [
+          "l2-gateway-enforce"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-lambda-verify"
+        ],
+        "after": [
+          "l2-lambda-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-avp-decision"
+        ],
+        "after": [
+          "l2-avp-decision"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-user-out"
+        ],
+        "after": [
+          "l2-user-out"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-page-out"
+        ],
+        "after": [
+          "l2-page-out"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-cognito-aws"
+        ],
+        "after": [
+          "l2-cognito-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-avp-aws"
+        ],
+        "after": [
+          "l2-avp-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-backend-aws"
+        ],
+        "after": [
+          "l2-backend-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-enforcement-aws"
+        ],
+        "after": [
+          "l2-enforcement-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-gateway-enforcement"
+        ],
+        "after": [
+          "l2-gateway-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-lambda-enforcement"
+        ],
+        "after": [
+          "l2-lambda-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-cognito-not-enforcement"
+        ],
+        "after": [
+          "l2-cognito-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-avp-not-enforcement"
+        ],
+        "after": [
+          "l2-avp-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-backend-not-enforcement"
+        ],
+        "after": [
+          "l2-backend-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-use"
+        ],
+        "after": [
+          "l2-use"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-authenticate"
+        ],
+        "after": [
+          "l2-authenticate"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-api-request"
+        ],
+        "after": [
+          "l2-api-request"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-pass-token"
+        ],
+        "after": [
+          "l2-pass-token"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-query"
+        ],
+        "after": [
+          "l2-query"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-forward"
+        ],
+        "after": [
+          "l2-forward"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-failure"
+        ],
+        "after": [
+          "l2-failure"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-tokens-return"
+        ],
+        "after": [
+          "l2-tokens-return"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-aux"
+        ],
+        "after": [
+          "l2-aux"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-each-token"
+        ],
+        "after": [
+          "l2-each-token"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-allow"
+        ],
+        "after": [
+          "l2-allow"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-deny"
+        ],
+        "after": [
+          "l2-deny"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-auth-https"
+        ],
+        "after": [
+          "l2-auth-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-request-https"
+        ],
+        "after": [
+          "l2-request-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-invoke"
+        ],
+        "after": [
+          "l2-invoke"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-query-https"
+        ],
+        "after": [
+          "l2-query-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-backend-https"
+        ],
+        "after": [
+          "l2-backend-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-failure-https"
+        ],
+        "after": [
+          "l2-failure-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-requirement"
+        ],
+        "after": [
+          "l2-requirement"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-attribute-username"
+        ],
+        "after": [
+          "l2-attribute-username"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l0-attribute-tenant"
+        ],
+        "after": [
+          "l2-attribute-tenant"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l0-attribute-type"
+        ],
+        "after": [
+          "l2-attribute-type"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l0-attribute-groups"
+        ],
+        "after": [
+          "l2-attribute-groups"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l0-sequence"
+        ],
+        "after": [
+          "l2-sequence"
+        ],
+        "status": "preserved",
+        "reason": "The numbered main interactions retain the same order; token return is part of authentication, and the failure alternative is separately accounted for."
+      }
+    ],
+    "2-4": [
+      {
+        "before": [
+          "l2-user"
+        ],
+        "after": [
+          "l4-user"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-page"
+        ],
+        "after": [
+          "l4-page"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-cloud"
+        ],
+        "after": [
+          "l4-cloud"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-cognito"
+        ],
+        "after": [
+          "l4-cognito"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-avp"
+        ],
+        "after": [
+          "l4-avp"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-backend"
+        ],
+        "after": [
+          "l4-backend"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-enforcement"
+        ],
+        "after": [
+          "l4-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-gateway"
+        ],
+        "after": [
+          "l4-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-lambda"
+        ],
+        "after": [
+          "l4-lambda"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l2-collect"
+        ],
+        "after": [
+          "l4-collect"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-no-page-verify"
+        ],
+        "after": [
+          "l4-no-page-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-cognito-verify"
+        ],
+        "after": [
+          "l4-cognito-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-cognito-auth"
+        ],
+        "after": [
+          "l4-cognito-auth"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-cognito-issue"
+        ],
+        "after": [
+          "l4-cognito-issue"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-gateway-enforce"
+        ],
+        "after": [
+          "l4-gateway-enforce"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-lambda-verify"
+        ],
+        "after": [
+          "l4-lambda-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-avp-decision"
+        ],
+        "after": [
+          "l4-avp-decision"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-user-out"
+        ],
+        "after": [
+          "l4-user-out"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-page-out"
+        ],
+        "after": [
+          "l4-page-out"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-cognito-aws"
+        ],
+        "after": [
+          "l4-cognito-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-avp-aws"
+        ],
+        "after": [
+          "l4-avp-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-backend-aws"
+        ],
+        "after": [
+          "l4-backend-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-enforcement-aws"
+        ],
+        "after": [
+          "l4-enforcement-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-gateway-enforcement"
+        ],
+        "after": [
+          "l4-gateway-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-lambda-enforcement"
+        ],
+        "after": [
+          "l4-lambda-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-cognito-not-enforcement"
+        ],
+        "after": [
+          "l4-cognito-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-avp-not-enforcement"
+        ],
+        "after": [
+          "l4-avp-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-backend-not-enforcement"
+        ],
+        "after": [
+          "l4-backend-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l2-use"
+        ],
+        "after": [
+          "l4-use"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l2-authenticate"
+        ],
+        "after": [
+          "l4-authenticate"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l2-api-request"
+        ],
+        "after": [
+          "l4-api-request"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l2-pass-token"
+        ],
+        "after": [
+          "l4-pass-token"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l2-query"
+        ],
+        "after": [
+          "l4-query"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l2-forward"
+        ],
+        "after": [
+          "l4-forward"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l2-failure"
+        ],
+        "after": [
+          "l4-failure"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l2-tokens-return"
+        ],
+        "after": [
+          "l4-tokens-return"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-aux"
+        ],
+        "after": [
+          "l4-aux"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-each-token"
+        ],
+        "after": [
+          "l4-each-token"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-allow"
+        ],
+        "after": [
+          "l4-allow"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-deny"
+        ],
+        "after": [
+          "l4-deny"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-auth-https"
+        ],
+        "after": [
+          "l4-auth-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-request-https"
+        ],
+        "after": [
+          "l4-request-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-invoke"
+        ],
+        "after": [
+          "l4-invoke"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-query-https"
+        ],
+        "after": [
+          "l4-query-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-backend-https"
+        ],
+        "after": [
+          "l4-backend-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-failure-https"
+        ],
+        "after": [
+          "l4-failure-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-requirement"
+        ],
+        "after": [
+          "l4-requirement"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l2-attribute-username"
+        ],
+        "after": [
+          "l4-attribute-username"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l2-attribute-tenant"
+        ],
+        "after": [
+          "l4-attribute-tenant"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l2-attribute-type"
+        ],
+        "after": [
+          "l4-attribute-type"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l2-attribute-groups"
+        ],
+        "after": [
+          "l4-attribute-groups"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l2-sequence"
+        ],
+        "after": [
+          "l4-sequence"
+        ],
+        "status": "preserved",
+        "reason": "The numbered main interactions retain the same order; token return is part of authentication, and the failure alternative is separately accounted for."
+      }
+    ],
+    "0-4": [
+      {
+        "before": [
+          "l0-user"
+        ],
+        "after": [
+          "l4-user"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-page"
+        ],
+        "after": [
+          "l4-page"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-cloud"
+        ],
+        "after": [
+          "l4-cloud"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-cognito"
+        ],
+        "after": [
+          "l4-cognito"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-avp"
+        ],
+        "after": [
+          "l4-avp"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-backend"
+        ],
+        "after": [
+          "l4-backend"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-enforcement"
+        ],
+        "after": [
+          "l4-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-gateway"
+        ],
+        "after": [
+          "l4-gateway"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-lambda"
+        ],
+        "after": [
+          "l4-lambda"
+        ],
+        "status": "preserved",
+        "reason": "The same identity, type and technology are retained. Singular depicted elements do not assert runtime replica multiplicity."
+      },
+      {
+        "before": [
+          "l0-collect"
+        ],
+        "after": [
+          "l4-collect"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-no-page-verify"
+        ],
+        "after": [
+          "l4-no-page-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-cognito-verify"
+        ],
+        "after": [
+          "l4-cognito-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-cognito-auth"
+        ],
+        "after": [
+          "l4-cognito-auth"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-cognito-issue"
+        ],
+        "after": [
+          "l4-cognito-issue"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-gateway-enforce"
+        ],
+        "after": [
+          "l4-gateway-enforce"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-lambda-verify"
+        ],
+        "after": [
+          "l4-lambda-verify"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-avp-decision"
+        ],
+        "after": [
+          "l4-avp-decision"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-user-out"
+        ],
+        "after": [
+          "l4-user-out"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-page-out"
+        ],
+        "after": [
+          "l4-page-out"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-cognito-aws"
+        ],
+        "after": [
+          "l4-cognito-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-avp-aws"
+        ],
+        "after": [
+          "l4-avp-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-backend-aws"
+        ],
+        "after": [
+          "l4-backend-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-enforcement-aws"
+        ],
+        "after": [
+          "l4-enforcement-aws"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-gateway-enforcement"
+        ],
+        "after": [
+          "l4-gateway-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-lambda-enforcement"
+        ],
+        "after": [
+          "l4-lambda-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-cognito-not-enforcement"
+        ],
+        "after": [
+          "l4-cognito-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-avp-not-enforcement"
+        ],
+        "after": [
+          "l4-avp-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-backend-not-enforcement"
+        ],
+        "after": [
+          "l4-backend-not-enforcement"
+        ],
+        "status": "preserved",
+        "reason": "The named entity has the same domain membership. L0’s exhaustive API-enforcement enumeration and the explicit later exclusions preserve its ownership; annotation placement is not membership."
+      },
+      {
+        "before": [
+          "l0-use"
+        ],
+        "after": [
+          "l4-use"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-authenticate"
+        ],
+        "after": [
+          "l4-authenticate"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-api-request"
+        ],
+        "after": [
+          "l4-api-request"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-pass-token"
+        ],
+        "after": [
+          "l4-pass-token"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-query"
+        ],
+        "after": [
+          "l4-query"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-forward"
+        ],
+        "after": [
+          "l4-forward"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-failure"
+        ],
+        "after": [
+          "l4-failure"
+        ],
+        "status": "preserved",
+        "reason": "The same initiator, callee, interaction and payload/outcome are stated; the authorization conditions and named protocols are accounted for separately."
+      },
+      {
+        "before": [
+          "l0-tokens-return"
+        ],
+        "after": [
+          "l4-tokens-return"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-aux"
+        ],
+        "after": [
+          "l4-aux"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-each-token"
+        ],
+        "after": [
+          "l4-each-token"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-allow"
+        ],
+        "after": [
+          "l4-allow"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-deny"
+        ],
+        "after": [
+          "l4-deny"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-auth-https"
+        ],
+        "after": [
+          "l4-auth-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-request-https"
+        ],
+        "after": [
+          "l4-request-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-invoke"
+        ],
+        "after": [
+          "l4-invoke"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-query-https"
+        ],
+        "after": [
+          "l4-query-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-backend-https"
+        ],
+        "after": [
+          "l4-backend-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-failure-https"
+        ],
+        "after": [
+          "l4-failure-https"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-requirement"
+        ],
+        "after": [
+          "l4-requirement"
+        ],
+        "status": "preserved",
+        "reason": "The same architectural proposition and its meaningful qualifiers are retained in the source wording."
+      },
+      {
+        "before": [
+          "l0-attribute-username"
+        ],
+        "after": [
+          "l4-attribute-username"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l0-attribute-tenant"
+        ],
+        "after": [
+          "l4-attribute-tenant"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l0-attribute-type"
+        ],
+        "after": [
+          "l4-attribute-type"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l0-attribute-groups"
+        ],
+        "after": [
+          "l4-attribute-groups"
+        ],
+        "status": "preserved",
+        "reason": "The complete ID-token example preserves the same attribute name and value; it remains an example rather than a mandatory policy rule."
+      },
+      {
+        "before": [
+          "l0-sequence"
+        ],
+        "after": [
+          "l4-sequence"
+        ],
+        "status": "preserved",
+        "reason": "The numbered main interactions retain the same order; token return is part of authentication, and the failure alternative is separately accounted for."
+      }
+    ]
+  },
+  "judgment": {
+    "method": "Independent semantic comparison of the three frozen descriptions only; no image, XML, SVG, other case, earlier pilot or model endpoint consulted.",
+    "sources": [
+      "/tmp/diagram-full-roundtrip.RZnmyG/l0-01.txt",
+      "/tmp/diagram-full-roundtrip.RZnmyG/case-01/l2.txt",
+      "/tmp/diagram-full-roundtrip.RZnmyG/case-01/l4.txt",
+      "/workspace/skills/incubator/architecture-diagram/evals/roundtrip.md",
+      "/workspace/skills/incubator/architecture-diagram/evals/roundtrip.mjs"
+    ],
+    "exclusions": [
+      "Authoring directives and visual styling/placement, including folded-arrow notation and legend decoration, are excluded as semantic facts; the architectural authentication token return is retained.",
+      "Readout-only absence statements about protocols, instance multiplicities, error-message text, separate decision/authorizer returns, verification method and policy rules do not assert real-system negatives or unknown vendor behavior.",
+      "Examples remain ID-token user attributes associated with authentication; a comment is not a member of the domain containing its incidental placement.",
+      "Domain crossing is entailed by the directed endpoints and their extracted memberships and is not recounted as duplicate facts.",
+      "The requirement, role allocation, sequence, per-request token frequency, protocol names, decision outcomes and individual token example attributes are retained."
+    ],
+    "findings": [
+      "No meaningful architectural drift found among the extracted facts for any of the three pairs.",
+      "L2 and L4 make API-enforcement exclusions explicit, consistently with the exhaustive L0 membership statement.",
+      "L4 adds legend/readout wording about Step 0, comments, and arrowhead counts; this does not introduce an architectural interaction or ownership assertion.",
+      "C4 type/technology captions are unchanged from explicit L0 classifications; title, legend and notation elaboration do not alter hosting, ownership, lifecycle or scope."
+    ],
+    "limitations": [
+      "One measured independent judgment, conditional on fact extraction and semantic alignment; it is not proof of exhaustive extraction, architecture correctness or general round-trip reliability.",
+      "Only text descriptions were inspected; no assessment of diagram geometry, visual validity, generator/reader isolation, model identity or untranscribed image content is made."
+    ]
+  }
+}
