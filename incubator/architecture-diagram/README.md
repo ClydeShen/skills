@@ -6,6 +6,49 @@ Date: 2026-10-29. Stage: candidate. Decision authority: the owner requested stan
 
 Turn an English scenario description into one editable `.drawio` dynamic diagram in a deployment view. Preserve the team's visual style, C4 information and correct vendor responsibilities. Raise consequential gaps and contradictions with recommendations before drawing. Initial input is text; overviews, infrastructure plans, code/IaC input, automatic redraw and exported images as product deliverables are later scope.
 
+## Quick start: install and test the candidate
+
+This is an experimental candidate, not a released skill. Use Codex or Claude Code with file access, Node.js 24, Git, and a draw.io editor/viewer. The candidate targets draw.io 32.6.1; record the version you actually use. No NVIDIA key, repository checkout or evaluation dependencies are needed.
+
+### Install in a test project
+
+Review the [candidate package](./candidate/architecture-diagram/SKILL.md) before installing. Open a terminal in a new or disposable project directory, outside this authoring repository. Choose the block for your shell and paste it once.
+
+macOS / Linux / WSL (Bash or Zsh):
+
+```bash
+INSTALL_INTERNAL_SKILLS=1 npx --yes skills@1.7.4 add https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/candidate/architecture-diagram --agent codex --copy --yes
+```
+
+Windows PowerShell:
+
+```powershell
+$env:INSTALL_INTERNAL_SKILLS = "1"
+npx.cmd --yes skills@1.7.4 add https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/candidate/architecture-diagram --agent codex --copy --yes
+```
+
+For Claude Code, replace `--agent codex` with `--agent claude-code` in either block. Installation is project-local, not global. The PowerShell setting lasts for that terminal session; use a dedicated test terminal. `INSTALL_INTERNAL_SKILLS=1` permits discovery of this candidate; it does not grant private-repository access. If access is restricted, use your normal Git credentials with repository read permission.
+
+These commands install the candidate currently on `main`; an installed copy does not update itself. For a repeatable comparison, replace `/tree/main/` with `/tree/<full-commit-SHA>/` and record that SHA. If you see “No skills found”, check the internal setting and the full candidate path. Do not use the repository-root release command for this trial.
+
+### Run a first trial
+
+Start a fresh client session in the same project after installation. Confirm that `architecture-diagram` appears in the client's skill list; restart the client if necessary. Send:
+
+```text
+Use the architecture-diagram skill to create an editable .drawio architecture diagram from the requirements below.
+
+[Paste one sanitized architecture scenario here.]
+```
+
+Open the generated `.drawio` file in draw.io. Check components, boundaries, arrow directions and conditions against your input. Keep the first diagram before asking for corrections. If the agent cannot render or inspect the image, record that limitation; XML generation is not visual verification.
+
+### Send useful feedback
+
+Share the sanitized input, first diagram/screenshot, corrections, revision count, client/model and draw.io version in [Issue #7](https://github.com/ClydeShen/skills/issues/7). Report missing or invented architecture and anything that was hard to understand. Use your own scenario before reading this initiative's examples. Include the installed source revision (or install date if unknown), and distinguish installation problems from output-quality problems. Maintainers summarize approved findings in the [evaluation record](./evaluation.md); testers do not need to edit this repository. Installation success alone does not establish skill effectiveness.
+
+Installation check, 2026-10-29: the remote `main` candidate at `07bb667e7a5ddb59dd46e23a38ff6af23b7abffa` installed successfully with skills CLI 1.7.4 into an isolated Linux project for both Codex and Claude Code. All six files matched the source, and icon lookup ran successfully. This verifies CLI delivery, not actual client activation, Windows PowerShell execution or diagram quality.
+
 ## Sources and active artifacts
 
 - Accepted requirements and decisions: [research handoff](../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md).
