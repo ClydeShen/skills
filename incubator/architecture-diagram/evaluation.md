@@ -1,11 +1,11 @@
 # Architecture Diagram evaluation
 
-Date: 2026-10-28. Updated: 2026-10-29. Status: standard candidate packaged and relocation-checked; authored visual repairs follow an existing-L1 pilot and four fresh full chains with mixed semantic results. Desktop integration and fresh candidate-generation behavior remain unverified. Dated sections distinguish earlier targets from the current candidate.
+Date: 2026-10-28. Updated: 2026-10-29. Status: installable candidate. After the initial 60/100 three-tier result and revisions, the owner rated the overall simple-diagram performance 85/100, with visual organization still weaker than the references. Two fresh-context generations now test restrained presentation guidance; their owner comparison remains pending. Dated records distinguish earlier targets and mixed round-trip results from current behavior; Desktop integration remains unverified.
 
 ## Scope and target
 
 - Initial stage (2026-10-28): pre-candidate prototype, no installable skill. Current package checks are recorded under [Standard candidate and explicit paths](#standard-candidate-and-explicit-paths-2026-10-29).
-- Cases: four owner-approved drafts migrated from the requirements handoff, owned by [the scenario manifest](./evals/cases.json) and its linked Markdown files. Scenario 05 is deferred.
+- Cases: four clarification drafts in [the scenario manifest](./evals/cases.json), the [three-tier reference case](./evals/three-tier-2026-10-29/README.md), and the [second text-only case with supporting services](./evals/three-tier-supporting-2026-10-29/README.md). Their [restrained-layout trial](./evals/restrained-layout-2026-10-29/README.md) keeps new independent generations separate from earlier deliveries. Scenario 05 is still deferred; these cases do not replace it.
 - Prototype: [Scenario 01 draw.io XML](./prototype/scenario-01.drawio), using explicitly stated fixture assumptions. It is not a model's response to the contradictory raw input.
 - Upstream: draw.io `v32.6.1`, commit `84487b4891cbc0f32d7e30f34cf878c87cb1f414`, freshly resolved from the release tag. [measured]
 - Generated metadata: [catalog](./prototype/catalog.json), with source file SHA-256 values and exact lookup IDs.
@@ -118,6 +118,9 @@ Current [skills CLI authoring documentation](https://github.com/vercel-labs/skil
 
 ## Open verification
 
+The owner's subsequent architecture-expression review rated the restrained-layout Case A 8.0/10 and Case B 6.5/10. The [semantic-clarity trial](./evals/semantic-clarity-2026-10-29/README.md) records the resulting view/evidence/relationship changes and two new text-only generations. These subjective scores do not rate those new outputs or certify AWS compliance.
+
+- Owner comparison and broader verification of the two fresh-context restrained-layout generations. The preceding reference-informed revision is not a blind run; the 60/100 baseline and overall 85/100 feedback remain distinct from any new result.
 - Owner acceptance of icon size, element descriptions and layout density.
 - Offline draw.io Desktop at the pinned version; browser evidence does not settle Desktop support.
 - Broader Azure catalog/viewer coverage and actual GCP3/Kubernetes rendering; participating Azure symbols are verified for these browser runs only.

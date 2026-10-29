@@ -1,0 +1,122 @@
+{
+  "id": "aws-three-tier-reference-2026-10-29",
+  "purpose": "Reference calibration; not held-out evaluation",
+  "generation_input": "source.md",
+  "package": "../../candidate/architecture-diagram",
+  "feedback": "README.md",
+  "reference": {
+    "url": "https://corporate-assets.lucid.co/co/d785f67d-ddfd-494f-a75b-cb132b614dcb.png?v=1778603179905",
+    "provenance": "Owner-supplied image displayed in conversation after the first diagram was frozen; owner supplied this Lucid-hosted URL.",
+    "access_date": "2026-10-29",
+    "local_file": null,
+    "sha256": null,
+    "archive_status": "pending: cloud proxy rejected the download with HTTP 403",
+    "role": "Visual comparison only; excluded from text-to-diagram generation input",
+    "license": "Not established; not included in the runtime skill package"
+  },
+  "frozen_sha256": {
+    "source.md": "3f05a13aee8ba2134499ffb4cb48a3b873322b375be9b14b0787a356d636c3a9",
+    "baseline.drawio": "d3a7860444c8a131b6a7d296b36448f00ca94b34e76a3279b44574c3bf247686",
+    "baseline.png": "e46e7cc229c1a2263a6eec1fbcdb9a790228c73bd0f07639613cf54faf7fb90d",
+    "baseline.render.json": "6d82c265df337234ad1600299a165e49cca792cc43d9e404c180c892c623f005",
+    "baseline-verification.json": "e3477158ee110155436985062a03748fb2d804dfa24877bbbda94875de9961c3"
+  },
+  "baseline_checks": {
+    "memberships": {
+      "web-a": "web-subnet-a",
+      "web-b": "web-subnet-b",
+      "app-a": "app-subnet-a",
+      "app-b": "app-subnet-b",
+      "rds-primary": "rds-subnet-a",
+      "rds-standby": "rds-subnet-b",
+      "web-subnet-a": "az-a",
+      "app-subnet-a": "az-a",
+      "rds-subnet-a": "az-a",
+      "web-subnet-b": "az-b",
+      "app-subnet-b": "az-b",
+      "rds-subnet-b": "az-b",
+      "az-a": "vpc",
+      "az-b": "vpc",
+      "vpc": "region",
+      "region": "aws",
+      "web-elb": "vpc",
+      "app-elb": "vpc",
+      "s3": "aws",
+      "users": "1"
+    },
+    "cidrs": {
+      "vpc": "10.0.0.0/16",
+      "web-subnet-a": "10.0.0.0/24",
+      "web-subnet-b": "10.0.1.0/24",
+      "app-subnet-a": "10.0.2.0/24",
+      "app-subnet-b": "10.0.3.0/24",
+      "rds-subnet-a": "10.0.4.0/24",
+      "rds-subnet-b": "10.0.5.0/24"
+    },
+    "relationships": [
+      [
+        "users",
+        "route53"
+      ],
+      [
+        "users",
+        "cloudfront"
+      ],
+      [
+        "cloudfront",
+        "s3"
+      ],
+      [
+        "cloudfront",
+        "web-elb"
+      ],
+      [
+        "web-elb",
+        "web-a"
+      ],
+      [
+        "web-elb",
+        "web-b"
+      ],
+      [
+        "web-a",
+        "app-elb"
+      ],
+      [
+        "web-b",
+        "app-elb"
+      ],
+      [
+        "app-elb",
+        "app-a"
+      ],
+      [
+        "app-elb",
+        "app-b"
+      ],
+      [
+        "app-a",
+        "rds-primary"
+      ],
+      [
+        "app-b",
+        "rds-primary"
+      ],
+      [
+        "rds-primary",
+        "rds-standby"
+      ]
+    ],
+    "scaling_groups": {
+      "web-asg": [
+        "web-a",
+        "web-b"
+      ],
+      "app-asg": [
+        "app-a",
+        "app-b"
+      ]
+    },
+    "interpretation": "These IDs verify the archived baseline only. Judge future diagrams by the source's meaning, not by ID or coordinate matching."
+  }
+}

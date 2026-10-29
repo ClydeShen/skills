@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-29",
+  "mode": "Text-only first delivery in the existing host-agent conversation",
+  "case_reference_seen": false,
+  "previous_case_reference_seen": true,
+  "fresh_context": false,
+  "owner_score": null,
+  "independent_semantic_review": false,
+  "source_normalization": "Heading levels, list markers and table spacing only; architecture wording retained.",
+  "skill_sha256": {
+    "SKILL.md": "87d5409f94731589a5088ca4a8b5a1375ac4ede8d55d5be5044a109298c9695e",
+    "references/notation.md": "0f0bbf6761e0f7e7300cda74cddd730d01790cd70788b5600710c0557959c28e",
+    "references/drawio.md": "ff7f7d213e655d4a836ee266ad0134692384b65171993dfe357ff9a5f6640f00",
+    "scripts/find-icon.mjs": "b7ea7aea44784ca82f8c7f3fe44e76ebe39c0c9a3561fa69b1900f1143af4f95",
+    "scripts/catalog.mjs": "835db1152ba35f42bb7cbd1c4fb191070bc825643e745e8a35d781f35ab792df",
+    "assets/catalog.json": "d567841c18435af41a9ee8ce7de82783e222e91c8f76161c553adf9e3e141b77"
+  },
+  "artifact_sha256": {
+    "source.md": "a83a330a20349e6fe0897a3547684f6b1883810cbc6be9b93dc260b22d3972ae",
+    "generate.mjs": "241c9c1782706e7d7530448558f9b0f389a4c2f33ab21d393216af7b9a72e5c3",
+    "first.drawio": "a265473492ff514f9f96e5503c4d914eb8d270cd919947e169109a796eaec185",
+    "first.svg": "6bd6c5c91fb5e7157a286f5e098edbf95672008b7b0ce5da01ed2c21628ecdb7",
+    "first.png": "70467acf2d6c314af7a993236c4ecd1d4c68314703656cf7d57a6b9fd82de059",
+    "first.render.json": "0fe4abbbde945e20c59b288272ffd1f3094f9bf8a9c8d3fdfe549498b11c0aa1"
+  },
+  "renderer": {
+    "name": "Chromium with pinned local draw.io viewer",
+    "version": "32.6.1",
+    "upstream_commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+    "browser": "Chrome/154.0.8037.57"
+  },
+  "checks": {
+    "errors": [],
+    "expected_relationships": [
+      "app-tier->cache",
+      "app-tier->primary",
+      "cache->primary",
+      "cloudfront->s3",
+      "dynamodb->port-ddb-in",
+      "elb->web-asg",
+      "port-alarms->alarms",
+      "port-ddb-out->dynamodb",
+      "port-ses->ses",
+      "port-sns->sns",
+      "primary->standby",
+      "standby->s3",
+      "users->dns",
+      "users->elb",
+      "web-asg->s3"
+    ],
+    "interpretation": "Bounded XML, source assertions, rendered routes and text geometry; not independent architectural or aesthetic judgment."
+  },
+  "interpretations": [
+    "DNS resolves ingress; user payload travels directly to ELB.",
+    "CloudFront points to S3 as the origin request, not the reverse content-return direction; media domain remains in its caption.",
+    "The deployment outline and its small ports retain unspecified callers without creating a network or runtime component.",
+    "S3 and supporting services are regional and outside AZ boundaries; no VPC/subnets are invented.",
+    "Cache-to-RDS and standby-side-to-S3 remain explicitly unresolved source relationships, not asserted native service operations.",
+    "Replication mode, automatic failover settings, full-application Multi-AZ availability and App Auto Scaling are not asserted."
+  ],
+  "limitations": [
+    "The prior case and its visual reference remain in context.",
+    "No reference image for this case was supplied or retrieved.",
+    "No independent image-only readout or original-image comparison has run.",
+    "No external model endpoint was called; exact host model parameters were not exposed.",
+    "Browser rendering does not verify draw.io Desktop or real deployment correctness."
+  ]
+}

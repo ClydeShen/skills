@@ -27,7 +27,7 @@ This uses Node.js 24 and Git. Regeneration reads and executes pinned upstream pa
 
 Use one `mxfile` / `diagram` / `mxGraphModel` page with root cells `0` and `1`. Use unique IDs. Set the file version to `32.6.1`. Parent child nodes to their actual boundary cells; coordinates of child vertices are relative to that parent.
 
-For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`, `vendor` and `iconKey`. Its child `mxCell` has `vertex="1"`, the real parent ID, the selected style and an `mxGeometry`. Labels use escaped XML attributes and HTML line breaks when `html=1`. The custom metadata supports inspection; visible names and types still belong in the caption.
+For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`, `vendor` and `iconKey`. Its child `mxCell` has `vertex="1"`, the real parent ID, the selected style and an `mxGeometry`. Labels use escaped XML attributes and HTML line breaks when `html=1`. Keep inspection metadata separate from the short visible caption; print a type or technology only when it clarifies the element.
 
 Use `source` and `target` IDs on connectors, with explicit ports when routing needs them. Root-parented edge waypoints use page coordinates; do not mix those with child-local coordinates. Useful native connector settings are:
 
@@ -36,7 +36,7 @@ startArrow=none;endArrow=block;endFill=1;rounded=0;
 labelBackgroundColor=#ffffff;html=1;
 ```
 
-Place the label through relative edge geometry at an appropriate segment. An opaque label may interrupt its own line. Do not introduce a waypoint detour just to avoid that label.
+For a necessary label, set a readable label width and use relative edge geometry on an appropriate segment. Leave obvious relationships unlabeled. An opaque label may interrupt its own line; it must not introduce a waypoint detour.
 
 ## Verify the actual view
 

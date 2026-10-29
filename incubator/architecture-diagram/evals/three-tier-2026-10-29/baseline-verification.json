@@ -1,0 +1,34 @@
+{
+  "mode": "host-authoring; bounded artifact checks, not independent semantic judgment",
+  "source_repository_commit": "96a9ec0c045c0a18803142cdaea97048024e642b",
+  "reference_image_seen": false,
+  "renderer": {
+    "name": "Chromium with pinned local draw.io viewer",
+    "drawio_version": "32.6.1",
+    "upstream_commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+    "browser": "Chrome/154.0.8037.57"
+  },
+  "static_diagnostics": [
+    "Line crosses caption web-asg: web-to-app-a",
+    "Line crosses caption web-asg: web-to-app-b",
+    "Line crosses caption app-asg: db-b"
+  ],
+  "static_diagnostic_interpretation": "Three estimated-caption collisions for Web/App Auto Scaling group shapes. The static checker treats non-C4 catalog shapes as below-icon captions, although these native logical groups label their top interior. Actual rendered group text and paths do not overlap. Checker unchanged.",
+  "rendered_diagnostics": [],
+  "pairwise_text_overlaps": [],
+  "icon_caption_overlaps": [],
+  "membership_errors": [],
+  "exact_directed_relationship_set_matches": true,
+  "hashes": {
+    "first.drawio": "d3a7860444c8a131b6a7d296b36448f00ca94b34e76a3279b44574c3bf247686",
+    "first.svg": "32a4e4c29cd8217be75908167c7ff09f3ca060dfa8bea0ed67360d4108f82eec",
+    "first.png": "e46e7cc229c1a2263a6eec1fbcdb9a790228c73bd0f07639613cf54faf7fb90d",
+    "first.render.json": "6d82c265df337234ad1600299a165e49cca792cc43d9e404c180c892c623f005"
+  },
+  "limits": [
+    "No reference-image comparison yet.",
+    "Existing conversation context; not independent activation or model evaluation.",
+    "No offline Desktop or interactive editing test.",
+    "Bounds and topology checks do not prove real AWS deployment correctness."
+  ]
+}

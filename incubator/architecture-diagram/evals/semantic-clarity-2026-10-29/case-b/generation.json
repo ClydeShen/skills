@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-29",
+  "mode": "independent text-only regeneration",
+  "source": "../../three-tier-supporting-2026-10-29/source.md",
+  "source_sha256": "a83a330a20349e6fe0897a3547684f6b1883810cbc6be9b93dc260b22d3972ae",
+  "skill_sha256": "a55330763ffdbb8ddcc0fcdcbe228efe028d038bdf79efbd7036ffa10258fae3",
+  "reference_image_used": false,
+  "previous_outputs_read": false,
+  "external_model_calls": false,
+  "drawio_version": "32.6.1",
+  "scope": "Supported high-level deployment and service relationships; unresolved paths preserved in assumptions.md",
+  "workflow_exception": "Disjoint delegated output directory; parent owns branch, git setup, aggregate checks and integration."
+}
