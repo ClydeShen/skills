@@ -68,7 +68,7 @@ Fixture mode sends authored synthetic answers through the grading pipeline. All 
 
 ## Adding suites
 
-Add a module under `incubator/<initiative>/evals/`. Export `createSuite({ mode })` returning a Promptfoo test configuration. Fixture mode supplies a provider without external calls; model mode receives the explicitly configured endpoint from the runner. Keep cases and domain assertions in the initiative and reusable utilities in `evals/`.
+From the `internal` stage, every initiative's evaluation cases run through this runner; see the [stage rule](./REPOSITORY-STRUCTURE.md#incubation-stages). Add a module under `incubator/<initiative>/evals/`. Export `createSuite({ mode })` returning a Promptfoo test configuration. Fixture mode supplies a provider without external calls; model mode receives the explicitly configured endpoint from the runner. Keep cases and domain assertions in the initiative and reusable utilities in `evals/`.
 
 ```text
 npm run eval -- --suite incubator/meta-thinking/evals/suite.mjs
