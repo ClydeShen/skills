@@ -8,6 +8,8 @@ Delivery agents share [AGENTS.md](./AGENTS.md). The [source-of-truth and folder 
 
 Research questions, synthesize reusable knowledge, incubate a specific skill, verify it, optionally evaluate it when time and token budget allow, try it in external projects, then release it. Feedback can return to research, knowledge, or incubation.
 
+Incubating and released skills use the same package structure and authoring practices. Incubation adds supporting experiments outside the package. Refine and prune continuously so release is a directory move with minimal discovery and documentation updates, not a packaging rewrite. See the [lifecycle contract](./docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle).
+
 ## Repository map
 
 - [`docs/`](./docs/): documentation about how this repository is organized and maintained.
@@ -19,7 +21,7 @@ Research questions, synthesize reusable knowledge, incubate a specific skill, ve
 
 The current knowledge base covers [skill design](./knowledge/skill-design/README.md), harness engineering in [`knowledge/harness/`](./knowledge/harness/) and [Meta Thinking](./knowledge/meta-thinking/README.md), shared guidance for choosing thinking and interaction approaches. The [Meta Thinking initiative](./incubator/meta-thinking/README.md) contains a candidate skill and evaluation cases. The [Tech Humanizer initiative](./incubator/tech-humanizer/README.md) contains a candidate writing skill and its local evaluations.
 
-The [Human-AI Meta Thinking research](./research/human-ai-interaction/meta-thinking/README.md) preserves the original draft, evidence, and open questions behind the guidance. The [Architecture Diagram initiative](./incubator/architecture-diagram/README.md) develops a draw.io prototype and evaluation from the [owner's requirements](./research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md); it has no installable package yet.
+The [Human-AI Meta Thinking research](./research/human-ai-interaction/meta-thinking/README.md) preserves the original draft, evidence, and open questions behind the guidance. The [Architecture Diagram initiative](./incubator/architecture-diagram/README.md) contains an experimental standard skill candidate, draw.io examples and evaluations based on the [owner's requirements](./research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md).
 
 No skill has been released yet.
 

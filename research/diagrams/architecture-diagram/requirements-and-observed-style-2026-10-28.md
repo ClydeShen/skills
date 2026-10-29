@@ -1,6 +1,6 @@
 # Research: Architecture-diagram skill requirements and observed house style
 
-Date: 2026-10-28. Subject: What the owner wants from an architecture-diagram skill, and which visual and structural conventions recur in the owner's real project diagrams. Context: Requirements for a skill that draws technical architecture diagrams in C4 terms. The initiative now owns prototype work and evaluation; no installable package exists yet. This note is the durable handoff so a fresh session can continue gathering requirements without the earlier conversation.
+Date: 2026-10-28, with dated owner clarifications below. Subject: What the owner wants from an architecture-diagram skill, and which visual and structural conventions recur in the owner's real project diagrams. Context: Requirements for a skill that draws technical architecture diagrams in C4 terms. The [initiative](../../../incubator/architecture-diagram/README.md) owns current package and evaluation status. This note is the durable requirements handoff, not a second lifecycle record.
 
 Confidence markers:
 - **[owner]**: stated or confirmed by the owner in conversation on the stated date.
@@ -241,9 +241,15 @@ The owner requested research into visual guidance, directions and house interior
 
 The owner rejected the Note-heavy repaired diagrams. Text survival alone is insufficient: the architecture's visible structure and implied relationships should communicate the system. Every Note counts as a visual-design drawback. If the graph can express a fact through boundaries, nodes, relationships, meaningful labels or a genuine relational matrix, use that representation. Moving a paragraph to a differently styled text box does not solve the problem.
 
-This clarification narrows section 2.11: permission to use native Notes is not encouragement to use them as the normal information carrier. Keep the exact native style only when a necessary residual Note is justified. Do not discard information or invent architecture to eliminate Notes. Review visual expression separately from round-trip fidelity. The [current drawing policy](../../../incubator/architecture-diagram/prototype/drawing-policy.md) and [visual-expression evidence](../../../incubator/architecture-diagram/evals/visual-expression-2026-10-29/README.md) implement the correction; new sample quality still awaits owner judgment.
+This clarification narrows section 2.11: permission to use native Notes is not encouragement to use them as the normal information carrier. Keep the exact native style only when a necessary residual Note is justified. Do not discard information or invent architecture to eliminate Notes. Review visual expression separately from round-trip fidelity. The [candidate](../../../incubator/architecture-diagram/candidate/architecture-diagram/SKILL.md) now owns runtime guidance; the [visual-expression evidence](../../../incubator/architecture-diagram/evals/visual-expression-2026-10-29/README.md) preserves the initial correction and its remaining limitations.
 
 The owner further rejected replacing repeated components with prose. Different environment instances remain distinct architectural objects even when their type and responsibility repeat. Restore the test/prod workload symbols in their own VNets and align them with dev. Reuse rendering patterns, not component identity; deduplication requires evidence that the represented entity is actually shared. Relations may use a compact matrix, but it must not replace the components themselves.
+
+### 2.15 First principles and standard candidate packaging [owner, 2026-10-29]
+
+The goal is a standard, accurate and information-rich architecture diagram, not a more complicated diagramming system. Show what exists, where it belongs, how it interacts and which conditions matter. Use visual structure and precise local labels; avoid introducing machinery or deleting architectural information merely to simplify the picture. Repeated participating instances need their essential paths, not just restored symbols accompanied by "same as above" prose.
+
+The owner requested a standard skill package during incubation. Candidates and releases use the same best practices; only maturity and publication status differ. Keep auxiliary experiments outside the runtime package, prune obsolete materials as the skill develops, and make eventual release a directory move with minimal discovery updates. The [repository lifecycle contract](../../../docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) owns this project-wide rule. The [candidate-layout report](../../../incubator/architecture-diagram/evals/candidate-layout-2026-10-29/README.md) records the initial implementation, without claiming release readiness.
 
 ## 3. Style prototype
 

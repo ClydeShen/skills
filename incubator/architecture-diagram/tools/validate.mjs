@@ -115,6 +115,8 @@ export function validateDiagram(xml, catalog) {
   if (doc.mxfile?.version !== upstreamVersion) errors.push('Diagram must declare the pinned draw.io version.');
   const pages = list(doc.mxfile?.diagram);
   if (pages.length !== 1 || !pages[0]?.mxGraphModel?.root) return [...errors, 'Expected one uncompressed mxGraphModel page.'];
+  const fontSize = Number(pages[0].mxGraphModel.architectureFontSize ?? 12);
+  if (!Number.isFinite(fontSize) || fontSize < 12) errors.push('Declare a readable architectural font size of at least 12.');
   const root = pages[0].mxGraphModel.root;
   const objects = list(root.object);
   const nodes = [...list(root.mxCell), ...objects.map(o => ({ ...o.mxCell, ...o, mxCell: undefined, value: o.label }))];
@@ -144,8 +146,8 @@ export function validateDiagram(xml, catalog) {
     if (!Object.values(box).every(Number.isFinite) || box.w <= 0 || box.h <= 0) errors.push(`Invalid dimensions: ${n.id}`);
     boxes.set(n.id, box);
     const autoNote = n.annotationKind === 'comment' && s.shape === 'note' && s.html === '1' && s.autosizeText === '1';
-    const validFont = autoNote ? Number.isFinite(Number(s.fontSize)) && Number(s.fontSize) > 0 : String(s.fontSize) === '12' && s.autosizeText !== '1';
-    if (!validFont) errors.push(`Font must be 12 unless this is an auto-sized native Note comment: ${n.id}`);
+    const validFont = autoNote ? Number.isFinite(Number(s.fontSize)) && Number(s.fontSize) > 0 : Number(s.fontSize) === fontSize && s.autosizeText !== '1';
+    if (!validFont) errors.push(`Font must match the declared architectural size (${fontSize}) unless this is an auto-sized native Note comment: ${n.id}`);
     if (n.c4Type) {
       if (!n.value?.includes(`[${n.c4Type}`)) errors.push(`Missing visible C4 type: ${n.id}`);
       if (['Container', 'Component'].includes(n.c4Type) && !n.technology) errors.push(`Missing technology: ${n.id}`);
@@ -168,8 +170,8 @@ export function validateDiagram(xml, catalog) {
   for (const n of objects.filter(n => !boundary(n) && n.iconKey)) {
     const b = boxes.get(n.id); if (!b) continue;
     const s = styleMap(n.mxCell.style), width = Number(s.labelWidth || 200);
-    const lines = n.label.split('\n').reduce((sum, line) => sum + Math.max(1, Math.ceil(line.length * 7.2 / width)), 0);
-    captions.set(n.id, { x: b.x + b.w / 2 - width / 2, y: b.y + b.h + Number(s.spacingTop || 0), w: width, h: lines * 16 });
+    const lines = n.label.split(/\n|<br\s*\/?\s*>/i).reduce((sum, line) => sum + Math.max(1, Math.ceil(line.length * fontSize * 0.6 / width)), 0);
+    captions.set(n.id, { x: b.x + b.w / 2 - width / 2, y: b.y + b.h + Number(s.spacingTop || 0), w: width, h: lines * fontSize * 4 / 3 });
   }
   const segments = [], routes = [];
   const annotationOwner = id => {
@@ -187,7 +189,7 @@ export function validateDiagram(xml, catalog) {
     if (annotationOwner(source.id) || annotationOwner(target.id)) errors.push(`Architectural call must not target an annotation: ${e.id}`);
     if (!e.value?.trim()) errors.push(`Missing relationship label: ${e.id}`);
     if (s.startArrow !== 'none' || s.endArrow !== 'block' || s.endFill !== '1') errors.push(`Use one filled, single-direction arrow: ${e.id}`);
-    if (s.fontSize !== '12' || s.autosizeText === '1') errors.push(`Wrong relationship font: ${e.id}`);
+    if (Number(s.fontSize) !== fontSize || s.autosizeText === '1') errors.push(`Wrong relationship font: ${e.id}`);
     if (s.labelBackgroundColor !== '#ffffff' || Number(e.mxGeometry?.y || 0) !== 0) errors.push(`Use an opaque label on the connector: ${e.id}`);
     if (source.c4Type === 'Container' && target.c4Type === 'Container' && !/\[[^\]]+\]/.test(e.value)) errors.push(`Missing relationship technology/protocol: ${e.id}`);
     const port = (id, x, y) => { const b = boxes.get(id); return { x: b.x + b.w * Number(x ?? 0.5), y: b.y + b.h * Number(y ?? 0.5) }; };

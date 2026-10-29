@@ -2,6 +2,8 @@
 
 Use spatial structure to make the intended architecture easier to read. Domain membership and interaction meaning are constraints; direction, alignment and whitespace are design choices within them. Apply this guidance to architecture views with nested deployment or system boundaries, adapting it to the audience's question.
 
+Start with what exists and where, how it interacts, and what constrains those interactions. Use standard visual vocabulary to express these facts accurately and richly. Do not turn this into a mandatory modeling framework, optimization formula or multi-view system. Establish the meaning, choose a simple arrangement, inspect the result, and repair concrete misunderstandings.
+
 ## Choose one primary reading direction
 
 | View's main question | Useful default | When to adapt |
@@ -30,6 +32,8 @@ Reduce crossings and ambiguous shared segments before chasing the smallest bend 
 
 Keep distinct architectural instances visible even when their icons, types and responsibilities repeat. Environment-specific workloads belong in their own deployment boundaries; use aligned repeated groups so readers can compare them. Reuse a drawing pattern without merging entity identity. A matrix can clarify relations between these visible objects, but cannot substitute for their existence. For a genuinely shared service, show one shared node unless a repeated view has explicit identity linkage. Mark representative physical multiplicity honestly; do not invent a fleet size from one icon.
 
+Show the essential connections of every participating instance. Restoring an icon while leaving its paths to “same as above” prose still makes the reader reconstruct the graph. Shared downstream infrastructure may remain drawn once, provided every entry connects explicitly and branch conditions retain the correct destination. Keep true relation tables, such as permission matrices, when their rows and columns communicate the facts better than more arrows.
+
 Bind every protocol, payload and response detail to the relationship it describes. A public API's JSON response does not specify every internal invocation. Express node responsibilities in concise captions and real data transformations at their responsible node or hop. Let containment establish ownership, directed edges establish interaction, parallel branches establish alternatives, and consistent alignment support comparison. Keep any spatial implication consistent with the source; placement alone must not invent sequence, exclusivity or ownership.
 
 Every explanatory Note indicates a cost in visual communication. First inspect why the graph cannot express its fact. Move the information into supported structure, meaningful connectors or concise local labels when possible. A matrix is useful for repeated relations such as environment bindings or firewall allowances: use explicit row/column subjects and cells with a defined meaning. A paragraph inside a table, a giant node caption or a renamed white text box still has the same explanatory burden.
@@ -46,3 +50,4 @@ The [research record](../../research/diagrams/architecture-diagram/layout-and-fi
 
 - 2026-10-29: Initial synthesis under the owner's request to repair fidelity defects and improve intuitive layout. Keep future runtime instructions short; retain research, metrics and experiments outside the installed package.
 - 2026-10-29: The owner rejected Note-heavy artifacts and explicitly made every Note a negative visual-design signal. Prefer structural expression; review communication quality independently from information survival. This is an owner-directed quality standard, not a new empirical claim about universal note-count thresholds.
+- 2026-10-29: The owner requested first-principles simplicity: standard, accurate and information-rich diagrams, not a new layout platform. Repair concrete visual omissions and ambiguities before adding mechanisms.

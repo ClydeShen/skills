@@ -36,6 +36,8 @@ Before changing skill layout, validation, installation, or release behavior, ver
 
 Follow [candidate and release rules](docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) and [package format](docs/DOCUMENT-FORMATS.md#skill-package-format). Maintain one active source per authored skill. Update package targets and links when promotion changes the source path.
 
+Use the same package best practices during incubation and after release. Keep runtime files relocatable and authoring support outside the package. Prune obsolete material as the skill matures; preserve necessary evaluation evidence. Release should move the validated package, not rebuild it into another format.
+
 ## Project tools
 
 Use `package.json` as the command source. Run `npm run check` before handing off a change. Use `npm run check:repo` for fast feedback. Read [prompt evaluation setup](docs/prompt-evaluation.md) for model configuration and test limits. `npm test` checks the harness; `npm run eval` is synthetic replay, not a model-quality gate. Keep credentials and local run results out of commits. Never weaken a gate just to make the task pass; report pre-existing failures and unavailable checks.
