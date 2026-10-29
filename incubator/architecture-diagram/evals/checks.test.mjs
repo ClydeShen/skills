@@ -119,3 +119,13 @@ test('local comments have explicit subjects; legend cells stay editable and tria
   masked.metrics.find(m => m.id === 'token').bounds = { x: 590, y: 200, w: 100, h: 80 };
   assert.ok(validateRender(masked).some(e => e.includes('annotation obscures boundary aws')));
 });
+
+test('native Misc Note retains automatic text fitting without changing architecture typography', () => {
+  const note = diagram.match(/<mxCell id="token"[\s\S]*?<\/mxCell>/)[0];
+  for (const style of ['autosizeText=1;', 'html=1;', 'backgroundOutline=1;', 'fontSize=20;', 'direction=west;', 'fillColor=#FFF9B2;', 'gradientColor=#FFF2A1;', 'shadow=1;']) assert.ok(note.includes(style), style);
+  assert.ok(note.includes('&lt;br&gt;'));
+  assert.ok(validateDiagram(diagram.replace(note, note.replace('autosizeText=1;', 'autosizeText=0;')), catalog).some(e => e.includes('Font must be 12')));
+  assert.ok(validateDiagram(diagram.replace('fontSize=12', 'fontSize=20'), catalog).some(e => e.includes('Font must be 12')));
+  assert.ok(validateDiagram(diagram.replace('shape=umlActor;', 'shape=umlActor;autosizeText=1;'), catalog).some(e => e.includes('Font must be 12')));
+  assert.ok(validateDiagram(diagram.replace('edgeStyle=orthogonalEdgeStyle;', 'edgeStyle=orthogonalEdgeStyle;autosizeText=1;'), catalog).some(e => e.includes('Wrong relationship font')));
+});

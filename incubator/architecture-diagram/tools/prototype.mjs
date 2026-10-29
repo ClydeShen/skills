@@ -25,7 +25,9 @@ function note(id, label, x, y, width, height, bold = false) {
   cells.push(`<mxCell id="${id}" value="${xml(label)}" vertex="1" parent="1" style="text;html=0;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=12;fontStyle=${bold ? 1 : 0};"><mxGeometry x="${x}" y="${y}" width="${width}" height="${height}" as="geometry"/></mxCell>`);
 }
 function comment(id, target, parent, label, x, y, width, height) {
-  cells.push(`<mxCell id="${id}" value="${xml(label)}" annotationKind="comment" annotationFor="${target}" vertex="1" parent="${parent}" style="shape=note;size=15;whiteSpace=wrap;html=0;align=left;verticalAlign=middle;spacing=12;fillColor=#fff9db;strokeColor=#b8a66a;fontFamily=Arial;fontSize=12;"><mxGeometry x="${x}" y="${y}" width="${width}" height="${height}" as="geometry"/></mxCell>`);
+  // Native Misc > Note preset from the pinned grapheditor/Sidebar.js.
+  const style = 'shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;autosizeText=1;fontColor=#000000;darkOpacity=0.05;fillColor=#FFF9B2;strokeColor=none;fillStyle=solid;fontSize=20;direction=west;gradientDirection=north;gradientColor=#FFF2A1;shadow=1;size=20;pointerEvents=1;';
+  cells.push(`<mxCell id="${id}" value="${xml(label.replaceAll('\n', '<br>'))}" annotationKind="comment" annotationFor="${target}" vertex="1" parent="${parent}" style="${style}"><mxGeometry x="${x}" y="${y}" width="${width}" height="${height}" as="geometry"/></mxCell>`);
 }
 function legendTable(x, y) {
   const widths = [130, 330], rowHeight = 30;
