@@ -28,12 +28,21 @@ Reduce crossings and ambiguous shared segments before chasing the smallest bend 
 
 ## Preserve information while improving presentation
 
-Bind every protocol, payload and response detail to the relationship it describes. A public API's JSON response does not specify every internal invocation. Use explicit subjects for important association notes. Use a table for repeated mappings and a nearby native note for a local explanation. Keep note emphasis subordinate to the architecture's primary reading path.
+Keep distinct architectural instances visible even when their icons, types and responsibilities repeat. Environment-specific workloads belong in their own deployment boundaries; use aligned repeated groups so readers can compare them. Reuse a drawing pattern without merging entity identity. A matrix can clarify relations between these visible objects, but cannot substitute for their existence. For a genuinely shared service, show one shared node unless a repeated view has explicit identity linkage. Mark representative physical multiplicity honestly; do not invent a fleet size from one icon.
+
+Bind every protocol, payload and response detail to the relationship it describes. A public API's JSON response does not specify every internal invocation. Express node responsibilities in concise captions and real data transformations at their responsible node or hop. Let containment establish ownership, directed edges establish interaction, parallel branches establish alternatives, and consistent alignment support comparison. Keep any spatial implication consistent with the source; placement alone must not invent sequence, exclusivity or ownership.
+
+Every explanatory Note indicates a cost in visual communication. First inspect why the graph cannot express its fact. Move the information into supported structure, meaningful connectors or concise local labels when possible. A matrix is useful for repeated relations such as environment bindings or firewall allowances: use explicit row/column subjects and cells with a defined meaning. A paragraph inside a table, a giant node caption or a renamed white text box still has the same explanatory burden.
+
+Names, protocols, conditions and compact notation keys are necessary diagram vocabulary; replacing all text with obscure pictograms would increase ambiguity. Preserve necessary qualifiers and unknowns. If one cannot be represented naturally, retain the minimal Note, report its design cost and state the unresolved limitation. A zero-Note count alone does not establish quality. Do not invent internal components, topology or deployment boundaries just to draw an illustration for a sentence.
 
 Before accepting a revision, compare meaningful facts independently from layout: nodes, responsibilities, parents, directed relationships, contracts, conditions and exclusions. Then inspect the rendered artifact for route continuity, label fit and grouping. Blind image-to-description round trips measure information survival; source admission and vendor research assess whether the starting architecture is justified. Neither replaces the other.
+
+Also review how the image communicates. Can the reader locate the entry, trace the main path, distinguish alternatives, find controls and identify transformations without detached explanations? Does each matrix expose a real relation? Does a caption identify its element and role without becoming a miniature document? Count and justify retained Notes separately from fidelity. Do not let a highly faithful wall of text pass as a well-designed diagram.
 
 ## Evidence and revision
 
 The [research record](../../research/diagrams/architecture-diagram/layout-and-fidelity-2026-10-29.md) separates official guidance, abstract-only experimental evidence and project inference. These defaults have not been shown optimal across architectures or cultures.
 
 - 2026-10-29: Initial synthesis under the owner's request to repair fidelity defects and improve intuitive layout. Keep future runtime instructions short; retain research, metrics and experiments outside the installed package.
+- 2026-10-29: The owner rejected Note-heavy artifacts and explicitly made every Note a negative visual-design signal. Prefer structural expression; review communication quality independently from information survival. This is an owner-directed quality standard, not a new empirical claim about universal note-count thresholds.

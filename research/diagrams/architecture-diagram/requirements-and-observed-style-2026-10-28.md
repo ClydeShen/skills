@@ -237,6 +237,14 @@ The owner clarified that repeated translation measures preservation of the same 
 
 The owner requested research into visual guidance, directions and house interiors after observing unnecessary folds and apparently arbitrary placement. Client-at-top and input-left/output-right were exploratory examples, not fixed requirements. Use [researched layout guidance](../../../knowledge/diagrams/architecture-layout.md) to choose a coherent direction, align related elements and reduce needless bends while preserving domains and architecture. The [research record](./layout-and-fidelity-2026-10-29.md) distinguishes evidence from project design defaults.
 
+### 2.14 Visual information before explanatory Notes [owner, 2026-10-29]
+
+The owner rejected the Note-heavy repaired diagrams. Text survival alone is insufficient: the architecture's visible structure and implied relationships should communicate the system. Every Note counts as a visual-design drawback. If the graph can express a fact through boundaries, nodes, relationships, meaningful labels or a genuine relational matrix, use that representation. Moving a paragraph to a differently styled text box does not solve the problem.
+
+This clarification narrows section 2.11: permission to use native Notes is not encouragement to use them as the normal information carrier. Keep the exact native style only when a necessary residual Note is justified. Do not discard information or invent architecture to eliminate Notes. Review visual expression separately from round-trip fidelity. The [current drawing policy](../../../incubator/architecture-diagram/prototype/drawing-policy.md) and [visual-expression evidence](../../../incubator/architecture-diagram/evals/visual-expression-2026-10-29/README.md) implement the correction; new sample quality still awaits owner judgment.
+
+The owner further rejected replacing repeated components with prose. Different environment instances remain distinct architectural objects even when their type and responsibility repeat. Restore the test/prod workload symbols in their own VNets and align them with dev. Reuse rendering patterns, not component identity; deduplication requires evidence that the represented entity is actually shared. Relations may use a compact matrix, but it must not replace the components themselves.
+
 ## 3. Style prototype
 
 A throwaway prototype draws a synthetic cross-cloud scenario in the style above. It shows nested zones with badges, icons with captions below, plain boxes, a person, a requirement note, step-numbered labels on lines, one dashed line, and a connector icon between two clouds. All icons are placeholders. They are not official vendor icons and use no vendor artwork.

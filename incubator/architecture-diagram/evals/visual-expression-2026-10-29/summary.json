@@ -1,0 +1,623 @@
+{
+  "date": "2026-10-29",
+  "mode": "iterative-visual-expression-with-blind-readout",
+  "baselineCommit": "b183ee13d51004fc324239067420cf11aeeff253",
+  "policySha256": "86c85990bb60e143f0faca388c56100d0a413a8c11c13a14f8b4bf9546c1be42",
+  "readers": {
+    "02": {
+      "context": "/root/visual_read_c",
+      "fork_turns": "none",
+      "input": "c.png only"
+    },
+    "03": {
+      "context": "/root/visual_read_d",
+      "fork_turns": "none",
+      "input": "d.png only"
+    }
+  },
+  "model": "Host agent; exact model identity and sampling parameters not exposed; no separately configured model endpoint invoked.",
+  "isolation": "Fresh conversations with shared filesystem access, not per-worker OS sandboxes. Source attestations are retained in visual-review.txt.",
+  "interpretation": "Note and route counts are diagnostics, not quality scores. This is not a full L0-to-L4 chain or independent fact-ledger judgment.",
+  "cases": {
+    "02": {
+      "sourceSha256": "6021ec1510bcb37fd80c747a017dedbf314cfa3714e84727019bc0e6b4794ce1",
+      "generatorSha256": "13668e849523ede21f986ae7805e914567e275d9868d1f9c9314649e71b152f4",
+      "artifacts": {
+        "diagram.drawio": "103cb70f8e16cf45780fdccb2419c15ec50a2225821fc39031f928cdb727dc09",
+        "diagram.svg": "9d7a8cd418907dd302454c1eddcb170169e517506a799f8ce9ba78c46a630f77",
+        "diagram.png": "f77b2bf12b17afa5517d5ebb9737d31292868907d55901f360f36a0097c0d470",
+        "diagram.render.json": "737eb5416356a420b39bef1c48dd06315e43d86c1de9900df440ea2b2e150267",
+        "readout.txt": "68e502158fe4e6d3f59c3483a6c899e8efbfac33f6ab3238a56422bc2d1dfd68",
+        "visual-review.txt": "0c7a0586b9c166b6746f5d796b379a369ec5f62eeea873a24487e91616740b24"
+      },
+      "notes": {
+        "before": 8,
+        "after": 0
+      },
+      "checks": {
+        "staticErrors": [],
+        "renderErrors": [],
+        "nativeNoteFindings": []
+      },
+      "before": {
+        "edges": {
+          "B8a": {
+            "bends": 0,
+            "length": 278,
+            "lowerBound": 278,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B8b": {
+            "bends": 0,
+            "length": 278,
+            "lowerBound": 278,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B8c": {
+            "bends": 0,
+            "length": 278,
+            "lowerBound": 278,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A1": {
+            "bends": 0,
+            "length": 348,
+            "lowerBound": 348,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A2": {
+            "bends": 0,
+            "length": 328,
+            "lowerBound": 328,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A3": {
+            "bends": 1,
+            "length": 490,
+            "lowerBound": 490,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A4": {
+            "bends": 0,
+            "length": 288,
+            "lowerBound": 288,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A5": {
+            "bends": 0,
+            "length": 458,
+            "lowerBound": 458,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A6": {
+            "bends": 0,
+            "length": 228,
+            "lowerBound": 228,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A7": {
+            "bends": 0,
+            "length": 328,
+            "lowerBound": 328,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A8": {
+            "bends": 2,
+            "length": 688,
+            "lowerBound": 452,
+            "excessLength": 236,
+            "alignedDetour": false
+          },
+          "A9": {
+            "bends": 2,
+            "length": 380.00081847944705,
+            "lowerBound": 320.00081847944705,
+            "excessLength": 60,
+            "alignedDetour": true
+          },
+          "B1": {
+            "bends": 2,
+            "length": 1010,
+            "lowerBound": 1010,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B2": {
+            "bends": 0,
+            "length": 288,
+            "lowerBound": 288,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B3": {
+            "bends": 0,
+            "length": 458,
+            "lowerBound": 458,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B4": {
+            "bends": 0,
+            "length": 228,
+            "lowerBound": 228,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B5": {
+            "bends": 0,
+            "length": 328,
+            "lowerBound": 328,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B6": {
+            "bends": 0,
+            "length": 268,
+            "lowerBound": 268,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B7a": {
+            "bends": 2,
+            "length": 720,
+            "lowerBound": 720,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B7b": {
+            "bends": 0,
+            "length": 298,
+            "lowerBound": 298,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B7c": {
+            "bends": 2,
+            "length": 720,
+            "lowerBound": 720,
+            "excessLength": 0,
+            "alignedDetour": false
+          }
+        },
+        "properCrossings": [],
+        "totalBends": 11,
+        "totalLength": 8688.000818479446,
+        "alignedDetours": [
+          "A9"
+        ],
+        "limitation": "Advisory geometry only. Crossings count segment-interior intersections, not touches or overlaps. The Manhattan lower bound ignores obstacles, captions, parallel paths and domains. A detour is not necessarily unnecessary; never shorten it without semantic and rendered checks."
+      },
+      "after": {
+        "edges": {
+          "B8a": {
+            "bends": 0,
+            "length": 278,
+            "lowerBound": 278,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B8b": {
+            "bends": 0,
+            "length": 278,
+            "lowerBound": 278,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B8c": {
+            "bends": 0,
+            "length": 278,
+            "lowerBound": 278,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A1": {
+            "bends": 0,
+            "length": 348,
+            "lowerBound": 348,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A2": {
+            "bends": 0,
+            "length": 328,
+            "lowerBound": 328,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A3": {
+            "bends": 1,
+            "length": 490,
+            "lowerBound": 490,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A4": {
+            "bends": 0,
+            "length": 288,
+            "lowerBound": 288,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A5": {
+            "bends": 0,
+            "length": 458,
+            "lowerBound": 458,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A6": {
+            "bends": 0,
+            "length": 228,
+            "lowerBound": 228,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A7": {
+            "bends": 0,
+            "length": 328,
+            "lowerBound": 328,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "A8": {
+            "bends": 2,
+            "length": 688,
+            "lowerBound": 452,
+            "excessLength": 236,
+            "alignedDetour": false
+          },
+          "A9": {
+            "bends": 2,
+            "length": 380.00081847944705,
+            "lowerBound": 320.00081847944705,
+            "excessLength": 60,
+            "alignedDetour": true
+          },
+          "B1": {
+            "bends": 2,
+            "length": 1010,
+            "lowerBound": 1010,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B2": {
+            "bends": 0,
+            "length": 288,
+            "lowerBound": 288,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B3": {
+            "bends": 0,
+            "length": 458,
+            "lowerBound": 458,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B4": {
+            "bends": 0,
+            "length": 228,
+            "lowerBound": 228,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B5": {
+            "bends": 0,
+            "length": 328,
+            "lowerBound": 328,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B6": {
+            "bends": 0,
+            "length": 268,
+            "lowerBound": 268,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B7a": {
+            "bends": 2,
+            "length": 720,
+            "lowerBound": 720,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B7b": {
+            "bends": 0,
+            "length": 298,
+            "lowerBound": 298,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "B7c": {
+            "bends": 2,
+            "length": 720,
+            "lowerBound": 720,
+            "excessLength": 0,
+            "alignedDetour": false
+          }
+        },
+        "properCrossings": [],
+        "totalBends": 11,
+        "totalLength": 8688.000818479446,
+        "alignedDetours": [
+          "A9"
+        ],
+        "limitation": "Advisory geometry only. Crossings count segment-interior intersections, not touches or overlaps. The Manhattan lower bound ignores obstacles, captions, parallel paths and domains. A detour is not necessarily unnecessary; never shorten it without semantic and rendered checks."
+      }
+    },
+    "03": {
+      "sourceSha256": "2a1c2ff6233d666626ff4582a92d0e1ce830099aaa16d0abb587b08e0dddf706",
+      "generatorSha256": "de7ded5850150853d9d6a6bcffaf09f8e9d2b3339c1310bc4cd075bca31851ec",
+      "artifacts": {
+        "diagram.drawio": "d072e1694d5b8c50338c9b2ce600b2e7303b5dc1a9736ec24e07696f8f4eb6e6",
+        "diagram.svg": "db765b86eade4a21e6858ed2c95913f167c94a7cf3d2e5015dbf59b4c5c6800f",
+        "diagram.png": "e3cb29a5ae8dead61e23069170f0eb76abb14bc1437f6c698687409955152d32",
+        "diagram.render.json": "099119b473b07bf5f30a841950c8ae7ddae93d54331292666ef969c31c9f0a66",
+        "readout.txt": "0f71b47742ad4ecdcb8389132482a04e4cdb3b2c4629b6d8aa2064205846ebc3",
+        "visual-review.txt": "4d9bb7e774cf32d09ac7424805399e34c5a4627b02e0890ef1e9390951c0e34f"
+      },
+      "notes": {
+        "before": 5,
+        "after": 0
+      },
+      "checks": {
+        "staticErrors": [],
+        "renderErrors": [],
+        "nativeNoteFindings": []
+      },
+      "before": {
+        "edges": {
+          "entrya": {
+            "bends": 0,
+            "length": 340,
+            "lowerBound": 340,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "entryb": {
+            "bends": 0,
+            "length": 340,
+            "lowerBound": 340,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "policya": {
+            "bends": 2,
+            "length": 408,
+            "lowerBound": 408,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "policyb": {
+            "bends": 2,
+            "length": 416,
+            "lowerBound": 416,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "authenticate": {
+            "bends": 2,
+            "length": 791,
+            "lowerBound": 791,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "forward": {
+            "bends": 0,
+            "length": 348,
+            "lowerBound": 348,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "authorize": {
+            "bends": 1,
+            "length": 468,
+            "lowerBound": 468,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "roles": {
+            "bends": 2,
+            "length": 818,
+            "lowerBound": 818,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "routeorders": {
+            "bends": 0,
+            "length": 808,
+            "lowerBound": 808,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "routedocuments": {
+            "bends": 2,
+            "length": 1130,
+            "lowerBound": 1130,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "awsorders": {
+            "bends": 0,
+            "length": 388,
+            "lowerBound": 388,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "awsdocuments": {
+            "bends": 2,
+            "length": 710,
+            "lowerBound": 710,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "vpnorders": {
+            "bends": 0,
+            "length": 308,
+            "lowerBound": 308,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "vpndocuments": {
+            "bends": 0,
+            "length": 308,
+            "lowerBound": 308,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "invoke": {
+            "bends": 0,
+            "length": 248.00081890766796,
+            "lowerBound": 248.00081890766796,
+            "excessLength": 0,
+            "alignedDetour": false
+          }
+        },
+        "properCrossings": [],
+        "totalBends": 13,
+        "totalLength": 7829.000818907668,
+        "alignedDetours": [],
+        "limitation": "Advisory geometry only. Crossings count segment-interior intersections, not touches or overlaps. The Manhattan lower bound ignores obstacles, captions, parallel paths and domains. A detour is not necessarily unnecessary; never shorten it without semantic and rendered checks."
+      },
+      "after": {
+        "edges": {
+          "entrya": {
+            "bends": 0,
+            "length": 340,
+            "lowerBound": 340,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "entryb": {
+            "bends": 0,
+            "length": 340,
+            "lowerBound": 340,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "policya": {
+            "bends": 2,
+            "length": 408,
+            "lowerBound": 408,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "policyb": {
+            "bends": 2,
+            "length": 416,
+            "lowerBound": 416,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "authenticate": {
+            "bends": 2,
+            "length": 791,
+            "lowerBound": 791,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "forward": {
+            "bends": 0,
+            "length": 348,
+            "lowerBound": 348,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "authorize": {
+            "bends": 1,
+            "length": 468,
+            "lowerBound": 468,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "roles": {
+            "bends": 2,
+            "length": 818,
+            "lowerBound": 818,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "routeorders": {
+            "bends": 0,
+            "length": 808,
+            "lowerBound": 808,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "routedocuments": {
+            "bends": 2,
+            "length": 1130,
+            "lowerBound": 1130,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "awsorders": {
+            "bends": 0,
+            "length": 388,
+            "lowerBound": 388,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "awsdocuments": {
+            "bends": 2,
+            "length": 710,
+            "lowerBound": 710,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "vpnorders": {
+            "bends": 0,
+            "length": 308,
+            "lowerBound": 308,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "vpndocuments": {
+            "bends": 0,
+            "length": 308,
+            "lowerBound": 308,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "invoke": {
+            "bends": 0,
+            "length": 248.00081890766796,
+            "lowerBound": 248.00081890766796,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "failurea": {
+            "bends": 0,
+            "length": 340,
+            "lowerBound": 340,
+            "excessLength": 0,
+            "alignedDetour": false
+          },
+          "failureb": {
+            "bends": 0,
+            "length": 340,
+            "lowerBound": 340,
+            "excessLength": 0,
+            "alignedDetour": false
+          }
+        },
+        "properCrossings": [],
+        "totalBends": 13,
+        "totalLength": 8509.000818907669,
+        "alignedDetours": [],
+        "limitation": "Advisory geometry only. Crossings count segment-interior intersections, not touches or overlaps. The Manhattan lower bound ignores obstacles, captions, parallel paths and domains. A detour is not necessarily unnecessary; never shorten it without semantic and rendered checks."
+      }
+    }
+  }
+}

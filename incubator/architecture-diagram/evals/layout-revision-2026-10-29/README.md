@@ -45,7 +45,7 @@ Local repository verification passed 51 regression tests, 42 default fixture ass
 
 The two reader contexts were launched with `fork_turns: none`, received only neutral-named PNGs and generic transcription instructions, and attested to reading only their assigned image. They did not receive source descriptions, XML/SVG, findings or the repair plan. Exact host model identity/parameters were not exposed; contexts share filesystem access. The parent compared the readouts with the targeted fixes after freezing the diagrams. There was no independent full fact-ledger judge, L3 redraw or L4 readout in this repair verification. No NVIDIA endpoint was used.
 
-The [summary](./summary.json) records artifact hashes, reader provenance, checks and geometry. Scenarios 01/04 were not redrawn; their frozen round-trip regression records remain. General layout effectiveness, cross-model reliability, complete new same-input L0/L2/L4 chains, held-out cases and Desktop behavior remain unverified. The initiative is not release-ready on this evidence alone.
+The [summary](./summary.json) records artifact hashes, reader provenance, checks and geometry. Its collector reads the [historical policy snapshot](./inputs/drawing-policy.txt), not the subsequently revised current policy; introducing this snapshot leaves the existing summary unchanged. Scenarios 01/04 were not redrawn; their frozen round-trip regression records remain. General layout effectiveness, cross-model reliability, complete new same-input L0/L2/L4 chains, held-out cases and Desktop behavior remain unverified. The initiative is not release-ready on this evidence alone.
 
 ## Reproduce
 

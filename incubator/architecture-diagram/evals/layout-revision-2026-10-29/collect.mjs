@@ -10,7 +10,7 @@ const catalog = json('../../prototype/catalog.json');
 const report = {
   date: '2026-10-29', mode: 'reviewed-artifact-repair-with-blind-readout',
   baselineCommit: '280ed6c1c380ddee7c6fbf8b630dd6d9a02c44c1',
-  policySha256: hash('../../prototype/drawing-policy.md'),
+  policySha256: hash('./inputs/drawing-policy.txt'),
   readers: {
     '02': { context: '/root/layout_read_c', fork_turns: 'none', input: 'c.png only', sourceAttestation: 'Read only the assigned raster using view_image at original resolution.' },
     '03': { context: '/root/layout_read_b', fork_turns: 'none', input: 'b.png only', sourceAttestation: 'Read only the assigned raster using view_image at original resolution.' },

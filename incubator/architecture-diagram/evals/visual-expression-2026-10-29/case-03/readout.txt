@@ -1,0 +1,94 @@
+IMAGE-ONLY TRANSCRIPTION
+
+Source: /tmp/visual-expression-readout.oDpwlk/d.png, viewed as a raster at original resolution. All statements below derive solely from visible text, shapes, containment, and arrows in that image.
+
+Title: Dynamic diagram (deployment view): Partner amendment requests through SOAP to AWS validation.
+Purpose line: Authenticate partner amendment requests, authorize the required user-profile role, validate in AWS and return XML through the originating SOAP API.
+
+BOUNDARIES AND MEMBERSHIP
+
+Two external software systems appear at the far left, outside the cloud boundaries: Existing partner integrators and New partner integrators.
+
+The large Azure Cloud deployment node contains:
+- Azure API Management (APIM), a deployment node containing Legacy SOAP API, Partner SOAP API, and APIM policy processing.
+- Azure AD B2C, labeled Identity exchange: unspecified and [Container: Identity provider], outside the APIM and Inbound processing boundaries.
+- Roles / permissions, [Container: Azure Cosmos DB], outside the Inbound processing boundary.
+- Inbound processing, a software system boundary containing API-Route-Processor, Common-Authx-Handler, and a nested Sub-workflows software system boundary. Sub-workflows contains Amend-Order-Processor and Amend-Document-Processor.
+
+A Site-to-site VPN sits between the Azure Cloud and AWS Cloud rectangles, outside both. Its type label is [Container: Azure ↔ AWS connection].
+
+AWS Cloud is a deployment node containing API Gateway and a nested Core platform software system boundary. Core platform contains Validation engine. API Gateway is outside Core platform but inside AWS Cloud.
+
+ELEMENT RESPONSIBILITIES AND TYPES
+
+Legacy SOAP API: [Container: SOAP API].
+Partner SOAP API: [Container: SOAP API].
+APIM policy processing: Check system-account roles; Require user profile; [Container: Azure API Management].
+Azure AD B2C: Identity exchange: unspecified; [Container: Identity provider].
+API-Route-Processor: [Container: Logic Apps workflow].
+Common-Authx-Handler: [Container: Logic Apps workflow].
+Roles / permissions: [Container: Azure Cosmos DB].
+Amend-Order-Processor: Validate XML - method - base64; Wrap decoded XML in JSON; JSON → Liquid template → XML; [Container: Logic Apps workflow].
+Amend-Document-Processor: Validate XML - method - base64; Wrap decoded XML in JSON; JSON → Liquid template → XML; [Container: Logic Apps workflow].
+Site-to-site VPN: [Container: Azure ↔ AWS connection].
+API Gateway: Operation / response schema: unspecified; [Container: AWS API Gateway].
+Validation engine: Business-rule validation; [Container: AWS Lambda function].
+
+DIRECTED INTERACTIONS AND ATTACHED CONDITIONS
+
+1a. Existing partner integrators → Legacy SOAP API. Label: SOAP / HTTPS; Basic | Bearer; XML response. A separate leftward arrow back to Existing partner integrators is labeled in bold: On internal error / timeout; Generic error only.
+
+1b. New partner integrators → Partner SOAP API. Label: SOAP / HTTPS; Basic | Bearer; XML response. A separate leftward arrow back to New partner integrators is labeled in bold: On internal error / timeout; Generic error only.
+
+2a. Legacy SOAP API → APIM policy processing. Label: Enter APIM policy; [XML]; XML response. The connector turns down and right into the shared policy-processing element.
+
+2b. Partner SOAP API → APIM policy processing. Label: Enter APIM policy; [XML]; XML response. The connector turns up and right into the same element.
+
+3. APIM policy processing → Azure AD B2C, using a dashed connector. Label: Authenticate; [Identity]; Result. The identity exchange is explicitly unspecified on Azure AD B2C itself.
+
+4. APIM policy processing → API-Route-Processor. Label: After authentication + APIM controls; [XML]; XML response.
+
+5. API-Route-Processor → Common-Authx-Handler. Label: Delegate authorization; [Workflow call]; role decision. The route rises from the processor and turns right into the handler.
+
+6. Common-Authx-Handler → Roles / permissions, using a dashed connector. Label: Query system account name + user profile name; Required user-profile role result; [Cosmos DB]. The line moves right, up, then right into the database element.
+
+7a. API-Route-Processor → Amend-Order-Processor. Label: amend_order; Requires ManageOrders; User profile mandatory; [Workflow call]; XML response. This is the upper processing branch.
+
+7b. API-Route-Processor → Amend-Document-Processor. Label: amend_document; Requires ManageDocuments; User profile mandatory; [Workflow call]; XML response. This branch turns down before continuing right into the document processor.
+
+8a. Amend-Order-Processor → Site-to-site VPN. Label: AWS amend API; [HTTPS/JSON]; JSON response.
+
+8b. Amend-Document-Processor → Site-to-site VPN. Label: AWS amend API; [HTTPS/JSON]; JSON response. This route runs right and then up into the VPN's lower incoming path.
+
+9a. Site-to-site VPN → API Gateway, on an upper horizontal path. Label: Traffic routing; [HTTPS/JSON]; JSON response.
+
+9b. Site-to-site VPN → API Gateway, on a lower horizontal path. Label: Traffic routing; [HTTPS/JSON]; JSON response.
+
+10. API Gateway → Validation engine. Label: Invoke; [Lambda invocation].
+
+REPEATED MAPPINGS
+
+Existing partner integrators → Legacy SOAP API → APIM policy processing, with SOAP / HTTPS, Basic | Bearer and XML response at ingress, then XML at the policy entry. Internal error / timeout produces Generic error only on the visible return arrow.
+
+New partner integrators → Partner SOAP API → APIM policy processing, with the same ingress protocol/authentication/response labels, XML policy entry, and generic-error return condition.
+
+amend_order → Requires ManageOrders → Amend-Order-Processor → AWS amend API via the Site-to-site VPN → Traffic routing through API Gateway → Validation engine.
+
+amend_document → Requires ManageDocuments → Amend-Document-Processor → AWS amend API via the Site-to-site VPN → Traffic routing through API Gateway → Validation engine.
+
+Both amendment branches state User profile mandatory and XML response on the workflow call. Both processor elements repeat the XML/method/base64 validation, decoded-XML-in-JSON wrapping, and JSON → Liquid template → XML transformation text. Both AWS amend API and traffic-routing legs state HTTPS/JSON and JSON response.
+
+LEGEND AND INTERPRETIVE LIMITS
+
+The legend states: Solid → request / forwarding; Dashed → auxiliary authentication or role query; Bold return → generic failure (internal details hidden).
+It also states: Normal responses are folded into request labels; a/b retain caller / method branches; Boundaries identify deployment and software-system domains.
+
+Accordingly, response words on request arrows describe responses without separate normal-response arrow geometry. The subtitle explicitly says XML returns through the originating SOAP API. The visible generic-failure arrows return from each SOAP API to its corresponding integrator. No separate arrows show failure propagation from AWS or the internal workflows.
+
+The numbering places authorization delegation and the role query before the amendment branches. The image does not draw an explicit authorization-decision diamond or a separate allow/deny path. Role requirements and the mandatory user profile are attached as text to the branch connectors. No explicit alternate path for a denied role or missing user profile is shown.
+
+The branch letters and legend retain the order/document correspondence across the repeated VPN and gateway interactions. Inside the shared VPN and gateway icons, there is no separate internal routing structure drawn.
+
+The handler name is rendered in very small type; I read it as Common-Authx-Handler, but the final character in the Authx segment is visually uncertain. This spelling uncertainty does not affect its visible authorization-delegation and role-query relationships.
+
+Neither identity-exchange details nor gateway operation/response-schema details are specified; both are explicitly marked unspecified. No URL paths, detailed payload schemas, retry rules, timeout values, or further processing after the validation engine are shown. The validation-engine invocation arrow has no separate response label.

@@ -1,0 +1,81 @@
+SOURCE AND SCOPE
+This transcription is based solely on viewing /tmp/visual-expression-readout.oDpwlk/c.png at original resolution. It records visible content and geometric relationships; it does not supplement them with vendor knowledge.
+
+TITLE AND PURPOSE
+Title: Dynamic diagram (deployment view): Private cross-cloud API access from Azure to AWS.
+Subtitle: Azure integration workloads privately call internal AWS API Gateway REST APIs. Flow A resolves DNS; flow B carries the corresponding environment's API request.
+
+BOUNDARIES, MEMBERSHIP, AND RESPONSIBILITIES
+Azure Cloud is a deployment node containing five deployment nodes: dev spoke VNet — representative, test spoke VNet, prod spoke VNet, DNS extension VNet, and Hub VNet.
+Each spoke contains a Representative integration caller, labeled Logic Apps alternative and [Container: Azure Function Apps]. The test and prod callers also say Same A/B path. Only the dev representative has explicitly drawn outgoing paths.
+DNS extension VNet contains Private Resolver inbound endpoint and Private Resolver outbound endpoint. Each is an infrastructure node of Azure DNS Private Resolver.
+Hub VNet contains Azure Firewall [Infrastructure node: Azure Firewall] and Azure VPN Gateway [Infrastructure node: Azure VPN Gateway].
+
+AWS Cloud is a deployment node containing Region: {region}, also a deployment node. That region contains Network services account and dev, test, and prod workload accounts, all labeled deployment nodes.
+Network services account contains Site-to-Site VPN attachment [Infrastructure node: AWS Site-to-Site VPN], Transit Gateway with VPC routing details: unspecified [Infrastructure node: AWS Transit Gateway], and three deployment-node VPC boundaries.
+Ingress VPC — 10.1.0.0/20 contains Route 53 inbound endpoint, labeled DNS only [Infrastructure node: Amazon Route 53 Resolver], and Private hosted zone execute-api.{region}.amazonaws.com, labeled Associated with ingress VPC [Infrastructure node: Amazon Route 53].
+Inspection VPC — 10.2.0.0/24 contains AWS Network Firewall — IDPS [Infrastructure node: AWS Network Firewall].
+Egress VPC — 10.3.0.0/20 contains execute-api interface VPC endpoint, labeled Private API entry [Infrastructure node: AWS VPC endpoint].
+The VPN attachment and Transit Gateway sit in the Network services account outside the three drawn VPC rectangles.
+
+Each workload account contains an Internal API [Software system boundary]. Inside each boundary are two containers: the environment's private REST API, labeled Resource policy protected [Container: Amazon API Gateway], and the environment's API backend, labeled Runtime: unspecified [Container: AWS Lambda]. Specifically, the three pairs are dev: private REST API and dev: API backend; test: private REST API and test: API backend; prod: private REST API and prod: API backend.
+
+FLOW A: BLUE DASHED DNS PATH
+A1: Representative dev integration caller -> Private Resolver inbound endpoint. Label: query [DNS 53]. The same label includes Reply: private endpoint IP; no separate return arrow is drawn.
+A2: Private Resolver inbound endpoint -> Private Resolver outbound endpoint. Label: execute-api query [DNS 53].
+A3: Private Resolver outbound endpoint -> Azure Firewall, by a dashed line turning left and downward. Label: outbound ruleset [DNS 53], *.execute-api.{region}.amazonaws.com -> {Route 53 inbound endpoint IPs}:53.
+A4: Azure Firewall -> Azure VPN Gateway. Label: DNS routing [53].
+A5: Azure VPN Gateway -> Site-to-Site VPN attachment across the cloud boundary. Label: DNS routing [53 / IPsec VPN]. Nearby text identifies IPsec site-to-site VPN.
+A6: Site-to-Site VPN attachment -> Transit Gateway. Label: DNS routing [53].
+A7: Transit Gateway -> AWS Network Firewall. Label: DNS routing [53 / IDPS].
+A8: AWS Network Firewall -> Route 53 inbound endpoint, via a dashed route going right, upward between the VPC columns, and then left into the endpoint. Label: DNS routing [53].
+A9: Route 53 inbound endpoint -> Private hosted zone, by a dashed route above the two nodes ending downward at the zone. Label: resolve [DNS]; endpoint private IP.
+Thus the pictured DNS path ends at the hosted zone and the request label at A1 states the returned private endpoint IP. A separate DNS response path and a separate zone-to-interface-endpoint connection are not drawn.
+
+FLOW B: ORANGE SOLID REQUEST PATH
+B1: Representative dev integration caller -> Azure Firewall, using a line turning right and down before proceeding right into the firewall. Label: HTTPS request [443].
+B2: Azure Firewall -> Azure VPN Gateway. Label: HTTPS routing [443].
+B3: Azure VPN Gateway -> Site-to-Site VPN attachment. Label: HTTPS routing [443 / IPsec VPN].
+B4: Site-to-Site VPN attachment -> Transit Gateway. Label: HTTPS routing [443].
+B5: Transit Gateway -> AWS Network Firewall. Label: HTTPS routing [443 / IDPS].
+B6: AWS Network Firewall -> execute-api interface VPC endpoint. Label: routing [HTTPS 443].
+The interface endpoint has three orange routes to the corresponding workload API:
+B7a: endpoint -> dev private REST API, labeled dev only and HTTPS 443.
+B7b: endpoint -> test private REST API, labeled test only and HTTPS 443.
+B7c: endpoint -> prod private REST API, labeled prod only and HTTPS 443.
+B8a: dev private REST API -> dev API backend. Label: invoke [AWS Lambda].
+B8b: test private REST API -> test API backend. Label: invoke [AWS Lambda].
+B8c: prod private REST API -> prod API backend. Label: invoke [AWS Lambda].
+The legend specifies that a/b/c selects dev/test/prod and that there is one environment per request. These are conditional environment alternatives, not a request fan-out to all three.
+
+VISIBLE RELATIONSHIP MATRICES
+Environment connections — one selected A/B flow:
+Columns are Spoke VNet, Hub VNet, DNS extension VNet, AWS workload account.
+dev maps to Hub VNet check mark, DNS extension VNet check mark, dev AWS workload account.
+test maps to Hub VNet check mark, DNS extension VNet check mark, test AWS workload account.
+prod maps to Hub VNet check mark, DNS extension VNet check mark, prod AWS workload account.
+This table and the Same A/B path labels provide the explicit repetition for the test and prod callers whose individual path arrows are omitted.
+
+Transit Gateway — VPC attachments:
+Columns are VPC and CIDR.
+Ingress: 10.1.0.0/20.
+Inspection: 10.2.0.0/24.
+Egress: 10.3.0.0/20.
+The table explicitly conveys these Transit Gateway attachments; individual attachment edges to every VPC are not drawn.
+
+Firewall allowances: Azure Firewall + AWS Network Firewall:
+Columns are Source; DNS 53 -> Route 53 inbound endpoint IPs; HTTPS 443 -> *.execute-api.{region}.amazonaws.com.
+dev spoke subnet has a check mark in both DNS and HTTPS columns.
+test spoke subnet has a check mark in both DNS and HTTPS columns.
+prod spoke subnet has a check mark in both DNS and HTTPS columns.
+The combined table names both firewalls. It does not give distinct per-firewall rule objects or further enforcement details.
+
+LEGEND AND EXPLICIT LIMITS
+A: blue dashed — DNS queries and DNS traffic routing, port 53.
+B: orange solid — HTTPS requests / routing, port 443, then API invocation.
+Numbers are independent per flow; a/b/c selects dev/test/prod (one environment per request).
+Filled arrow: caller -> callee, or explicitly labeled infrastructure traffic routing.
+Normal responses are folded into request labels. Boundaries identify architectural domains.
+Check mark means connected / allowed in the labeled matrix; unlisted rules are unspecified.
+
+The region remains the placeholder {region}. Backend runtimes and Transit Gateway VPC routing details are explicitly unspecified. Endpoint IP values, subnet CIDRs, API policy expressions, individual DNS records, concrete API identifiers, and implementation details of the environment selection are not supplied. The DNS-only role belongs to the Route 53 inbound endpoint; the private API entry role belongs to the interface VPC endpoint. Resource-policy protection is stated on each API without the policy's contents. IDPS appears on the AWS firewall and on the A7/B5 routing labels. No additional unseen controls or routing relationships are implied here.
