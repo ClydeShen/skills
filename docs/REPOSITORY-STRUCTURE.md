@@ -67,9 +67,11 @@ The owner defined these stages on 2026-10-29. Record the current stage and its b
 | `init` | A new idea emerging from discussion | The idea and intended problem have been recorded. |
 | `plan` | Collecting information and discussing the idea | Research, requirements and design discussion are underway. |
 | `draft` | Information is substantially available; skill incubation begins | Enough context exists to start authoring the standard skill package. |
-| `internal` | The skill has been written and internal evaluation is established | The package has runnable evaluation cases, grading criteria and a result-recording path. Until these exist, it remains `draft`. Record fixture, model and host results separately; entering this stage does not mean evaluation has passed. |
+| `internal` | The skill has been written and internal evaluation is established | The package has runnable evaluation cases in the shared [Promptfoo runner](./prompt-evaluation.md), grading criteria and a result-recording path. Until these exist, it remains `draft`. Record fixture, model and host results separately; entering this stage does not mean evaluation has passed. |
 | `public` | The candidate can be directly installed and tested | Its README provides usable installation and first-trial instructions. Completed external trials are not a prerequisite for this stage. |
 | `release` | The skill is published in the release tree | The package has moved into `skills/`, with applicable skills.sh configuration, package best practices and release checks completed. |
+
+Owner rule, 2026-10-30: a skill at `draft` or an earlier stage is very early, so authors may use custom programs and methods to check feasibility and initial effect. Once evaluation cases are built for `internal`, they use the shared Promptfoo runner and no skill-specific evaluation framework. Draft-era methods, such as the Architecture Diagram round-trip, may remain as dated history or temporary diagnostics until the skill settles, then retire; they do not count as `internal` evaluation.
 
 These stages replace the former broad README labels `candidate`, `external-trial` and `released` for current lifecycle reporting. Candidate remains the package-location term for an unreleased skill, not an additional stage. Preserve dated historical evaluation labels in their original context.
 
