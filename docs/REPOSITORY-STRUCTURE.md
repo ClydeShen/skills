@@ -58,6 +58,25 @@ Keep generated run output in ignored `evals/.local/`. Record a concise reproduci
 
 ## Candidate and release lifecycle
 
+### Incubation stages
+
+The owner defined these stages on 2026-10-29. Record the current stage and its basis in the initiative README. A stage describes the work underway; keep evaluation outcomes and remaining gaps explicit in the evaluation record.
+
+| Stage | Meaning | Basis for assigning the stage |
+| --- | --- | --- |
+| `init` | A new idea emerging from discussion | The idea and intended problem have been recorded. |
+| `plan` | Collecting information and discussing the idea | Research, requirements and design discussion are underway. |
+| `draft` | Information is substantially available; skill incubation begins | Enough context exists to start authoring the standard skill package. |
+| `internal` | The skill has been written and is undergoing internal evaluation | The package is written and evaluation work has started. Record fixture, model and host results separately; entering this stage does not mean evaluation has passed. |
+| `public` | The candidate can be directly installed and tested | Its README provides usable installation and first-trial instructions. Completed external trials are not a prerequisite for this stage. |
+| `release` | The skill is published in the release tree | The package has moved into `skills/`, with applicable skills.sh configuration, package best practices and release checks completed. |
+
+These stages replace the former broad README labels `candidate`, `external-trial` and `released` for current lifecycle reporting. Candidate remains the package-location term for an unreleased skill, not an additional stage. Preserve dated historical evaluation labels in their original context.
+
+`public` describes installable test availability, not repository visibility or a formal release. A public-stage candidate can retain `metadata.internal: true` and provide explicit-path installation with `INSTALL_INTERNAL_SKILLS=1`. That CLI marker does not determine lifecycle stage. Record a pause separately from the stage. Update the README when work changes phase; elapsed time or a merged document alone does not advance it.
+
+### Package progression
+
 1. Create or update the initiative README before introducing a package.
    Once the owner authorizes a specific skill's implementation, start with a minimal standard candidate package. Incubation is experimental maturity, not a script-only format. Keep behavior in `SKILL.md`, loadable guidance in `references/`, and reusable runtime helpers in `scripts/` only when needed. Research-only initiatives may remain without a package. Evaluation generators and delivery history stay outside the package. This clarification was requested by the owner on 2026-10-29.
 2. Keep a new active candidate at `incubator/<initiative>/candidate/<skill-name>/`.
@@ -78,7 +97,7 @@ Prune during incubation, not only at release. Remove superseded scratch files, u
 
 The final migration should therefore be small: move the validated package, remove its candidate-only discovery marker, update repository-side paths and documentation, and verify installation. Add skills CLI discovery configuration only if the chosen layout needs it. Standard `skills/` locations are already discovered; do not create a second hand-maintained skill registry or expose the incubator through a custom discovery path. Category nesting remains subject to the folder contract and an actual discovery check. Verify an isolated copy of the package during incubation so missing runtime dependencies are found before release.
 
-The initiative workspace remains after release to own its design history, evaluation cases and feedback. Its stage is `released`; its active package path points to `skills/`. Consequently, tests need not move when the package is promoted. The suite must target the active package path and must fail clearly if that target is absent. Do not silently fall back to an old copy.
+The initiative workspace remains after release to own its design history, evaluation cases and feedback. Its stage is `release`; its active package path points to `skills/`. Consequently, tests need not move when the package is promoted. The suite must target the active package path and must fail clearly if that target is absent. Do not silently fall back to an old copy.
 
 The initiative README owns lifecycle and trial status. Do not add a hand-maintained second catalog or status manifest. Package frontmatter owns package metadata. Installation listings are derived from package discovery, not manually curated in another index.
 

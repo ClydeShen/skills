@@ -33,6 +33,8 @@ The repository checker rejects lowercase or mixed-case variants of the establish
 
 Do not add empty scaffold sections to existing content mechanically. Preserve useful historical notes. Apply missing fields when a document's substance or purpose changes.
 
+Use the [incubation stages](./REPOSITORY-STRUCTURE.md#incubation-stages) for current initiative status and explain its basis. At `public`, include copyable candidate installation commands, prerequisites, a first-trial prompt and a feedback route in the README. Research and discussion at `init` or `plan` do not require an installable package.
+
 ## Skill package format
 
 Use the [skill design principles](../knowledge/skill-design/skill-design-principles.md) for behavioral value, freedom, interaction and iteration. This section owns package format and resource boundaries.

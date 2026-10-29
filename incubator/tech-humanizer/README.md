@@ -1,6 +1,8 @@
 # Tech Humanizer
 
-Date: 2026-10-28. Stage: candidate. Active package: [candidate/tech-humanizer/](./candidate/tech-humanizer/SKILL.md). Evaluation single source: [evals/suite.mjs](./evals/suite.mjs) and [evals/cases.json](./evals/cases.json). Trial and verification record: [evaluation.md](./evaluation.md).
+Date: 2026-10-28. Updated: 2026-10-29. Stage: internal. Active package: [candidate/tech-humanizer/](./candidate/tech-humanizer/SKILL.md). Evaluation single source: [evals/suite.mjs](./evals/suite.mjs) and [evals/cases.json](./evals/cases.json). Trial and verification record: [evaluation.md](./evaluation.md).
+
+Stage basis: the skill package is written and internal evaluation has begun with synthetic replay. Under the owner's lifecycle definitions (2026-10-29), this is `internal`; real-model output quality and profile behavior remain untested.
 
 The candidate is not released. It stays hidden from default discovery with `metadata.internal: true` until the owner authorizes release and a trial has produced behavioral evidence.
 

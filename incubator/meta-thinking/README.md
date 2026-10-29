@@ -2,7 +2,9 @@
 
 The initial candidate turns [shared knowledge](../../knowledge/meta-thinking/meta-thinking-guidance.md) into a trialable, low-frequency skill. The owner authorized implementation on 2026-10-25. It remains in incubation; real behavior and long-term benefit need trials.
 
-Updated: 2026-10-28. Stage: candidate. Active package: [candidate/meta-thinking/](./candidate/meta-thinking/SKILL.md). Evaluation sources of truth: [evals/suite.mjs](./evals/suite.mjs) and [evals/cases.json](./evals/cases.json). Trial and verification record: [evaluation.md](./evaluation.md).
+Updated: 2026-10-29. Stage: internal. Active package: [candidate/meta-thinking/](./candidate/meta-thinking/SKILL.md). Evaluation sources of truth: [evals/suite.mjs](./evals/suite.mjs) and [evals/cases.json](./evals/cases.json). Trial and verification record: [evaluation.md](./evaluation.md).
+
+Stage basis: the skill package is written and internal evaluation work has started. Under the owner's lifecycle definitions (2026-10-29), this is `internal`; comparative model behavior and host integration remain unverified.
 
 ## Files
 
