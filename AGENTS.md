@@ -23,7 +23,7 @@ Write repository content in English, including documents, prompts, examples and 
 When creating, reviewing or revising a skill, use [the skill design principles](knowledge/skill-design/skill-design-principles.md). They guide behavioral value, model freedom, human interaction and evidence; package format remains in `docs/DOCUMENT-FORMATS.md`.
 
 1. Change the authoritative artifact and the references that must agree with it. Create a `SKILL.md` only when the user asks to implement or revise a specific skill.
-2. Follow [the writing standards](knowledge/harness/document-writing-standards.md) for terminology, procedures, research evidence, dates, and decisions. Use a template under `knowledge/harness/templates/` when its document type matches the task.
+2. Follow [the writing standards](knowledge/harness/document-writing-standards.md) and [document purpose and maintenance](docs/DOCUMENT-FORMATS.md#document-purpose-and-maintenance). Integrate, consolidate and prune when editing; keep READMEs scoped to their folder and reader. Use only applicable template sections.
 3. Keep shared knowledge independent of one skill. Keep files required at skill runtime inside that skill's package.
 4. When a document moves or its purpose changes, update every inbound link and the relevant README map in the same change.
 5. When the owner approves a terminology change, update `GLOSSARY.md`, then search the repository and update every affected use. Otherwise, preserve the canonical term.

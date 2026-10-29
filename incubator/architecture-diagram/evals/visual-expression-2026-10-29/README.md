@@ -52,7 +52,7 @@ The [collector](./collect.mjs) records hashes, Note counts, actual rendered geom
 
 Both selected diagrams pass static XML, actual browser-render geometry and catalog checks. Counted proper crossings remain zero; bend counts remain 11 (02) and 13 (03). No bend-count improvement is claimed for this revision. Local verification passed 54 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and both loopback provider contracts. Advisory agnix still reports the two existing candidate `metadata.internal` incompatibilities; it is not a clean lint scan. These are engineering results, not a semantic or visual-quality pass rate.
 
-From the repository root, run the two `generate-02.mjs` / `generate-03.mjs` files in this directory. Render each with the [pinned local browser setup](../../README.md#reproduce), targeting its `diagram.svg` and `diagram.png`. Then run:
+From the repository root, run the two `generate-02.mjs` / `generate-03.mjs` files in this directory. Render each with the [pinned local browser setup](../../tools/README.md#render-locally), targeting its `diagram.svg` and `diagram.png`. Then run:
 
 ```text
 node --test incubator/architecture-diagram/evals/visual-expression.test.mjs

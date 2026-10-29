@@ -12,6 +12,26 @@ Translate non-English source material faithfully and label translated quotations
 
 Use established terminology from `GLOSSARY.md`. Add an entry when a shared concept becomes part of the maintained model. Do not fill the glossary with file schemas or provisional research categories.
 
+## Document purpose and maintenance
+
+The owner confirmed these rules on 2026-10-29. Documentation should reduce the reader's effort to understand and act. Agent autonomy does not justify accumulating transcripts, redundant rules or speculative context in maintained documents.
+
+Before editing, identify the reader, the document's scope and the question it must answer. Integrate new information into the relevant section; consolidate repeated explanations and remove superseded current guidance. Read the resulting document as a whole, not only the added lines. Keep necessary constraints, evidence and uncertainty even when shortening text.
+
+State each rule or fact in its authoritative location. Elsewhere, provide only the context needed for the next action and a link. Keep task progress in GitHub issues, evaluation evidence in evaluation records, and durable operating rules in their owning standard. Do not turn READMEs into session logs or move an unedited content dump into another file.
+
+A README introduces its containing folder and directs readers to relevant detail. Choose its structure by role:
+
+| README role | Lead with | Keep elsewhere |
+| --- | --- | --- |
+| Repository overview | Project purpose, useful entry points and contributor startup | Detailed procedures, individual trial histories and repeated folder inventories |
+| Skill or skill initiative | Who it helps, the useful outcome, a concrete example, how to try it and honest maturity/limits | Authoring history, tool internals and full evaluation reports |
+| Functional folder or tool | Function, prerequisites, minimal usage, inputs/outputs and necessary cautions | Project-wide background and unrelated functionality |
+| Engineering or agent context | Local responsibilities, invariants, commands and links needed to work safely | Rules already owned by parent instructions and chronological work logs |
+| Knowledge or evidence collection | The question or subject, current conclusion/status and a selective reading path | Full contents of the linked sources |
+
+Present a skill's value attractively through concrete uses and outputs; distinguish intended benefits from verified results. Omit inapplicable sections rather than imposing one README template everywhere. Optimize for understanding and useful context, not an arbitrary word or token limit. Apply the same purpose-and-scope review to every document type, including templates and agent instructions.
+
 ## Framework document filenames
 
 Use uppercase filename stems and the normal lowercase `.md` extension for repository harness framework documents. This distinguishes shared operating context and rules from ordinary project content. Examples: `AGENTS.md`, `CLAUDE.md`, `GLOSSARY.md`, `CONTEXT.md`, `HARNESS.md`, `REPOSITORY-STRUCTURE.md` and `DOCUMENT-FORMATS.md`. The owner confirmed this convention in the repository conversation on 2026-10-24 (UTC).
@@ -27,11 +47,11 @@ The repository checker rejects lowercase or mixed-case variants of the establish
 | Research note | Date, question, context, conclusion, evidence, project implications, unverified items and opened sources | Existing [research template](../knowledge/harness/templates/research-note-template.md) |
 | ADR | Status, date, decision authority, context, chosen rules, alternatives and consequences | Existing [ADR template](../knowledge/harness/templates/adr-template.md) |
 | Knowledge topic | Current guidance, applicability, evidence/uncertainty, source links and revision record | [Knowledge scaffold](./templates/knowledge-topic-template.md) |
-| Initiative README | Stage, goal, knowledge sources, active package path, evaluation path, known gaps and next step | [Initiative scaffold](./templates/initiative-template.md) |
+| Initiative README | User value and scope, stage and basis, usage appropriate to that stage, active package, key knowledge/evaluation links and material limits | [Initiative scaffold](./templates/initiative-template.md) |
 | Evaluation record | Scope, case/target version, mode, model/parameters where applicable, environment, result and limitations | [Evaluation scaffold](./templates/evaluation-record-template.md) |
 | Skill package | Standard frontmatter, focused instructions, declared resource load conditions and package-local runtime files | Agent Skills format plus the rules below |
 
-Do not add empty scaffold sections to existing content mechanically. Preserve useful historical notes. Apply missing fields when a document's substance or purpose changes.
+Use scaffolds selectively. Preserve necessary historical evidence in its owning record; current guidance should describe the current state. Git retains retired text. Do not rewrite frozen measurements or erase the provenance needed to interpret them.
 
 Use the [incubation stages](./REPOSITORY-STRUCTURE.md#incubation-stages) for current initiative status and explain its basis. At `public`, include copyable candidate installation commands, prerequisites, a first-trial prompt and a feedback route in the README. Research and discussion at `init` or `plan` do not require an installable package.
 

@@ -4,7 +4,7 @@ The initial candidate turns [shared knowledge](../../knowledge/meta-thinking/met
 
 Updated: 2026-10-29. Stage: internal. Active package: [candidate/meta-thinking/](./candidate/meta-thinking/SKILL.md). Evaluation sources of truth: [evals/suite.mjs](./evals/suite.mjs) and [evals/cases.json](./evals/cases.json). Trial and verification record: [evaluation.md](./evaluation.md).
 
-Stage basis: the skill package is written and internal evaluation work has started. Under the owner's lifecycle definitions (2026-10-29), this is `internal`; comparative model behavior and host integration remain unverified.
+Stage basis: the package has runnable evaluation cases, grading criteria and a result record. Under the owner's lifecycle definitions (2026-10-29), this is `internal`; comparative model behavior and host integration remain unverified.
 
 ## Files
 
