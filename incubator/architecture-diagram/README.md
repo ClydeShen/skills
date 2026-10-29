@@ -14,6 +14,7 @@ Turn an English scenario description into one editable `.drawio` dynamic diagram
 - Active package: none. There is no `SKILL.md` and no installable skill yet.
 - Approved evaluation scenarios: [01](./evals/scenario-01.md), [02](./evals/scenario-02.md), [03](./evals/scenario-03.md), [04](./evals/scenario-04.md).
 - Evaluation suite and checks: [suite](./evals/suite.mjs), [manifest/assertion data](./evals/cases.json), [tests](./evals/checks.test.mjs).
+- Primary semantic evaluation: [two-round-trip protocol](./evals/roundtrip.md), [adapter runner/comparator](./evals/roundtrip.mjs), [regression tests](./evals/roundtrip.test.mjs), and [Scenario 01 existing-L1 pilot](./evals/roundtrip-pilot-2026-10-29/README.md).
 - Prototype: [editable draw.io file](./prototype/scenario-01.drawio), [rendered evidence](./prototype/scenario-01.svg), [catalog](./prototype/catalog.json).
 - Verification and limitations: [evaluation record](./evaluation.md).
 - Remaining tasks and owner-dependent follow-up: [GitHub Issue #7](https://github.com/ClydeShen/skills/issues/7).
@@ -40,7 +41,9 @@ npm run eval -- --suite incubator/architecture-diagram/evals/suite.mjs
 node incubator/architecture-diagram/tools/validate.mjs incubator/architecture-diagram/prototype/scenario-01.drawio
 ```
 
-The suite is a clarification smoke test. Synthetic replay checks grading and input isolation, not model quality. No model calls were made.
+The suite is a clarification smoke test. Synthetic replay checks grading and input isolation, not model quality, and makes no model calls.
+
+The primary behavioral evaluation instead crosses L0/L2/L4 from two isolated description/diagram round trips. The first [host-agent pilot](./evals/roundtrip-pilot-2026-10-29/README.md) found real detail loss from the existing prototype, despite stable L2/L4 and passing geometric checks. The reusable runner needs trusted vision/generation host adapters for unattended execution; none is silently selected. See the [protocol](./evals/roundtrip.md) for stage inputs, fresh contexts and limits.
 
 To regenerate, obtain a local checkout at the pinned upstream commit. Downloading upstream is a separate setup step; keep the checkout outside this repository. Extraction may need network access for missing Git objects in a partial clone. Generated metadata must not be manually edited.
 
@@ -57,4 +60,4 @@ node incubator/architecture-diagram/tools/render.mjs /path/to/pinned-drawio incu
 
 ## Next step
 
-Review the rendered prototype when the owner is available: 72-unit icons, caption density and practical readability. Test the same file in offline draw.io Desktop at the pinned version. Then refine from that evidence and package the minimum useful runtime instructions and tools. Scenario 05 remains deferred, not rejected or invented. Azure/GCP/Kubernetes runtime rendering and independent blind readout remain open; the first prototype exercises AWS only.
+Address the Scenario 01 pilot's explicit information losses, then run a fresh complete L0 chain and extend to resolved Scenarios 02-04. Preserve the measured failed artifacts instead of repairing the middle of a chain. Configure a real unattended generation/vision adapter only under the intended service authority and budget. The pilot includes two fresh image-only readouts, but does not complete scenario coverage or establish reliability. Owner review of visual density, offline draw.io Desktop and Azure/GCP/Kubernetes rendering remain open. Scenario 05 stays deferred. Candidate packaging follows evidence; there is no installable package yet.

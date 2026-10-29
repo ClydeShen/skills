@@ -1,6 +1,6 @@
 # Architecture Diagram evaluation
 
-Date: 2026-10-28. Updated: 2026-10-29. Status: prototype and deterministic checks implemented; model behavior, desktop integration and final owner visual acceptance pending.
+Date: 2026-10-28. Updated: 2026-10-29. Status: prototype, deterministic checks and an existing-L1 host-agent round-trip pilot implemented; full-chain coverage, Desktop integration and candidate behavior remain unverified.
 
 ## Scope and target
 
@@ -60,12 +60,28 @@ Commands and runtime setup are maintained in the [initiative README](./README.md
 
 The clarification grader checks a few expected concepts and nonempty recommendations/disclosures. Keyword checks cannot establish semantic correctness, recommendation quality, or whether a tool-enabled agent actually waits before drawing. Inspect real traces and artifacts in a later model/host trial.
 
+## Primary semantic evaluation: two round trips
+
+The owner specified L0 description -> L1 diagram -> fresh image-only L2 description -> L3 diagram -> another fresh image-only L4 description, with L0/L2, L2/L4 and L0/L4 cross-comparisons. The [protocol](./evals/roundtrip.md) owns the dimensions, input isolation, semantic alignment contract and interpretation. Static geometry, catalog checks and clarification fixture replay are auxiliary, not substitutes.
+
+On 2026-10-29, the [Scenario 01 pilot](./evals/roundtrip-pilot-2026-10-29/README.md) used the existing L1 at `db8d125`, two separately launched image-only readers, a new L2-only generator and a separate semantic judge. Workers used `fork_turns: none`; the host's standing instructions and shared filesystem still existed. The initial L0 was normalized from the approved case and declared fixture resolutions after L1 already existed. This was not a new L0-to-L1 model generation or a complete skill evaluation. No separately configured NVIDIA or other remote endpoint was called. Exact host model identity/parameters were not exposed.
+
+The calibrated extraction contains 74 L0 facts and 63 each at L2/L4. Eleven explicit qualifiers were omitted in L0/L2 and remain missing in L0/L4, including credential/password handling, ID-token type, per-request token frequency, request-specific decision querying and error-message content. L2/L4 has no drift found among extracted architecture facts. Broad elements, call directions, protocols, domain memberships and allow/403 outcomes survive. No established critical change or unresolved alignment remains in the selected judgment; extraction completeness is still a judgment, and the overall result is negative `drift`, not a skill pass rate. [measured host-agent pilot]
+
+Judge calibration removed false positives about comment placement, readout-only absence observations and literal-word differences. The parent did not modify any measured diagram or description. Full-chain reproducibility, repeated runs, other scenarios and cross-model robustness remain unknown. L3 passed XML and rendered geometry checks, but author inspection found that its Note style does not match the exact Misc preset. That conformance gap is separate from semantic drift and was not repaired during the experiment.
+
+[`roundtrip.mjs`](./evals/roundtrip.mjs) now provides a minimal-packet adapter runner and a grounded, full-coverage semantic-ledger comparator. Mock-adapter regression tests verify orchestration, PNG-only readers, distinct reported fresh contexts, rejected source rewrites and negative findings. The actual pilot was launched through the app's agent tools rather than a configured unattended local adapter. Replaying its saved judgment validates the report, not a fresh model run. Selected descriptions, diagrams, hashes and fact-level alignments are retained with the [pilot](./evals/roundtrip-pilot-2026-10-29/README.md).
+
+Local implementation verification passed the repository gate with 44 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and both loopback provider contracts. These engineering checks correctly preserve the pilot's negative drift result; they do not turn it into an all-green architecture-quality test. [measured]
+
 ## Open verification
 
 - Owner acceptance of icon size, element descriptions and layout density.
 - Offline draw.io Desktop at the pinned version; browser evidence does not settle Desktop support.
 - Real rendering of Azure, GCP3 and Kubernetes styles, including viewer/version differences.
-- Independent image-only architectural readout against the approved checklist.
+- Fresh complete L0 generation and repeated isolated round trips; Scenario 01 has only the existing-L1 pilot so far.
+- Resolve and run Scenarios 02-04 through the primary protocol, not just clarification fixtures.
+- Actual unattended generation/vision adapter integration, with explicit service authority and budget.
 - Coverage of Docker/Argo CD/Red Hat and adopted F1-F6 criteria beyond the explicit fallback; no separate icon service is built.
 - Scenario 05 when the owner is available.
 - Real-model and installed-client behavior, package creation and release readiness.

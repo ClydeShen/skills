@@ -1,0 +1,3493 @@
+{
+  "levels": {
+    "0": {
+      "description": "Dynamic diagram (deployment view): Token-based API authorization.\nRequirement: Authenticate users and authorize each API request.\n\nA User [Person] signs in through a Web sign-in page [Container: Web app] with a username and password. Both the User and Web sign-in page are outside AWS Cloud. The page collects and submits the credentials to Amazon Cognito user pool over HTTPS; the page does not verify the password. Cognito verifies the password, authenticates the user and issues tokens. The ID token carries user attributes, for example cognito:username = alex; custom:tenantId = T-001; custom:type = Customer; cognito:groups = [Customers].\n\nAWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]. API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]. API Gateway enforces the authorization result; Lambda authorizer verifies the token and queries policy; Amazon Verified Permissions makes policy decisions.\n\nThe Web sign-in page sends the token with each API request to Amazon API Gateway over HTTPS. API Gateway passes the token to the Lambda authorizer using a generic AWS invocation. The authorizer verifies the token and asks the Amazon Verified Permissions decision endpoint over HTTPS whether the request is allowed. If allowed, API Gateway forwards the request to Backend APIs over HTTPS. If authorization fails, API Gateway returns HTTP 403 with an authorization error message to the Web sign-in page over HTTPS.\n\nRepresent the main sequence as 1. Authenticate (returns tokens); 2. API request with token; 3. Pass token for authorization; 4. Query policy; 5. Forward allowed request. A separate bold 5' relationship represents the HTTP 403 failure response. Policy query is auxiliary and dashed; main calls are solid. Arrows point from caller to callee; return tokens are folded into the authentication label, rather than a second return arrow. User uses the Web sign-in page. Show the token example in a local comment near Step 1 and explain the notation in a legend. All calls remain inside shared enclosing domains and cross only required boundaries.\n",
+      "facts": [
+        {
+          "id": "L0_view",
+          "dimension": "notes",
+          "claim": "The view is a dynamic deployment diagram of token-based API authorization.",
+          "critical": false,
+          "evidence": "Dynamic diagram (deployment view): Token-based API authorization."
+        },
+        {
+          "id": "L0_require_authenticate",
+          "dimension": "responsibilities",
+          "claim": "The system must authenticate users.",
+          "critical": true,
+          "evidence": "Authenticate users and authorize each API request."
+        },
+        {
+          "id": "L0_require_every_request",
+          "dimension": "conditions",
+          "claim": "Authorization is required for each API request.",
+          "critical": true,
+          "evidence": "Authenticate users and authorize each API request."
+        },
+        {
+          "id": "L0_user",
+          "dimension": "elements",
+          "claim": "User is a Person.",
+          "critical": true,
+          "evidence": "User [Person]"
+        },
+        {
+          "id": "L0_web",
+          "dimension": "elements",
+          "claim": "Web sign-in page is a Web app container.",
+          "critical": true,
+          "evidence": "Web sign-in page [Container: Web app]"
+        },
+        {
+          "id": "L0_cognito",
+          "dimension": "elements",
+          "claim": "Amazon Cognito user pool is an Amazon Cognito container.",
+          "critical": true,
+          "evidence": "Amazon Cognito user pool [Container: Amazon Cognito]"
+        },
+        {
+          "id": "L0_gateway",
+          "dimension": "elements",
+          "claim": "Amazon API Gateway is an AWS managed service container.",
+          "critical": true,
+          "evidence": "Amazon API Gateway [Container: AWS managed service]"
+        },
+        {
+          "id": "L0_authorizer",
+          "dimension": "elements",
+          "claim": "Lambda authorizer is an AWS Lambda container.",
+          "critical": true,
+          "evidence": "Lambda authorizer [Container: AWS Lambda]"
+        },
+        {
+          "id": "L0_avp",
+          "dimension": "elements",
+          "claim": "Amazon Verified Permissions is an AWS managed service container.",
+          "critical": true,
+          "evidence": "Amazon Verified Permissions [Container: AWS managed service]"
+        },
+        {
+          "id": "L0_backend",
+          "dimension": "elements",
+          "claim": "Backend APIs is a REST API container.",
+          "critical": true,
+          "evidence": "Backend APIs [Container: REST API]"
+        },
+        {
+          "id": "L0_cloud_type",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud is a deployment node.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node]"
+        },
+        {
+          "id": "L0_enforcement_type",
+          "dimension": "boundaries",
+          "claim": "API enforcement is a software system boundary.",
+          "critical": true,
+          "evidence": "API enforcement [Software system boundary]"
+        },
+        {
+          "id": "L0_user_out",
+          "dimension": "boundaries",
+          "claim": "User is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Both the User and Web sign-in page are outside AWS Cloud."
+        },
+        {
+          "id": "L0_web_out",
+          "dimension": "boundaries",
+          "claim": "Web sign-in page is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Both the User and Web sign-in page are outside AWS Cloud."
+        },
+        {
+          "id": "L0_cognito_in",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]."
+        },
+        {
+          "id": "L0_avp_in",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]."
+        },
+        {
+          "id": "L0_backend_in",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]."
+        },
+        {
+          "id": "L0_enforcement_in",
+          "dimension": "boundaries",
+          "claim": "API enforcement is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node] encloses Amazon Cognito user pool [Container: Amazon Cognito], Amazon Verified Permissions [Container: AWS managed service], Backend APIs [Container: REST API], and API enforcement [Software system boundary]."
+        },
+        {
+          "id": "L0_gateway_in",
+          "dimension": "boundaries",
+          "claim": "Amazon API Gateway is inside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "L0_authorizer_in",
+          "dimension": "boundaries",
+          "claim": "Lambda authorizer is inside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "L0_avp_out",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is outside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "L0_backend_out",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is outside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "L0_only_enclosed",
+          "dimension": "boundaries",
+          "claim": "The described API enforcement enclosure has only API Gateway and Lambda authorizer as its members.",
+          "critical": true,
+          "evidence": "API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "L0_cognito_out",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is outside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement encloses only Amazon API Gateway [Container: AWS managed service] and Lambda authorizer [Container: AWS Lambda]."
+        },
+        {
+          "id": "L0_cognito_auth",
+          "dimension": "responsibilities",
+          "claim": "Cognito authenticates the user.",
+          "critical": true,
+          "evidence": "Cognito verifies the password, authenticates the user and issues tokens."
+        },
+        {
+          "id": "L0_cognito_issue",
+          "dimension": "responsibilities",
+          "claim": "Cognito issues tokens.",
+          "critical": true,
+          "evidence": "Cognito verifies the password, authenticates the user and issues tokens."
+        },
+        {
+          "id": "L0_gateway_enforce",
+          "dimension": "responsibilities",
+          "claim": "API Gateway enforces the authorization result.",
+          "critical": true,
+          "evidence": "API Gateway enforces the authorization result"
+        },
+        {
+          "id": "L0_lambda_verify",
+          "dimension": "responsibilities",
+          "claim": "Lambda authorizer verifies the token.",
+          "critical": true,
+          "evidence": "Lambda authorizer verifies the token and queries policy"
+        },
+        {
+          "id": "L0_lambda_policy",
+          "dimension": "responsibilities",
+          "claim": "Lambda authorizer queries policy.",
+          "critical": true,
+          "evidence": "Lambda authorizer verifies the token and queries policy"
+        },
+        {
+          "id": "L0_avp_decides",
+          "dimension": "responsibilities",
+          "claim": "Amazon Verified Permissions makes policy decisions.",
+          "critical": true,
+          "evidence": "Amazon Verified Permissions makes policy decisions."
+        },
+        {
+          "id": "L0_uses",
+          "dimension": "directions",
+          "claim": "User uses the Web sign-in page (User to page).",
+          "critical": true,
+          "evidence": "User uses the Web sign-in page."
+        },
+        {
+          "id": "L0_auth_direction",
+          "dimension": "directions",
+          "claim": "Authentication call is from Web sign-in page to Cognito.",
+          "critical": true,
+          "evidence": "The page collects and submits the credentials to Amazon Cognito user pool over HTTPS"
+        },
+        {
+          "id": "L0_request_direction",
+          "dimension": "directions",
+          "claim": "API request carrying a token goes from Web sign-in page to API Gateway.",
+          "critical": true,
+          "evidence": "The Web sign-in page sends the token with each API request to Amazon API Gateway"
+        },
+        {
+          "id": "L0_pass_direction",
+          "dimension": "directions",
+          "claim": "API Gateway passes the token to Lambda authorizer.",
+          "critical": true,
+          "evidence": "API Gateway passes the token to the Lambda authorizer"
+        },
+        {
+          "id": "L0_query_direction",
+          "dimension": "directions",
+          "claim": "Lambda authorizer queries Amazon Verified Permissions.",
+          "critical": true,
+          "evidence": "The authorizer verifies the token and asks the Amazon Verified Permissions decision endpoint"
+        },
+        {
+          "id": "L0_forward_direction",
+          "dimension": "directions",
+          "claim": "API Gateway forwards the allowed request to Backend APIs.",
+          "critical": true,
+          "evidence": "If allowed, API Gateway forwards the request to Backend APIs"
+        },
+        {
+          "id": "L0_failure_direction",
+          "dimension": "directions",
+          "claim": "Authorization failure response goes from API Gateway to Web sign-in page.",
+          "critical": true,
+          "evidence": "If authorization fails, API Gateway returns HTTP 403 with an authorization error message to the Web sign-in page"
+        },
+        {
+          "id": "L0_auth_https",
+          "dimension": "protocols",
+          "claim": "Web page authentication call to Cognito uses HTTPS.",
+          "critical": false,
+          "evidence": "submits the credentials to Amazon Cognito user pool over HTTPS"
+        },
+        {
+          "id": "L0_request_https",
+          "dimension": "protocols",
+          "claim": "Web page API request to API Gateway uses HTTPS.",
+          "critical": false,
+          "evidence": "sends the token with each API request to Amazon API Gateway over HTTPS"
+        },
+        {
+          "id": "L0_pass_aws",
+          "dimension": "protocols",
+          "claim": "API Gateway invokes Lambda authorizer using an AWS invocation.",
+          "critical": false,
+          "evidence": "using a generic AWS invocation"
+        },
+        {
+          "id": "L0_query_https",
+          "dimension": "protocols",
+          "claim": "Lambda authorizer policy query to Verified Permissions uses HTTPS.",
+          "critical": false,
+          "evidence": "asks the Amazon Verified Permissions decision endpoint over HTTPS"
+        },
+        {
+          "id": "L0_forward_https",
+          "dimension": "protocols",
+          "claim": "API Gateway forwarding to Backend APIs uses HTTPS.",
+          "critical": false,
+          "evidence": "forwards the request to Backend APIs over HTTPS"
+        },
+        {
+          "id": "L0_failure_https",
+          "dimension": "protocols",
+          "claim": "API Gateway authorization failure response to Web page uses HTTPS.",
+          "critical": false,
+          "evidence": "returns HTTP 403 with an authorization error message to the Web sign-in page over HTTPS"
+        },
+        {
+          "id": "L0_allow",
+          "dimension": "conditions",
+          "claim": "The backend request forwarding is conditional on authorization allowing the request.",
+          "critical": true,
+          "evidence": "If allowed, API Gateway forwards the request"
+        },
+        {
+          "id": "L0_deny",
+          "dimension": "conditions",
+          "claim": "Failed authorization produces HTTP 403.",
+          "critical": true,
+          "evidence": "If authorization fails, API Gateway returns HTTP 403"
+        },
+        {
+          "id": "L0_auth_returns",
+          "dimension": "relationships",
+          "claim": "The authentication operation returns tokens.",
+          "critical": true,
+          "evidence": "1. Authenticate (returns tokens)"
+        },
+        {
+          "id": "L0_step1",
+          "dimension": "notes",
+          "claim": "Authentication is sequence step 1.",
+          "critical": false,
+          "evidence": "1. Authenticate (returns tokens)"
+        },
+        {
+          "id": "L0_step2",
+          "dimension": "notes",
+          "claim": "Token-bearing API request is sequence step 2.",
+          "critical": false,
+          "evidence": "2. API request with token"
+        },
+        {
+          "id": "L0_step3",
+          "dimension": "notes",
+          "claim": "Passing the token for authorization is sequence step 3.",
+          "critical": false,
+          "evidence": "3. Pass token for authorization"
+        },
+        {
+          "id": "L0_step4",
+          "dimension": "notes",
+          "claim": "Policy query is sequence step 4.",
+          "critical": false,
+          "evidence": "4. Query policy"
+        },
+        {
+          "id": "L0_step5",
+          "dimension": "notes",
+          "claim": "Forwarding the allowed request is sequence step 5.",
+          "critical": false,
+          "evidence": "5. Forward allowed request"
+        },
+        {
+          "id": "L0_step5alt",
+          "dimension": "notes",
+          "claim": "Failure response is an alternative step 5 prime.",
+          "critical": false,
+          "evidence": "A separate bold 5' relationship represents the HTTP 403 failure response."
+        },
+        {
+          "id": "L0_auxiliary",
+          "dimension": "relationships",
+          "claim": "Policy query is an auxiliary call.",
+          "critical": false,
+          "evidence": "Policy query is auxiliary and dashed"
+        },
+        {
+          "id": "L0_main_calls",
+          "dimension": "relationships",
+          "claim": "Authentication, API request, token pass, allowed forwarding and failure response belong to the main call notation.",
+          "critical": false,
+          "evidence": "main calls are solid"
+        },
+        {
+          "id": "L0_caller_callee",
+          "dimension": "notes",
+          "claim": "Call arrows encode caller-to-callee direction.",
+          "critical": true,
+          "evidence": "Arrows point from caller to callee"
+        },
+        {
+          "id": "L0_token_label",
+          "dimension": "notes",
+          "claim": "Token return is folded into the authentication label rather than a separate return arrow.",
+          "critical": false,
+          "evidence": "return tokens are folded into the authentication label, rather than a second return arrow."
+        },
+        {
+          "id": "L0_local_note",
+          "dimension": "notes",
+          "claim": "Token example is a local comment associated with step 1.",
+          "critical": false,
+          "evidence": "Show the token example in a local comment near Step 1"
+        },
+        {
+          "id": "L0_user_attributes",
+          "dimension": "notes",
+          "claim": "The example token carries user attributes.",
+          "critical": false,
+          "evidence": "The ID token carries user attributes"
+        },
+        {
+          "id": "L0_claim_username",
+          "dimension": "notes",
+          "claim": "The example token contains cognito:username = alex.",
+          "critical": false,
+          "evidence": "cognito:username = alex"
+        },
+        {
+          "id": "L0_claim_tenant",
+          "dimension": "notes",
+          "claim": "The example token contains custom:tenantId = T-001.",
+          "critical": false,
+          "evidence": "custom:tenantId = T-001"
+        },
+        {
+          "id": "L0_claim_type",
+          "dimension": "notes",
+          "claim": "The example token contains custom:type = Customer.",
+          "critical": false,
+          "evidence": "custom:type = Customer"
+        },
+        {
+          "id": "L0_claim_groups",
+          "dimension": "notes",
+          "claim": "The example token contains cognito:groups = [Customers].",
+          "critical": false,
+          "evidence": "cognito:groups = [Customers]"
+        },
+        {
+          "id": "L0_legend",
+          "dimension": "notes",
+          "claim": "A legend explains notation.",
+          "critical": false,
+          "evidence": "explain the notation in a legend"
+        },
+        {
+          "id": "L0_username_input",
+          "dimension": "relationships",
+          "claim": "The User supplies a username when signing in through the Web page.",
+          "critical": false,
+          "evidence": "A User [Person] signs in through a Web sign-in page [Container: Web app] with a username and password."
+        },
+        {
+          "id": "L0_password_input",
+          "dimension": "relationships",
+          "claim": "The User supplies a password when signing in through the Web page.",
+          "critical": false,
+          "evidence": "A User [Person] signs in through a Web sign-in page [Container: Web app] with a username and password."
+        },
+        {
+          "id": "L0_collect_credentials",
+          "dimension": "responsibilities",
+          "claim": "The Web sign-in page collects credentials.",
+          "critical": false,
+          "evidence": "The page collects and submits the credentials"
+        },
+        {
+          "id": "L0_submit_credentials",
+          "dimension": "relationships",
+          "claim": "The Web sign-in page submits credentials to Cognito.",
+          "critical": false,
+          "evidence": "The page collects and submits the credentials to Amazon Cognito user pool"
+        },
+        {
+          "id": "L0_web_no_verify_password",
+          "dimension": "responsibilities",
+          "claim": "The Web sign-in page does not verify the password.",
+          "critical": false,
+          "evidence": "the page does not verify the password."
+        },
+        {
+          "id": "L0_cognito_verify_password",
+          "dimension": "responsibilities",
+          "claim": "Cognito verifies the password.",
+          "critical": false,
+          "evidence": "Cognito verifies the password"
+        },
+        {
+          "id": "L0_id_token",
+          "dimension": "notes",
+          "claim": "The illustrated attribute-bearing token is an ID token.",
+          "critical": false,
+          "evidence": "The ID token carries user attributes"
+        },
+        {
+          "id": "L0_every_token",
+          "dimension": "relationships",
+          "claim": "The page sends a token with each API request.",
+          "critical": false,
+          "evidence": "The Web sign-in page sends the token with each API request"
+        },
+        {
+          "id": "L0_decision_endpoint",
+          "dimension": "relationships",
+          "claim": "The authorizer queries the Verified Permissions decision endpoint.",
+          "critical": false,
+          "evidence": "asks the Amazon Verified Permissions decision endpoint"
+        },
+        {
+          "id": "L0_query_request_allowed",
+          "dimension": "conditions",
+          "claim": "The authorizer asks whether this request is allowed.",
+          "critical": false,
+          "evidence": "whether the request is allowed."
+        },
+        {
+          "id": "L0_error_message",
+          "dimension": "relationships",
+          "claim": "The HTTP 403 failure response includes an authorization error message.",
+          "critical": false,
+          "evidence": "returns HTTP 403 with an authorization error message"
+        }
+      ]
+    },
+    "2": {
+      "description": "Title: \"Dynamic diagram (deployment view): Token-based API authorization\"\n\nRequirement: \"Authenticate users and authorize each API request.\"\n\nElements and boundaries:\n\n- A User, typed \"[Person],\" is outside the AWS Cloud deployment node.\n- A Web sign-in page, typed \"[Container: Web app],\" is also outside AWS Cloud.\n- The enclosing \"AWS Cloud [Deployment node]\" contains Amazon Cognito user pool, Amazon Verified Permissions, Backend APIs, and the API enforcement boundary.\n- \"API enforcement [Software system boundary]\" encloses Amazon API Gateway and Lambda authorizer only.\n- Amazon Cognito user pool is typed \"[Container: Amazon Cognito]\" and has responsibility \"Authenticates and issues tokens.\"\n- Amazon API Gateway is typed \"[Container: AWS managed service]\" and has responsibility \"Enforces the authorization result.\"\n- Lambda authorizer is typed \"[Container: AWS Lambda]\" and has responsibility \"Verifies token and queries policy.\"\n- Amazon Verified Permissions is typed \"[Container: AWS managed service]\" and has responsibility \"Makes policy decisions.\"\n- Backend APIs is typed \"[Container: REST API].\"\n\nDirected relationships:\n\n- User → Web sign-in page: solid arrow labeled \"Uses web app.\"\n- Web sign-in page → Amazon Cognito user pool: solid arrow labeled \"1. Authenticate [HTTPS]\" with \"returns tokens\" on a second line. The visible arrowhead points toward Cognito; token return is expressed in the label rather than as a separate return arrow.\n- Web sign-in page → Amazon API Gateway: solid arrow labeled \"2. API request with token [HTTPS].\" It enters AWS Cloud and then the API enforcement boundary.\n- Amazon API Gateway → Lambda authorizer: solid arrow labeled \"3. Pass token [AWS invocation].\" Both endpoints are within API enforcement.\n- Lambda authorizer → Amazon Verified Permissions: dashed arrow labeled \"4. Query policy [HTTPS].\" This auxiliary relationship crosses out of the API enforcement boundary while remaining inside AWS Cloud.\n- Amazon API Gateway → Backend APIs: solid arrow labeled \"5. Forward allowed request [HTTPS].\" This crosses out of API enforcement while remaining inside AWS Cloud.\n- Amazon API Gateway → Web sign-in page: solid arrow routed back out of API enforcement and AWS Cloud, labeled in bold \"5'. Authorization failure: HTTP 403 [HTTPS].\" Its arrowhead points into the Web sign-in page. This is the failure response alternative to forwarding an allowed request.\n\nA yellow folded note inside AWS Cloud, outside API enforcement, reads:\n\n\"Step 1: example token claims\ncognito:username = alex\ncustom:tenantId = T-001\ncustom:type = Customer\ncognito:groups = [Customers]\"\n\nLegend and interpretation:\n\n- Solid arrow: \"Main call; caller to callee.\"\n- Dashed arrow: \"Auxiliary policy query.\"\n- Bold label: \"Failure response.\"\n- Service tile / actor: \"AWS service / person.\"\n- Plain white box: \"Custom container.\"\n- Outlined group: \"Deployment node or system boundary.\"\n- Folded note: \"Local comment, not a service or boundary.\"\n\nAWS services are represented with service tiles, the user with a person symbol, and the web app and backend with plain white boxes. No separate policy-decision return arrow or token-verification mechanism is explicitly shown. All text above was readable; no additional behavior is inferred.\n",
+      "facts": [
+        {
+          "id": "L2_view",
+          "dimension": "notes",
+          "claim": "The view is a dynamic deployment diagram of token-based API authorization.",
+          "critical": false,
+          "evidence": "Dynamic diagram (deployment view): Token-based API authorization"
+        },
+        {
+          "id": "L2_require_authenticate",
+          "dimension": "responsibilities",
+          "claim": "The system must authenticate users.",
+          "critical": true,
+          "evidence": "Authenticate users and authorize each API request."
+        },
+        {
+          "id": "L2_require_every_request",
+          "dimension": "conditions",
+          "claim": "Authorization is required for each API request.",
+          "critical": true,
+          "evidence": "Authenticate users and authorize each API request."
+        },
+        {
+          "id": "L2_user",
+          "dimension": "elements",
+          "claim": "User is a Person.",
+          "critical": true,
+          "evidence": "A User, typed \"[Person],\""
+        },
+        {
+          "id": "L2_web",
+          "dimension": "elements",
+          "claim": "Web sign-in page is a Web app container.",
+          "critical": true,
+          "evidence": "A Web sign-in page, typed \"[Container: Web app],\""
+        },
+        {
+          "id": "L2_cognito",
+          "dimension": "elements",
+          "claim": "Amazon Cognito user pool is an Amazon Cognito container.",
+          "critical": true,
+          "evidence": "Amazon Cognito user pool is typed \"[Container: Amazon Cognito]\""
+        },
+        {
+          "id": "L2_gateway",
+          "dimension": "elements",
+          "claim": "Amazon API Gateway is an AWS managed service container.",
+          "critical": true,
+          "evidence": "Amazon API Gateway is typed \"[Container: AWS managed service]\""
+        },
+        {
+          "id": "L2_authorizer",
+          "dimension": "elements",
+          "claim": "Lambda authorizer is an AWS Lambda container.",
+          "critical": true,
+          "evidence": "Lambda authorizer is typed \"[Container: AWS Lambda]\""
+        },
+        {
+          "id": "L2_avp",
+          "dimension": "elements",
+          "claim": "Amazon Verified Permissions is an AWS managed service container.",
+          "critical": true,
+          "evidence": "Amazon Verified Permissions is typed \"[Container: AWS managed service]\""
+        },
+        {
+          "id": "L2_backend",
+          "dimension": "elements",
+          "claim": "Backend APIs is a REST API container.",
+          "critical": true,
+          "evidence": "Backend APIs is typed \"[Container: REST API].\""
+        },
+        {
+          "id": "L2_cloud_type",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud is a deployment node.",
+          "critical": true,
+          "evidence": "AWS Cloud [Deployment node]"
+        },
+        {
+          "id": "L2_enforcement_type",
+          "dimension": "boundaries",
+          "claim": "API enforcement is a software system boundary.",
+          "critical": true,
+          "evidence": "API enforcement [Software system boundary]"
+        },
+        {
+          "id": "L2_user_out",
+          "dimension": "boundaries",
+          "claim": "User is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "A User, typed \"[Person],\" is outside the AWS Cloud deployment node."
+        },
+        {
+          "id": "L2_web_out",
+          "dimension": "boundaries",
+          "claim": "Web sign-in page is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "A Web sign-in page, typed \"[Container: Web app],\" is also outside AWS Cloud."
+        },
+        {
+          "id": "L2_cognito_in",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The enclosing \"AWS Cloud [Deployment node]\" contains Amazon Cognito user pool, Amazon Verified Permissions, Backend APIs, and the API enforcement boundary."
+        },
+        {
+          "id": "L2_avp_in",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The enclosing \"AWS Cloud [Deployment node]\" contains Amazon Cognito user pool, Amazon Verified Permissions, Backend APIs, and the API enforcement boundary."
+        },
+        {
+          "id": "L2_backend_in",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The enclosing \"AWS Cloud [Deployment node]\" contains Amazon Cognito user pool, Amazon Verified Permissions, Backend APIs, and the API enforcement boundary."
+        },
+        {
+          "id": "L2_enforcement_in",
+          "dimension": "boundaries",
+          "claim": "API enforcement is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "The enclosing \"AWS Cloud [Deployment node]\" contains Amazon Cognito user pool, Amazon Verified Permissions, Backend APIs, and the API enforcement boundary."
+        },
+        {
+          "id": "L2_gateway_in",
+          "dimension": "boundaries",
+          "claim": "Amazon API Gateway is inside API enforcement.",
+          "critical": true,
+          "evidence": "\"API enforcement [Software system boundary]\" encloses Amazon API Gateway and Lambda authorizer only."
+        },
+        {
+          "id": "L2_authorizer_in",
+          "dimension": "boundaries",
+          "claim": "Lambda authorizer is inside API enforcement.",
+          "critical": true,
+          "evidence": "\"API enforcement [Software system boundary]\" encloses Amazon API Gateway and Lambda authorizer only."
+        },
+        {
+          "id": "L2_avp_out",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is outside API enforcement.",
+          "critical": true,
+          "evidence": "\"API enforcement [Software system boundary]\" encloses Amazon API Gateway and Lambda authorizer only."
+        },
+        {
+          "id": "L2_backend_out",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is outside API enforcement.",
+          "critical": true,
+          "evidence": "\"API enforcement [Software system boundary]\" encloses Amazon API Gateway and Lambda authorizer only."
+        },
+        {
+          "id": "L2_only_enclosed",
+          "dimension": "boundaries",
+          "claim": "The described API enforcement enclosure has only API Gateway and Lambda authorizer as its members.",
+          "critical": true,
+          "evidence": "\"API enforcement [Software system boundary]\" encloses Amazon API Gateway and Lambda authorizer only."
+        },
+        {
+          "id": "L2_cognito_out",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is outside API enforcement.",
+          "critical": true,
+          "evidence": "\"API enforcement [Software system boundary]\" encloses Amazon API Gateway and Lambda authorizer only."
+        },
+        {
+          "id": "L2_cognito_auth",
+          "dimension": "responsibilities",
+          "claim": "Cognito authenticates the user.",
+          "critical": true,
+          "evidence": "Authenticates and issues tokens."
+        },
+        {
+          "id": "L2_cognito_issue",
+          "dimension": "responsibilities",
+          "claim": "Cognito issues tokens.",
+          "critical": true,
+          "evidence": "Authenticates and issues tokens."
+        },
+        {
+          "id": "L2_gateway_enforce",
+          "dimension": "responsibilities",
+          "claim": "API Gateway enforces the authorization result.",
+          "critical": true,
+          "evidence": "Enforces the authorization result."
+        },
+        {
+          "id": "L2_lambda_verify",
+          "dimension": "responsibilities",
+          "claim": "Lambda authorizer verifies the token.",
+          "critical": true,
+          "evidence": "Verifies token and queries policy."
+        },
+        {
+          "id": "L2_lambda_policy",
+          "dimension": "responsibilities",
+          "claim": "Lambda authorizer queries policy.",
+          "critical": true,
+          "evidence": "Verifies token and queries policy."
+        },
+        {
+          "id": "L2_avp_decides",
+          "dimension": "responsibilities",
+          "claim": "Amazon Verified Permissions makes policy decisions.",
+          "critical": true,
+          "evidence": "Makes policy decisions."
+        },
+        {
+          "id": "L2_uses",
+          "dimension": "directions",
+          "claim": "User uses the Web sign-in page (User to page).",
+          "critical": true,
+          "evidence": "User → Web sign-in page: solid arrow labeled \"Uses web app.\""
+        },
+        {
+          "id": "L2_auth_direction",
+          "dimension": "directions",
+          "claim": "Authentication call is from Web sign-in page to Cognito.",
+          "critical": true,
+          "evidence": "Web sign-in page → Amazon Cognito user pool: solid arrow labeled \"1. Authenticate [HTTPS]\""
+        },
+        {
+          "id": "L2_request_direction",
+          "dimension": "directions",
+          "claim": "API request carrying a token goes from Web sign-in page to API Gateway.",
+          "critical": true,
+          "evidence": "Web sign-in page → Amazon API Gateway: solid arrow labeled \"2. API request with token [HTTPS].\""
+        },
+        {
+          "id": "L2_pass_direction",
+          "dimension": "directions",
+          "claim": "API Gateway passes the token to Lambda authorizer.",
+          "critical": true,
+          "evidence": "Amazon API Gateway → Lambda authorizer: solid arrow labeled \"3. Pass token [AWS invocation].\""
+        },
+        {
+          "id": "L2_query_direction",
+          "dimension": "directions",
+          "claim": "Lambda authorizer queries Amazon Verified Permissions.",
+          "critical": true,
+          "evidence": "Lambda authorizer → Amazon Verified Permissions: dashed arrow labeled \"4. Query policy [HTTPS].\""
+        },
+        {
+          "id": "L2_forward_direction",
+          "dimension": "directions",
+          "claim": "API Gateway forwards the allowed request to Backend APIs.",
+          "critical": true,
+          "evidence": "Amazon API Gateway → Backend APIs: solid arrow labeled \"5. Forward allowed request [HTTPS].\""
+        },
+        {
+          "id": "L2_failure_direction",
+          "dimension": "directions",
+          "claim": "Authorization failure response goes from API Gateway to Web sign-in page.",
+          "critical": true,
+          "evidence": "Amazon API Gateway → Web sign-in page: solid arrow routed back out of API enforcement and AWS Cloud"
+        },
+        {
+          "id": "L2_auth_https",
+          "dimension": "protocols",
+          "claim": "Web page authentication call to Cognito uses HTTPS.",
+          "critical": false,
+          "evidence": "1. Authenticate [HTTPS]"
+        },
+        {
+          "id": "L2_request_https",
+          "dimension": "protocols",
+          "claim": "Web page API request to API Gateway uses HTTPS.",
+          "critical": false,
+          "evidence": "2. API request with token [HTTPS]."
+        },
+        {
+          "id": "L2_pass_aws",
+          "dimension": "protocols",
+          "claim": "API Gateway invokes Lambda authorizer using an AWS invocation.",
+          "critical": false,
+          "evidence": "3. Pass token [AWS invocation]."
+        },
+        {
+          "id": "L2_query_https",
+          "dimension": "protocols",
+          "claim": "Lambda authorizer policy query to Verified Permissions uses HTTPS.",
+          "critical": false,
+          "evidence": "4. Query policy [HTTPS]."
+        },
+        {
+          "id": "L2_forward_https",
+          "dimension": "protocols",
+          "claim": "API Gateway forwarding to Backend APIs uses HTTPS.",
+          "critical": false,
+          "evidence": "5. Forward allowed request [HTTPS]."
+        },
+        {
+          "id": "L2_failure_https",
+          "dimension": "protocols",
+          "claim": "API Gateway authorization failure response to Web page uses HTTPS.",
+          "critical": false,
+          "evidence": "5'. Authorization failure: HTTP 403 [HTTPS]."
+        },
+        {
+          "id": "L2_allow",
+          "dimension": "conditions",
+          "claim": "The backend request forwarding is conditional on authorization allowing the request.",
+          "critical": true,
+          "evidence": "5. Forward allowed request [HTTPS]."
+        },
+        {
+          "id": "L2_deny",
+          "dimension": "conditions",
+          "claim": "Failed authorization produces HTTP 403.",
+          "critical": true,
+          "evidence": "5'. Authorization failure: HTTP 403 [HTTPS]."
+        },
+        {
+          "id": "L2_auth_returns",
+          "dimension": "relationships",
+          "claim": "The authentication operation returns tokens.",
+          "critical": true,
+          "evidence": "\"1. Authenticate [HTTPS]\" with \"returns tokens\" on a second line."
+        },
+        {
+          "id": "L2_step1",
+          "dimension": "notes",
+          "claim": "Authentication is sequence step 1.",
+          "critical": false,
+          "evidence": "1. Authenticate [HTTPS]"
+        },
+        {
+          "id": "L2_step2",
+          "dimension": "notes",
+          "claim": "Token-bearing API request is sequence step 2.",
+          "critical": false,
+          "evidence": "2. API request with token [HTTPS]."
+        },
+        {
+          "id": "L2_step3",
+          "dimension": "notes",
+          "claim": "Passing the token for authorization is sequence step 3.",
+          "critical": false,
+          "evidence": "3. Pass token [AWS invocation]."
+        },
+        {
+          "id": "L2_step4",
+          "dimension": "notes",
+          "claim": "Policy query is sequence step 4.",
+          "critical": false,
+          "evidence": "4. Query policy [HTTPS]."
+        },
+        {
+          "id": "L2_step5",
+          "dimension": "notes",
+          "claim": "Forwarding the allowed request is sequence step 5.",
+          "critical": false,
+          "evidence": "5. Forward allowed request [HTTPS]."
+        },
+        {
+          "id": "L2_step5alt",
+          "dimension": "notes",
+          "claim": "Failure response is an alternative step 5 prime.",
+          "critical": false,
+          "evidence": "5'. Authorization failure: HTTP 403 [HTTPS]."
+        },
+        {
+          "id": "L2_auxiliary",
+          "dimension": "relationships",
+          "claim": "Policy query is an auxiliary call.",
+          "critical": false,
+          "evidence": "This auxiliary relationship crosses out of the API enforcement boundary"
+        },
+        {
+          "id": "L2_main_calls",
+          "dimension": "relationships",
+          "claim": "Authentication, API request, token pass, allowed forwarding and failure response belong to the main call notation.",
+          "critical": false,
+          "evidence": "Solid arrow: \"Main call; caller to callee.\""
+        },
+        {
+          "id": "L2_caller_callee",
+          "dimension": "notes",
+          "claim": "Call arrows encode caller-to-callee direction.",
+          "critical": true,
+          "evidence": "Main call; caller to callee."
+        },
+        {
+          "id": "L2_token_label",
+          "dimension": "notes",
+          "claim": "Token return is folded into the authentication label rather than a separate return arrow.",
+          "critical": false,
+          "evidence": "token return is expressed in the label rather than as a separate return arrow."
+        },
+        {
+          "id": "L2_local_note",
+          "dimension": "notes",
+          "claim": "Token example is a local comment associated with step 1.",
+          "critical": false,
+          "evidence": "Step 1: example token claims"
+        },
+        {
+          "id": "L2_user_attributes",
+          "dimension": "notes",
+          "claim": "The example token carries user attributes.",
+          "critical": false,
+          "evidence": "Step 1: example token claims\ncognito:username = alex\ncustom:tenantId = T-001\ncustom:type = Customer\ncognito:groups = [Customers]"
+        },
+        {
+          "id": "L2_claim_username",
+          "dimension": "notes",
+          "claim": "The example token contains cognito:username = alex.",
+          "critical": false,
+          "evidence": "cognito:username = alex"
+        },
+        {
+          "id": "L2_claim_tenant",
+          "dimension": "notes",
+          "claim": "The example token contains custom:tenantId = T-001.",
+          "critical": false,
+          "evidence": "custom:tenantId = T-001"
+        },
+        {
+          "id": "L2_claim_type",
+          "dimension": "notes",
+          "claim": "The example token contains custom:type = Customer.",
+          "critical": false,
+          "evidence": "custom:type = Customer"
+        },
+        {
+          "id": "L2_claim_groups",
+          "dimension": "notes",
+          "claim": "The example token contains cognito:groups = [Customers].",
+          "critical": false,
+          "evidence": "cognito:groups = [Customers]"
+        },
+        {
+          "id": "L2_legend",
+          "dimension": "notes",
+          "claim": "A legend explains notation.",
+          "critical": false,
+          "evidence": "Legend and interpretation:"
+        }
+      ]
+    },
+    "4": {
+      "description": "The diagram is titled \"Dynamic diagram (deployment view): Token-based API authorization.\" Its requirement is: \"Authenticate users and authorize each API request.\"\n\nElements and boundaries:\n\n- User, typed as \"[Person],\" is outside the AWS Cloud boundary.\n- Web sign-in page, typed as \"[Container: Web app],\" is also outside AWS Cloud.\n- AWS Cloud is an enclosing \"[Deployment node].\" It contains Amazon Cognito user pool, the API enforcement boundary, Amazon Verified Permissions, and Backend APIs.\n- API enforcement is an enclosing \"[Software system boundary]\" inside AWS Cloud. It contains Amazon API Gateway and Lambda authorizer.\n- Amazon Cognito user pool is \"[Container: Amazon Cognito]\" with responsibility \"Authenticates and issues tokens.\"\n- Amazon API Gateway is \"[Container: AWS managed service]\" with responsibility \"Enforces the authorization result.\"\n- Lambda authorizer is \"[Container: AWS Lambda]\" with responsibility \"Verifies token and queries policy.\"\n- Amazon Verified Permissions is \"[Container: AWS managed service]\" with responsibility \"Makes policy decisions.\" It is inside AWS Cloud but outside API enforcement.\n- Backend APIs is \"[Container: REST API].\" It is inside AWS Cloud but outside API enforcement.\n\nDirected relationships:\n\n- User → Web sign-in page: \"Uses web app.\" This is a solid arrow without a step number or stated protocol.\n- Step 1, Web sign-in page → Amazon Cognito user pool: \"1. Authenticate [HTTPS]\" with a second line, \"returns tokens.\" This is a solid arrow. There is no separate return arrow drawn.\n- Step 2, Web sign-in page → Amazon API Gateway: \"2. API request with token [HTTPS].\" This is a solid arrow entering AWS Cloud and API enforcement.\n- Step 3, Amazon API Gateway → Lambda authorizer: \"3. Pass token [AWS invocation].\" This is a solid arrow entirely inside API enforcement.\n- Step 4, Lambda authorizer → Amazon Verified Permissions: \"4. Query policy [HTTPS].\" This is a dashed arrow crossing out of API enforcement while remaining inside AWS Cloud.\n- Step 5, Amazon API Gateway → Backend APIs: \"5. Forward allowed request [HTTPS].\" This is a solid arrow crossing out of API enforcement while remaining inside AWS Cloud. The stated condition is that the request is allowed.\n- Alternative step 5′, Amazon API Gateway → Web sign-in page: \"5′. Authorization failure: HTTP 403 [HTTPS].\" The label is bold, marking a failure response. Its solid routed arrow exits both API enforcement and AWS Cloud and ends at the web sign-in page.\n\nA folded yellow note inside AWS Cloud, near Cognito and above the API enforcement boundary, contains:\n\n\"Step 1: example token claims\ncognito:username = alex\ncustom:tenantId = T-001\ncustom:type = Customer\ncognito:groups = [Customers]\"\n\nThe legend specifies that a solid arrow is a main call from caller to callee; a dashed arrow is an auxiliary policy query; and a bold label is a failure response. Service tiles and the actor represent AWS services and a person. Plain white boxes represent custom containers. Outlined groups represent deployment nodes or system boundaries. A folded note is a local comment, not a service or boundary.\n\nAll text described above was readable. No policy-result return relationship or additional authorization conditions are explicitly drawn.\n",
+      "facts": [
+        {
+          "id": "L4_view",
+          "dimension": "notes",
+          "claim": "The view is a dynamic deployment diagram of token-based API authorization.",
+          "critical": false,
+          "evidence": "Dynamic diagram (deployment view): Token-based API authorization."
+        },
+        {
+          "id": "L4_require_authenticate",
+          "dimension": "responsibilities",
+          "claim": "The system must authenticate users.",
+          "critical": true,
+          "evidence": "Authenticate users and authorize each API request."
+        },
+        {
+          "id": "L4_require_every_request",
+          "dimension": "conditions",
+          "claim": "Authorization is required for each API request.",
+          "critical": true,
+          "evidence": "Authenticate users and authorize each API request."
+        },
+        {
+          "id": "L4_user",
+          "dimension": "elements",
+          "claim": "User is a Person.",
+          "critical": true,
+          "evidence": "User, typed as \"[Person],\""
+        },
+        {
+          "id": "L4_web",
+          "dimension": "elements",
+          "claim": "Web sign-in page is a Web app container.",
+          "critical": true,
+          "evidence": "Web sign-in page, typed as \"[Container: Web app],\""
+        },
+        {
+          "id": "L4_cognito",
+          "dimension": "elements",
+          "claim": "Amazon Cognito user pool is an Amazon Cognito container.",
+          "critical": true,
+          "evidence": "Amazon Cognito user pool is \"[Container: Amazon Cognito]\""
+        },
+        {
+          "id": "L4_gateway",
+          "dimension": "elements",
+          "claim": "Amazon API Gateway is an AWS managed service container.",
+          "critical": true,
+          "evidence": "Amazon API Gateway is \"[Container: AWS managed service]\""
+        },
+        {
+          "id": "L4_authorizer",
+          "dimension": "elements",
+          "claim": "Lambda authorizer is an AWS Lambda container.",
+          "critical": true,
+          "evidence": "Lambda authorizer is \"[Container: AWS Lambda]\""
+        },
+        {
+          "id": "L4_avp",
+          "dimension": "elements",
+          "claim": "Amazon Verified Permissions is an AWS managed service container.",
+          "critical": true,
+          "evidence": "Amazon Verified Permissions is \"[Container: AWS managed service]\""
+        },
+        {
+          "id": "L4_backend",
+          "dimension": "elements",
+          "claim": "Backend APIs is a REST API container.",
+          "critical": true,
+          "evidence": "Backend APIs is \"[Container: REST API].\""
+        },
+        {
+          "id": "L4_cloud_type",
+          "dimension": "boundaries",
+          "claim": "AWS Cloud is a deployment node.",
+          "critical": true,
+          "evidence": "AWS Cloud is an enclosing \"[Deployment node].\""
+        },
+        {
+          "id": "L4_enforcement_type",
+          "dimension": "boundaries",
+          "claim": "API enforcement is a software system boundary.",
+          "critical": true,
+          "evidence": "API enforcement is an enclosing \"[Software system boundary]\""
+        },
+        {
+          "id": "L4_user_out",
+          "dimension": "boundaries",
+          "claim": "User is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "User, typed as \"[Person],\" is outside the AWS Cloud boundary."
+        },
+        {
+          "id": "L4_web_out",
+          "dimension": "boundaries",
+          "claim": "Web sign-in page is outside AWS Cloud.",
+          "critical": true,
+          "evidence": "Web sign-in page, typed as \"[Container: Web app],\" is also outside AWS Cloud."
+        },
+        {
+          "id": "L4_cognito_in",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud is an enclosing \"[Deployment node].\" It contains Amazon Cognito user pool, the API enforcement boundary, Amazon Verified Permissions, and Backend APIs."
+        },
+        {
+          "id": "L4_avp_in",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud is an enclosing \"[Deployment node].\" It contains Amazon Cognito user pool, the API enforcement boundary, Amazon Verified Permissions, and Backend APIs."
+        },
+        {
+          "id": "L4_backend_in",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud is an enclosing \"[Deployment node].\" It contains Amazon Cognito user pool, the API enforcement boundary, Amazon Verified Permissions, and Backend APIs."
+        },
+        {
+          "id": "L4_enforcement_in",
+          "dimension": "boundaries",
+          "claim": "API enforcement is inside AWS Cloud.",
+          "critical": true,
+          "evidence": "AWS Cloud is an enclosing \"[Deployment node].\" It contains Amazon Cognito user pool, the API enforcement boundary, Amazon Verified Permissions, and Backend APIs."
+        },
+        {
+          "id": "L4_gateway_in",
+          "dimension": "boundaries",
+          "claim": "Amazon API Gateway is inside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement is an enclosing \"[Software system boundary]\" inside AWS Cloud. It contains Amazon API Gateway and Lambda authorizer."
+        },
+        {
+          "id": "L4_authorizer_in",
+          "dimension": "boundaries",
+          "claim": "Lambda authorizer is inside API enforcement.",
+          "critical": true,
+          "evidence": "API enforcement is an enclosing \"[Software system boundary]\" inside AWS Cloud. It contains Amazon API Gateway and Lambda authorizer."
+        },
+        {
+          "id": "L4_avp_out",
+          "dimension": "boundaries",
+          "claim": "Amazon Verified Permissions is outside API enforcement.",
+          "critical": true,
+          "evidence": "It is inside AWS Cloud but outside API enforcement."
+        },
+        {
+          "id": "L4_backend_out",
+          "dimension": "boundaries",
+          "claim": "Backend APIs is outside API enforcement.",
+          "critical": true,
+          "evidence": "Backend APIs is \"[Container: REST API].\" It is inside AWS Cloud but outside API enforcement."
+        },
+        {
+          "id": "L4_only_enclosed",
+          "dimension": "boundaries",
+          "claim": "The described API enforcement enclosure has only API Gateway and Lambda authorizer as its members.",
+          "critical": true,
+          "evidence": "API enforcement is an enclosing \"[Software system boundary]\" inside AWS Cloud. It contains Amazon API Gateway and Lambda authorizer."
+        },
+        {
+          "id": "L4_cognito_out",
+          "dimension": "boundaries",
+          "claim": "Amazon Cognito user pool is outside API enforcement.",
+          "critical": true,
+          "evidence": "AWS Cloud is an enclosing \"[Deployment node].\" It contains Amazon Cognito user pool, the API enforcement boundary, Amazon Verified Permissions, and Backend APIs.\n- API enforcement is an enclosing \"[Software system boundary]\" inside AWS Cloud. It contains Amazon API Gateway and Lambda authorizer."
+        },
+        {
+          "id": "L4_cognito_auth",
+          "dimension": "responsibilities",
+          "claim": "Cognito authenticates the user.",
+          "critical": true,
+          "evidence": "Authenticates and issues tokens."
+        },
+        {
+          "id": "L4_cognito_issue",
+          "dimension": "responsibilities",
+          "claim": "Cognito issues tokens.",
+          "critical": true,
+          "evidence": "Authenticates and issues tokens."
+        },
+        {
+          "id": "L4_gateway_enforce",
+          "dimension": "responsibilities",
+          "claim": "API Gateway enforces the authorization result.",
+          "critical": true,
+          "evidence": "Enforces the authorization result."
+        },
+        {
+          "id": "L4_lambda_verify",
+          "dimension": "responsibilities",
+          "claim": "Lambda authorizer verifies the token.",
+          "critical": true,
+          "evidence": "Verifies token and queries policy."
+        },
+        {
+          "id": "L4_lambda_policy",
+          "dimension": "responsibilities",
+          "claim": "Lambda authorizer queries policy.",
+          "critical": true,
+          "evidence": "Verifies token and queries policy."
+        },
+        {
+          "id": "L4_avp_decides",
+          "dimension": "responsibilities",
+          "claim": "Amazon Verified Permissions makes policy decisions.",
+          "critical": true,
+          "evidence": "Makes policy decisions."
+        },
+        {
+          "id": "L4_uses",
+          "dimension": "directions",
+          "claim": "User uses the Web sign-in page (User to page).",
+          "critical": true,
+          "evidence": "User → Web sign-in page: \"Uses web app.\""
+        },
+        {
+          "id": "L4_auth_direction",
+          "dimension": "directions",
+          "claim": "Authentication call is from Web sign-in page to Cognito.",
+          "critical": true,
+          "evidence": "Web sign-in page → Amazon Cognito user pool: \"1. Authenticate [HTTPS]\""
+        },
+        {
+          "id": "L4_request_direction",
+          "dimension": "directions",
+          "claim": "API request carrying a token goes from Web sign-in page to API Gateway.",
+          "critical": true,
+          "evidence": "Web sign-in page → Amazon API Gateway: \"2. API request with token [HTTPS].\""
+        },
+        {
+          "id": "L4_pass_direction",
+          "dimension": "directions",
+          "claim": "API Gateway passes the token to Lambda authorizer.",
+          "critical": true,
+          "evidence": "Amazon API Gateway → Lambda authorizer: \"3. Pass token [AWS invocation].\""
+        },
+        {
+          "id": "L4_query_direction",
+          "dimension": "directions",
+          "claim": "Lambda authorizer queries Amazon Verified Permissions.",
+          "critical": true,
+          "evidence": "Lambda authorizer → Amazon Verified Permissions: \"4. Query policy [HTTPS].\""
+        },
+        {
+          "id": "L4_forward_direction",
+          "dimension": "directions",
+          "claim": "API Gateway forwards the allowed request to Backend APIs.",
+          "critical": true,
+          "evidence": "Amazon API Gateway → Backend APIs: \"5. Forward allowed request [HTTPS].\""
+        },
+        {
+          "id": "L4_failure_direction",
+          "dimension": "directions",
+          "claim": "Authorization failure response goes from API Gateway to Web sign-in page.",
+          "critical": true,
+          "evidence": "Amazon API Gateway → Web sign-in page: \"5′. Authorization failure: HTTP 403 [HTTPS].\""
+        },
+        {
+          "id": "L4_auth_https",
+          "dimension": "protocols",
+          "claim": "Web page authentication call to Cognito uses HTTPS.",
+          "critical": false,
+          "evidence": "1. Authenticate [HTTPS]"
+        },
+        {
+          "id": "L4_request_https",
+          "dimension": "protocols",
+          "claim": "Web page API request to API Gateway uses HTTPS.",
+          "critical": false,
+          "evidence": "2. API request with token [HTTPS]."
+        },
+        {
+          "id": "L4_pass_aws",
+          "dimension": "protocols",
+          "claim": "API Gateway invokes Lambda authorizer using an AWS invocation.",
+          "critical": false,
+          "evidence": "3. Pass token [AWS invocation]."
+        },
+        {
+          "id": "L4_query_https",
+          "dimension": "protocols",
+          "claim": "Lambda authorizer policy query to Verified Permissions uses HTTPS.",
+          "critical": false,
+          "evidence": "4. Query policy [HTTPS]."
+        },
+        {
+          "id": "L4_forward_https",
+          "dimension": "protocols",
+          "claim": "API Gateway forwarding to Backend APIs uses HTTPS.",
+          "critical": false,
+          "evidence": "5. Forward allowed request [HTTPS]."
+        },
+        {
+          "id": "L4_failure_https",
+          "dimension": "protocols",
+          "claim": "API Gateway authorization failure response to Web page uses HTTPS.",
+          "critical": false,
+          "evidence": "5′. Authorization failure: HTTP 403 [HTTPS]."
+        },
+        {
+          "id": "L4_allow",
+          "dimension": "conditions",
+          "claim": "The backend request forwarding is conditional on authorization allowing the request.",
+          "critical": true,
+          "evidence": "The stated condition is that the request is allowed."
+        },
+        {
+          "id": "L4_deny",
+          "dimension": "conditions",
+          "claim": "Failed authorization produces HTTP 403.",
+          "critical": true,
+          "evidence": "5′. Authorization failure: HTTP 403 [HTTPS]."
+        },
+        {
+          "id": "L4_auth_returns",
+          "dimension": "relationships",
+          "claim": "The authentication operation returns tokens.",
+          "critical": true,
+          "evidence": "\"1. Authenticate [HTTPS]\" with a second line, \"returns tokens.\""
+        },
+        {
+          "id": "L4_step1",
+          "dimension": "notes",
+          "claim": "Authentication is sequence step 1.",
+          "critical": false,
+          "evidence": "1. Authenticate [HTTPS]"
+        },
+        {
+          "id": "L4_step2",
+          "dimension": "notes",
+          "claim": "Token-bearing API request is sequence step 2.",
+          "critical": false,
+          "evidence": "2. API request with token [HTTPS]."
+        },
+        {
+          "id": "L4_step3",
+          "dimension": "notes",
+          "claim": "Passing the token for authorization is sequence step 3.",
+          "critical": false,
+          "evidence": "3. Pass token [AWS invocation]."
+        },
+        {
+          "id": "L4_step4",
+          "dimension": "notes",
+          "claim": "Policy query is sequence step 4.",
+          "critical": false,
+          "evidence": "4. Query policy [HTTPS]."
+        },
+        {
+          "id": "L4_step5",
+          "dimension": "notes",
+          "claim": "Forwarding the allowed request is sequence step 5.",
+          "critical": false,
+          "evidence": "5. Forward allowed request [HTTPS]."
+        },
+        {
+          "id": "L4_step5alt",
+          "dimension": "notes",
+          "claim": "Failure response is an alternative step 5 prime.",
+          "critical": false,
+          "evidence": "Alternative step 5′"
+        },
+        {
+          "id": "L4_auxiliary",
+          "dimension": "relationships",
+          "claim": "Policy query is an auxiliary call.",
+          "critical": false,
+          "evidence": "a dashed arrow is an auxiliary policy query"
+        },
+        {
+          "id": "L4_main_calls",
+          "dimension": "relationships",
+          "claim": "Authentication, API request, token pass, allowed forwarding and failure response belong to the main call notation.",
+          "critical": false,
+          "evidence": "a solid arrow is a main call from caller to callee"
+        },
+        {
+          "id": "L4_caller_callee",
+          "dimension": "notes",
+          "claim": "Call arrows encode caller-to-callee direction.",
+          "critical": true,
+          "evidence": "a solid arrow is a main call from caller to callee"
+        },
+        {
+          "id": "L4_token_label",
+          "dimension": "notes",
+          "claim": "Token return is folded into the authentication label rather than a separate return arrow.",
+          "critical": false,
+          "evidence": "\"1. Authenticate [HTTPS]\" with a second line, \"returns tokens.\" This is a solid arrow. There is no separate return arrow drawn."
+        },
+        {
+          "id": "L4_local_note",
+          "dimension": "notes",
+          "claim": "Token example is a local comment associated with step 1.",
+          "critical": false,
+          "evidence": "Step 1: example token claims"
+        },
+        {
+          "id": "L4_user_attributes",
+          "dimension": "notes",
+          "claim": "The example token carries user attributes.",
+          "critical": false,
+          "evidence": "Step 1: example token claims\ncognito:username = alex\ncustom:tenantId = T-001\ncustom:type = Customer\ncognito:groups = [Customers]"
+        },
+        {
+          "id": "L4_claim_username",
+          "dimension": "notes",
+          "claim": "The example token contains cognito:username = alex.",
+          "critical": false,
+          "evidence": "cognito:username = alex"
+        },
+        {
+          "id": "L4_claim_tenant",
+          "dimension": "notes",
+          "claim": "The example token contains custom:tenantId = T-001.",
+          "critical": false,
+          "evidence": "custom:tenantId = T-001"
+        },
+        {
+          "id": "L4_claim_type",
+          "dimension": "notes",
+          "claim": "The example token contains custom:type = Customer.",
+          "critical": false,
+          "evidence": "custom:type = Customer"
+        },
+        {
+          "id": "L4_claim_groups",
+          "dimension": "notes",
+          "claim": "The example token contains cognito:groups = [Customers].",
+          "critical": false,
+          "evidence": "cognito:groups = [Customers]"
+        },
+        {
+          "id": "L4_legend",
+          "dimension": "notes",
+          "claim": "A legend explains notation.",
+          "critical": false,
+          "evidence": "The legend specifies"
+        }
+      ]
+    }
+  },
+  "pairs": {
+    "0-2": [
+      {
+        "before": [
+          "L0_view"
+        ],
+        "after": [
+          "L2_view"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_require_authenticate"
+        ],
+        "after": [
+          "L2_require_authenticate"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_require_every_request"
+        ],
+        "after": [
+          "L2_require_every_request"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_user"
+        ],
+        "after": [
+          "L2_user"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_web"
+        ],
+        "after": [
+          "L2_web"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_cognito"
+        ],
+        "after": [
+          "L2_cognito"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_gateway"
+        ],
+        "after": [
+          "L2_gateway"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_authorizer"
+        ],
+        "after": [
+          "L2_authorizer"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_avp"
+        ],
+        "after": [
+          "L2_avp"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_backend"
+        ],
+        "after": [
+          "L2_backend"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_cloud_type"
+        ],
+        "after": [
+          "L2_cloud_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_enforcement_type"
+        ],
+        "after": [
+          "L2_enforcement_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_user_out"
+        ],
+        "after": [
+          "L2_user_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_web_out"
+        ],
+        "after": [
+          "L2_web_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_cognito_in"
+        ],
+        "after": [
+          "L2_cognito_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_avp_in"
+        ],
+        "after": [
+          "L2_avp_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_backend_in"
+        ],
+        "after": [
+          "L2_backend_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_enforcement_in"
+        ],
+        "after": [
+          "L2_enforcement_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_gateway_in"
+        ],
+        "after": [
+          "L2_gateway_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_authorizer_in"
+        ],
+        "after": [
+          "L2_authorizer_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_avp_out"
+        ],
+        "after": [
+          "L2_avp_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_backend_out"
+        ],
+        "after": [
+          "L2_backend_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_only_enclosed"
+        ],
+        "after": [
+          "L2_only_enclosed"
+        ],
+        "status": "preserved",
+        "reason": "The complete nested enumerations describe the same membership: AWS Cloud contains Cognito, API enforcement, Verified Permissions and Backend APIs; API enforcement contains Gateway and authorizer. L4 additionally puts Verified Permissions and Backend APIs explicitly outside. Reading those enumerations together preserves the described membership and Cognito exclusion; no alternative membership in the described set is asserted. The absence of the word only does not itself create drift."
+      },
+      {
+        "before": [
+          "L0_cognito_out"
+        ],
+        "after": [
+          "L2_cognito_out"
+        ],
+        "status": "preserved",
+        "reason": "The complete nested enumerations describe the same membership: AWS Cloud contains Cognito, API enforcement, Verified Permissions and Backend APIs; API enforcement contains Gateway and authorizer. L4 additionally puts Verified Permissions and Backend APIs explicitly outside. Reading those enumerations together preserves the described membership and Cognito exclusion; no alternative membership in the described set is asserted. The absence of the word only does not itself create drift."
+      },
+      {
+        "before": [
+          "L0_cognito_auth"
+        ],
+        "after": [
+          "L2_cognito_auth"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_cognito_issue"
+        ],
+        "after": [
+          "L2_cognito_issue"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_gateway_enforce"
+        ],
+        "after": [
+          "L2_gateway_enforce"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_lambda_verify"
+        ],
+        "after": [
+          "L2_lambda_verify"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_lambda_policy"
+        ],
+        "after": [
+          "L2_lambda_policy"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_avp_decides"
+        ],
+        "after": [
+          "L2_avp_decides"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_uses"
+        ],
+        "after": [
+          "L2_uses"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_auth_direction"
+        ],
+        "after": [
+          "L2_auth_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_request_direction"
+        ],
+        "after": [
+          "L2_request_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_pass_direction"
+        ],
+        "after": [
+          "L2_pass_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_query_direction"
+        ],
+        "after": [
+          "L2_query_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_forward_direction"
+        ],
+        "after": [
+          "L2_forward_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_failure_direction"
+        ],
+        "after": [
+          "L2_failure_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_auth_https"
+        ],
+        "after": [
+          "L2_auth_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_request_https"
+        ],
+        "after": [
+          "L2_request_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_pass_aws"
+        ],
+        "after": [
+          "L2_pass_aws"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_query_https"
+        ],
+        "after": [
+          "L2_query_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_forward_https"
+        ],
+        "after": [
+          "L2_forward_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_failure_https"
+        ],
+        "after": [
+          "L2_failure_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_allow"
+        ],
+        "after": [
+          "L2_allow"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_deny"
+        ],
+        "after": [
+          "L2_deny"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_auth_returns"
+        ],
+        "after": [
+          "L2_auth_returns"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step1"
+        ],
+        "after": [
+          "L2_step1"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step2"
+        ],
+        "after": [
+          "L2_step2"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step3"
+        ],
+        "after": [
+          "L2_step3"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step4"
+        ],
+        "after": [
+          "L2_step4"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step5"
+        ],
+        "after": [
+          "L2_step5"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step5alt"
+        ],
+        "after": [
+          "L2_step5alt"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_auxiliary"
+        ],
+        "after": [
+          "L2_auxiliary"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_main_calls"
+        ],
+        "after": [
+          "L2_main_calls"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_caller_callee"
+        ],
+        "after": [
+          "L2_caller_callee"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_token_label"
+        ],
+        "after": [
+          "L2_token_label"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_local_note"
+        ],
+        "after": [
+          "L2_local_note"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_user_attributes"
+        ],
+        "after": [
+          "L2_user_attributes"
+        ],
+        "status": "preserved",
+        "reason": "Both identify token contents as user-related claims, with the same username, tenant, type and groups. These explicit examples preserve the user-attribute meaning without requiring that exact phrase; ID-token type is evaluated separately."
+      },
+      {
+        "before": [
+          "L0_claim_username"
+        ],
+        "after": [
+          "L2_claim_username"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_claim_tenant"
+        ],
+        "after": [
+          "L2_claim_tenant"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_claim_type"
+        ],
+        "after": [
+          "L2_claim_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_claim_groups"
+        ],
+        "after": [
+          "L2_claim_groups"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_legend"
+        ],
+        "after": [
+          "L2_legend"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_username_input"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later authentication label omits username input; this is a subordinate input qualifier, not a changed authentication outcome."
+      },
+      {
+        "before": [
+          "L0_password_input"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later authentication label omits password input; this separate input qualifier cannot be inferred from generic authentication."
+      },
+      {
+        "before": [
+          "L0_collect_credentials"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later page label and authentication arrow do not state credential collection; this subordinate page responsibility is omitted."
+      },
+      {
+        "before": [
+          "L0_submit_credentials"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later authentication arrow preserves the destination but does not specify the payload as credentials; payload specificity is omitted."
+      },
+      {
+        "before": [
+          "L0_web_no_verify_password"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later descriptions do not allocate password checking away from the Web page explicitly; the negative responsibility qualifier is omitted."
+      },
+      {
+        "before": [
+          "L0_cognito_verify_password"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "Authenticates and issues tokens does not explicitly retain password verification; this separate implementation responsibility is omitted."
+      },
+      {
+        "before": [
+          "L0_id_token"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "Later notes say example token claims without identifying the token as an ID token; token type is omitted."
+      },
+      {
+        "before": [
+          "L0_every_token"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The global each-request authorization requirement survives, but the request-arrow text does not explicitly retain token transmission frequency; this subordinate transmission qualifier is omitted."
+      },
+      {
+        "before": [
+          "L0_decision_endpoint"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The service destination survives, but its decision-endpoint specificity is omitted."
+      },
+      {
+        "before": [
+          "L0_query_request_allowed"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "Query policy plus the decision-service responsibility does not explicitly state the query target as this request being allowed; this query-specific qualifier is omitted, although the forwarding allow condition survives."
+      },
+      {
+        "before": [
+          "L0_error_message"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The failure code survives, but neither later description specifies an authorization error message in the response; this response-content detail is omitted."
+      }
+    ],
+    "2-4": [
+      {
+        "before": [
+          "L2_view"
+        ],
+        "after": [
+          "L4_view"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_require_authenticate"
+        ],
+        "after": [
+          "L4_require_authenticate"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_require_every_request"
+        ],
+        "after": [
+          "L4_require_every_request"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_user"
+        ],
+        "after": [
+          "L4_user"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_web"
+        ],
+        "after": [
+          "L4_web"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_cognito"
+        ],
+        "after": [
+          "L4_cognito"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_gateway"
+        ],
+        "after": [
+          "L4_gateway"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_authorizer"
+        ],
+        "after": [
+          "L4_authorizer"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_avp"
+        ],
+        "after": [
+          "L4_avp"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_backend"
+        ],
+        "after": [
+          "L4_backend"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_cloud_type"
+        ],
+        "after": [
+          "L4_cloud_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_enforcement_type"
+        ],
+        "after": [
+          "L4_enforcement_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_user_out"
+        ],
+        "after": [
+          "L4_user_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_web_out"
+        ],
+        "after": [
+          "L4_web_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_cognito_in"
+        ],
+        "after": [
+          "L4_cognito_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_avp_in"
+        ],
+        "after": [
+          "L4_avp_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_backend_in"
+        ],
+        "after": [
+          "L4_backend_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_enforcement_in"
+        ],
+        "after": [
+          "L4_enforcement_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_gateway_in"
+        ],
+        "after": [
+          "L4_gateway_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_authorizer_in"
+        ],
+        "after": [
+          "L4_authorizer_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_avp_out"
+        ],
+        "after": [
+          "L4_avp_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_backend_out"
+        ],
+        "after": [
+          "L4_backend_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_only_enclosed"
+        ],
+        "after": [
+          "L4_only_enclosed"
+        ],
+        "status": "preserved",
+        "reason": "The complete nested enumerations describe the same membership: AWS Cloud contains Cognito, API enforcement, Verified Permissions and Backend APIs; API enforcement contains Gateway and authorizer. L4 additionally puts Verified Permissions and Backend APIs explicitly outside. Reading those enumerations together preserves the described membership and Cognito exclusion; no alternative membership in the described set is asserted. The absence of the word only does not itself create drift."
+      },
+      {
+        "before": [
+          "L2_cognito_out"
+        ],
+        "after": [
+          "L4_cognito_out"
+        ],
+        "status": "preserved",
+        "reason": "The complete nested enumerations describe the same membership: AWS Cloud contains Cognito, API enforcement, Verified Permissions and Backend APIs; API enforcement contains Gateway and authorizer. L4 additionally puts Verified Permissions and Backend APIs explicitly outside. Reading those enumerations together preserves the described membership and Cognito exclusion; no alternative membership in the described set is asserted. The absence of the word only does not itself create drift."
+      },
+      {
+        "before": [
+          "L2_cognito_auth"
+        ],
+        "after": [
+          "L4_cognito_auth"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_cognito_issue"
+        ],
+        "after": [
+          "L4_cognito_issue"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_gateway_enforce"
+        ],
+        "after": [
+          "L4_gateway_enforce"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_lambda_verify"
+        ],
+        "after": [
+          "L4_lambda_verify"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_lambda_policy"
+        ],
+        "after": [
+          "L4_lambda_policy"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_avp_decides"
+        ],
+        "after": [
+          "L4_avp_decides"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_uses"
+        ],
+        "after": [
+          "L4_uses"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_auth_direction"
+        ],
+        "after": [
+          "L4_auth_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_request_direction"
+        ],
+        "after": [
+          "L4_request_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_pass_direction"
+        ],
+        "after": [
+          "L4_pass_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_query_direction"
+        ],
+        "after": [
+          "L4_query_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_forward_direction"
+        ],
+        "after": [
+          "L4_forward_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_failure_direction"
+        ],
+        "after": [
+          "L4_failure_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_auth_https"
+        ],
+        "after": [
+          "L4_auth_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_request_https"
+        ],
+        "after": [
+          "L4_request_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_pass_aws"
+        ],
+        "after": [
+          "L4_pass_aws"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_query_https"
+        ],
+        "after": [
+          "L4_query_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_forward_https"
+        ],
+        "after": [
+          "L4_forward_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_failure_https"
+        ],
+        "after": [
+          "L4_failure_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_allow"
+        ],
+        "after": [
+          "L4_allow"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_deny"
+        ],
+        "after": [
+          "L4_deny"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_auth_returns"
+        ],
+        "after": [
+          "L4_auth_returns"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_step1"
+        ],
+        "after": [
+          "L4_step1"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_step2"
+        ],
+        "after": [
+          "L4_step2"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_step3"
+        ],
+        "after": [
+          "L4_step3"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_step4"
+        ],
+        "after": [
+          "L4_step4"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_step5"
+        ],
+        "after": [
+          "L4_step5"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_step5alt"
+        ],
+        "after": [
+          "L4_step5alt"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_auxiliary"
+        ],
+        "after": [
+          "L4_auxiliary"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_main_calls"
+        ],
+        "after": [
+          "L4_main_calls"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_caller_callee"
+        ],
+        "after": [
+          "L4_caller_callee"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_token_label"
+        ],
+        "after": [
+          "L4_token_label"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_local_note"
+        ],
+        "after": [
+          "L4_local_note"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_user_attributes"
+        ],
+        "after": [
+          "L4_user_attributes"
+        ],
+        "status": "preserved",
+        "reason": "Both identify token contents as user-related claims, with the same username, tenant, type and groups. These explicit examples preserve the user-attribute meaning without requiring that exact phrase; ID-token type is evaluated separately."
+      },
+      {
+        "before": [
+          "L2_claim_username"
+        ],
+        "after": [
+          "L4_claim_username"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_claim_tenant"
+        ],
+        "after": [
+          "L4_claim_tenant"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_claim_type"
+        ],
+        "after": [
+          "L4_claim_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_claim_groups"
+        ],
+        "after": [
+          "L4_claim_groups"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L2_legend"
+        ],
+        "after": [
+          "L4_legend"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      }
+    ],
+    "0-4": [
+      {
+        "before": [
+          "L0_view"
+        ],
+        "after": [
+          "L4_view"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_require_authenticate"
+        ],
+        "after": [
+          "L4_require_authenticate"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_require_every_request"
+        ],
+        "after": [
+          "L4_require_every_request"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_user"
+        ],
+        "after": [
+          "L4_user"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_web"
+        ],
+        "after": [
+          "L4_web"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_cognito"
+        ],
+        "after": [
+          "L4_cognito"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_gateway"
+        ],
+        "after": [
+          "L4_gateway"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_authorizer"
+        ],
+        "after": [
+          "L4_authorizer"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_avp"
+        ],
+        "after": [
+          "L4_avp"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_backend"
+        ],
+        "after": [
+          "L4_backend"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_cloud_type"
+        ],
+        "after": [
+          "L4_cloud_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_enforcement_type"
+        ],
+        "after": [
+          "L4_enforcement_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_user_out"
+        ],
+        "after": [
+          "L4_user_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_web_out"
+        ],
+        "after": [
+          "L4_web_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_cognito_in"
+        ],
+        "after": [
+          "L4_cognito_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_avp_in"
+        ],
+        "after": [
+          "L4_avp_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_backend_in"
+        ],
+        "after": [
+          "L4_backend_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_enforcement_in"
+        ],
+        "after": [
+          "L4_enforcement_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_gateway_in"
+        ],
+        "after": [
+          "L4_gateway_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_authorizer_in"
+        ],
+        "after": [
+          "L4_authorizer_in"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_avp_out"
+        ],
+        "after": [
+          "L4_avp_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_backend_out"
+        ],
+        "after": [
+          "L4_backend_out"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_only_enclosed"
+        ],
+        "after": [
+          "L4_only_enclosed"
+        ],
+        "status": "preserved",
+        "reason": "The complete nested enumerations describe the same membership: AWS Cloud contains Cognito, API enforcement, Verified Permissions and Backend APIs; API enforcement contains Gateway and authorizer. L4 additionally puts Verified Permissions and Backend APIs explicitly outside. Reading those enumerations together preserves the described membership and Cognito exclusion; no alternative membership in the described set is asserted. The absence of the word only does not itself create drift."
+      },
+      {
+        "before": [
+          "L0_cognito_out"
+        ],
+        "after": [
+          "L4_cognito_out"
+        ],
+        "status": "preserved",
+        "reason": "The complete nested enumerations describe the same membership: AWS Cloud contains Cognito, API enforcement, Verified Permissions and Backend APIs; API enforcement contains Gateway and authorizer. L4 additionally puts Verified Permissions and Backend APIs explicitly outside. Reading those enumerations together preserves the described membership and Cognito exclusion; no alternative membership in the described set is asserted. The absence of the word only does not itself create drift."
+      },
+      {
+        "before": [
+          "L0_cognito_auth"
+        ],
+        "after": [
+          "L4_cognito_auth"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_cognito_issue"
+        ],
+        "after": [
+          "L4_cognito_issue"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_gateway_enforce"
+        ],
+        "after": [
+          "L4_gateway_enforce"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_lambda_verify"
+        ],
+        "after": [
+          "L4_lambda_verify"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_lambda_policy"
+        ],
+        "after": [
+          "L4_lambda_policy"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_avp_decides"
+        ],
+        "after": [
+          "L4_avp_decides"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_uses"
+        ],
+        "after": [
+          "L4_uses"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_auth_direction"
+        ],
+        "after": [
+          "L4_auth_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_request_direction"
+        ],
+        "after": [
+          "L4_request_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_pass_direction"
+        ],
+        "after": [
+          "L4_pass_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_query_direction"
+        ],
+        "after": [
+          "L4_query_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_forward_direction"
+        ],
+        "after": [
+          "L4_forward_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_failure_direction"
+        ],
+        "after": [
+          "L4_failure_direction"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_auth_https"
+        ],
+        "after": [
+          "L4_auth_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_request_https"
+        ],
+        "after": [
+          "L4_request_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_pass_aws"
+        ],
+        "after": [
+          "L4_pass_aws"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_query_https"
+        ],
+        "after": [
+          "L4_query_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_forward_https"
+        ],
+        "after": [
+          "L4_forward_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_failure_https"
+        ],
+        "after": [
+          "L4_failure_https"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_allow"
+        ],
+        "after": [
+          "L4_allow"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_deny"
+        ],
+        "after": [
+          "L4_deny"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_auth_returns"
+        ],
+        "after": [
+          "L4_auth_returns"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step1"
+        ],
+        "after": [
+          "L4_step1"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step2"
+        ],
+        "after": [
+          "L4_step2"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step3"
+        ],
+        "after": [
+          "L4_step3"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step4"
+        ],
+        "after": [
+          "L4_step4"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step5"
+        ],
+        "after": [
+          "L4_step5"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_step5alt"
+        ],
+        "after": [
+          "L4_step5alt"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_auxiliary"
+        ],
+        "after": [
+          "L4_auxiliary"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_main_calls"
+        ],
+        "after": [
+          "L4_main_calls"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_caller_callee"
+        ],
+        "after": [
+          "L4_caller_callee"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_token_label"
+        ],
+        "after": [
+          "L4_token_label"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_local_note"
+        ],
+        "after": [
+          "L4_local_note"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_user_attributes"
+        ],
+        "after": [
+          "L4_user_attributes"
+        ],
+        "status": "preserved",
+        "reason": "Both identify token contents as user-related claims, with the same username, tenant, type and groups. These explicit examples preserve the user-attribute meaning without requiring that exact phrase; ID-token type is evaluated separately."
+      },
+      {
+        "before": [
+          "L0_claim_username"
+        ],
+        "after": [
+          "L4_claim_username"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_claim_tenant"
+        ],
+        "after": [
+          "L4_claim_tenant"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_claim_type"
+        ],
+        "after": [
+          "L4_claim_type"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_claim_groups"
+        ],
+        "after": [
+          "L4_claim_groups"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_legend"
+        ],
+        "after": [
+          "L4_legend"
+        ],
+        "status": "preserved",
+        "reason": "Both descriptions explicitly retain the same architectural proposition; wording or organization differs without a semantic change."
+      },
+      {
+        "before": [
+          "L0_username_input"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later authentication label omits username input; this is a subordinate input qualifier, not a changed authentication outcome."
+      },
+      {
+        "before": [
+          "L0_password_input"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later authentication label omits password input; this separate input qualifier cannot be inferred from generic authentication."
+      },
+      {
+        "before": [
+          "L0_collect_credentials"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later page label and authentication arrow do not state credential collection; this subordinate page responsibility is omitted."
+      },
+      {
+        "before": [
+          "L0_submit_credentials"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later authentication arrow preserves the destination but does not specify the payload as credentials; payload specificity is omitted."
+      },
+      {
+        "before": [
+          "L0_web_no_verify_password"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The later descriptions do not allocate password checking away from the Web page explicitly; the negative responsibility qualifier is omitted."
+      },
+      {
+        "before": [
+          "L0_cognito_verify_password"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "Authenticates and issues tokens does not explicitly retain password verification; this separate implementation responsibility is omitted."
+      },
+      {
+        "before": [
+          "L0_id_token"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "Later notes say example token claims without identifying the token as an ID token; token type is omitted."
+      },
+      {
+        "before": [
+          "L0_every_token"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The global each-request authorization requirement survives, but the request-arrow text does not explicitly retain token transmission frequency; this subordinate transmission qualifier is omitted."
+      },
+      {
+        "before": [
+          "L0_decision_endpoint"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The service destination survives, but its decision-endpoint specificity is omitted."
+      },
+      {
+        "before": [
+          "L0_query_request_allowed"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "Query policy plus the decision-service responsibility does not explicitly state the query target as this request being allowed; this query-specific qualifier is omitted, although the forwarding allow condition survives."
+      },
+      {
+        "before": [
+          "L0_error_message"
+        ],
+        "after": [],
+        "status": "omitted",
+        "reason": "The failure code survives, but neither later description specifies an authorization error message in the response; this response-content detail is omitted."
+      }
+    ]
+  }
+}
