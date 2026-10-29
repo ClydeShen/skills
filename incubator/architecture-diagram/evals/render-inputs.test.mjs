@@ -1,6 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pageSize, referencedAssets } from '../tools/render-inputs.mjs';
+import { pageSize, referencedAssets, annotationMetadata } from '../tools/render-inputs.mjs';
+
+test('annotation metadata survives draw.io user-object and mxCell encodings', () => {
+  const metadata = { annotationKind: 'comment', annotationFor: 'endpoint' };
+  assert.deepEqual(annotationMetadata(metadata), metadata);
+  const decoded = { value: { getAttribute: key => metadata[key] } };
+  assert.deepEqual(annotationMetadata(decoded), metadata);
+  // Exercise the same standalone function representation executed in Chromium.
+  assert.deepEqual(Function(`return (${annotationMetadata.toString()})`)()(decoded), metadata);
+  assert.deepEqual(annotationMetadata({ value: 'ordinary text' }), { annotationKind: null, annotationFor: null });
+});
 
 test('render pages are bounded and SVG assets require an exact usable catalog match', () => {
   const ref = 'img/lib/azure2/compute/Function_Apps.svg';

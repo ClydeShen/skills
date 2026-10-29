@@ -88,16 +88,24 @@ Only one chain per case was run. No pass percentage, population reliability, cro
 
 Local verification passed 47 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and both loopback provider contracts. The new collection checks preserve exact description/image hashes and the mixed semantic outcomes, including critical failure and uncertainty. These engineering passes are not four architecture-quality passes. [measured]
 
+## Fidelity and layout repairs, 2026-10-29
+
+The owner authorized repair of actual architecture defects and research into intuitive layout. The [repair report](./evals/layout-revision-2026-10-29/README.md) owns new Scenario 02/03 diagrams, explicit input corrections, two fresh image-only readouts and measured geometry. Official AWS research resolves the VPN-attachment account constraint; the old fidelity result remains negative, but it does not prove the added account placement was invalid AWS architecture. The internal Lambda JSON qualifier was removed, outbound-ruleset association named, and original solid delegation restored.
+
+The main flow is aligned, and rendered bend counts fall from 13 to 11 and 21 to 13 respectively without additional node, endpoint or undeclared parent changes. The prototype policy now applies [layout guidance](../../knowledge/diagrams/architecture-layout.md). A renderer metadata fix makes user-object Note annotations visible to collision checks. Both revised artifacts pass actual render checks and Note-text containment checks. This is author repair plus blind readout verification, not a fresh L0-to-L4 chain or controlled prompt comparison. Existing Scenario 01/04 artifacts and all frozen round-trip measurements remain unchanged.
+
+Local repair verification passed 51 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and the loopback provider contracts. The two selected blind readouts recover the targeted ownership, association and contract distinctions; this is not a full independent semantic-ledger audit. [measured]
+
 ## Open verification
 
 - Owner acceptance of icon size, element descriptions and layout density.
 - Offline draw.io Desktop at the pinned version; browser evidence does not settle Desktop support.
 - Broader Azure catalog/viewer coverage and actual GCP3/Kubernetes rendering; participating Azure symbols are verified for these browser runs only.
 - Repeated isolated full chains and held-out/controlled-mutation cases; four fresh chains now exist, one per Scenario 01-04.
-- Verify proposed fixes for observed ownership/contract drift and strengthen raw-draft-to-L0 admission.
+- Verify the repaired policy and corrected baselines with complete new same-information chains and controlled prompt comparisons; artifact repairs and initial blind readouts are complete.
 - Actual unattended generation/vision adapter integration, with explicit service authority and budget.
 - Coverage of Docker/Argo CD/Red Hat and adopted F1-F6 criteria beyond the explicit fallback; no separate icon service is built.
 - Scenario 05 when the owner is available.
 - Real-model and installed-client behavior, package creation and release readiness.
 
-No vendor source was reread to validate the scenario's actual deployed architecture. This prototype tests the accepted synthetic fixture, not any client system. Private sample images, identifiers and paths are absent.
+The original full-chain run did not research vendor correctness during its frozen translations. The later repair researched the relevant AWS account constraint and Azure ruleset association before revising the synthetic baseline. No actual client deployment was validated. Private sample images, identifiers and paths are absent.

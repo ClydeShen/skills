@@ -1,5 +1,12 @@
 import { styleMap } from './catalog.mjs';
 
+// draw.io stores user-object attributes on cell.value, not always on mxCell.
+// This function is also serialized into the browser renderer.
+export function annotationMetadata(cell) {
+  const read = key => cell.value?.getAttribute?.(key) || cell[key] || null;
+  return { annotationKind: read('annotationKind'), annotationFor: read('annotationFor') };
+}
+
 export function pageSize(source) {
   const width = Number(source.match(/\bpageWidth="([^"]*)"/)?.[1] ?? 1900);
   const height = Number(source.match(/\bpageHeight="([^"]*)"/)?.[1] ?? 1040);

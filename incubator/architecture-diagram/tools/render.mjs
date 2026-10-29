@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { once } from 'node:events';
 import { upstreamCommit, upstreamVersion } from './catalog.mjs';
-import { pageSize, referencedAssets } from './render-inputs.mjs';
+import { pageSize, referencedAssets, annotationMetadata } from './render-inputs.mjs';
 
 const [checkout, input, svgOutput, screenshot] = process.argv.slice(2);
 if (!screenshot) throw new Error('Usage: node tools/render.mjs <drawio-checkout> <input.drawio> <output.svg> <preview.png>');
@@ -43,10 +43,11 @@ const html = `<!doctype html><meta charset="utf-8"><style>body{margin:0;backgrou
   graph.refresh();
   var svg = graph.getSvg('#ffffff', 1);
   var rect = function(b) { return b ? {x:b.x,y:b.y,w:b.width,h:b.height} : null; };
+  var annotationMetadata = ${annotationMetadata.toString()};
   var metrics = Object.values(graph.getModel().cells).map(function(cell) {
     var state=graph.view.getState(cell);
     if (!state) return null;
-    return {id:cell.id,parent:cell.parent?.id || null,source:cell.source?.id || null,target:cell.target?.id || null,type:cell.value?.getAttribute?.('c4Type') || null,annotationKind:cell.annotationKind || null,annotationFor:cell.annotationFor || null,bounds:rect(state),body:rect(state.shape?.boundingBox),text:rect(state.text?.boundingBox),points:state.absolutePoints?.map(function(p){return {x:p.x,y:p.y};}) || null};
+    return {id:cell.id,parent:cell.parent?.id || null,source:cell.source?.id || null,target:cell.target?.id || null,type:cell.value?.getAttribute?.('c4Type') || null,...annotationMetadata(cell),bounds:rect(state),body:rect(state.shape?.boundingBox),text:rect(state.text?.boundingBox),points:state.absolutePoints?.map(function(p){return {x:p.x,y:p.y};}) || null};
   }).filter(Boolean);
   document.getElementById('result').textContent = 'JSON:' + btoa(unescape(encodeURIComponent(JSON.stringify({svg:mxUtils.getXml(svg),metrics:metrics}))));
 } catch (e) { document.getElementById('result').textContent = 'ERROR:' + e.stack; } })();
