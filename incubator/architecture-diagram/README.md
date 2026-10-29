@@ -1,6 +1,6 @@
 # Architecture Diagram
 
-Date: 2026-10-29. Stage: candidate. Decision authority: the owner requested standard skill packaging and further diagram repairs. Scenario 05 remains deferred; packaging is not release approval.
+Date: 2026-10-29. Stage: public. Decision authority: the owner's lifecycle definitions, 2026-10-29. The candidate has verified installation and a README quick start for direct user testing. Scenario 05 and behavioral verification gaps remain open; this is an experimental public trial.
 
 ## Goal and scope
 

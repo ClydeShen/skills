@@ -1,6 +1,8 @@
 # <Initiative name>
 
-Date: YYYY-MM-DD. Stage: candidate | external-trial | released | paused. Decision authority: <owner or delegated agent decision>.
+Date: YYYY-MM-DD. Stage: init | plan | draft | internal | public | release. Decision authority: <owner or delegated agent decision>.
+
+Stage basis: <work or artifact establishing this stage under the repository lifecycle contract; record evaluation outcomes separately>.
 
 ## Goal and scope
 
