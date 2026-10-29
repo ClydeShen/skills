@@ -96,6 +96,14 @@ The main flow is aligned, and rendered bend counts fall from 13 to 11 and 21 to 
 
 Local repair verification passed 51 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and the loopback provider contracts. The two selected blind readouts recover the targeted ownership, association and contract distinctions; this is not a full independent semantic-ledger audit. [measured]
 
+## Visual expression and distinct instances, 2026-10-29
+
+The owner rejected reliance on explanatory Notes and corrected the earlier advice to replace repeated components with text. The [visual-expression report](./evals/visual-expression-2026-10-29/README.md) records revised Scenario 02/03 artifacts, a fact-placement audit, fresh image-only readouts and separate visual critiques. Eight and five Notes respectively become zero through node/edge labels, explicit failure returns and real relation matrices. Test/prod workload symbols are restored in their own VNets; shared rendering patterns do not collapse distinct architectural identities. Earlier architecture repairs and frozen full-chain measurements remain intact.
+
+The selected readers recover the targeted distinctions, but also flag wide canvases, small overview text, long auxiliary paths and residual dependence on matrices/legends. Scenario 02 still compresses the repeated source-side routes; restored components do not by themselves make those paths fully visual. Zero Notes is not a quality pass. The three new regressions protect bounded structure and fact placement, not visual excellence or full semantic-ledger coverage. This is iterative artifact repair, not a new L0-to-L4 run or evidence of an installable skill's reliability. [measured host-agent readouts; author review]
+
+Local verification passed 54 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and the loopback provider contracts. Both revised artifacts have zero counted proper crossings and unchanged bend counts relative to the previous layout repairs. [measured]
+
 ## Open verification
 
 - Owner acceptance of icon size, element descriptions and layout density.

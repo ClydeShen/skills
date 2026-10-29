@@ -40,6 +40,16 @@ Critical changes include domain ownership, essential call existence/direction, i
 
 ## Implementation and result semantics
 
+### Separate visual communication from information survival
+
+Owner clarification, 2026-10-29: a diagram covered in explanatory Notes can preserve text while failing to communicate visually. Keep the L0/L2/L4 fidelity judgment intact and report visual communication independently. Each Note is a design cost requiring justification, even if its content is accurate. A zero count is not an automatic pass; inspect disguised paragraphs, oversized captions and tables that merely repackage prose.
+
+For visual review, identify the visible encoding of domain membership, main/auxiliary/failure paths, branch conditions, transformations and repeated mappings. The reader should trace the essential architecture without detached explanations. Short node/edge labels and a notation key remain legitimate vocabulary. Keep unknowns and meaningful qualifiers; do not invent graph structure or discard information to reduce text. Any comment-removal or other ablation is a separate diagnostic artifact and must not replace an already frozen measured image.
+
+The [visual-expression revision](./visual-expression-2026-10-29/README.md) records the initial application and its limits. It is not a completed new round-trip experiment.
+
+### Runner and comparator
+
 [`roundtrip.mjs`](./roundtrip.mjs) exports `executeRoundTrip`, with explicit `generate`, `render`, `read` and `judge` host adapters. The runner passes minimal stage-specific packets, requires distinct reported fresh generation/reader contexts, delays judging until after L4, and refuses judge rewrites of source descriptions. Adapters must actually launch the isolated workers and use a vision-capable reader; context labels alone do not establish that. There is no default remote provider, credential discovery, hidden model call or automatic fallback.
 
 Generation/read adapters return `{output, context: {id, fresh: true}}`. The render adapter returns `{image, mimeType: "image/png"}`; SVG/XML inputs are rejected before reading. The judge returns the ledger object below. An adapter may report additional provenance, but must not substitute a context ID for observed isolation. Reject an empty existing-L1 input rather than silently generating a replacement.
