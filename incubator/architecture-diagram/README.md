@@ -15,6 +15,7 @@ Turn an English scenario description into one editable `.drawio` dynamic diagram
 - Approved evaluation scenarios: [01](./evals/scenario-01.md), [02](./evals/scenario-02.md), [03](./evals/scenario-03.md), [04](./evals/scenario-04.md).
 - Evaluation suite and checks: [suite](./evals/suite.mjs), [manifest/assertion data](./evals/cases.json), [tests](./evals/checks.test.mjs).
 - Primary semantic evaluation: [two-round-trip protocol](./evals/roundtrip.md), [adapter runner/comparator](./evals/roundtrip.mjs), [regression tests](./evals/roundtrip.test.mjs), and [Scenario 01 existing-L1 pilot](./evals/roundtrip-pilot-2026-10-29/README.md).
+- Completed four-case full chains: [report, findings and improvement plan](./evals/full-roundtrip-2026-10-29/README.md), [frozen results](./evals/full-roundtrip-2026-10-29/summary.json), and [evidence collector](./evals/collect-roundtrips.mjs).
 - Prototype: [editable draw.io file](./prototype/scenario-01.drawio), [rendered evidence](./prototype/scenario-01.svg), [catalog](./prototype/catalog.json).
 - Verification and limitations: [evaluation record](./evaluation.md).
 - Remaining tasks and owner-dependent follow-up: [GitHub Issue #7](https://github.com/ClydeShen/skills/issues/7).
@@ -43,7 +44,7 @@ node incubator/architecture-diagram/tools/validate.mjs incubator/architecture-di
 
 The suite is a clarification smoke test. Synthetic replay checks grading and input isolation, not model quality, and makes no model calls.
 
-The primary behavioral evaluation instead crosses L0/L2/L4 from two isolated description/diagram round trips. The first [host-agent pilot](./evals/roundtrip-pilot-2026-10-29/README.md) found real detail loss from the existing prototype, despite stable L2/L4 and passing geometric checks. The reusable runner needs trusted vision/generation host adapters for unattended execution; none is silently selected. See the [protocol](./evals/roundtrip.md) for stage inputs, fresh contexts and limits.
+The primary behavioral evaluation crosses L0/L2/L4 from two isolated description/diagram round trips. The first [host-agent pilot](./evals/roundtrip-pilot-2026-10-29/README.md) found detail loss from the existing prototype. The subsequent [four fresh full chains](./evals/full-roundtrip-2026-10-29/README.md) found no drift in extracted Scenario 01/04 facts, a critical unsupported VPN-account assertion in Scenario 02, and an internal response-format addition in Scenario 03. Engineering checks still pass for all eight diagrams; fidelity and local layout consistency are distinct. The app agent orchestrated the live workers; a standalone vision/generation adapter is not silently configured. See the [protocol](./evals/roundtrip.md) for input boundaries and limits.
 
 To regenerate, obtain a local checkout at the pinned upstream commit. Downloading upstream is a separate setup step; keep the checkout outside this repository. Extraction may need network access for missing Git objects in a partial clone. Generated metadata must not be manually edited.
 
@@ -52,7 +53,7 @@ node incubator/architecture-diagram/tools/catalog.mjs /path/to/pinned-drawio inc
 node incubator/architecture-diagram/tools/prototype.mjs
 ```
 
-For the optional local browser render, check out `src/main/webapp/js/viewer-static.min.js`, `src/main/webapp/js/stencils.min.js`, `src/main/webapp/shapes/mxAWS4.js` and `src/main/webapp/shapes/mxKubernetes.js` from that commit. Chromium and loopback socket access are needed; set `DIAGRAM_BROWSER` to its executable if necessary. The renderer serves only local resources, uses a temporary browser profile, disables background networking and blocks external DNS resolution. It does not install a browser or fetch runtime assets.
+For the optional local browser render, check out `src/main/webapp/js/viewer-static.min.js`, `src/main/webapp/js/stencils.min.js`, `src/main/webapp/shapes/mxAWS4.js` and `src/main/webapp/shapes/mxKubernetes.js` from that commit. Also check out any catalog-referenced SVG assets used by the diagram (for these Azure fixtures, under `src/main/webapp/img/lib/azure2/`). Chromium and loopback socket access are needed; set `DIAGRAM_BROWSER` to its executable if necessary. The renderer serves only local scripts, embeds allowlisted pinned SVG resources, respects bounded declared page sizes, uses a temporary browser profile and disables external/background networking. It does not install a browser or fetch missing runtime assets.
 
 ```text
 node incubator/architecture-diagram/tools/render.mjs /path/to/pinned-drawio incubator/architecture-diagram/prototype/scenario-01.drawio incubator/architecture-diagram/prototype/scenario-01.svg /path/to/preview.png
@@ -60,4 +61,4 @@ node incubator/architecture-diagram/tools/render.mjs /path/to/pinned-drawio incu
 
 ## Next step
 
-Address the Scenario 01 pilot's explicit information losses, then run a fresh complete L0 chain and extend to resolved Scenarios 02-04. Preserve the measured failed artifacts instead of repairing the middle of a chain. Configure a real unattended generation/vision adapter only under the intended service authority and budget. The pilot includes two fresh image-only readouts, but does not complete scenario coverage or establish reliability. Owner review of visual density, offline draw.io Desktop and Azure/GCP/Kubernetes rendering remain open. Scenario 05 stays deferred. Candidate packaging follows evidence; there is no installable package yet.
+Use the [prioritized plan](./evals/full-roundtrip-2026-10-29/README.md#prioritized-improvement-plan) to address ownership unknowns, hop-specific contracts and raw-draft-to-L0 admission. Preserve frozen failed artifacts; use new attempts to verify improvements. Four full chains have now run once, but that is not a general reliability estimate or release approval. Owner visual review, repeated/held-out cases, offline Desktop, GCP/Kubernetes rendering and standalone model-adapter integration remain open. Participating Azure symbols were actually browser-rendered. Scenario 05 stays deferred. Candidate packaging follows evidence; there is no installable package yet.

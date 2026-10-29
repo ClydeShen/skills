@@ -1,0 +1,695 @@
+{
+  "renderer": "Chromium with pinned local draw.io viewer",
+  "drawio_version": "32.6.1",
+  "upstream_commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+  "browser": "Chrome/154.0.8037.57",
+  "metrics": [
+    {
+      "id": "0",
+      "parent": null,
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "body": null,
+      "text": null,
+      "points": null
+    },
+    {
+      "id": "1",
+      "parent": "0",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "body": null,
+      "text": null,
+      "points": null
+    },
+    {
+      "id": "title",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 70,
+        "y": 35,
+        "w": 2310,
+        "h": 35
+      },
+      "body": {
+        "x": 70,
+        "y": 35,
+        "w": 2310,
+        "h": 35
+      },
+      "text": {
+        "x": 72,
+        "y": 45.5,
+        "w": 393,
+        "h": 14
+      },
+      "points": null
+    },
+    {
+      "id": "purpose",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 70,
+        "y": 85,
+        "w": 2310,
+        "h": 30
+      },
+      "body": {
+        "x": 70,
+        "y": 85,
+        "w": 2310,
+        "h": 30
+      },
+      "text": {
+        "x": 72,
+        "y": 93,
+        "w": 348,
+        "h": 14
+      },
+      "points": null
+    },
+    {
+      "id": "aws",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 760,
+        "y": 180,
+        "w": 1620,
+        "h": 1080
+      },
+      "body": {
+        "x": 759.5,
+        "y": 179.5,
+        "w": 1621,
+        "h": 1081
+      },
+      "text": {
+        "x": 792,
+        "y": 199,
+        "w": 109,
+        "h": 29
+      },
+      "points": null
+    },
+    {
+      "id": "enforcement",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Software system boundary",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 850,
+        "y": 650,
+        "w": 900,
+        "h": 530
+      },
+      "body": {
+        "x": 849.25,
+        "y": 649.25,
+        "w": 901.5,
+        "h": 531.5
+      },
+      "text": {
+        "x": 870,
+        "y": 672,
+        "w": 161,
+        "h": 29
+      },
+      "points": null
+    },
+    {
+      "id": "gateway",
+      "parent": "enforcement",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1050,
+        "y": 784,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 1049.5,
+        "y": 783.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 993,
+        "y": 871,
+        "w": 186,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "authorizer",
+      "parent": "enforcement",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1450,
+        "y": 784,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 1449.5,
+        "y": 783.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 1398.5,
+        "y": 871,
+        "w": 175,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "cognito",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1050,
+        "y": 360,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 1049.5,
+        "y": 359.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 985,
+        "y": 447,
+        "w": 202,
+        "h": 58
+      },
+      "points": null
+    },
+    {
+      "id": "permissions",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2110,
+        "y": 784,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 2109.5,
+        "y": 783.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 2053,
+        "y": 871,
+        "w": 186,
+        "h": 58
+      },
+      "points": null
+    },
+    {
+      "id": "backend",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2010,
+        "y": 520,
+        "w": 240,
+        "h": 110
+      },
+      "body": {
+        "x": 2009.5,
+        "y": 519.5,
+        "w": 241,
+        "h": 111
+      },
+      "text": {
+        "x": 2070.5,
+        "y": 560.5,
+        "w": 119,
+        "h": 29
+      },
+      "points": null
+    },
+    {
+      "id": "user",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Person",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 150,
+        "y": 520,
+        "w": 260,
+        "h": 90
+      },
+      "body": {
+        "x": 149.5,
+        "y": 519.5,
+        "w": 261,
+        "h": 91
+      },
+      "text": {
+        "x": 257.5,
+        "y": 550.5,
+        "w": 45,
+        "h": 29
+      },
+      "points": null
+    },
+    {
+      "id": "web",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 150,
+        "y": 750,
+        "w": 260,
+        "h": 180
+      },
+      "body": {
+        "x": 149.5,
+        "y": 749.5,
+        "w": 261,
+        "h": 181
+      },
+      "text": {
+        "x": 192.5,
+        "y": 811,
+        "w": 175,
+        "h": 58
+      },
+      "points": null
+    },
+    {
+      "id": "token-example",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": "comment",
+      "annotationFor": "cognito",
+      "bounds": {
+        "x": 1300,
+        "y": 270,
+        "w": 620,
+        "h": 220
+      },
+      "body": {
+        "x": 1296,
+        "y": 265.99999999999994,
+        "w": 630,
+        "h": 231.0000000000001
+      },
+      "text": {
+        "x": 1479,
+        "y": 320,
+        "w": 262,
+        "h": 120
+      },
+      "points": null
+    },
+    {
+      "id": "legend",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": "legend",
+      "annotationFor": null,
+      "bounds": {
+        "x": 760,
+        "y": 1330,
+        "w": 1250,
+        "h": 150
+      },
+      "body": {
+        "x": 759.5,
+        "y": 1329.5,
+        "w": 1251,
+        "h": 151
+      },
+      "text": {
+        "x": 780,
+        "y": 1349,
+        "w": 445,
+        "h": 72
+      },
+      "points": null
+    },
+    {
+      "id": "uses",
+      "parent": "1",
+      "source": "user",
+      "target": "web",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 280,
+        "y": 610,
+        "w": 1,
+        "h": 140
+      },
+      "body": {
+        "x": 272.2,
+        "y": 602.2,
+        "w": 16.6,
+        "h": 156.6
+      },
+      "text": {
+        "x": 217,
+        "y": 665.5,
+        "w": 126,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 280,
+          "y": 610
+        },
+        {
+          "x": 280,
+          "y": 750
+        }
+      ]
+    },
+    {
+      "id": "step1",
+      "parent": "1",
+      "source": "web",
+      "target": "cognito",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 410,
+        "y": 396,
+        "w": 640,
+        "h": 379
+      },
+      "body": {
+        "x": 402.2,
+        "y": 388.2,
+        "w": 656.6,
+        "h": 395.6
+      },
+      "text": {
+        "x": 812,
+        "y": 381.5,
+        "w": 170,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 410,
+          "y": 775
+        },
+        {
+          "x": 500,
+          "y": 775
+        },
+        {
+          "x": 500,
+          "y": 396
+        },
+        {
+          "x": 1050,
+          "y": 396
+        }
+      ]
+    },
+    {
+      "id": "step2",
+      "parent": "1",
+      "source": "web",
+      "target": "gateway",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 410,
+        "y": 820,
+        "w": 640,
+        "h": 1
+      },
+      "body": {
+        "x": 402.2,
+        "y": 812.2,
+        "w": 656.6,
+        "h": 16.6
+      },
+      "text": {
+        "x": 513.5,
+        "y": 805.5,
+        "w": 133,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 410,
+          "y": 820
+        },
+        {
+          "x": 1050,
+          "y": 820
+        }
+      ]
+    },
+    {
+      "id": "step3",
+      "parent": "1",
+      "source": "gateway",
+      "target": "authorizer",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1122,
+        "y": 820,
+        "w": 328,
+        "h": 1
+      },
+      "body": {
+        "x": 1114.2,
+        "y": 812.2,
+        "w": 344.6,
+        "h": 16.6
+      },
+      "text": {
+        "x": 1205,
+        "y": 805.5,
+        "w": 162,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 1122,
+          "y": 820
+        },
+        {
+          "x": 1450,
+          "y": 820
+        }
+      ]
+    },
+    {
+      "id": "step4",
+      "parent": "1",
+      "source": "authorizer",
+      "target": "permissions",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1522,
+        "y": 820,
+        "w": 588,
+        "h": 1
+      },
+      "body": {
+        "x": 1514.2,
+        "y": 812.2,
+        "w": 604.6,
+        "h": 16.6
+      },
+      "text": {
+        "x": 1809.5,
+        "y": 805.5,
+        "w": 189,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 1522,
+          "y": 820
+        },
+        {
+          "x": 2110,
+          "y": 820
+        }
+      ]
+    },
+    {
+      "id": "step5",
+      "parent": "1",
+      "source": "gateway",
+      "target": "backend",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1086,
+        "y": 575,
+        "w": 924,
+        "h": 209
+      },
+      "body": {
+        "x": 1078.2,
+        "y": 567.2,
+        "w": 940.6,
+        "h": 225.6
+      },
+      "text": {
+        "x": 1484.5,
+        "y": 560.5,
+        "w": 145,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 1086,
+          "y": 784
+        },
+        {
+          "x": 1086,
+          "y": 575
+        },
+        {
+          "x": 2010,
+          "y": 575
+        },
+        {
+          "x": 2010,
+          "y": 575
+        }
+      ]
+    },
+    {
+      "id": "failure",
+      "parent": "1",
+      "source": "gateway",
+      "target": "web",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 280,
+        "y": 840,
+        "w": 770,
+        "h": 160
+      },
+      "body": {
+        "x": 272.2,
+        "y": 832.2,
+        "w": 786.6,
+        "h": 176.6
+      },
+      "text": {
+        "x": 427,
+        "y": 985.5,
+        "w": 246,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 1050,
+          "y": 840
+        },
+        {
+          "x": 910,
+          "y": 840
+        },
+        {
+          "x": 910,
+          "y": 1000
+        },
+        {
+          "x": 280,
+          "y": 1000
+        },
+        {
+          "x": 280,
+          "y": 930
+        }
+      ]
+    }
+  ]
+}

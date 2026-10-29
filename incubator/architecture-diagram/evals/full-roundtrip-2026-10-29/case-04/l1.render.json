@@ -1,0 +1,1222 @@
+{
+  "renderer": "Chromium with pinned local draw.io viewer",
+  "drawio_version": "32.6.1",
+  "upstream_commit": "84487b4891cbc0f32d7e30f34cf878c87cb1f414",
+  "browser": "Chrome/154.0.8037.57",
+  "metrics": [
+    {
+      "id": "0",
+      "parent": null,
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "body": null,
+      "text": null,
+      "points": null
+    },
+    {
+      "id": "1",
+      "parent": "0",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      "body": null,
+      "text": null,
+      "points": null
+    },
+    {
+      "id": "title",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 80,
+        "y": 30,
+        "w": 3600,
+        "h": 45
+      },
+      "body": {
+        "x": 80,
+        "y": 30,
+        "w": 3600,
+        "h": 45
+      },
+      "text": {
+        "x": 82,
+        "y": 45.5,
+        "w": 569,
+        "h": 14
+      },
+      "points": null
+    },
+    {
+      "id": "purpose",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": "comment",
+      "annotationFor": "cosmos",
+      "bounds": {
+        "x": 80,
+        "y": 105,
+        "w": 3630,
+        "h": 130
+      },
+      "body": {
+        "x": 76,
+        "y": 100.99999999999977,
+        "w": 3640,
+        "h": 141.00000000000045
+      },
+      "text": {
+        "x": 1428,
+        "y": 146,
+        "w": 934,
+        "h": 48
+      },
+      "points": null
+    },
+    {
+      "id": "aws",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 80,
+        "y": 290,
+        "w": 1120,
+        "h": 1730
+      },
+      "body": {
+        "x": 79,
+        "y": 289,
+        "w": 1122,
+        "h": 1732
+      },
+      "text": {
+        "x": 100,
+        "y": 313,
+        "w": 144,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "producer",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Software system",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 240,
+        "y": 760,
+        "w": 280,
+        "h": 130
+      },
+      "body": {
+        "x": 239,
+        "y": 759,
+        "w": 282,
+        "h": 132
+      },
+      "text": {
+        "x": 247,
+        "y": 803.5,
+        "w": 266,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "trigger",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": "comment",
+      "annotationFor": "producer",
+      "bounds": {
+        "x": 170,
+        "y": 420,
+        "w": 760,
+        "h": 120
+      },
+      "body": {
+        "x": 166,
+        "y": 415.99999999999994,
+        "w": 770,
+        "h": 131.00000000000006
+      },
+      "text": {
+        "x": 307,
+        "y": 456,
+        "w": 486,
+        "h": 48
+      },
+      "points": null
+    },
+    {
+      "id": "queue-a",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 900,
+        "y": 550,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 899.5,
+        "y": 549.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 842.5,
+        "y": 641,
+        "w": 187,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "queue-b",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 900,
+        "y": 850,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 899.5,
+        "y": 849.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 846,
+        "y": 941,
+        "w": 180,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "queue-c",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 900,
+        "y": 1150,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 899.5,
+        "y": 1149.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 851,
+        "y": 1241,
+        "w": 170,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "s3",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 900,
+        "y": 1720,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 899.5,
+        "y": 1719.5,
+        "w": 73,
+        "h": 73
+      },
+      "text": {
+        "x": 872.5,
+        "y": 1811,
+        "w": 127,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "public",
+      "parent": "aws",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": "comment",
+      "annotationFor": "s3",
+      "bounds": {
+        "x": 140,
+        "y": 1900,
+        "w": 950,
+        "h": 90
+      },
+      "body": {
+        "x": 136,
+        "y": 1896,
+        "w": 960,
+        "h": 101
+      },
+      "text": {
+        "x": 469.5,
+        "y": 1909,
+        "w": 291,
+        "h": 72
+      },
+      "points": null
+    },
+    {
+      "id": "azure",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": "Deployment node",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1350,
+        "y": 290,
+        "w": 2390,
+        "h": 1730
+      },
+      "body": {
+        "x": 1349,
+        "y": 289,
+        "w": 2392,
+        "h": 1732
+      },
+      "text": {
+        "x": 1370,
+        "y": 313,
+        "w": 144,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "outbound",
+      "parent": "azure",
+      "source": null,
+      "target": null,
+      "type": "Software system boundary",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1500,
+        "y": 440,
+        "w": 1540,
+        "h": 1430
+      },
+      "body": {
+        "x": 1499,
+        "y": 439,
+        "w": 1542,
+        "h": 1432
+      },
+      "text": {
+        "x": 1520,
+        "y": 463,
+        "w": 161,
+        "h": 29
+      },
+      "points": null
+    },
+    {
+      "id": "listener-a",
+      "parent": "outbound",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2050,
+        "y": 550,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 2050,
+        "y": 550,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 2007,
+        "y": 641,
+        "w": 158,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "listener-b",
+      "parent": "outbound",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2050,
+        "y": 850,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 2050,
+        "y": 850,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 2007,
+        "y": 941,
+        "w": 158,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "listener-c",
+      "parent": "outbound",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2050,
+        "y": 1150,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 2050,
+        "y": 1150,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 2007,
+        "y": 1241,
+        "w": 158,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "processing",
+      "parent": "outbound",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2500,
+        "y": 1370,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 2500,
+        "y": 1370,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 2457,
+        "y": 1461,
+        "w": 158,
+        "h": 29
+      },
+      "points": null
+    },
+    {
+      "id": "retrieving",
+      "parent": "outbound",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2500,
+        "y": 1720,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 2500,
+        "y": 1720,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 2457,
+        "y": 1811,
+        "w": 158,
+        "h": 29
+      },
+      "points": null
+    },
+    {
+      "id": "cosmos",
+      "parent": "azure",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 3450,
+        "y": 800,
+        "w": 72,
+        "h": 72
+      },
+      "body": {
+        "x": 3450,
+        "y": 800,
+        "w": 72,
+        "h": 72
+      },
+      "text": {
+        "x": 3379.5,
+        "y": 891,
+        "w": 213,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "blob",
+      "parent": "azure",
+      "source": null,
+      "target": null,
+      "type": "Container",
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 3360,
+        "y": 1690,
+        "w": 300,
+        "h": 140
+      },
+      "body": {
+        "x": 3359,
+        "y": 1689,
+        "w": 302,
+        "h": 142
+      },
+      "text": {
+        "x": 3425.5,
+        "y": 1738.5,
+        "w": 169,
+        "h": 43
+      },
+      "points": null
+    },
+    {
+      "id": "retention",
+      "parent": "azure",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": "comment",
+      "annotationFor": "blob",
+      "bounds": {
+        "x": 3250,
+        "y": 1890,
+        "w": 420,
+        "h": 100
+      },
+      "body": {
+        "x": 3246,
+        "y": 1886,
+        "w": 430,
+        "h": 111
+      },
+      "text": {
+        "x": 3351.5,
+        "y": 1916,
+        "w": 217,
+        "h": 48
+      },
+      "points": null
+    },
+    {
+      "id": "A1",
+      "parent": "1",
+      "source": "producer",
+      "target": "s3",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 380,
+        "y": 890,
+        "w": 520,
+        "h": 866
+      },
+      "body": {
+        "x": 372,
+        "y": 882,
+        "w": 537,
+        "h": 883
+      },
+      "text": {
+        "x": 478.5,
+        "y": 1749,
+        "w": 151,
+        "h": 14
+      },
+      "points": [
+        {
+          "x": 380,
+          "y": 890
+        },
+        {
+          "x": 380,
+          "y": 1756
+        },
+        {
+          "x": 900,
+          "y": 1756
+        }
+      ]
+    },
+    {
+      "id": "A2a",
+      "parent": "1",
+      "source": "producer",
+      "target": "queue-a",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 520,
+        "y": 586,
+        "w": 380,
+        "h": 193.5
+      },
+      "body": {
+        "x": 512,
+        "y": 578,
+        "w": 397,
+        "h": 210.5
+      },
+      "text": {
+        "x": 695.5,
+        "y": 571.5,
+        "w": 150,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 520,
+          "y": 779.5
+        },
+        {
+          "x": 610,
+          "y": 779.5
+        },
+        {
+          "x": 610,
+          "y": 586
+        },
+        {
+          "x": 900,
+          "y": 586
+        }
+      ]
+    },
+    {
+      "id": "A2b",
+      "parent": "1",
+      "source": "producer",
+      "target": "queue-b",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 520,
+        "y": 818.5,
+        "w": 380,
+        "h": 67.5
+      },
+      "body": {
+        "x": 512,
+        "y": 810.5,
+        "w": 397,
+        "h": 84.5
+      },
+      "text": {
+        "x": 701.5,
+        "y": 871.5,
+        "w": 150,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 520,
+          "y": 818.5
+        },
+        {
+          "x": 660,
+          "y": 818.5
+        },
+        {
+          "x": 660,
+          "y": 886
+        },
+        {
+          "x": 900,
+          "y": 886
+        }
+      ]
+    },
+    {
+      "id": "A2c",
+      "parent": "1",
+      "source": "producer",
+      "target": "queue-c",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 520,
+        "y": 857.5,
+        "w": 380,
+        "h": 328.5
+      },
+      "body": {
+        "x": 512,
+        "y": 849.5,
+        "w": 397,
+        "h": 345.5
+      },
+      "text": {
+        "x": 702,
+        "y": 1171.5,
+        "w": 149,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 520,
+          "y": 857.5
+        },
+        {
+          "x": 570,
+          "y": 857.5
+        },
+        {
+          "x": 570,
+          "y": 1186
+        },
+        {
+          "x": 900,
+          "y": 1186
+        }
+      ]
+    },
+    {
+      "id": "A3a",
+      "parent": "1",
+      "source": "listener-a",
+      "target": "queue-a",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 972,
+        "y": 586,
+        "w": 1078,
+        "h": 1
+      },
+      "body": {
+        "x": 964,
+        "y": 578,
+        "w": 1095,
+        "h": 17
+      },
+      "text": {
+        "x": 1634,
+        "y": 571.5,
+        "w": 186,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2050,
+          "y": 586
+        },
+        {
+          "x": 972,
+          "y": 586
+        }
+      ]
+    },
+    {
+      "id": "A3b",
+      "parent": "1",
+      "source": "listener-b",
+      "target": "queue-b",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 972,
+        "y": 886,
+        "w": 1078,
+        "h": 1
+      },
+      "body": {
+        "x": 964,
+        "y": 878,
+        "w": 1095,
+        "h": 17
+      },
+      "text": {
+        "x": 1634,
+        "y": 871.5,
+        "w": 186,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2050,
+          "y": 886
+        },
+        {
+          "x": 972,
+          "y": 886
+        }
+      ]
+    },
+    {
+      "id": "A3c",
+      "parent": "1",
+      "source": "listener-c",
+      "target": "queue-c",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 972,
+        "y": 1186,
+        "w": 1078,
+        "h": 1
+      },
+      "body": {
+        "x": 964,
+        "y": 1178,
+        "w": 1095,
+        "h": 17
+      },
+      "text": {
+        "x": 1634.5,
+        "y": 1171.5,
+        "w": 185,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2050,
+          "y": 1186
+        },
+        {
+          "x": 972,
+          "y": 1186
+        }
+      ]
+    },
+    {
+      "id": "A4a",
+      "parent": "1",
+      "source": "listener-a",
+      "target": "cosmos",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2122,
+        "y": 586,
+        "w": 1328,
+        "h": 235.60000000000002
+      },
+      "body": {
+        "x": 2114,
+        "y": 578,
+        "w": 1345,
+        "h": 252.60000000000002
+      },
+      "text": {
+        "x": 2578,
+        "y": 571.5,
+        "w": 182,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2122,
+          "y": 586
+        },
+        {
+          "x": 3200,
+          "y": 586
+        },
+        {
+          "x": 3200,
+          "y": 821.6
+        },
+        {
+          "x": 3450,
+          "y": 821.6
+        }
+      ]
+    },
+    {
+      "id": "A4b",
+      "parent": "1",
+      "source": "listener-b",
+      "target": "cosmos",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2122,
+        "y": 836,
+        "w": 1328,
+        "h": 50
+      },
+      "body": {
+        "x": 2114,
+        "y": 828,
+        "w": 1345,
+        "h": 67
+      },
+      "text": {
+        "x": 2513,
+        "y": 871.5,
+        "w": 182,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2122,
+          "y": 886
+        },
+        {
+          "x": 3250,
+          "y": 886
+        },
+        {
+          "x": 3250,
+          "y": 836
+        },
+        {
+          "x": 3450,
+          "y": 836
+        }
+      ]
+    },
+    {
+      "id": "A4c",
+      "parent": "1",
+      "source": "listener-c",
+      "target": "cosmos",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2122,
+        "y": 850.4,
+        "w": 1328,
+        "h": 335.6
+      },
+      "body": {
+        "x": 2114,
+        "y": 842.4,
+        "w": 1345,
+        "h": 352.6
+      },
+      "text": {
+        "x": 2530.5,
+        "y": 1171.5,
+        "w": 181,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2122,
+          "y": 1186
+        },
+        {
+          "x": 3300,
+          "y": 1186
+        },
+        {
+          "x": 3300,
+          "y": 850.4
+        },
+        {
+          "x": 3450,
+          "y": 850.4
+        }
+      ]
+    },
+    {
+      "id": "B1",
+      "parent": "1",
+      "source": "processing",
+      "target": "cosmos",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2572,
+        "y": 836,
+        "w": 1118,
+        "h": 570
+      },
+      "body": {
+        "x": 2564,
+        "y": 828,
+        "w": 1135,
+        "h": 587
+      },
+      "text": {
+        "x": 2808,
+        "y": 1391.5,
+        "w": 178,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2572,
+          "y": 1406
+        },
+        {
+          "x": 3690,
+          "y": 1406
+        },
+        {
+          "x": 3690,
+          "y": 836
+        },
+        {
+          "x": 3522,
+          "y": 836
+        }
+      ]
+    },
+    {
+      "id": "B2",
+      "parent": "1",
+      "source": "processing",
+      "target": "retrieving",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 1900,
+        "y": 1406,
+        "w": 636,
+        "h": 314
+      },
+      "body": {
+        "x": 1892,
+        "y": 1398,
+        "w": 653,
+        "h": 331
+      },
+      "text": {
+        "x": 2092.5,
+        "y": 1391.5,
+        "w": 195,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2500,
+          "y": 1406
+        },
+        {
+          "x": 1900,
+          "y": 1406
+        },
+        {
+          "x": 1900,
+          "y": 1640
+        },
+        {
+          "x": 2536,
+          "y": 1640
+        },
+        {
+          "x": 2536,
+          "y": 1720
+        }
+      ]
+    },
+    {
+      "id": "B3",
+      "parent": "1",
+      "source": "retrieving",
+      "target": "s3",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 972,
+        "y": 1756,
+        "w": 1528,
+        "h": 1
+      },
+      "body": {
+        "x": 964,
+        "y": 1748,
+        "w": 1545,
+        "h": 17
+      },
+      "text": {
+        "x": 1870.5,
+        "y": 1741.5,
+        "w": 265,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2500,
+          "y": 1756
+        },
+        {
+          "x": 972,
+          "y": 1756
+        }
+      ]
+    },
+    {
+      "id": "B4",
+      "parent": "1",
+      "source": "retrieving",
+      "target": "blob",
+      "type": null,
+      "annotationKind": null,
+      "annotationFor": null,
+      "bounds": {
+        "x": 2572,
+        "y": 1756,
+        "w": 788,
+        "h": 1
+      },
+      "body": {
+        "x": 2564,
+        "y": 1748,
+        "w": 805,
+        "h": 17
+      },
+      "text": {
+        "x": 2786,
+        "y": 1741.5,
+        "w": 164,
+        "h": 29
+      },
+      "points": [
+        {
+          "x": 2572,
+          "y": 1756
+        },
+        {
+          "x": 3360,
+          "y": 1756
+        }
+      ]
+    },
+    {
+      "id": "legend",
+      "parent": "1",
+      "source": null,
+      "target": null,
+      "type": null,
+      "annotationKind": "legend",
+      "annotationFor": null,
+      "bounds": {
+        "x": 80,
+        "y": 2100,
+        "w": 3630,
+        "h": 240
+      },
+      "body": {
+        "x": 79.5,
+        "y": 2099.5,
+        "w": 3631,
+        "h": 241
+      },
+      "text": {
+        "x": 98,
+        "y": 2123,
+        "w": 761,
+        "h": 86
+      },
+      "points": null
+    }
+  ]
+}

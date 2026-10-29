@@ -1,0 +1,38 @@
+The diagram is titled “Dynamic diagram (deployment view): Private cross-cloud API access from Azure to AWS.” Azure integration workloads privately call internal AWS API Gateway REST APIs. Flow A resolves DNS; flow B carries the corresponding environment’s API request.
+
+The Azure Cloud deployment boundary contains a DNS extension VNet, a hub VNet, and three spoke VNets for dev, test, and prod. The dev spoke VNet is marked representative and contains a representative integration caller, a container using Azure Function Apps. Logic Apps is an alternative caller. The test and prod spoke VNets each state that their integration workload uses Function Apps or Logic Apps and follows the same representative A/B flow. All three spoke VNets connect to the hub VNet and the separate DNS extension VNet. A single depicted caller represents the environment-specific integration workload and selects its corresponding AWS workload account.
+
+The DNS extension VNet contains two infrastructure nodes: a Private Resolver inbound endpoint and a Private Resolver outbound endpoint, both using Azure DNS Private Resolver. Its outbound endpoint has a DNS forwarding ruleset: *.execute-api.{region}.amazonaws.com forwards to {Route 53 inbound endpoint IPs}. DNS uses port 53, and the resolver IPs are parameters. The hub VNet contains an Azure Firewall infrastructure node and an Azure VPN Gateway infrastructure node.
+
+The AWS Cloud deployment boundary contains a Region: {region} deployment boundary. Within that region are one network services account and separate dev, test, and prod workload accounts, all depicted as deployment nodes. The network services account contains an AWS Site-to-Site VPN infrastructure node, an AWS Transit Gateway infrastructure node, and three VPCs: ingress VPC 10.1.0.0/20, inspection VPC 10.2.0.0/24, and egress VPC 10.3.0.0/20. The ingress VPC contains a Route 53 inbound endpoint, using Amazon Route 53 Resolver, and a private hosted zone using Amazon Route 53. The private hosted zone is execute-api.{region}.amazonaws.com and is associated with the ingress VPC. The inspection VPC contains an AWS Network Firewall — IDPS infrastructure node, using AWS Network Firewall. The egress VPC contains an execute-api interface VPC endpoint, using AWS VPC endpoint.
+
+The AWS Transit Gateway has attachments to the ingress, inspection, and egress VPCs. Transit Gateway/VPC routing details beyond the depicted forwarding path are unspecified. Azure VPN Gateway and AWS Site-to-Site VPN are joined by an IPsec site-to-site VPN across the Azure/AWS boundary.
+
+Each of the dev, test, and prod AWS workload accounts contains an “Internal API” software system boundary. Each Internal API boundary contains two containers: that environment’s private REST API, implemented with Amazon API Gateway and marked “Resource policy protected,” and that environment’s API backend, implemented with AWS Lambda. There are three private REST APIs and three Lambda backends in total. Lambda runtime is unspecified.
+
+Flow A is drawn with blue dashed directed arrows for DNS queries and DNS traffic routing on port 53. Its numbered path is:
+A1: The representative integration caller sends a query to the Azure Private Resolver inbound endpoint, labeled “query [DNS 53]; reply: private endpoint IP.”
+A2: The inbound endpoint sends an execute-api query to the Azure Private Resolver outbound endpoint, labeled “execute-api query [DNS 53].”
+A3: The outbound endpoint routes DNS traffic to Azure Firewall, labeled “DNS routing [53].”
+A4: Azure Firewall routes DNS traffic to Azure VPN Gateway, labeled “DNS routing [53].”
+A5: Azure VPN Gateway routes DNS traffic across the cloud boundary to AWS Site-to-Site VPN, labeled “DNS routing [53 / IPsec VPN].”
+A6: AWS Site-to-Site VPN routes DNS traffic to Transit Gateway, labeled “DNS routing [53].”
+A7: Transit Gateway routes DNS traffic to AWS Network Firewall — IDPS, labeled “DNS routing [53 / IDPS].”
+A8: AWS Network Firewall routes DNS traffic to the Route 53 inbound endpoint in the ingress VPC, labeled “DNS routing [53].”
+A9: The Route 53 inbound endpoint resolves against the private hosted zone, labeled “resolve [DNS]; endpoint private IP.”
+
+Flow B is drawn with orange solid directed arrows for HTTPS requests and routing on port 443, followed by API invocation. Its numbered path is:
+B1: The representative integration caller sends an HTTPS request to Azure Firewall, labeled “HTTPS request [443].”
+B2: Azure Firewall routes HTTPS traffic to Azure VPN Gateway, labeled “HTTPS routing [443].”
+B3: Azure VPN Gateway routes HTTPS traffic to AWS Site-to-Site VPN across the cloud boundary, labeled “HTTPS routing [443 / IPsec VPN].”
+B4: AWS Site-to-Site VPN routes HTTPS traffic to Transit Gateway, labeled “HTTPS routing [443].”
+B5: Transit Gateway routes HTTPS traffic to AWS Network Firewall — IDPS, labeled “HTTPS routing [443 / IDPS].”
+B6: AWS Network Firewall routes traffic to the execute-api interface VPC endpoint in the egress VPC, labeled “routing [HTTPS 443].”
+B7a, B7b, and B7c: The interface VPC endpoint sends HTTPS traffic on port 443 into, respectively, the dev, test, or prod workload account’s private REST API. One environment is selected per request.
+B8a, B8b, and B8c: The corresponding dev, test, or prod API Gateway invokes its own environment’s API backend, labeled “invoke [AWS Lambda].”
+
+The interface VPC endpoint is the private entry to the API Gateway APIs. Route 53 performs DNS resolution; no Route 53 outbound endpoint is retained. Route 53 resolver endpoints do not forward HTTPS. DNS queries pass through AWS Network Firewall in this fixture. API access remains subject to each API’s resource policy; the policy rules are not specified.
+
+A firewall allowance table applies to both Azure Firewall AND AWS Network Firewall. Its columns are Environment, Source, Destination, and Port. The rows are: dev, dev spoke subnet, Route 53 inbound endpoint IPs, 53; test, test spoke subnet, Route 53 inbound endpoint IPs, 53; prod, prod spoke subnet, Route 53 inbound endpoint IPs, 53; and dev/test/prod, corresponding spoke subnet, *.execute-api.{region}.amazonaws.com, 443. The architecture parameters {region} and {Route 53 inbound endpoint IPs} are supplied parameters.
+
+The legend states that numbering is independent for each flow and that a/b/c selects dev/test/prod, with one environment per request. A filled arrow means caller to callee or explicitly labeled infrastructure traffic routing. Normal responses are folded into request labels. Boundaries identify architectural domains. No call frequency, detailed authentication mechanism, specific denial/error response, or additional routing behavior is specified.

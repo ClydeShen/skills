@@ -34,6 +34,8 @@ Extract atomic propositions with exact supporting text. Align paraphrases semant
 
 Do not confuse readout-only observations ("not explicitly drawn") with assertions about the real system. A comment's incidental location is not architectural domain ownership. Interpret whole nested enumerations and examples semantically; absence of the exact word "only" or "attributes" is not automatically a loss. Calibrate questionable judge findings without changing any measured description or diagram, and retain the review reason.
 
+Apply the frozen authoring policy when distinguishing notation from new facts. Added C4 type/technology lines, a title or a legend are not inventions when they faithfully express the source's service/role and the accepted conventions. A type/grouping that changes hosting, ownership, lifecycle or architectural scope is still meaningful drift. Do not classify every C4 label as an addition merely because L0 uses natural language.
+
 Critical changes include domain ownership, essential call existence/direction, invented connectivity and changed access-control outcomes. They are hard failures, not errors averaged away by a high total similarity. Other meaningful drift remains a negative result, with uncertainty reported explicitly. Stable L2/L4 does not cancel a loss already present in L2. Semantic stability also does not prove that the original architecture is valid.
 
 ## Implementation and result semantics

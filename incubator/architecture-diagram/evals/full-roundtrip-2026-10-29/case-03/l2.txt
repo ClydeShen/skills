@@ -1,0 +1,61 @@
+The diagram is titled “Dynamic diagram (deployment view): Partner amendment requests through SOAP to AWS validation.” Its stated purpose is to authenticate partner amendment requests, authorize the required user-profile role, validate in AWS, and return XML through the originating SOAP API.
+
+Deployment and system membership
+
+Two external software systems appear outside the cloud boundaries: Existing partner integrators and New partner integrators.
+
+The Azure Cloud deployment node contains an Azure API Management (APIM) deployment node, an Inbound processing software-system boundary, Azure AD B2C, and a Roles / permissions store. Azure AD B2C is a container of type Identity provider. Roles / permissions is a container using Azure Cosmos DB. These two containers are outside both the APIM deployment node and the Inbound processing boundary, while remaining inside Azure Cloud.
+
+The APIM deployment node contains three containers: Legacy SOAP API, of type SOAP API; Partner SOAP API, also of type SOAP API; and APIM policy processing, of type Azure API Management.
+
+Inbound processing contains API-Route-Processor and Common-Authx-Handler, each a Logic Apps workflow container. It also contains a nested Sub-workflows software-system boundary. Sub-workflows contains two Logic Apps workflow containers: Amend-Order-Processor and Amend-Document-Processor. Thus four Logic Apps workflow containers are depicted in Azure.
+
+A Site-to-site VPN container is shown between the Azure Cloud and AWS Cloud boundaries, outside both enclosing cloud boxes. Its type is “Azure ↔ AWS connection.”
+
+The AWS Cloud deployment node contains an API Gateway container of type AWS API Gateway and a nested Core platform software-system boundary. Core platform contains a Validation engine container of type AWS Lambda function. API Gateway is inside AWS Cloud but outside Core platform.
+
+Directed request flow and associated responses
+
+The diagram numbers the flow and uses a/b suffixes to preserve caller or method branches. A solid single arrow means a request or forwarding action; its label also describes the normal response, rather than drawing a separate response arrow. A dashed single arrow denotes an auxiliary authentication or role query.
+
+1a. Existing partner integrators initiate a SOAP over HTTPS request to Legacy SOAP API, crossing into Azure Cloud and the APIM deployment node. The response is XML.
+
+1b. New partner integrators initiate a SOAP over HTTPS request to Partner SOAP API, crossing the same deployment boundaries. The response is XML.
+
+2a. Legacy SOAP API forwards into APIM policy processing. The arrow is labeled “Enter APIM policy,” with XML as the request representation and an XML response.
+
+2b. Partner SOAP API likewise forwards into APIM policy processing, labeled “Enter APIM policy,” with XML and an XML response. Both originating SOAP APIs therefore enter the same policy-processing container.
+
+3. APIM policy processing initiates a dashed auxiliary “Authenticate” call to Azure AD B2C. Its qualifier is “[Identity]” and the response is labeled “Result.” This call leaves the APIM deployment node but stays within Azure Cloud. Authentication input may be basic or bearer. APIM authenticates against Azure AD B2C; the identity exchange implementation is explicitly unspecified.
+
+APIM request controls apply after authentication: check system-account roles, and require a user profile for both amendment methods.
+
+4. APIM policy processing sends an “Authenticated request after controls” to API-Route-Processor. The label specifies XML and an XML response. This crosses from the APIM deployment node into the Inbound processing software-system boundary, within Azure Cloud.
+
+5. API-Route-Processor initiates a dashed “Delegate authorization” call to Common-Authx-Handler. It is a workflow call and returns a role decision.
+
+6. Common-Authx-Handler initiates a dashed query to Roles / permissions in Azure Cosmos DB. The query supplies “system account name + user profile name” and returns the “Required user-profile role result.” It crosses out of Inbound processing while remaining inside Azure Cloud.
+
+7a. API-Route-Processor calls Amend-Order-Processor inside the nested Sub-workflows boundary for the amend_order method. This workflow call requires ManageOrders and returns XML.
+
+7b. API-Route-Processor calls Amend-Document-Processor inside Sub-workflows for the amend_document method. This workflow call requires ManageDocuments and returns XML.
+
+8a. Amend-Order-Processor initiates an “AWS amend API” call toward the Site-to-site VPN, with HTTPS/JSON and a JSON response. This leaves the Sub-workflows and Inbound processing boundaries and Azure Cloud.
+
+8b. Amend-Document-Processor initiates the corresponding “AWS amend API” call toward the same Site-to-site VPN, also using HTTPS/JSON with a JSON response and leaving those Azure boundaries.
+
+9a and 9b. The VPN forwards the respective branches as “Traffic routing” to the single API Gateway in AWS Cloud. Both labels specify HTTPS/JSON and a JSON response. These routes enter the AWS Cloud boundary.
+
+10. API Gateway initiates an “Invoke” call to the Validation engine inside Core platform. The call is qualified as “Lambda invocation” and returns a JSON response.
+
+Processing, authorization, and failure requirements
+
+Both sub-workflows validate XML, the method, and malformed base64. They wrap decoded XML in JSON. Their response transformation is explicitly “JSON response → Liquid template → XML.” They return XML through the originating SOAP API.
+
+The method-authorization table states that amend_order requires the user-profile role ManageOrders, with a mandatory user profile. It states that amend_document requires the user-profile role ManageDocuments, also with a mandatory user profile. APIM system-account role checks and Common-Authx-Handler user-profile role checks are distinct controls. No explicit denial status, denial payload, or separate denial route is shown for a failed role check or missing profile.
+
+Failure handling hides internal errors, with an AWS-call timeout given as an example. Only a generic error response is returned through the originating SOAP entry: Legacy SOAP API returns to existing integrators, and Partner SOAP API returns to new integrators. The generic error's exact schema or status is not specified.
+
+The AWS amend operation and response schema are explicitly unspecified. The Validation engine applies business-rule validation. The diagram does not specify the individual business rules, call frequency, or an identity-exchange implementation.
+
+The legend identifies the service icons as official Azure2 / AWS4 catalog entries and says that boundaries represent deployment or software-system domains. No additional behavior is implied by icon placement or by line routing beyond the labeled calls and boundary crossings.
