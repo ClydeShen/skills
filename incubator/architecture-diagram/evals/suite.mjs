@@ -15,6 +15,8 @@ export function gradeClarification(output, test) {
 }
 
 export async function createSuite({ mode }) {
+  const skill = await readFile(new URL('../candidate/architecture-diagram/SKILL.md', import.meta.url), 'utf8');
+  const notation = await readFile(new URL('../candidate/architecture-diagram/references/notation.md', import.meta.url), 'utf8');
   const cases = JSON.parse(await readFile(new URL('./cases.json', import.meta.url), 'utf8'));
   const tests = await Promise.all(cases.map(async test => {
     const source = await readFile(new URL(test.source, import.meta.url), 'utf8');
@@ -24,9 +26,9 @@ export async function createSuite({ mode }) {
       assert: [{ type: 'javascript', value: output => gradeClarification(output, test) }] };
   }));
   return {
-    description: 'Pre-candidate clarification smoke checks. No model or diagram rendering in fixture mode.',
-    prompts: [{ label: 'requirements-brief', raw: 'requirements-brief', function: ({ vars }) => JSON.stringify([
-      { role: 'system', content: 'Prepare one architecture scenario for a draw.io dynamic diagram in a deployment view. Identify contradictions and consequential missing facts. Raise them with recommendations before drawing; do not invent capabilities, private connectivity or user confirmations. Ignore struck-out text and disclose it. Exclude non-architectural business rules, schemas and alarms and disclose omissions. For evaluation only, return JSON with action (clarify or draw), questions (objects with question and recommendation), ignored (strings) and omitted (strings). No tools or file writes are available.' },
+    description: 'Candidate clarification smoke checks. No model or diagram rendering in fixture mode.',
+    prompts: [{ label: 'candidate-clarification', raw: 'candidate-clarification', function: ({ vars }) => JSON.stringify([
+      { role: 'system', content: skill + '\n\n' + notation + '\n\nFor evaluation only, return JSON with action (clarify or draw), questions (objects with question and recommendation), ignored (strings) and omitted (strings). No tools or file writes are available. Do not claim to have researched, rendered or written files. This protocol tests clarification, not image generation.' },
       { role: 'user', content: vars.input },
     ]) }],
     providers: mode === 'fixture' ? [async (_prompt, context) => ({ output: JSON.stringify(cases.find(c => c.id === context.vars.case_id).fixture) })] : [],

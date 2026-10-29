@@ -10,6 +10,7 @@ Date: YYYY-MM-DD. Stage: candidate | external-trial | released | paused. Decisio
 
 - Knowledge: <relative links to the current guidance>.
 - Active package: <one candidate or released path>.
+- Package boundary: <runtime resources inside; authoring and evaluation support outside; relocation check and any remaining blockers>.
 - Evaluation suite: <initiative-local evals path>.
 - Evaluation record: <relative link>.
 

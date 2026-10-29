@@ -1,6 +1,6 @@
 # Architecture Diagram
 
-Date: 2026-10-28. Stage: prototype (before candidate packaging). Decision authority: owner-authorized work that can proceed while Scenario 05 is deferred and the owner is offline.
+Date: 2026-10-29. Stage: candidate. Decision authority: the owner requested standard skill packaging and further diagram repairs. Scenario 05 remains deferred; packaging is not release approval.
 
 ## Goal and scope
 
@@ -11,19 +11,24 @@ Turn an English scenario description into one editable `.drawio` dynamic diagram
 - Accepted requirements and decisions: [research handoff](../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md).
 - Evidence: [vendor/C4 conventions](../../research/diagrams/architecture-diagram/vendor-diagram-conventions-2026-10-28.md) and [draw.io libraries](../../research/diagrams/architecture-diagram/drawio-builtin-icon-libraries-2026-10-28.md).
 - Authoring philosophy: [skill design principles](../../knowledge/skill-design/skill-design-principles.md).
-- Active package: none. There is no `SKILL.md` and no installable skill yet.
+- Active package: [Architecture Diagram](./candidate/architecture-diagram/SKILL.md), with package-local notation, draw.io authoring guidance, a text-only icon catalog and lookup/regeneration helpers. It is an experimental candidate, not a released skill.
 - Approved evaluation scenarios: [01](./evals/scenario-01.md), [02](./evals/scenario-02.md), [03](./evals/scenario-03.md), [04](./evals/scenario-04.md).
 - Evaluation suite and checks: [suite](./evals/suite.mjs), [manifest/assertion data](./evals/cases.json), [tests](./evals/checks.test.mjs).
 - Primary semantic evaluation: [two-round-trip protocol](./evals/roundtrip.md), [adapter runner/comparator](./evals/roundtrip.mjs), [regression tests](./evals/roundtrip.test.mjs), and [Scenario 01 existing-L1 pilot](./evals/roundtrip-pilot-2026-10-29/README.md).
 - Completed four-case full chains: [report, findings and improvement plan](./evals/full-roundtrip-2026-10-29/README.md), [frozen results](./evals/full-roundtrip-2026-10-29/summary.json), and [evidence collector](./evals/collect-roundtrips.mjs).
-- Current prototype decisions: [drawing policy](./prototype/drawing-policy.md), supported by [layout guidance](../../knowledge/diagrams/architecture-layout.md) and [research](../../research/diagrams/architecture-diagram/layout-and-fidelity-2026-10-29.md).
+- Current behavior: the active package and its [notation](./candidate/architecture-diagram/references/notation.md), informed by [layout guidance](../../knowledge/diagrams/architecture-layout.md) and [research](../../research/diagrams/architecture-diagram/layout-and-fidelity-2026-10-29.md).
 - Revised problem diagrams: [Scenario 02/03 repairs, previews and verification](./evals/layout-revision-2026-10-29/README.md). These preserve the frozen failures and record baseline corrections separately.
-- Latest visual revisions: [Scenario 02/03 visual expression, restored environment instances and blind reviews](./evals/visual-expression-2026-10-29/README.md). Notes are removed through local encoding and relation matrices, not by deleting architectural facts or repeated components.
-- Prototype: [editable draw.io file](./prototype/scenario-01.drawio), [rendered evidence](./prototype/scenario-01.svg), [catalog](./prototype/catalog.json).
+- Earlier visual revisions: [Scenario 02/03 visual expression, restored environment instances and blind reviews](./evals/visual-expression-2026-10-29/README.md).
+- Latest revisions: [candidate packaging, explicit environment paths and readable typography](./evals/candidate-layout-2026-10-29/README.md). This is authored repair and package verification, not a fresh model-generation trial.
+- Historical prototype: [editable draw.io file](./prototype/scenario-01.drawio), [rendered evidence](./prototype/scenario-01.svg), [catalog snapshot](./prototype/catalog.json) and [superseded drawing policy](./prototype/drawing-policy.md).
 - Verification and limitations: [evaluation record](./evaluation.md).
 - Remaining tasks and owner-dependent follow-up: [GitHub Issue #7](https://github.com/ClydeShen/skills/issues/7).
 
 ## Design choices
+
+The candidate is the relocatable runtime package. `SKILL.md` owns behavior; `references/` owns conditionally loaded notation and draw.io guidance; `scripts/` owns exact icon lookup and catalog regeneration; `assets/` contains generated metadata. Nothing at runtime imports the initiative's tools, evaluation files or repository guidance. The catalog implementation moved into the package; the old tool path is a compatibility entry for historical fixture generators, not a second implementation. The prototype catalog is retained as evidence at its original pin, not as a second current catalog.
+
+Keep evaluation scripts and saved evidence outside the candidate. Retire obsolete scratch work and duplicate instructions during iteration; preserve the frozen round-trip failures needed for comparison. Authorized release moves this directory to `skills/`, removes `metadata.internal: true`, and updates repository-side targets and discovery. It should not require runtime rewrites. The boolean marker is a verified skills CLI extension, not portable Agent Skills metadata. Package format and design standards are identical before and after release.
 
 Start from the four approved scenarios, not a new taxonomy. The prototype uses explicit synthetic resolutions for Scenario 01; these are fixture assumptions, not new owner approvals or a model interaction. It demonstrates exact catalog lookup, vendor-matching checks, typography, captions, auxiliary calls and a separate failure response.
 
@@ -52,8 +57,8 @@ The primary behavioral evaluation crosses L0/L2/L4 from two isolated description
 To regenerate, obtain a local checkout at the pinned upstream commit. Downloading upstream is a separate setup step; keep the checkout outside this repository. Extraction may need network access for missing Git objects in a partial clone. Generated metadata must not be manually edited.
 
 ```text
-node incubator/architecture-diagram/tools/catalog.mjs /path/to/pinned-drawio incubator/architecture-diagram/prototype/catalog.json
-node incubator/architecture-diagram/tools/prototype.mjs
+node incubator/architecture-diagram/candidate/architecture-diagram/scripts/catalog.mjs /path/to/pinned-drawio incubator/architecture-diagram/candidate/architecture-diagram/assets/catalog.json
+node incubator/architecture-diagram/candidate/architecture-diagram/scripts/find-icon.mjs --vendor AWS --title Lambda
 ```
 
 For the optional local browser render, check out `src/main/webapp/js/viewer-static.min.js`, `src/main/webapp/js/stencils.min.js`, `src/main/webapp/shapes/mxAWS4.js` and `src/main/webapp/shapes/mxKubernetes.js` from that commit. Also check out any catalog-referenced SVG assets used by the diagram (for these Azure fixtures, under `src/main/webapp/img/lib/azure2/`). Chromium and loopback socket access are needed; set `DIAGRAM_BROWSER` to its executable if necessary. The renderer serves only local scripts, embeds allowlisted pinned SVG resources, respects bounded declared page sizes, uses a temporary browser profile and disables external/background networking. It does not install a browser or fetch missing runtime assets.
@@ -64,4 +69,4 @@ node incubator/architecture-diagram/tools/render.mjs /path/to/pinned-drawio incu
 
 ## Next step
 
-Review the latest [Scenario 02/03 visual revisions](./evals/visual-expression-2026-10-29/README.md), including their remaining readability tradeoffs. Earlier ownership, hop-contract and edge-style repairs retain their provenance. The short prototype policy now protects visual expression and distinct environment instances. The [remaining evaluation plan](./evals/full-roundtrip-2026-10-29/README.md#prioritized-improvement-plan) still calls for controlled same-input comparisons, complete new round trips, repetitions and held-out cases. Owner visual review, offline Desktop, GCP/Kubernetes rendering and standalone model-adapter integration remain open. Participating Azure symbols were actually browser-rendered. Scenario 05 stays deferred. Candidate packaging follows evidence; there is no installable package yet.
+Review the latest [Scenario 02/03 candidate-layout revisions](./evals/candidate-layout-2026-10-29/README.md), then test the candidate in fresh same-input generation/translation chains. Earlier ownership, hop-contract and edge-style repairs retain their provenance. The [remaining evaluation plan](./evals/full-roundtrip-2026-10-29/README.md#prioritized-improvement-plan) still calls for controlled comparisons, repetitions and held-out cases. Owner visual review, offline Desktop, GCP/Kubernetes rendering and standalone model-adapter integration remain open. Participating Azure symbols were actually browser-rendered. Scenario 05 stays deferred. The candidate is available for explicit internal discovery; it is not released or evidence of installed-client effectiveness.

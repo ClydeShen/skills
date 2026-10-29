@@ -37,6 +37,8 @@ Do not add empty scaffold sections to existing content mechanically. Preserve us
 
 Use the [skill design principles](../knowledge/skill-design/skill-design-principles.md) for behavioral value, freedom, interaction and iteration. This section owns package format and resource boundaries.
 
+Apply this format equally to incubating candidates and released skills. Experimental status is not an exemption from package-local resources or focused instructions. Keep incubation support outside the package and follow the [minimal-migration lifecycle](./REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle).
+
 Require YAML frontmatter with `name` and `description`. Follow the Agent Skills limits: name at most 64 characters, description at most 1024 characters, and name matching the immediate parent directory. Use lowercase kebab-case names. Describe both the useful task and activation conditions.
 
 Use standard fields first. Record target-specific extensions and their compatible clients in the initiative. Current candidate `metadata.internal` uses a YAML boolean for skills CLI behavior; do not represent it as a portable Agent Skills guarantee. Keep generic metadata values as strings unless a verified extension requires otherwise.

@@ -1,10 +1,10 @@
 # Architecture Diagram evaluation
 
-Date: 2026-10-28. Updated: 2026-10-29. Status: prototype, deterministic checks, an existing-L1 pilot and four fresh full chains completed; critical/noncritical semantic drift found, Desktop integration and candidate behavior unverified.
+Date: 2026-10-28. Updated: 2026-10-29. Status: standard candidate packaged and relocation-checked; authored visual repairs follow an existing-L1 pilot and four fresh full chains with mixed semantic results. Desktop integration and fresh candidate-generation behavior remain unverified. Dated sections distinguish earlier targets from the current candidate.
 
 ## Scope and target
 
-- Stage: pre-candidate prototype, no installable skill.
+- Initial stage (2026-10-28): pre-candidate prototype, no installable skill. Current package checks are recorded under [Standard candidate and explicit paths](#standard-candidate-and-explicit-paths-2026-10-29).
 - Cases: four owner-approved drafts migrated from the requirements handoff, owned by [the scenario manifest](./evals/cases.json) and its linked Markdown files. Scenario 05 is deferred.
 - Prototype: [Scenario 01 draw.io XML](./prototype/scenario-01.drawio), using explicitly stated fixture assumptions. It is not a model's response to the contradictory raw input.
 - Upstream: draw.io `v32.6.1`, commit `84487b4891cbc0f32d7e30f34cf878c87cb1f414`, freshly resolved from the release tag. [measured]
@@ -104,6 +104,16 @@ The selected readers recover the targeted distinctions, but also flag wide canva
 
 Local verification passed 54 regression tests, 42 default fixture assertions, four architecture clarification fixture assertions and the loopback provider contracts. Both revised artifacts have zero counted proper crossings and unchanged bend counts relative to the previous layout repairs. [measured]
 
+## Standard candidate and explicit paths, 2026-10-29
+
+The owner requested standard skill packaging during incubation and minimal migration at release. The [active candidate](./candidate/architecture-diagram/SKILL.md) is now a self-contained package with notation/draw.io references, exact icon lookup, catalog regeneration and text-only catalog data. The initiative retains authoring tools and evaluation evidence outside that package. The [candidate-layout report](./evals/candidate-layout-2026-10-29/README.md) records explicit test/prod paths, removal of the substitute environment matrix, uniform 16-unit typography and the remaining wide-layout trade-offs. Older evidence is unchanged. These are authored repairs, not new candidate-generation or round-trip effectiveness results.
+
+Local Linux verification passed `npm run check` (58 regression tests and 42 default fixture assertions), four architecture clarification fixture assertions, and both loopback provider contracts. Actual pinned-browser renders pass static, route/boundary and label checks; the new fixtures also reject pairwise rendered-text overlap. The typography validator now accepts a declared uniform size of at least 12 instead of hardcoding 12; negative cases still reject mixed/invalid sizes, while the native auto-fit Note exception remains bounded. The clarification suite now loads the active candidate and notation; synthetic success still measures only harness behavior. [measured]
+
+The Agent Skills reference validator at `69ef37e9424c0a7ea9dd2293b559e43ec8176379` passed the candidate; this SHA was confirmed as upstream HEAD on 2026-10-29. Skills CLI `1.7.4` listed no released skills at the repository root (expected exit 1) and exactly one at the explicit internal candidate path. A real `--agent codex --copy --yes` installation into an isolated temporary workspace included all six runtime files, and its icon lookup ran successfully. A regression also copies the unchanged package to a categorized `skills/diagrams/architecture-diagram/` directory and loads both helper modules without repository dependencies. This establishes relocation and CLI resource delivery, not actual client activation, generation behavior or release readiness. [measured]
+
+Current [skills CLI authoring documentation](https://github.com/vercel-labs/skills/blob/main/docs/creating-skills.md), read on 2026-10-29, documents standard `skills/` discovery, bounded category nesting, the internal-marker extension and optional custom paths. No custom discovery configuration was added: the project uses standard locations and keeps candidates hidden by default. The repository lifecycle now applies identical package practices to candidates and releases, with continuous pruning and minimal promotion changes. This is the owner's project policy; the boolean internal marker remains a CLI-specific extension.
+
 ## Open verification
 
 - Owner acceptance of icon size, element descriptions and layout density.
@@ -114,6 +124,6 @@ Local verification passed 54 regression tests, 42 default fixture assertions, fo
 - Actual unattended generation/vision adapter integration, with explicit service authority and budget.
 - Coverage of Docker/Argo CD/Red Hat and adopted F1-F6 criteria beyond the explicit fallback; no separate icon service is built.
 - Scenario 05 when the owner is available.
-- Real-model and installed-client behavior, package creation and release readiness.
+- Real-model and installed-client behavior, license/provenance review for publication and release readiness. Standard candidate packaging and isolated CLI delivery are verified above.
 
 The original full-chain run did not research vendor correctness during its frozen translations. The later repair researched the relevant AWS account constraint and Azure ruleset association before revising the synthetic baseline. No actual client deployment was validated. Private sample images, identifiers and paths are absent.

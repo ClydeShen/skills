@@ -1,6 +1,6 @@
 # Prototype drawing decisions
 
-Date: 2026-10-29. Current prototype guidance; no installable skill. Use alongside the accepted [house-style requirements](../../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md). Load [layout guidance](../../../knowledge/diagrams/architecture-layout.md) when planning or repairing a dense layout.
+Date: 2026-10-29. Historical prototype guidance, superseded for current authoring by the [candidate skill](../candidate/architecture-diagram/SKILL.md). This file remains for earlier trial provenance; do not maintain a second runtime policy here. The accepted [house-style requirements](../../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md) and [layout guidance](../../../knowledge/diagrams/architecture-layout.md) retain their evidence roles.
 
 1. Resolve architectural meaning before coordinates. Preserve user intent, corrections, exclusions, multiplicity and main/auxiliary/failure distinctions.
 2. Research accessible platform constraints before asking about ownership or capability. Record consequential derived facts and their sources. Ask about unresolved project choices that change the architecture.

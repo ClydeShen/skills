@@ -59,6 +59,7 @@ Keep generated run output in ignored `evals/.local/`. Record a concise reproduci
 ## Candidate and release lifecycle
 
 1. Create or update the initiative README before introducing a package.
+   Once the owner authorizes a specific skill's implementation, start with a minimal standard candidate package. Incubation is experimental maturity, not a script-only format. Keep behavior in `SKILL.md`, loadable guidance in `references/`, and reusable runtime helpers in `scripts/` only when needed. Research-only initiatives may remain without a package. Evaluation generators and delivery history stay outside the package. This clarification was requested by the owner on 2026-10-29.
 2. Keep a new active candidate at `incubator/<initiative>/candidate/<skill-name>/`.
 3. Give every authored skill a unique repository-wide name that does not collide with a locked development tool.
 4. Match frontmatter `name` to the package's immediate directory name.
@@ -70,6 +71,12 @@ Keep generated run output in ignored `evals/.local/`. Record a concise reproduci
 10. Update the initiative stage, evaluation target, installation instructions and all affected links in the same change.
 
 Release moves the package; it does not leave another editable source copy. Git history preserves the former candidate. Once released, maintain that skill's active source in `skills/`; use branches/worktrees for revisions rather than a second same-name package. Rename or split packages only through an explicit decision with updated references.
+
+Owner clarification, 2026-10-29: candidates and releases follow the same skill design, package format and runtime-boundary practices from the start. Their difference is maturity and publication status, not a separate experimental format. Keep the candidate relocatable: moving its directory to the release location must not require rewriting instructions, changing internal paths, copying in repository dependencies or rebuilding a different distribution. If relocation requires those changes, repair the candidate before promotion.
+
+Prune during incubation, not only at release. Remove superseded scratch files, unused helpers and duplicate current guidance after checking their callers and inbound links. Keep only useful runtime resources in the package; keep evaluation cases, generators and concise design evidence in the initiative. Preserve evidence still needed to explain or reproduce a recorded result. Do not rewrite frozen measurements or keep every abandoned experiment as current guidance; Git history can recover retired tracked material. Update navigation when removing files.
+
+The final migration should therefore be small: move the validated package, remove its candidate-only discovery marker, update repository-side paths and documentation, and verify installation. Add skills CLI discovery configuration only if the chosen layout needs it. Standard `skills/` locations are already discovered; do not create a second hand-maintained skill registry or expose the incubator through a custom discovery path. Category nesting remains subject to the folder contract and an actual discovery check. Verify an isolated copy of the package during incubation so missing runtime dependencies are found before release.
 
 The initiative workspace remains after release to own its design history, evaluation cases and feedback. Its stage is `released`; its active package path points to `skills/`. Consequently, tests need not move when the package is promoted. The suite must target the active package path and must fail clearly if that target is absent. Do not silently fall back to an old copy.
 
