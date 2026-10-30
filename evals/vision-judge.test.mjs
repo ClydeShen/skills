@@ -51,13 +51,17 @@ test('grading passes expected behavior and rejects the failures that matter', ()
   for (const output of ['not json', '{}', JSON.stringify({ verdicts: [], runs_ok: 0 })]) assert.equal(gradeJudgement(output, claims).pass, false, output);
 });
 
-test('runs combine by strict majority; one confirmation of a false claim is enough to fail', () => {
+test('runs combine by strict majority for true and planted claims, and a lone slip is flagged, not fatal', () => {
   const runs = [good, good, { ...good, 'b-calls-a': 'drawn_incorrectly' }].map((v) => parseVerdicts(answer(v), claims));
   assert.equal(gradeJudgement(aggregateRuns(runs, claims), claims).pass, true);
   const noisy = [good, { ...good, 'b-calls-a': 'not_shown' }, { ...good, 'b-calls-a': 'unclear' }].map((v) => parseVerdicts(answer(v), claims));
   assert.equal(gradeJudgement(aggregateRuns(noisy, claims), claims).pass, false);
-  const oneSlip = [good, good, { ...good, 'x-a-outside': 'drawn_correctly' }].map((v) => parseVerdicts(answer(v), claims));
-  assert.equal(gradeJudgement(aggregateRuns(oneSlip, claims), claims).pass, false);
+  const slip = { ...good, 'x-a-outside': 'drawn_correctly' };
+  const oneSlip = gradeJudgement(aggregateRuns([good, good, slip].map((v) => parseVerdicts(answer(v), claims)), claims), claims);
+  assert.equal(oneSlip.pass, true);
+  assert.match(oneSlip.reason, /x-a-outside confirmed in 1 of 3 runs/);
+  assert.equal(gradeJudgement(aggregateRuns([good, slip, slip].map((v) => parseVerdicts(answer(v), claims)), claims), claims).pass, false, 'most runs confirmed a false claim');
+  assert.equal(gradeJudgement(aggregateRuns([parseVerdicts(answer(slip), claims)], claims), claims).pass, false, 'a single run has no majority to outvote the slip');
   const withFailure = aggregateRuns([parseVerdicts(answer(good), claims), null, parseVerdicts(answer(good), claims)], claims);
   assert.equal(withFailure.runs_ok, 2);
   assert.equal(withFailure.runs_total, 3);

@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 // Image judge: reads one image and checks a list of claims against what is visible.
-// Claims are { id, text, critical?: boolean, expect?: 'drawn' | 'not_drawn' }. A 'not_drawn' claim is a
+// Claims are { id, text, key?, critical?: boolean, expect?: 'drawn' | 'not_drawn' }; id is what the judge sees, key labels reports. A 'not_drawn' claim is a
 // planted false claim; the judge must never confirm it. Labels stay on the grading side, outside prompts.
 export const verdictValues = ['drawn_correctly', 'drawn_incorrectly', 'not_shown', 'unclear'];
 
@@ -85,13 +85,15 @@ export function aggregateRuns(runs, claims) {
   return { runs_ok: usable.length, runs_total: runs.length, verdicts };
 }
 
-// Critical true claims need a strict majority of runs; a planted false claim fails if any run confirms it.
+// Both kinds of claim are decided by a strict majority of runs, so one noisy run cannot fail or pass a case.
+// A planted false claim that only some runs confirmed is reported as a flag.
 export function gradeJudgement(output, claims) {
   let judgement;
   try { judgement = typeof output === 'string' ? JSON.parse(output) : output; } catch { judgement = null; }
   if (!judgement?.verdicts || !judgement.runs_ok) return { pass: false, score: 0, reason: 'No usable judge verdicts.' };
   const byId = new Map(judgement.verdicts.map((v) => [v.id, v]));
   const failures = [];
+  const flags = [];
   let checked = 0;
   for (const claim of claims) {
     const expect = claim.expect ?? 'drawn';
@@ -99,16 +101,17 @@ export function gradeJudgement(output, claims) {
     const confirmed = result?.votes?.drawn_correctly ?? 0;
     if (expect === 'not_drawn') {
       checked++;
-      if (confirmed > 0) failures.push(`false claim confirmed: ${claim.id}`);
+      if (confirmed * 2 > judgement.runs_ok) failures.push(`false claim confirmed: ${claim.key ?? claim.id}`);
+      else if (confirmed) flags.push(`${claim.key ?? claim.id} confirmed in ${confirmed} of ${judgement.runs_ok} runs`);
     } else if (claim.critical !== false) {
       checked++;
-      if (confirmed * 2 <= judgement.runs_ok) failures.push(`critical claim not confirmed: ${claim.id} (${result?.verdict ?? 'missing'})`);
+      if (confirmed * 2 <= judgement.runs_ok) failures.push(`critical claim not confirmed: ${claim.key ?? claim.id} (${result?.verdict ?? 'missing'})`);
     }
   }
   return {
     pass: failures.length === 0,
     score: checked ? (checked - failures.length) / checked : 0,
-    reason: failures.join('; ') || `All ${checked} checked claims behaved as expected over ${judgement.runs_ok} run(s); judge evidence still needs spot checks.`,
+    reason: failures.join('; ') || `All ${checked} checked claims behaved as expected over ${judgement.runs_ok} run(s)${flags.length ? `; flagged: ${flags.join(', ')}` : ''}; judge evidence still needs spot checks.`,
   };
 }
 
