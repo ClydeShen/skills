@@ -108,6 +108,17 @@ export function modelProvider(env, selection = 'auto') {
   };
 }
 
+export const judgeDefaultModel = 'mistralai/mistral-large-4-1t-a52b';
+
+// Image judge settings. The judge model is separate from the generation model; it never inherits its reasoning or token settings.
+export function judgeConfig(env) {
+  const provider = modelProvider({
+    ...env, NVIDIA_MODEL: env.NVIDIA_JUDGE_MODEL || judgeDefaultModel, NVIDIA_REASONING_EFFORT: '', EVAL_MAX_TOKENS: '',
+  }, 'nvidia');
+  const { apiBaseUrl, apiKey, max_tokens: maxTokens, passthrough } = provider.config;
+  return { model: provider.id.replace(/^openai:chat:/, ''), apiBaseUrl, apiKey, temperature: 0.6, maxTokens, extraBody: passthrough };
+}
+
 export function digest(text) {
   return createHash('sha256').update(text).digest('hex');
 }
