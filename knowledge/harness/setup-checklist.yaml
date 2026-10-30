@@ -989,6 +989,26 @@ items:
     see: [reviewer-standard.md, feedback-loops-standard.md#21-review-findings]
     status: todo
 
+  - id: review-instructions
+    phase: 5
+    level: recommended
+    weight: 2
+    check: >-
+      Write the review instructions of the project in one file: what is blocking, the risk tiers with their approvals,
+      what not to report, what to always check, and the limit on suggestions. Name the file in AGENTS.md. Protect it on
+      the default branch.
+    done_when: >-
+      The file has the five parts, AGENTS.md names it, only the owner can change it on the default branch, and each
+      change in the tracker has a risk tier.
+    harness: { role: guide, control: inferential, timing: pre-integration }
+    why: >-
+      A reviewer that does not know the project reports what it can invent, and the same depth of review for a text
+      change and for a change to a contract wastes the attention of people. The file calibrates the reviewer, and the
+      tiers send human attention to the changes that cannot be undone.
+    weight_reason: A guide for an inferential sensor; the gates and the confirmation step work without it.
+    see: [reviewer-standard.md#6-task-set-the-risk-tier-of-a-change, reviewer-standard.md#7-task-write-the-review-instructions-of-a-project, human-team-in-loop.md]
+    status: todo
+
   - id: release-loop
     phase: 5
     level: recommended

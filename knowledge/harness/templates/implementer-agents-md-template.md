@@ -12,6 +12,7 @@ Put this file at the repository root for implementing agents (one or many). **Ke
 - `HANDOFF.md`: current status, next steps, working habits, what not to do.
 - `docs/as-built/index.md`: the current state of each package (if it exists).
 - Work comes from issues. Read the "Background", "Scope", and "Acceptance" sections of the issue first.
+- `<review instructions>`: what is blocking, the risk tier of each kind of change, what not to report. Reviewers read it before each review.
 
 ## Commands
 
@@ -26,7 +27,7 @@ Put this file at the repository root for implementing agents (one or many). **Ke
 1. Take work from an issue that has the ready mark. Claim it before you start (assign it to yourself, or move it to "in progress"). Do one issue at a time.
 2. Work in your own working copy (for example, a git worktree for each task). Keep the change small. Rebase on the latest main branch before you open the pull request.
 3. Commit each issue separately. Use `<commit message format>`. Put the verification result in the commit message.
-4. In the issue, report the result of each acceptance condition. Paste the command and its output. Do not write only "done". Then move the issue to "in review".
+4. In the issue, report the result of each acceptance condition. Paste the command and its output, and say how to undo the change. Do not write only "done". Then move the issue to "in review".
 5. Do not change the plan documents, the ADRs, or the epics. If the plan is wrong, write it in the issue.
 6. If you must change a contract (`<path of the contracts>`), give the reason in the issue and update the contract document.
 7. In a cleanup story, refactor only. Do not add features.
