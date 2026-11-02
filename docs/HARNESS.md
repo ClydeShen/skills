@@ -84,15 +84,29 @@ Never use a quality score as a gate. A score rewards adding rules. Treat growth 
 
 ### Environments
 
-| Environment                 | Hooks and setup                                                                                                                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Local Claude Code and Codex | `npm ci` or session start enables everything. Codex must trust the project hooks.                                                                                                           |
-| VS Code                     | Git hooks run for its commits. The Copilot setting points at the commit instructions. Other generators get no instructions, so the hook rejects a wrong message.                            |
-| Claude cloud                | Repository hooks run in a single-repository session. Multi-repository sessions and project threads skip them; use a setup script with `npm ci`.                                             |
-| Codex cloud                 | Project hooks do not run with cloud orchestration. Add `npm ci` to the environment setup script in Codex settings; that also enables Git hooks and tools while network access is available. |
-| Any other path              | CI repeats the checks, including after `--no-verify`.                                                                                                                                       |
+| Environment                 | Hooks and setup                                                                                                                                                                                                                       |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Local Claude Code and Codex | `npm ci` or session start enables everything. Codex must trust the project hooks.                                                                                                                                                     |
+| VS Code                     | Git hooks run for its commits. The Copilot setting points at the commit instructions. Other generators get no instructions, so the hook rejects a wrong message.                                                                      |
+| Claude cloud                | Repository hooks run in a single-repository session. Multi-repository sessions and project threads skip them; run the [cloud setup script](#cloud-environment-setup).                                                                 |
+| Codex cloud                 | Project hooks do not run with cloud orchestration. Run the [cloud setup script](#cloud-environment-setup) from the environment setup script in Codex settings; it also enables Git hooks and tools while network access is available. |
+| Any other path              | CI repeats the checks, including after `--no-verify`.                                                                                                                                                                                 |
 
 Whether Git hooks fire on each cloud host has not been observed yet. Record it here when it has.
+
+### Cloud environment setup
+
+A hosted workspace may ship Node.js 22 and a restricted network, so the gate fails until it is prepared. Make the environment's setup script run [`harness/cloud-setup.sh`](../harness/cloud-setup.sh) from the repository root: `bash harness/cloud-setup.sh`. It installs Node.js 24 from nodejs.org when the image has another major version, checks the download against the published checksum, and runs `npm ci`, which enables the Git hooks. It is safe to repeat and needs no Python or model key. If the host runs the setup script before it clones the repository, run the script by hand at session start.
+
+Configure these in the host's environment settings; the script cannot:
+
+| Setting                                                           | Why                                                                                                                                                          |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Environment variable `NODE_USE_ENV_PROXY=1`                       | Later `npm ci` or tool installs behind an egress proxy. The script sets it for its own `npm ci`.                                                             |
+| Network access to `nodejs.org` and the package registries         | Node.js download and `npm ci`. On a limited policy keep "Allow package managers" enabled.                                                                    |
+| Network access to `integrate.api.nvidia.com` and `NVIDIA_API_KEY` | Only for real-model evaluation (`npm run eval:nvidia`); the default gate and synthetic replay need neither. See [prompt evaluation](./prompt-evaluation.md). |
+
+A change to network settings may apply only to new sessions. After setup, `npm run git:check` passes only on `main` or a `work/`, `claude/` or `codex/` task branch. Observed on 2026-11-02 in Claude cloud: image Node 22.23.4, `npm ci` and the full gate passed with Node 24.22.2, and a real NVIDIA request succeeded once the host was allowed. Record other hosts here when observed.
 
 ## Client and Git adapters
 
