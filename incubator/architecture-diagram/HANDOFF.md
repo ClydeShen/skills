@@ -5,7 +5,7 @@ Updated: 2026-11-03. The last change, [PR #25](https://github.com/ClydeShen/skil
 ## Start here
 
 - Active package: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md), a public-stage candidate, not a release. The [initiative README](./README.md) owns installation and lifecycle status.
-- Latest evidence: [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), then [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
+- Latest evidence: [clean-session trials](./evals/clean-session-2026-11-02/README.md), then [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
 
 ## Owner direction
 
@@ -28,7 +28,7 @@ Updated: 2026-11-03. The last change, [PR #25](https://github.com/ClydeShen/skil
 1. Tangled steps and needless bends. The rules used to demand that numbered steps read in order, which, with scenarios that list steps 1, 2, 3, likely pushed sessions to place and port by number and tangle lines (round 3 B: `2` and `3` cross). The rules now place by role and lane and order ports to avoid crossings; round 3 A's 1, 3, 2 is acceptable. `check-layout.mjs` also reports bends that a clear straight or one-bend route would avoid, as in round 3 A's `Run`. Whether fresh sessions produce untangled layouts is untested: rerun both scenarios (problem 4).
 2. Shared services. Round 3 B still left AI Search to one side, so the ingestion write takes a long route and crosses `3. Store conversation`. The rule exists; consider stronger guidance or an example.
 3. Fresh sessions in the Codex sandbox cannot render: `render.mjs` stops with `listen EPERM` (see the [round 1 agent report](./evals/semantic-routing-2026-11-02/round1-a/agent-report.md)), so they never see their image. Static checks partly compensate. A renderer that needs no local listener would close the gap.
-4. Round 3 was cut off before agent reports and was not reviewed independently. Rerun both scenarios with the current package, then have a context-free reviewer score the images, as in round 1 (A 8/10, B 6/10).
+4. The [clean-session trials](./evals/clean-session-2026-11-02/README.md) reran both scenarios at `cc7d529` in Claude Code: A 7/10 with numbered, untangled steps; B 6/10 with AI Search placed between its flows but the query calls left unnumbered and unlabeled. The notation rule lets a session drop numbers when it judges them unneeded. One run each, Claude Code only; Codex was not rerun.
 5. Not verified: repeatability across several runs, Claude Code sessions (usage limit hit during this work), offline Desktop use on another machine, and redistribution terms for icons whose licence requires attribution (Jenkins, CC-BY-SA-3.0) or limits use (Microsoft Fabric).
 
 ## How to evaluate a change
