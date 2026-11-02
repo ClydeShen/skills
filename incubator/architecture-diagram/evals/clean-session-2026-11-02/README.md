@@ -38,3 +38,14 @@ The query calls now read `1 search`, `2 answer` and `3 store`, fan out without c
 - Deploy, telemetry and `3 store` leave the web app's underside about 20 units apart, and the Function's caption sits away from its icon, so lines and captions are hard to attribute.
 
 The reviewer also read the secrets arrows as writes to Key Vault; the package draws arrows from initiator to callee, so that reading is not a defect.
+
+## B after keeping auxiliary connectors from reading as a boundary
+
+In the numbered rerun, the secrets and telemetry lines ran around AI Search, Azure OpenAI and Cosmos DB and together formed a dashed rectangle like the region frame, so Key Vault read as sitting on a zone's edge. Commit `a3c662c` forbids auxiliary connectors that enclose elements, places shared support services in a support lane and gives auxiliary connectors a dotted pattern. One rerun of B with the same setup: [image](./b-support-lane/diagram.png), [file](./b-support-lane/diagram.drawio), [report](./b-support-lane/agent-report.md); 20 turns, 231 s; layout check 22 items, kept.
+
+No connectors enclose elements: Key Vault and Application Insights sit in a middle support row, auxiliary lines are dotted, and every service has an icon. Steps read `1 Ask` to `4 Store` for the query and `A Upload` to `D Index` for ingestion. The independent reviewer scored 6/10. Findings that hold, each confirmed by a shared-segment report in the layout check:
+
+- Both Deploy lines join other connectors instead of reaching their targets alone: one runs on the `1 Ask` line, the other on the `B Trigger` line, so they read as deploying into a request or into Blob Storage.
+- `2 Search` leaves the web app on the same trunk as the dotted secrets and telemetry lines; the Function's lines likewise share a trunk with `D Index`.
+- The `westeurope` frame still encloses every Azure service, as in both earlier B runs.
+- Secrets and telemetry lines have no labels.
