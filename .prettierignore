@@ -1,0 +1,8 @@
+# Prettier owns Markdown only; Biome owns the other formats.
+*
+!*.md
+!**/
+.agents/skills/
+.claude/skills/
+incubator/*/evals/*-20*-*-*/
+evals/.local/
