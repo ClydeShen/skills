@@ -49,3 +49,13 @@ No connectors enclose elements: Key Vault and Application Insights sit in a midd
 - `2 Search` leaves the web app on the same trunk as the dotted secrets and telemetry lines; the Function's lines likewise share a trunk with `D Index`.
 - The `westeurope` frame still encloses every Azure service, as in both earlier B runs.
 - Secrets and telemetry lines have no labels.
+
+## B after forbidding shared segments and unstated region membership
+
+Commit `d8e0d3b` forbids connectors of different meaning from sharing a segment, asks for every shared-segment report to be fixed, and keeps services of unstated location out of a stated boundary. One rerun of B with the same setup: [image](./b-no-shared/diagram.png), [file](./b-no-shared/diagram.drawio), [report](./b-no-shared/agent-report.md); 19 turns, 144 s; layout check 6 items.
+
+The independent reviewer scored 7/10. Findings:
+
+- All 15 connectors use `edgeStyle=none`: straight diagonal lines. No segment is shared, but only because nothing is orthogonal. The package asks for orthogonal routes in prose and never names the style, and the layout check computes orthogonal routes only, so it said almost nothing. The reviewer did not count the diagonals against the image.
+- The `westeurope` frame still encloses every Azure service. The agent report justifies it, consistent with `cloud-conventions.md`, which says a regional service sits in its region; that rule overrides the new one in practice.
+- `1 sign in` and `2 question` were numbered into the query sequence, so the source's three steps became 3 to 5. The ingestion path runs along the whole bottom edge and back up, and is not numbered.
