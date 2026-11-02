@@ -40,7 +40,9 @@ test('candidate helpers work from an isolated relocated package with exact, vend
       { cwd: dir, encoding: 'utf8' },
     );
     assert.equal(result.status, 0, result.error?.message || result.stderr);
-    assert.deepEqual(JSON.parse(result.stdout).matches, entry);
+    const { placement, ...match } = JSON.parse(result.stdout).matches[0];
+    assert.deepEqual([match], entry);
+    assert.deepEqual([placement.width, placement.height, placement.kind], [72, 72, 'symbol']);
     const module = spawnSync(
       process.execPath,
       [

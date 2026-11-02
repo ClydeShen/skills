@@ -1,5 +1,6 @@
 import { deflateRawSync } from 'node:zlib';
 import { styleMap } from './catalog.mjs';
+import { checkEmbeddedIcons, sha256 } from './icons.mjs';
 
 // draw.io stores user-object attributes on cell.value, not always on mxCell.
 // This function is also serialized into the browser renderer.
@@ -24,19 +25,25 @@ export function pageSize(source) {
   return { width, height };
 }
 
-export function referencedAssets(source, catalog) {
+export function referencedAssets(source, catalog, icons = { entries: [] }) {
   const allowed = new Set(
     catalog.entries
       .filter((e) => e.usable)
       .map((e) => styleMap(e.style).image)
       .filter(Boolean),
   );
+  const embedded = new Set(icons.entries.map((e) => e.sha256));
+  checkEmbeddedIcons(source, icons);
   const refs = [...new Set([...source.matchAll(/\bimage=([^;"<>]+)(?:;|(?="))/g)].map((m) => m[1]))];
+  const files = [];
   for (const ref of refs) {
+    const data = ref.match(/^data:image\/svg\+xml,([A-Za-z0-9+/=]+)$/)?.[1];
+    if (data && embedded.has(sha256(Buffer.from(data, 'base64').toString('utf8')))) continue;
     if (!/^img\/lib\/[a-zA-Z0-9_./-]+\.svg$/.test(ref) || ref.split('/').includes('..') || !allowed.has(ref))
-      throw new Error(`Uncatalogued or unsafe render image: ${ref}`);
+      throw new Error(`Uncatalogued or unsafe render image: ${ref.slice(0, 80)}`);
+    files.push(ref);
   }
-  return refs;
+  return files;
 }
 
 // Needs no installation. Browsers do not send the part after # to the server, so the diagram stays on the device.

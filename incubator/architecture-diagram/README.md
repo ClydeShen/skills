@@ -8,7 +8,7 @@ Stage: **public**. Updated: 2026-10-29. Basis: verified candidate installation a
 
 ## What you get
 
-One editable `.drawio` architecture diagram and its PNG for documents, Markdown and wikis, with a logical, deployment or flow emphasis supported by your English scenario description. Unresolved source claims and implementation choices stay in a concise companion account. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable.
+One editable `.drawio` architecture diagram and its PNG for documents, Markdown and wikis, with a logical, deployment or flow emphasis supported by your English scenario description. Unresolved source claims and implementation choices stay in a concise companion account. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable. Icons cover AWS, Azure, Google Cloud and Kubernetes through draw.io's libraries, and common platform vendors such as Terraform, GitHub, Microsoft Fabric, Kafka and Cloudflare through bundled upstream artwork that is embedded in the file, so it opens in any draw.io without extra libraries. See the [icon coverage sheet](./evals/icon-coverage-2026-11-02/README.md).
 
 Start with a specific interaction, such as a sign-in flow or a request crossing cloud and on-premises boundaries. Code/IaC input, and automatic redraw are outside current scope. Static export is the core goal; an interactive HTML and SVG version may follow.
 

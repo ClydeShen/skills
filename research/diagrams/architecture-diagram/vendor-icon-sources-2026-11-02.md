@@ -12,12 +12,12 @@ Confidence markers:
 
 ## Overview
 
-| Question                                           | Recommendation                                                                                                                                                                 | Strength of evidence                                 | Confidence                                   |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- | -------------------------------------------- |
-| 1. Which vendors does draw.io 32.6.1 cover?        | AWS, Azure, Google Cloud, Kubernetes, plus Azure DevOps, Azure-hosted Databricks and Red Hat OpenShift through `azure2`. Twelve vendors have no draw.io icon.                  | strong                                               | [measured]                                   |
-| 2. Where do the others come from?                  | Simple Icons covers 20 of the 26 requested vendors with a per-icon official source URL. Microsoft Fabric has an official npm package. MuleSoft and Confluent: no source found. | strong for packages; weak for MuleSoft and Confluent | [measured]                                   |
-| 3. How to keep icons current without drawing them? | Generate one catalog from pinned package versions, copy SVGs byte for byte with a hash, and add a staleness check against the registry.                                        | medium                                               | [inference] built on [measured] release data |
-| 4. One unified mechanism                           | Extend the existing generated catalog with a provenance-tagged second tier; embed SVGs as data URIs; let checks reject any icon not in the catalog.                            | medium                                               | [inference]                                  |
+| Question                                           | Recommendation                                                                                                                                                                                                                              | Strength of evidence | Confidence                                   |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | -------------------------------------------- |
+| 1. Which vendors does draw.io 32.6.1 cover?        | AWS, Azure, Google Cloud, Kubernetes, plus Azure DevOps, Azure-hosted Databricks and Red Hat OpenShift through `azure2`. Twelve vendors have no draw.io icon.                                                                               | strong               | [measured]                                   |
+| 2. Where do the others come from?                  | `@thesvg/icons` 4.0.0 covers every requested vendor in colour, with light variants and per-icon licence and URL fields. Microsoft Fabric's own npm package has its workload and item icons. MuleSoft and Confluent exist only as wordmarks. | strong               | [measured]                                   |
+| 3. How to keep icons current without drawing them? | Generate one catalog from pinned package versions, copy SVGs byte for byte with a hash, and add a staleness check against the registry.                                                                                                     | medium               | [inference] built on [measured] release data |
+| 4. One unified mechanism                           | Extend the existing generated catalog with a provenance-tagged second tier; embed SVGs as data URIs; let checks reject any icon not in the catalog.                                                                                         | medium               | [inference]                                  |
 
 ## 1. Coverage in draw.io 32.6.1
 
@@ -71,15 +71,19 @@ Microsoft Fabric: Microsoft Learn provides "the official collection of icons for
 
 Gilbarbara `logos` includes a `fabric` icon; it is the Fabric.io logo, not Microsoft Fabric. [measured]
 
-MuleSoft and Confluent: no official brand or icon page could be reached (403 or 404 on probed URLs). [measured] Not found.
+MuleSoft and Confluent: no official brand or icon page could be reached (403 or 404 on probed URLs). [measured]
+
+`@thesvg/icons` 4.0.0 (MIT package, 7,600+ brand SVGs) has every requested vendor, usually as `default` (colour) and `mono` variants, sometimes `light`, `dark` or `wordmark`. Each module exports `license` and `url`; per-icon licences vary (CC0-1.0, MIT, Apache-2.0, nominative fair use, and "Microsoft proprietary … maintainer review required" for its Fabric copies). [measured] Its MuleSoft SVG carries the title `MS_2019_Master_Horizontal_Logo_CoreBlue` and is identical to the svgl.app copy; its Confluent SVG is an Inkscape-edited horizontal wordmark. Neither has a symbol-only variant. [measured]
+
+The raw SVGs in `@fabric-msft/svg-icons` 11.1.0 are under `svg/`, named `<item>_<size>_<item|color>.svg`; the product mark is `fabric_48_color.svg`. [measured]
 
 ### Recommendation for the project
 
-Use Simple Icons as the single brand-logo tier, because each icon names its source and the release cadence is documented. Use `@fabric-msft/svg-icons` for Microsoft Fabric. Keep MuleSoft and Confluent as plain boxes until the owner supplies official assets. Do not use `logos` or `devicon`: they lack per-icon provenance, so currency and origin cannot be checked.
+Use draw.io libraries first, then the vendor's own package (Microsoft Fabric), then `@thesvg/icons`, preferring its `light` variant on a white canvas. Use a horizontal wordmark as the component's logo and label when no symbol exists (MuleSoft, Confluent). Fall back to a plain box when the only mark is unreadable text (GitHub Pages). Simple Icons, `logos` and `devicon` are not needed: Simple Icons is single-colour and a subset; the other two lack per-icon provenance. A rendered check of all 109 selected icons is in [icon coverage check](../../../incubator/architecture-diagram/evals/icon-coverage-2026-11-02/README.md).
 
 ### Relation to existing constraints
 
-Simple Icons logos are brand marks, not product architecture icons, and are single-colour. They are suitable for a vendor component but cannot distinguish products inside one vendor beyond what the set names.
+Most non-cloud vendors publish one brand mark, not product architecture icons, so a vendor component usually cannot be distinguished below the product names the set includes.
 
 ## 3. Keeping icons current without drawing
 
@@ -106,7 +110,7 @@ draw.io's own `GCP Icons` palette stores icons as `shape=image;image=data:image/
 
 ### Recommendation for the project
 
-Resolve every component through `find-icon.mjs` in a fixed order: draw.io vendor library, then official vendor package, then Simple Icons, then the plain-box fallback. The agent never chooses the source; the catalog does.
+Resolve every component through `find-icon.mjs` in a fixed order: draw.io vendor library, then official vendor package, then `@thesvg/icons`, then the plain-box fallback. The agent never chooses the source; the catalog does.
 
 ### Relation to existing constraints
 
@@ -115,22 +119,23 @@ Keeps one generated catalog as the single source of truth, consistent with the p
 ## Not verified
 
 - Whether each vendor's own brand guidelines allow its logo in third-party diagrams or redistribution in an open-source package.
-- Whether Simple Icons `source` SVGs match each vendor's current mark; only the URLs were read.
-- How draw.io Desktop treats large data URIs in exported PNGs; not tested.
+- Whether theSVG copies match each vendor's current mark; only metadata and SVG titles were read.
+- How draw.io Desktop treats large data URIs in exported PNGs; the 109-icon sheet rendered, but embedding in PNG metadata was not tested.
 - Docker in MSCAE, Ansible in IBM Cloud and GitHub in WebIcons: currency not compared with vendor marks.
-- MuleSoft and Confluent official assets.
+- MuleSoft and Confluent symbol-only official assets.
 
 ## Decisions for the owner
 
-- Accept single-colour brand logos for non-cloud vendors, or require multicolour official artwork?
-- Bundle icons with licences such as CC-BY-SA-3.0 (Jenkins), which require attribution, or keep those as plain boxes?
-- Bundle Microsoft Fabric icons, whose terms permit copying only for diagram, training and documentation use?
+- Settled 2026-11-02: use any readily available upstream icon; wordmarks are acceptable where no symbol exists; plain box otherwise.
+- Bundle icons whose per-icon licence requires attribution (Jenkins CC-BY-SA-3.0) or limits use (Microsoft Fabric terms), or resolve them at generation time only?
 
 ## Sources
 
 - https://www.npmjs.com/package/simple-icons: package metadata; tarball 16.36.0 read for `DISCLAIMER.md`, `VERSIONING.md` and `data/simple-icons.json`.
 - https://www.npmjs.com/package/@iconify-json/logos: package metadata and `info.json` in tarball 1.2.18.
 - https://www.npmjs.com/package/@iconify-json/devicon: package metadata and `info.json` in tarball 1.2.76.
-- https://www.npmjs.com/package/@fabric-msft/svg-icons: version and licence via `npm view`.
+- https://www.npmjs.com/package/@fabric-msft/svg-icons: version and licence via `npm view`; tarball 11.1.0 `svg/` folder read.
+- https://www.npmjs.com/package/@thesvg/icons: tarball 4.0.0 read for variants, `license` and `url` of each selected icon.
+- https://svgl.app/library/mulesoft.svg: MuleSoft SVG compared with the theSVG copy.
 - https://learn.microsoft.com/en-us/fabric/fundamentals/icons: official Microsoft Fabric icon terms and download locations.
 - https://github.com/jgraph/drawio/tree/84487b4891cbc0f32d7e30f34cf878c87cb1f414: sidebar sources searched for each vendor.

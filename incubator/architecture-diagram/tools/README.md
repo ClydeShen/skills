@@ -19,3 +19,15 @@ Rendering is part of the package: run `node incubator/architecture-diagram/candi
 ## Catalog helpers
 
 Use the package's [lookup and regeneration instructions](../candidate/architecture-diagram/references/drawio.md#exact-icon-lookup). `catalog.mjs` here is a compatibility entry for historical fixture generators; the package owns the implementation. Generated metadata must not be edited manually.
+
+## Vendor icons
+
+`build-vendor-icons.mjs` regenerates the package's `assets/vendor-icons.json` from the pinned npm releases it names. Without an argument it downloads them with `npm pack`; pass a directory holding unpacked `thesvg/` and `fabric/` packages to work offline. `--check-latest` compares the pinned versions with the registry and exits 2 when an update exists. To update, change the pinned version, regenerate, review the [icon coverage sheet](../evals/icon-coverage-2026-11-02/README.md) and run the tests.
+
+```sh
+node incubator/architecture-diagram/tools/build-vendor-icons.mjs --check-latest
+node incubator/architecture-diagram/tools/build-vendor-icons.mjs
+node incubator/architecture-diagram/evals/icon-coverage-2026-11-02/generate.mjs
+```
+
+The curated list in the builder decides which icons ship. `trim-viewbox.mjs` tightens only the `viewBox` of marks drawn in a square canvas with wide transparent margins; artwork paths and colours stay unchanged.

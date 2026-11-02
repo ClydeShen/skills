@@ -30,11 +30,11 @@ Before composing the view, read [composition.md](references/composition.md), [re
 - Label what the reader cannot infer reliably from the symbols and topology. Preserve distinguishing roles, exact-hop contracts, branch conditions and transformations; omit repeated type names, obvious forwarding prose and unknown-value placeholders. Disclose material unknowns together outside the graph or once in a compact scope line.
 - Keep every route inside domains shared by its endpoints. Cross only required boundaries. Move nodes or ports before adding detours; native inline labels interrupt their own stroke.
 - Prefer supported visual structure and concise local labels to explanatory Notes. Use a table for a real repeated relation, such as firewall allowances, not as a substitute for topology. Never delete a fact just to reduce text.
-- Use exact vendor/catalog matches. Use the documented plain-box fallback when no reliable match exists. Never borrow a similar icon.
+- Use exact vendor/catalog matches from `find-icon.mjs`, with the size and style it returns. Use the documented plain-box fallback when no reliable match exists. Never borrow a similar icon or draw one.
 
 ## Inspect and deliver
 
-Run `node scripts/check-text.mjs <diagram.drawio>` and `node scripts/check-layout.mjs <diagram.drawio>`, and fix what they report. Run `node scripts/render.mjs <diagram.drawio>` and read the PNG. Squint at it: the main path and its start must stand out. Check the actual image, not XML alone, and repeat after every fix. If the script exits with code 3, nothing more can be rendered here: deliver the `.drawio`, pass on the link it prints, and state that the image was not inspected. Otherwise the work is unfinished until the PNG has been inspected.
+Run `node scripts/embed-icons.mjs <diagram.drawio>` whenever the diagram uses a vendor icon outside the draw.io libraries. Then run `node scripts/check-text.mjs <diagram.drawio>` and `node scripts/check-layout.mjs <diagram.drawio>`, and fix what they report. Run `node scripts/render.mjs <diagram.drawio>` and read the PNG. Squint at it: the main path and its start must stand out. Check the actual image, not XML alone, and repeat after every fix. If the script exits with code 3, nothing more can be rendered here: deliver the `.drawio`, pass on the link it prints, and state that the image was not inspected. Otherwise the work is unfinished until the PNG has been inspected.
 
 Trace every entry through its intended destination, including auxiliary calls and explicit failures. Verify instances, memberships, protocols and conditions against the source. Check that branch selection cannot be mistaken for broadcast.
 

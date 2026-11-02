@@ -1,0 +1,874 @@
+[
+  {
+    "vendor": "Kubernetes",
+    "caption": "Kubernetes",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.9,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Helm",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Role",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Volume",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "StatefulSet",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Ingress",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Group",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "kube-proxy",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "ClusterRole",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Controller manager",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "etcd",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Deployment",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "DaemonSet",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Namespace",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "API server",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "PodSecurityPolicy",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "RoleBinding",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Cloud controller manager",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Scheduler",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "ConfigMap",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "CRD",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Pod",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Job",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Endpoints",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "PersistentVolume",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Kubelet",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Control plane",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "User",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "NetworkPolicy",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "ReplicaSet",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "ServiceAccount",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Node",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "ResourceQuota",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "PVC",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "HPA",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Service",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "CronJob",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "Secret",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "LimitRange",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "StorageClass",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "Kubernetes",
+    "caption": "ClusterRoleBinding",
+    "kind": "symbol",
+    "width": 72,
+    "height": 69.1,
+    "source": "draw.io kubernetes"
+  },
+  {
+    "vendor": "OpenShift",
+    "caption": "Red Hat OpenShift",
+    "kind": "symbol",
+    "width": 72,
+    "height": 66.7,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "OpenShift",
+    "caption": "Azure Red Hat OpenShift",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "draw.io azure2"
+  },
+  {
+    "vendor": "OpenShift",
+    "caption": "ROSA",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "draw.io aws4"
+  },
+  {
+    "vendor": "Docker",
+    "caption": "Docker",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Terraform",
+    "caption": "Terraform",
+    "kind": "symbol",
+    "width": 50,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Ansible",
+    "caption": "Ansible",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Argo CD",
+    "caption": "Argo CD",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Argo CD",
+    "caption": "Argo",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "GitHub",
+    "caption": "GitHub",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "GitHub",
+    "caption": "GitHub Actions",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "GitHub",
+    "caption": "GitHub Copilot",
+    "kind": "symbol",
+    "width": 72,
+    "height": 58.5,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "GitHub",
+    "caption": "GitHub Codespaces",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "GitHub",
+    "caption": "GitHub Pages",
+    "kind": "fallback",
+    "width": 144,
+    "height": 72,
+    "source": "plain-box fallback"
+  },
+  {
+    "vendor": "Azure DevOps",
+    "caption": "Azure DevOps",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "draw.io azure2"
+  },
+  {
+    "vendor": "Jenkins",
+    "caption": "Jenkins",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "VMware",
+    "caption": "VMware",
+    "kind": "wide",
+    "width": 200,
+    "height": 38.1,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "VMware",
+    "caption": "vSphere",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "VMware",
+    "caption": "Azure VMware Solution",
+    "kind": "symbol",
+    "width": 72,
+    "height": 57.4,
+    "source": "draw.io azure2"
+  },
+  {
+    "vendor": "VMware",
+    "caption": "Elastic VMware Service",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "draw.io aws4"
+  },
+  {
+    "vendor": "Databricks",
+    "caption": "Databricks",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Databricks",
+    "caption": "Azure Databricks",
+    "kind": "symbol",
+    "width": 66.5,
+    "height": 72,
+    "source": "draw.io azure2"
+  },
+  {
+    "vendor": "Snowflake",
+    "caption": "Snowflake",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Microsoft Fabric",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "OneLake",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Power BI",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Data Factory",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Data Engineering",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Data Warehouse",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Data Science",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Real-Time Intelligence",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Lakehouse",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Warehouse",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "SQL database",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Mirrored database",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Eventstream",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Eventhouse",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "KQL database",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Pipeline",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Dataflow Gen2",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Notebook",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Semantic model",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Report",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Real-Time dashboard",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "Microsoft Fabric",
+    "caption": "Data agent",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@fabric-msft/svg-icons"
+  },
+  {
+    "vendor": "MuleSoft",
+    "caption": "MuleSoft",
+    "kind": "wide",
+    "width": 132.2,
+    "height": 40,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Apigee",
+    "caption": "Apigee",
+    "kind": "symbol",
+    "width": 72,
+    "height": 70.2,
+    "source": "draw.io gcp3"
+  },
+  {
+    "vendor": "Kong",
+    "caption": "Kong",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Kafka",
+    "caption": "Apache Kafka",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Kafka",
+    "caption": "Amazon MSK",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "draw.io aws4"
+  },
+  {
+    "vendor": "Confluent",
+    "caption": "Confluent",
+    "kind": "wide",
+    "width": 200,
+    "height": 38.7,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "HashiCorp",
+    "caption": "HashiCorp",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "HashiCorp",
+    "caption": "Vault",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "HashiCorp",
+    "caption": "Consul",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "HashiCorp",
+    "caption": "Nomad",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "HashiCorp",
+    "caption": "Packer",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "HashiCorp",
+    "caption": "Vagrant",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "HashiCorp",
+    "caption": "Waypoint",
+    "kind": "symbol",
+    "width": 72,
+    "height": 47,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Splunk",
+    "caption": "Splunk",
+    "kind": "wide",
+    "width": 123.6,
+    "height": 40,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Dynatrace",
+    "caption": "Dynatrace",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Grafana",
+    "caption": "Grafana",
+    "kind": "symbol",
+    "width": 66.1,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Grafana",
+    "caption": "Grafana Loki",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Grafana",
+    "caption": "Prometheus",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Grafana",
+    "caption": "Azure Managed Grafana",
+    "kind": "symbol",
+    "width": 72,
+    "height": 55.9,
+    "source": "draw.io azure2"
+  },
+  {
+    "vendor": "Grafana",
+    "caption": "Amazon Managed Grafana",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "draw.io aws4"
+  },
+  {
+    "vendor": "Cloudflare",
+    "caption": "Cloudflare",
+    "kind": "wide",
+    "width": 88.3,
+    "height": 40,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Cloudflare",
+    "caption": "Cloudflare Workers",
+    "kind": "symbol",
+    "width": 72,
+    "height": 65,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Cloudflare",
+    "caption": "Cloudflare Pages",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  },
+  {
+    "vendor": "Cloudflare",
+    "caption": "Workers AI",
+    "kind": "symbol",
+    "width": 72,
+    "height": 72,
+    "source": "@thesvg/icons"
+  }
+]

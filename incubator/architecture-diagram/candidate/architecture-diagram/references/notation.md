@@ -12,7 +12,7 @@ Choose a recognizable symbol at the level actually described: service, resource 
 
 Keep distinct environment instances visible. For a fleet, use an exact multi-instance symbol or a small repeated/stacked set, with one clear indication that counts are representative when unspecified. Do not collapse a fleet into one ordinary icon plus “multiple”. Reuse drawing patterns, not entity identity.
 
-Keep people and external systems outside deployment boundaries. Use official vendor symbols from one pinned generation per vendor, preserving their colors and identity. Keep comparable icons at a consistent size; start with 72 draw.io units. Place captions below or beside symbols where they remain clearly associated and leave paths readable; comparable elements should feel consistent, not mechanically identical.
+Keep people and external systems outside deployment boundaries. Use official vendor symbols from one pinned generation per vendor, preserving their colors and identity. Size every icon by the placement `find-icon.mjs` returns, so comparable icons match: a 72-unit square, or 40 high for wide marks. Place captions below or beside symbols where they remain clearly associated and leave paths readable; comparable elements should feel consistent, not mechanically identical.
 
 Use matching built-in group styles only when their meaning fits. Do not use public/private-subnet or lock symbols to invent security properties. If no exact service icon exists, use a white box with a thin grey border and a truthful name; never borrow a similar vendor icon.
 
