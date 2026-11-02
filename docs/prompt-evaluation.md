@@ -56,6 +56,14 @@ The endpoint must support Chat Completions. Use a local service or an explicitly
 
 Variables come from `.env.evaluation` or the host environment, avoiding OS-specific assignments in npm commands. Existing environment variables take precedence. Evaluation disables Promptfoo telemetry, update checks, caching and result sharing; the local runner writes reports.
 
+## Image judge
+
+For skills whose deliverable is an image, [`evals/vision-judge.mjs`](../evals/vision-judge.mjs) provides a Promptfoo provider that reads one image and checks a list of claims against what is visible. It uses `NVIDIA_JUDGE_MODEL`, which defaults to `mistralai/mistral-large-4-1t-a52b`, so the judge differs from the generation model and never inherits its reasoning or token settings.
+
+A suite supplies `image_path` and `claims` as test vars. Each claim is `{ id, text, critical?, expect? }`. The judge never sees `critical` or `expect`. A `not_drawn` claim is a planted false claim: a strict majority of runs confirming it fails the case, and a lone confirmation is reported as a flag. A critical claim needs a strict majority of runs to confirm it. Give the judge neutral claim ids in shuffled order; an id such as `x-...` that reveals a planted claim inflates its accuracy. Add planted false claims for each kind of error the skill can make, such as reversed direction, wrong boundary, wrong count and wrong responsibility, so a judge that agrees with everything is caught.
+
+The provider asks each run in a different claim order, retries transient HTTP errors with backoff, and reports an error without credentials when no run succeeds. A suite that returns its own `providers` keeps them in model mode; the report lists them as `suite_providers`. Calibration on 2026-10-30 used one image and four candidate judges with a handful of runs each; treat the judge as a noisy instrument and spot-check its evidence.
+
 ## Meta Thinking suite
 
 The initiative owns its [cases](../incubator/meta-thinking/evals/cases.json) and [suite](../incubator/meta-thinking/evals/suite.mjs); `evals/` owns the shared runner.

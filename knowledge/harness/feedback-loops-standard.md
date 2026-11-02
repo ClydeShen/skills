@@ -124,12 +124,12 @@ Rules:
 
 One fix repairs one mistake. A change to the harness stops the same kind of mistake in every later task. When a kind of problem repeats, move it up this ladder:
 
-| Step                     | When                                  | What                                                                                                                              |
-| ------------------------ | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| 1. Fix and record        | The first time                        | Fix the code. Add an entry to the feedback log (section 4.4)                                                                      |
-| 2. Make it a check       | It repeats, and a tool can detect it  | A lint rule, a structure test, an architecture rule, or a test. Give it a message by section 1                                    |
-| 3. Make it a guide       | It repeats, and no tool can detect it | One short rule, as close as possible to where it applies: in the folder's instructions, in a template, or in the review checklist |
-| 4. Make it a global rule | Only if it applies to every task      | One line in AGENTS.md                                                                                                             |
+| Step                     | When                                  | What                                                                                                                                                                                             |
+| ------------------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1. Fix and record        | The first time                        | Fix the code. Add an entry to the feedback log (section 4.4)                                                                                                                                     |
+| 2. Make it a check       | It repeats, and a tool can detect it  | A lint rule, a structure test, an architecture rule, or a test. Give it a message by section 1                                                                                                   |
+| 3. Make it a guide       | It repeats, and no tool can detect it | One short rule, as close as possible to where it applies: in the folder's instructions, in a template, or in the review instructions ([reviewer-standard.md](./reviewer-standard.md), section 7) |
+| 4. Make it a global rule | Only if it applies to every task      | One line in AGENTS.md                                                                                                                                                                            |
 
 Rules:
 
@@ -144,6 +144,7 @@ The checks get feedback too. A noisy check teaches people and agents to ignore i
 1. **Anyone can mark a check result "not useful"** and give one reason. Use the simplest channel that the team has (an issue label, a line in the feedback log).
 2. **Review the checks at least once per milestone.** Look at the checks that are often marked "not useful", the checks that never fire, and the rules that are often bypassed. For each, rewrite the message, change the rule, or remove the check. Often a better message is enough.
 3. **A check that never fires** is either a sign of good code or a blind spot. Find out which, for example with mutation testing or a deliberate mistake.
+4. **Measure a reviewer as you measure a check.** Count the findings that the implementer showed to be wrong. When you change the reviewer (the model, the prompt, or the review instructions), run it on past changes with a known result: changes that were reverted or caused an incident, and changes that were clean. Keep the change only if the reviewer finds more of the first group and adds no false findings on the second. Start a new reviewer in a mode where its comments do not block, until the team trusts it.
 
 ### 4.4 The feedback log
 
@@ -206,3 +207,4 @@ All pages were opened on 2026-10-14. The research note behind this file also lis
 - [Loop engineering without verification is just automation (Sonar)](https://www.sonarsource.com/blog/loop-engineering-without-verification-is-just-automation/): checks that can fail the work versus opinions; a separate judge over self-critique.
 - [Evaluating AGENTS.md (arXiv 2602.11988)](https://arxiv.org/pdf/2602.11988): context files did not raise task success and raised cost; write only the minimum requirements.
 - [Agentic Context Engineering (arXiv 2510.04618)](https://arxiv.org/html/2510.04618v2): itemized, incremental updates; repeated rewriting loses detail.
+- 2026-10-30: [How the Claude Code team does code review](https://claude.dev/blog/solving-code-review-at-anthropic/) (Anthropic developer blog, read as a summary): a daily run of the reviewer on past incident changes, and on clean changes; a change to the reviewer stays only if the score rises. [How Anthropic secures its AI-native software development lifecycle](https://claude.com/blog/how-anthropic-secures-its-ai-native-software-development-lifecycle) (read as a summary): a new AI reviewer posts comments for human approval until trust is earned.

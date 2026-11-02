@@ -18,7 +18,9 @@ async function main() {
   process.env.PROMPTFOO_CACHE_ENABLED = 'false';
   process.env.PROMPTFOO_CONFIG_DIR = resolve(local, 'promptfoo');
   const { createSuite } = await import(pathToFileURL(resolve(root, suitePath)).href);
-  const suite = await createSuite({ mode });
+  const suite = await createSuite({ mode, env: process.env });
+  // A suite that supplies its own providers, such as the image judge, keeps them in model mode.
+  const suiteProviders = Boolean(suite.providers?.length);
   if (caseId) {
     suite.tests = suite.tests.filter((test) => test.vars?.case_id === caseId);
     if (!suite.tests.length) throw new Error('No test matches the requested case ID.');
@@ -26,7 +28,7 @@ async function main() {
   const { default: promptfoo } = await import('promptfoo');
   const record = await promptfoo.evaluate({
     ...suite,
-    ...(provider ? { providers: [provider] } : {}),
+    ...(provider && !suiteProviders ? { providers: [provider] } : {}),
     writeLatestResults: false,
     sharing: false,
   }, { cache: false, maxConcurrency: 1 });
@@ -36,14 +38,15 @@ async function main() {
   const report = {
     created_at: new Date().toISOString(),
     mode,
-    scope: mode === 'fixture' ? 'Synthetic replay: harness and assertions only; no model was evaluated.' : 'Prompt decision checks; no agent tools or persistent memory execution.',
+    scope: mode === 'fixture' ? 'Synthetic replay: harness and assertions only; no model was evaluated.' : suiteProviders && suite.description ? suite.description : 'Prompt decision checks; no agent tools or persistent memory execution.',
     suite: suitePath,
     case_filter: caseId || null,
     suite_sha256: digest(await readFile(resolve(root, suitePath), 'utf8')),
     framework: { name: 'promptfoo', version: packageInfo.version },
     runtime: { node: process.version, platform: process.platform, arch: process.arch },
-    model: provider ? provider.id.replace(/^openai:chat:/, '') : null,
-    parameters: provider ? {
+    model: provider && !suiteProviders ? provider.id.replace(/^openai:chat:/, '') : null,
+    suite_providers: mode === 'model' && suiteProviders ? suite.providers.map((p) => (typeof p.id === 'function' ? p.id() : null)).filter(Boolean) : undefined,
+    parameters: provider && !suiteProviders ? {
       endpoint: provider.config.apiBaseUrl,
       temperature: provider.config.temperature,
       top_p: provider.config.top_p,

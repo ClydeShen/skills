@@ -30,7 +30,7 @@ Blocked by #<prerequisite issue>, #<prerequisite issue>
 ## How to finish
 - Meet the project's Definition of Done: <link or summary>. This story also needs: <for example, a document to update, a live smoke test>.
 - Commit each story separately. Put the verification result in the commit message.
-- Report the result of each acceptance condition in this issue (command and output). Then move the issue to "in review".
+- Report the result of each acceptance condition in this issue (command and output), and say how to undo the change. Then move the issue to "in review".
 - If you cannot continue by your own actions, stop. Mark the issue blocked with the reason, the role that can remove the cause, and the condition to continue.
 - Refer to this issue with `Refs: #<n>`. Do not use keywords that close it on merge; a planner closes it after verification.
 

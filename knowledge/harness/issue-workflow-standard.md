@@ -64,9 +64,9 @@ When an issue is blocked, stop. Write the reason, the role that can remove the c
 | Backlog | Ready | Planner | The issue meets the Definition of Ready and has no open hard dependency. |
 | Ready | In progress | Implementer | The implementer claims it. No issue of its conflict group is in progress. The WIP limit is not reached. |
 | In progress | Ready | Implementer | The implementer removes its claim. The issue says what is done and the next step. |
-| In progress | In review | Implementer | The one-command check passes. The report in the issue has the command and the output of each acceptance condition. The change is ready to merge (for example, a pull request). |
+| In progress | In review | Implementer | The one-command check passes. The report in the issue has the command and the output of each acceptance condition, and says how to undo the change. The change is ready to merge (for example, a pull request). |
 | In review | In progress | Reviewer | A required check fails, the merge queue rejects the change, or there is a confirmed blocking finding. Count one round. |
-| In review | Verifying | Reviewer approves; the implementer or the merge queue merges | No confirmed blocking finding. The full check passes at the last gate ([guardrails-standard.md](./guardrails-standard.md), section 1). The change is merged. |
+| In review | Verifying | Reviewer approves; the implementer or the merge queue merges | No confirmed blocking finding. The approvals of the risk tier are given ([reviewer-standard.md](./reviewer-standard.md), section 6). The full check passes at the last gate ([guardrails-standard.md](./guardrails-standard.md), section 1). The change is merged. |
 | Verifying | In progress | Planner | An acceptance condition or the Definition of Done is not satisfied on the merged result. Count one round. |
 | Verifying | Closed | Planner | The Definition of Done is satisfied (section 2.2). |
 | Closed | Verifying | Planner | The issue was closed without verification (for example, by a closing keyword in a merged pull request). |
@@ -199,8 +199,8 @@ The states of the issues show the health of the whole delivery system. A planner
 | False-ready rate: issues marked ready that implementers send back as blocked or ambiguous | The quality of the Definition of Ready itself. |
 | Reasons for "not ready" and "blocked", by the role that can fix them | Technical dependency (tech lead), architecture gap (architect), unclear story or acceptance (business analyst), missing test criteria (QA or business analyst), missing decision (owner). A cause that recurs needs a fix of the system, not only of the issue. |
 | Work that waits for human verification or approval | In an agent-driven project, capacity is often not coding speed. It is the attention of the people who verify and approve, environment slots (a GPU, rate limits, token budgets), and file conflicts. A queue of ready work is normal. A growing queue of work that waits for people is the signal. |
-
 | Review sampling: the share of agent changes that a person read, and whether a person read each change to a contract, core logic, security, or data | Comprehension debt ([GLOSSARY.md](../../GLOSSARY.md)). A share that falls while the output grows means that the team owns more code that it cannot explain. |
 | Cost per closed issue (tokens or money), with the number of agent sessions and rounds | Whether the loops converge. A cost that grows for issues of the same size shows a stuck loop or a vague issue ([feedback-loops-standard.md](./feedback-loops-standard.md), section 2.3). |
+| Revert rate and incident rate: the share of merged changes that were reverted, and the share that caused an incident | Whether the review lets defects pass. If these rise while the time that people spend on review falls, the time was not saved. It moved to later. |
 
 Count blocked, waiting, and on hold separately. If waiting is counted as blocked, the block signal is too high and a capacity problem is hidden. If on-hold work stays in progress, the cycle time and the work in progress are wrong.
