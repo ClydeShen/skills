@@ -1,11 +1,12 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // Claude and Codex call this when a session starts. It stays silent on stdout because clients treat
 // that stream as session context; a failure reaches the agent through the later gates.
 const root = fileURLToPath(new URL('../', import.meta.url));
-const installed = existsSync(new URL('../node_modules/.bin/biome', import.meta.url));
+const installed = existsSync(path.join(root, 'node_modules', '@biomejs', 'biome', 'package.json'));
 const [command, args] = installed
   ? [process.execPath, ['harness/prepare.mjs']]
   : ['npm', ['ci', '--no-audit', '--no-fund']];
