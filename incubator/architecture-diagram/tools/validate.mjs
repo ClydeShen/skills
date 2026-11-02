@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
+import { findForbiddenText } from '../candidate/architecture-diagram/scripts/check-text.mjs';
 import { styleMap, upstreamVersion } from './catalog.mjs';
 
 const list = (value) => (value == null ? [] : Array.isArray(value) ? value : [value]);
@@ -376,7 +377,11 @@ if (
 ) {
   const [file, catalogFile = fileURLToPath(new URL('../prototype/catalog.json', import.meta.url))] =
     process.argv.slice(2);
-  const errors = validateDiagram(readFileSync(file, 'utf8'), JSON.parse(readFileSync(catalogFile, 'utf8')));
+  const xml = readFileSync(file, 'utf8');
+  const errors = [
+    ...validateDiagram(xml, JSON.parse(readFileSync(catalogFile, 'utf8'))),
+    ...findForbiddenText(xml).map(({ symbol, text }) => `Found "${symbol}" in visible text: ${text}`),
+  ];
   for (const error of errors) console.error(error);
   console.log(
     `Prototype static checks: ${errors.length} errors. Caption bounds are estimates; inspect the actual render.`,

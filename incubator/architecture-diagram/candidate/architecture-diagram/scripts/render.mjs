@@ -1,20 +1,97 @@
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync, spawn, spawnSync } from 'node:child_process';
 import { once } from 'node:events';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { tmpdir } from 'node:os';
+import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
 import { upstreamCommit, upstreamVersion } from './catalog.mjs';
 import { annotationMetadata, pageSize, referencedAssets } from './render-inputs.mjs';
 
-const [checkout, input, svgOutput, screenshot] = process.argv.slice(2);
-if (!screenshot)
-  throw new Error('Usage: node tools/render.mjs <drawio-checkout> <input.drawio> <output.svg> <preview.png>');
-if (execFileSync('git', ['-C', checkout, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim() !== upstreamCommit)
-  throw new Error('Renderer checkout is not pinned.');
+const [input, screenshot = input?.replace(/(\.drawio)?$/, '.png')] = process.argv.slice(2);
+if (!input) throw new Error('Usage: node scripts/render.mjs <diagram.drawio> [output.png]');
+const svgOutput = screenshot.replace(/\.png$/, '.svg');
+const git = (args, options = {}) => execFileSync('git', args, { encoding: 'utf8', ...options }).trim();
+
+// The first run fetches the pinned draw.io viewer once; later runs work offline.
+function pinnedCheckout() {
+  const directory =
+    process.env.DRAWIO_CHECKOUT || path.join(homedir(), '.cache/architecture-diagram', `drawio-${upstreamCommit}`);
+  if (!existsSync(path.join(directory, '.git'))) {
+    git(
+      ['clone', '--quiet', '--filter=blob:none', '--no-checkout', 'https://github.com/jgraph/drawio.git', directory],
+      { stdio: 'pipe' },
+    );
+    git([
+      '-C',
+      directory,
+      'sparse-checkout',
+      'set',
+      'src/main/webapp/js',
+      'src/main/webapp/shapes',
+      'src/main/webapp/img/lib',
+    ]);
+    git(['-C', directory, 'checkout', '--quiet', upstreamCommit], { stdio: 'pipe' });
+  }
+  if (git(['-C', directory, 'rev-parse', 'HEAD']) !== upstreamCommit)
+    throw new Error(`Renderer checkout is not pinned: ${directory}`);
+  return directory;
+}
+
+function findBrowser() {
+  const names = [process.env.DIAGRAM_BROWSER, 'chromium', 'chromium-browser', 'google-chrome', 'chrome'];
+  for (const name of names.filter(Boolean)) {
+    if (spawnSync(name, ['--version'], { stdio: 'ignore' }).status === 0) return name;
+  }
+  const paths = [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    'C:/Program Files/Google/Chrome/Application/chrome.exe',
+    'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+  ];
+  const found = paths.find((file) => existsSync(file));
+  if (!found) throw new Error('No draw.io Desktop, Chromium or Chrome found. The PNG was not produced.');
+  return found;
+}
+
+// draw.io Desktop is the real target, and its PNG keeps an editable copy of the diagram.
+function exportWithDesktop() {
+  const candidates = [
+    process.env.DRAWIO_CLI,
+    'drawio',
+    path.join(homedir(), 'Applications/draw.io.app/Contents/MacOS/draw.io'),
+    '/Applications/draw.io.app/Contents/MacOS/draw.io',
+  ];
+  const shell = process.platform === 'win32';
+  for (const cli of candidates.filter(Boolean)) {
+    const args = [
+      '--export',
+      '--format',
+      'png',
+      '--embed-diagram',
+      '--border',
+      '20',
+      '--scale',
+      '2',
+      '--output',
+      screenshot,
+      input,
+    ];
+    if (spawnSync(cli, args, { stdio: 'ignore', timeout: 60_000, shell }).status === 0 && existsSync(screenshot))
+      return cli;
+  }
+  return null;
+}
+
+if (exportWithDesktop()) {
+  console.log(`Rendered ${screenshot} with draw.io Desktop; it embeds an editable copy. Inspect the PNG.`);
+  process.exit(0);
+}
+
+const browserPath = findBrowser();
+const checkout = pinnedCheckout();
 const source = readFileSync(input, 'utf8');
 const page = pageSize(source);
-const catalog = JSON.parse(readFileSync(new URL('../prototype/catalog.json', import.meta.url), 'utf8'));
+const catalog = JSON.parse(readFileSync(new URL('../assets/catalog.json', import.meta.url), 'utf8'));
 const assets = referencedAssets(source, catalog);
 const assetUris = Object.fromEntries(
   assets.map((ref) => [
@@ -89,7 +166,7 @@ try {
   server.listen(0, '127.0.0.1');
   await once(server, 'listening');
   const child = spawn(
-    process.env.DIAGRAM_BROWSER || 'chromium',
+    browserPath,
     [
       '--headless',
       '--no-sandbox',
@@ -191,7 +268,7 @@ try {
     child.kill('SIGTERM');
     await exited;
   }
-  console.log('Rendered with pinned local draw.io runtime in Chromium. Desktop rendering still requires verification.');
+  console.log(`Rendered ${screenshot} and ${svgOutput} with the pinned draw.io viewer. Inspect the PNG.`);
 } finally {
   server.closeAllConnections();
   await new Promise((resolve) => server.close(resolve));

@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { annotationMetadata, pageSize, referencedAssets } from '../tools/render-inputs.mjs';
+import {
+  annotationMetadata,
+  pageSize,
+  referencedAssets,
+} from '../candidate/architecture-diagram/scripts/render-inputs.mjs';
 
 test('annotation metadata survives draw.io user-object and mxCell encodings', () => {
   const metadata = { annotationKind: 'comment', annotationFor: 'endpoint' };
