@@ -19,7 +19,7 @@ const esc = (s) => s.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceA
 const pick = (vendor, title, caption = title, filter = () => true) => {
   const found = entries.filter((e) => e.vendor === vendor && e.title === title && filter(e));
   if (!found.length) throw new Error(`No icon for ${vendor} / ${title}`);
-  return { caption, placement: iconPlacement(found[0]), source: found[0].source?.package ?? `draw.io ${found[0].library}` };
+  return { caption, placement: iconPlacement(found[0]), source: found[0].source?.package ?? found[0].source?.repository ?? `draw.io ${found[0].library}` };
 };
 const all = (vendor) => icons.entries.filter((e) => e.vendor === vendor).map((e) => pick(vendor, e.title));
 const fallback = (caption) => ({ caption, placement: FALLBACK, source: 'plain-box fallback' });
@@ -67,39 +67,67 @@ const vendors = [
   ['Cloudflare', all('Cloudflare')],
 ];
 
-// Grid of 160-wide slots; a placement wider than one slot takes two. Every size comes from iconPlacement.
-const COL = 200, SLOT = 160, ROW = 150, PER_ROW = 8, BAND = 72, TOP = 100, PAD = 30;
-const font = 'fontFamily=Helvetica;fontColor=#263238;';
-const cells = [
-  `<mxCell id="title" value="Non-cloud vendor icons in the architecture-diagram skill" style="text;html=1;align=left;fontSize=24;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="20" width="1000" height="36" as="geometry"/></mxCell>`,
-  `<mxCell id="note" value="Placement and artwork from find-icon.mjs and embed-icons.mjs. Grey box: no usable icon (plain-box fallback)." style="text;html=1;align=left;fontSize=16;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="56" width="1300" height="26" as="geometry"/></mxCell>`,
+const aiVendors = [
+  ['OpenAI', [...all('OpenAI'), fallback('OpenAI Agents SDK')]],
+  ['Anthropic', [...all('Anthropic'), fallback('Claude Agent SDK')]],
+  ['Google', [...all('Google'), pick('Google Cloud', 'Vertex AI')]],
+  ['Microsoft', all('Microsoft')],
+  ['Microsoft Foundry and Azure AI', [
+    pick('Azure', 'AI Foundry', 'Microsoft Foundry'), pick('Azure', 'Foundry Models'), pick('Azure', 'Foundry Agent Service'),
+    pick('Azure', 'OpenAI', 'Azure OpenAI'), pick('Azure', 'Azure Machine Learning'), pick('Azure', 'Cognitive Services', 'Azure AI services'),
+    pick('Azure', 'Copilot Studio'),
+  ]],
+  ['AWS', [pick('AWS', 'Bedrock'), pick('AWS', 'Bedrock AgentCore')]],
+  ['Databricks', [...all('Databricks'), pick('Azure', 'Databricks', 'Azure Databricks')]],
+  ['NVIDIA and Hugging Face', [...all('NVIDIA'), ...all('Hugging Face')]],
+  ['LangChain', all('LangChain')],
+  ['Agent frameworks', [...all('LlamaIndex'), ...all('CrewAI'), ...all('Pydantic'), ...all('Mastra')]],
+  ['Model serving and MLOps', [...all('MLflow'), ...all('Ollama'), ...all('vLLM')]],
+  ['Vector databases', [...all('Pinecone'), ...all('Weaviate')]],
+  ['LLM observability', all('Langfuse')],
+  ['Protocols', [...all('Model Context Protocol'), ...all('A2A')]],
+  ['Workflow platforms', [...all('Dify'), ...all('n8n')]],
+  ['Enterprise AI', [...all('Palantir'), ...all('Salesforce')]],
 ];
-let y = TOP, n = 0;
-for (const [vendor, items] of vendors) {
-  let slot = 0;
-  const placed = items.map((it) => {
-    const span = it.placement.width > SLOT - 16 ? 2 : 1;
-    if ((slot % PER_ROW) + span > PER_ROW) slot += PER_ROW - (slot % PER_ROW);
-    const at = slot;
-    slot += span;
-    return { ...it, at, span };
-  });
-  const h = Math.ceil(slot / PER_ROW) * ROW;
-  cells.push(`<mxCell id="v${n++}" value="${esc(vendor)}" style="text;html=1;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="${y}" width="${COL - 20}" height="${h - 12}" as="geometry"/></mxCell>`);
-  for (const it of placed) {
-    const { width, height, style } = it.placement;
-    const cx = PAD + COL + (it.at % PER_ROW) * SLOT + (it.span * SLOT) / 2;
-    const top = y + Math.floor(it.at / PER_ROW) * ROW + 8 + (BAND - height) / 2;
-    cells.push(`<mxCell id="i${n++}" value="${esc(it.caption)}" style="${esc(style)}${font}" vertex="1" parent="1"><mxGeometry x="${(cx - width / 2).toFixed(1)}" y="${top.toFixed(1)}" width="${width}" height="${height}" as="geometry"/></mxCell>`);
+
+// Grid of 160-wide slots; a placement wider than one slot takes two. Every size comes from iconPlacement.
+const COL = 240, SLOT = 160, ROW = 164, PER_ROW = 8, BAND = 72, TOP = 100, PAD = 30;
+const font = 'fontFamily=Helvetica;fontColor=#263238;';
+function sheet(name, title, groups) {
+  const cells = [
+    `<mxCell id="title" value="${esc(title)}" style="text;html=1;align=left;fontSize=24;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="20" width="1000" height="36" as="geometry"/></mxCell>`,
+    `<mxCell id="note" value="Placement and artwork from find-icon.mjs and embed-icons.mjs. Grey box: no usable icon (plain-box fallback)." style="text;html=1;align=left;fontSize=16;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="56" width="1300" height="26" as="geometry"/></mxCell>`,
+  ];
+  let y = TOP, n = 0;
+  for (const [group, items] of groups) {
+    let slot = 0;
+    const placed = items.map((it) => {
+      const span = it.placement.width > SLOT - 16 ? 2 : 1;
+      if ((slot % PER_ROW) + span > PER_ROW) slot += PER_ROW - (slot % PER_ROW);
+      const at = slot;
+      slot += span;
+      return { ...it, at, span };
+    });
+    const h = Math.ceil(slot / PER_ROW) * ROW;
+    cells.push(`<mxCell id="v${n++}" value="${esc(group)}" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontSize=18;fontStyle=1;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="${y}" width="${COL - 20}" height="${h - 12}" as="geometry"/></mxCell>`);
+    for (const it of placed) {
+      const { width, height, style } = it.placement;
+      const cx = PAD + COL + (it.at % PER_ROW) * SLOT + (it.span * SLOT) / 2;
+      const top = y + Math.floor(it.at / PER_ROW) * ROW + 8 + (BAND - height) / 2;
+      cells.push(`<mxCell id="i${n++}" value="${esc(it.caption)}" style="${esc(style)}${font}" vertex="1" parent="1"><mxGeometry x="${(cx - width / 2).toFixed(1)}" y="${top.toFixed(1)}" width="${width}" height="${height}" as="geometry"/></mxCell>`);
+    }
+    y += h;
+    cells.push(`<mxCell id="r${n++}" value="" style="line;strokeColor=#E0E0E0;" vertex="1" parent="1"><mxGeometry x="${PAD}" y="${y - 8}" width="${COL + PER_ROW * SLOT}" height="1" as="geometry"/></mxCell>`);
   }
-  y += h;
-  cells.push(`<mxCell id="r${n++}" value="" style="line;strokeColor=#E0E0E0;" vertex="1" parent="1"><mxGeometry x="${PAD}" y="${y - 8}" width="${COL + PER_ROW * SLOT}" height="1" as="geometry"/></mxCell>`);
+  const width = PAD * 2 + COL + PER_ROW * SLOT;
+  const xml = `<mxfile host="drawio" version="32.6.1"><diagram id="icons" name="Icons"><mxGraphModel dx="0" dy="0" grid="0" page="1" pageWidth="${width}" pageHeight="${y + PAD}" background="#FFFFFF"><root><mxCell id="0"/><mxCell id="1" parent="0"/>${cells.join('')}</root></mxGraphModel></diagram></mxfile>\n`;
+  writeFileSync(here(`./${name}.drawio`), embedVendorIcons(xml, icons).xml);
+  return groups.flatMap(([group, items]) =>
+    items.map(({ caption, placement, source }) => ({ group, caption, kind: placement.kind, width: placement.width, height: placement.height, source })),
+  );
 }
-const width = PAD * 2 + COL + PER_ROW * SLOT;
-const xml = `<mxfile host="drawio" version="32.6.1"><diagram id="icons" name="Icons"><mxGraphModel dx="0" dy="0" grid="0" page="1" pageWidth="${width}" pageHeight="${y + PAD}" background="#FFFFFF"><root><mxCell id="0"/><mxCell id="1" parent="0"/>${cells.join('')}</root></mxGraphModel></diagram></mxfile>\n`;
-writeFileSync(here('./icon-sheet.drawio'), embedVendorIcons(xml, icons).xml);
-const rows = vendors.flatMap(([vendor, items]) =>
-  items.map(({ caption, placement, source }) => ({ vendor, caption, kind: placement.kind, width: placement.width, height: placement.height, source })),
-);
-writeFileSync(here('./icon-sources.json'), `${JSON.stringify(rows, null, 2)}\n`);
-console.log(`${rows.length} placements for ${vendors.length} vendors.`);
+
+const platform = sheet('icon-sheet', 'Non-cloud vendor icons in the architecture-diagram skill', vendors);
+const ai = sheet('ai-icon-sheet', 'AI provider and tooling icons in the architecture-diagram skill', aiVendors);
+writeFileSync(here('./icon-sources.json'), `${JSON.stringify({ platform, ai }, null, 2)}\n`);
+console.log(`${platform.length} platform and ${ai.length} AI placements.`);

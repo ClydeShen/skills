@@ -26,8 +26,12 @@ export const FALLBACK = {
     'rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;align=center;verticalAlign=middle;fontSize=16;',
 };
 
-export const sha256 = (text) => createHash('sha256').update(text, 'utf8').digest('hex');
+export const sha256 = (data) => createHash('sha256').update(data).digest('hex');
 export const dataUri = (svg) => `data:image/svg+xml,${Buffer.from(svg, 'utf8').toString('base64')}`;
+// Official artwork is SVG where the vendor publishes one, PNG otherwise; both embed the same way.
+export const artwork = (entry) => (entry.png ? Buffer.from(entry.png, 'base64') : Buffer.from(entry.svg, 'utf8'));
+export const entryUri = (entry) => (entry.png ? `data:image/png,${entry.png}` : dataUri(entry.svg));
+const isVendorIcon = (entry) => Boolean(entry.svg || entry.png);
 
 export function loadVendorIcons(url = new URL('../assets/vendor-icons.json', import.meta.url)) {
   return JSON.parse(readFileSync(url, 'utf8'));
@@ -62,7 +66,7 @@ export function iconPlacement(entry) {
     height = ICON_SIZE;
     width = ICON_SIZE * ratio;
   }
-  const base = entry.svg
+  const base = isVendorIcon(entry)
     ? `shape=image;aspect=fixed;imageAspect=1;vendorIcon=${entry.id}`
     : withoutKeys(entry.style, LABEL_KEYS);
   return {
@@ -86,7 +90,7 @@ export function embedVendorIcons(xml, icons) {
     if (!id) return match;
     const entry = byId.get(id);
     if (!entry) throw new Error(`Unknown vendorIcon ${id}. Look it up with find-icon.mjs.`);
-    const image = `image=${dataUri(entry.svg)}`;
+    const image = `image=${entryUri(entry)}`;
     const next = /(?:^|;)image=/.test(style)
       ? style.replace(/(^|;)image=[^;]*/, `$1${image}`)
       : `${style.replace(/;?$/, ';')}${image};`;
@@ -102,11 +106,11 @@ export function checkEmbeddedIcons(xml, icons) {
   const hashes = new Set(icons.entries.map((e) => e.sha256));
   for (const [, style] of xml.matchAll(styleAttributes)) {
     const id = vendorIconId(style);
-    const data = style.match(/(?:^|;)image=data:image\/svg\+xml,([^;]*)/)?.[1];
+    const data = style.match(/(?:^|;)image=data:image\/(?:svg\+xml|png),([^;]*)/)?.[1];
     if (id && !byId.has(id)) throw new Error(`Unknown vendorIcon ${id}.`);
     if (id && !data) throw new Error(`vendorIcon ${id} has no artwork. Run node scripts/embed-icons.mjs.`);
     if (!data) continue;
-    const hash = sha256(Buffer.from(data, 'base64').toString('utf8'));
+    const hash = sha256(Buffer.from(data, 'base64'));
     if (id ? byId.get(id).sha256 !== hash : !hashes.has(hash))
       throw new Error(`Embedded image ${id ?? '(unnamed)'} differs from the catalogued artwork. Run embed-icons.mjs.`);
   }

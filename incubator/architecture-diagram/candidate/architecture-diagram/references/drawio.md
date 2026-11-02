@@ -4,7 +4,7 @@ The target is draw.io **v32.6.1**, upstream commit `84487b4891cbc0f32d7e30f34cf8
 
 ## Exact icon lookup
 
-The package carries two icon sources. The draw.io [catalog](../assets/catalog.json) holds palette titles, style strings and IDs for AWS, Azure, Google Cloud and Kubernetes; draw.io draws that artwork itself. The [vendor icons](../assets/vendor-icons.json) hold unmodified upstream SVG artwork, with source, version, licence and SHA-256, for vendors draw.io lacks: Docker, Terraform, Ansible, Argo CD, GitHub, Jenkins, VMware, Databricks, Snowflake, Microsoft Fabric, MuleSoft, Kong, Kafka, Confluent, HashiCorp, Splunk, Dynatrace, Grafana, Cloudflare, and the Kubernetes, Helm and OpenShift brand marks. Do not load either file into the conversation. Query both with [find-icon.mjs](../scripts/find-icon.mjs), from the installed package directory:
+The package carries two icon sources. The draw.io [catalog](../assets/catalog.json) holds palette titles, style strings and IDs for AWS, Azure, Google Cloud and Kubernetes; draw.io draws that artwork itself. The [vendor icons](../assets/vendor-icons.json) hold unmodified upstream SVG or PNG artwork, with source, pinned version or commit, licence and SHA-256, for vendors draw.io lacks: platform tools such as Docker, Terraform, GitHub, Microsoft Fabric, Kafka, HashiCorp and Cloudflare, and AI providers and tooling such as OpenAI, Anthropic, Gemini, Microsoft Copilot, NVIDIA, LangChain, MCP and A2A. AWS Bedrock, Azure AI and Microsoft Foundry, and Vertex AI come from the draw.io catalog. Run `--list` for the full set. Do not load either file into the conversation. Query both with [find-icon.mjs](../scripts/find-icon.mjs), from the installed package directory:
 
 ```text
 node scripts/find-icon.mjs --list

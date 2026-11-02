@@ -37,8 +37,8 @@ export function referencedAssets(source, catalog, icons = { entries: [] }) {
   const refs = [...new Set([...source.matchAll(/\bimage=([^;"<>]+)(?:;|(?="))/g)].map((m) => m[1]))];
   const files = [];
   for (const ref of refs) {
-    const data = ref.match(/^data:image\/svg\+xml,([A-Za-z0-9+/=]+)$/)?.[1];
-    if (data && embedded.has(sha256(Buffer.from(data, 'base64').toString('utf8')))) continue;
+    const data = ref.match(/^data:image\/(?:svg\+xml|png),([A-Za-z0-9+/=]+)$/)?.[1];
+    if (data && embedded.has(sha256(Buffer.from(data, 'base64')))) continue;
     if (!/^img\/lib\/[a-zA-Z0-9_./-]+\.svg$/.test(ref) || ref.split('/').includes('..') || !allowed.has(ref))
       throw new Error(`Uncatalogued or unsafe render image: ${ref.slice(0, 80)}`);
     files.push(ref);

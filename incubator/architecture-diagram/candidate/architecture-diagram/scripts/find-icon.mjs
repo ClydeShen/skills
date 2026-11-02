@@ -45,9 +45,9 @@ if (
         ),
       );
     } else {
-      const matches = findIcons({ entries }, options).map(({ svg, ...entry }) => ({
+      const matches = findIcons({ entries }, options).map(({ svg, png, ...entry }) => ({
         ...entry,
-        placement: iconPlacement(svg ? { ...entry, svg } : entry),
+        placement: iconPlacement(svg || png ? { ...entry, svg, png } : entry),
       }));
       console.log(
         JSON.stringify(

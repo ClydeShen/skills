@@ -116,6 +116,20 @@ Resolve every component through `find-icon.mjs` in a fixed order: draw.io vendor
 
 Keeps one generated catalog as the single source of truth, consistent with the package rule that runtime files stay inside the skill.
 
+## 5. AI providers and tooling
+
+### Evidence
+
+draw.io 32.6.1 covers the cloud AI services: `aws4` Bedrock and Bedrock AgentCore; `azure2` OpenAI, AI Foundry, Foundry Models, Foundry Agent Service, Azure Machine Learning, Cognitive Services and Copilot Studio; `gcp3` Vertex AI. [measured]
+
+`@thesvg/icons` 4.0.0 has OpenAI, ChatGPT, Anthropic, Claude, Claude Code, Gemini, Microsoft Copilot, Microsoft 365 Copilot, NVIDIA, Hugging Face, LangChain, LangGraph, LangSmith, LlamaIndex, CrewAI, Pydantic AI, Mastra, MLflow, Ollama, vLLM, Pinecone, Langfuse, Dify, n8n, Palantir, Salesforce and Model Context Protocol. [measured] Variant names are not consistent: OpenAI's and Anthropic's `default` are white artwork and `light` is dark, while Mastra's `light` is white. [measured] Its `nim` icon is the Nim programming language (`https://nim-lang.org`), not NVIDIA NIM. [measured]
+
+Iconify and svgl returned nothing for Semantic Kernel, AutoGen, A2A, Microsoft Agent Framework, Google ADK, OpenAI Agents SDK, Claude Agent SDK or Agentforce. [measured] Official repositories hold marks for A2A (`a2aproject/A2A`, Apache-2.0), Google ADK (`google/adk-python`, Apache-2.0), AutoGen (`microsoft/autogen`, CC-BY-4.0), Weaviate (`weaviate/weaviate-io`, no licence), and 128 × 128 PNG NuGet icons for Semantic Kernel and Microsoft Agent Framework (MIT). [measured] The OpenAI Agents SDK logo in `openai/openai-agents-python` uses only `fill="white"`. [measured] No dedicated Claude Agent SDK, Palantir AIP or Agentforce mark was found in these sources. [measured]
+
+### Recommendation for the project
+
+Add the theSVG entries with explicitly chosen variants and the repository files pinned to a commit. Support PNG artwork where the vendor publishes no SVG. Use the plain-box fallback for OpenAI Agents SDK and Claude Agent SDK, and the parent brand mark with a precise caption for Palantir AIP, Agentforce and NVIDIA NIM. The [icon coverage check](../../../incubator/architecture-diagram/evals/icon-coverage-2026-11-02/README.md) shows the result.
+
 ## Not verified
 
 - Whether each vendor's own brand guidelines allow its logo in third-party diagrams or redistribution in an open-source package.
@@ -137,5 +151,7 @@ Keeps one generated catalog as the single source of truth, consistent with the p
 - https://www.npmjs.com/package/@fabric-msft/svg-icons: version and licence via `npm view`; tarball 11.1.0 `svg/` folder read.
 - https://www.npmjs.com/package/@thesvg/icons: tarball 4.0.0 read for variants, `license` and `url` of each selected icon.
 - https://svgl.app/library/mulesoft.svg: MuleSoft SVG compared with the theSVG copy.
+- https://api.iconify.design/search and https://api.svgl.app: searched for the AI marks missing from theSVG.
+- GitHub repositories `a2aproject/A2A`, `google/adk-python`, `microsoft/autogen`, `microsoft/semantic-kernel`, `microsoft/agent-framework`, `openai/openai-agents-python` and `weaviate/weaviate-io`: logo files, commit and licence read via the GitHub API.
 - https://learn.microsoft.com/en-us/fabric/fundamentals/icons: official Microsoft Fabric icon terms and download locations.
 - https://github.com/jgraph/drawio/tree/84487b4891cbc0f32d7e30f34cf878c87cb1f414: sidebar sources searched for each vendor.

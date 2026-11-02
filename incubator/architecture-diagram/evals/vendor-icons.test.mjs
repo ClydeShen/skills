@@ -6,9 +6,11 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import {
+  artwork,
   checkEmbeddedIcons,
   dataUri,
   embedVendorIcons,
+  entryUri,
   FALLBACK,
   ICON_SIZE,
   iconPlacement,
@@ -31,11 +33,23 @@ test('bundled vendor icons are pinned, unique and hash-identified', () => {
   assert.deepEqual(icons.sources, { '@thesvg/icons': '4.0.0', '@fabric-msft/svg-icons': '11.1.0' });
   assert.equal(new Set(icons.entries.map((e) => e.id)).size, icons.entries.length);
   for (const e of icons.entries) {
-    assert.equal(sha256(e.svg), e.sha256, e.id);
-    assert.match(e.svg, /<svg[\s>]/, e.id);
-    assert.ok(e.vendor && e.title && e.license && e.source.version, e.id);
+    assert.equal(sha256(artwork(e)), e.sha256, e.id);
+    if (e.png) assert.equal(artwork(e).subarray(1, 4).toString(), 'PNG', e.id);
+    else assert.match(e.svg, /<svg[\s>]/, e.id);
+    assert.ok(e.vendor && e.title && e.license, e.id);
+    assert.ok(e.source.version || /^[0-9a-f]{40}$/.test(e.source.commit), `${e.id} is pinned`);
     assert.ok(!catalog.entries.some((c) => c.id === e.id), `${e.id} collides with the draw.io catalog`);
   }
+});
+
+test('official PNG artwork embeds and verifies like SVG', () => {
+  const kernel = icons.entries.find((e) => e.title === 'Semantic Kernel');
+  assert.ok(kernel.png);
+  const { xml } = embedVendorIcons(page(iconPlacement(kernel).style), icons);
+  assert.ok(xml.includes(`image=${entryUri(kernel)};`));
+  checkEmbeddedIcons(xml, icons);
+  assert.deepEqual(referencedAssets(xml, catalog, icons), []);
+  assert.throws(() => checkEmbeddedIcons(xml.replace(kernel.png.slice(-12), 'AAAAAAAAAAAA'), icons), /differs/);
 });
 
 test('placement gives every source the same size and caption standard', () => {
