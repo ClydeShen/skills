@@ -346,7 +346,6 @@ export function checkLayout(xml) {
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
-  warnings.push(...stepOrder(edges, boxes));
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
 }
 
@@ -473,11 +472,7 @@ function crossings(edges, boxes) {
       const sameSide =
         (e.source === f.source && sideOf(e.style.exitX, e.style.exitY) === sideOf(f.style.exitX, f.style.exitY)) ||
         (e.target === f.target && sideOf(e.style.entryX, e.style.entryY) === sideOf(f.style.entryX, f.style.entryY));
-      const [m, n] = [stepOf(e), stepOf(f)];
-      if (crossed && sameSide && m && n && m.series === n.series)
-        // Swapping the ports of numbered steps would put them out of order; step order reports where to move.
-        found.push(`Connectors ${e.id} and ${f.id} are steps that cross. Place their targets in step order.`);
-      else if (crossed && sameSide && e.style.exitX !== undefined && f.style.exitX !== undefined)
+      if (crossed && sameSide && e.style.exitX !== undefined && f.style.exitX !== undefined)
         found.push(`Connectors ${e.id} and ${f.id} share a side of one element and cross. Swap their ports.`);
       else if (crossed)
         found.push(
@@ -485,52 +480,6 @@ function crossings(edges, boxes) {
         );
       if (shared > 10) found.push(`Connectors ${e.id} and ${f.id} share a ${Math.round(shared)}-unit segment.`);
     }
-  return found;
-}
-
-// A label such as "2. Write answer" or "Q2" numbers a step; the letter separates series.
-function stepOf(edge) {
-  const text = plain(edge.value);
-  const match = text.match(/^([A-Z])(\d+)\b/) ?? text.match(/^()(\d+)[.):]/);
-  return match ? { series: match[1], n: Number(match[2]), label: `${match[1]}${match[2]}` } : null;
-}
-
-// Steps leaving one side of an element read in order only when their ports and their targets
-// both run top to bottom (or left to right) in step order; otherwise the lines read out of order or tangle.
-function stepOrder(edges, boxes) {
-  const found = [];
-  const steps = edges
-    .map((edge) => ({ edge, step: stepOf(edge) }))
-    .filter(({ edge, step }) => step && edge.style.exitX !== undefined && boxes.has(edge.target));
-  const groups = Map.groupBy(steps, ({ edge, step }) => {
-    const side = sideOf(edge.style.exitX, edge.style.exitY);
-    return `${edge.source}\u0000${side}\u0000${step.series}`;
-  });
-  for (const group of groups.values()) {
-    if (group.length < 2) continue;
-    const { edge } = group[0];
-    const side = sideOf(edge.style.exitX, edge.style.exitY);
-    const across = side === 'left' || side === 'right';
-    const [before, axis] = across ? ['above', 'top to bottom'] : ['left of', 'left to right'];
-    const port = ({ edge: e }) => Number(across ? e.style.exitY : e.style.exitX);
-    const place = ({ edge: e }) => {
-      const b = boxes.get(e.target);
-      return across ? b.y + b.h / 2 : b.x + b.w / 2;
-    };
-    group.sort((a, b) => a.step.n - b.step.n);
-    for (let i = 1; i < group.length; i++) {
-      const [a, b] = [group[i - 1], group[i]];
-      if (a.step.n === b.step.n) continue;
-      if (port(b) < port(a))
-        found.push(
-          `Step ${b.step.label} leaves the ${side} of ${edge.source} ${before} step ${a.step.label}. Order the ports, and their targets, ${axis} in step order.`,
-        );
-      else if (a.edge.target !== b.edge.target && place(b) < place(a) - 10)
-        found.push(
-          `Steps ${a.step.label} and ${b.step.label} leave the ${side} of ${edge.source} in order, but ${b.edge.target} sits ${before} ${a.edge.target}. Move the targets into step order so the lines do not cross.`,
-        );
-    }
-  }
   return found;
 }
 

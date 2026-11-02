@@ -253,46 +253,46 @@ test('a detour around a movable connector label is reported; one around a captio
   assert.deepEqual(simpler(aroundCaption), []);
 });
 
-test('numbered steps report ports or targets out of order and are never told to swap ports', () => {
-  const steps = (ports, targets) =>
+test('numbered steps that tangle are told to swap ports; numbers out of spatial order are not reported', () => {
+  const fan = (...lines) =>
     page(
       icon('agent', 0, 200, 'Agent'),
       icon('t1', 400, 0, 'One'),
       icon('t2', 400, 200, 'Two'),
       icon('t3', 400, 400, 'Three'),
-      ...[1, 2, 3].map((n, i) =>
-        edge(`s${n}`, 'agent', targets[i], `exitX=1;exitY=${ports[i]};entryX=0;entryY=0.5;`, `${n}. Step`, ''),
-      ),
+      edge('s1', 'agent', 't1', 'exitX=1;exitY=0.25;entryX=0;entryY=0.5;', '1. Step', waypoints([236, 218], [236, 36])),
+      ...lines,
     );
-  const order = (xml) => checkLayout(xml).warnings.filter((w) => /^Steps? /.test(w));
-  assert.deepEqual(order(steps([0.25, 0.5, 0.75], ['t1', 't2', 't3'])), []);
-  assert.deepEqual(order(steps([0.25, 0.75, 0.5], ['t1', 't2', 't3'])), [
-    'Step 3 leaves the right of agent above step 2. Order the ports, and their targets, top to bottom in step order.',
-  ]);
-  const tangled = steps([0.25, 0.5, 0.75], ['t1', 't3', 't2']);
-  assert.deepEqual(order(tangled), [
-    'Steps 2 and 3 leave the right of agent in order, but t2 sits above t3. Move the targets into step order so the lines do not cross.',
-  ]);
-  assert.ok(!checkLayout(tangled).warnings.some((w) => w.includes('Swap their ports')));
+  const steps = (xml) => checkLayout(xml).warnings.filter((w) => /Swap their ports|[Ss]teps? /.test(w));
+  // A reader finds the numbers on the page; 1, 3, 2 from top to bottom is fine when nothing crosses.
+  const untangled = fan(
+    edge('s3', 'agent', 't2', 'exitX=1;exitY=0.5;entryX=0;entryY=0.5;', '3. Step'),
+    edge('s2', 'agent', 't3', 'exitX=1;exitY=0.75;entryX=0;entryY=0.5;', '2. Step', waypoints([236, 254], [236, 436])),
+  );
+  assert.deepEqual(steps(untangled), []);
+  const tangled = fan(
+    edge('s2', 'agent', 't3', 'exitX=1;exitY=0.5;entryX=0;entryY=0.5;', '2. Step', waypoints([200, 236], [200, 436])),
+    edge('s3', 'agent', 't2', 'exitX=1;exitY=0.75;entryX=0;entryY=0.5;', '3. Step', waypoints([250, 254], [250, 236])),
+  );
+  assert.deepEqual(steps(tangled), ['Connectors s2 and s3 share a side of one element and cross. Swap their ports.']);
 });
 
-test('round 3 semantic routing trials report the out-of-order steps and avoidable bends visible in their images', () => {
+test('round 3 semantic routing trials report the tangle and avoidable bends visible in their images', () => {
   const trial = (name) =>
     checkLayout(readFileSync(new URL(`./semantic-routing-2026-11-02/${name}/diagram.drawio`, import.meta.url), 'utf8'))
       .warnings;
   const a = trial('round3-a');
-  for (const expected of [
-    'Step 3 leaves the right of assistant above step 2. Order the ports, and their targets, top to bottom in step order.',
-    'Connector runTf bends 2 times, but a one-bend route is clear: leave the right of actions and enter the top of tf.',
-  ])
-    assert.ok(a.includes(expected), expected);
-  // Write embeddings goes around the Embeddings API icon; that channel is reasonable.
-  assert.ok(!a.some((w) => w.startsWith('Connector index ') && /route is clear|to avoid/.test(w)));
-  const b = trial('round3-b');
   assert.ok(
-    b.includes(
-      'Steps 2 and 3 leave the right of web in order, but cosmos sits above openai. Move the targets into step order so the lines do not cross.',
+    a.includes(
+      'Connector runTf bends 2 times, but a one-bend route is clear: leave the right of actions and enter the top of tf.',
     ),
   );
-  assert.ok(!b.some((w) => w.includes('Swap their ports')));
+  // Steps reading 1, 3, 2 do not cross there, so they are not reported.
+  assert.ok(!a.some((w) => /Swap their ports|[Ss]teps? /.test(w)));
+  // Write embeddings goes around the Embeddings API icon; that channel is reasonable.
+  assert.ok(!a.some((w) => w.startsWith('Connector index ') && /route is clear|to avoid/.test(w)));
+  // Steps 2 and 3 cross; swapping their ports untangles them.
+  assert.ok(
+    trial('round3-b').includes('Connectors answer and store share a side of one element and cross. Swap their ports.'),
+  );
 });

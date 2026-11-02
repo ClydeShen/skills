@@ -25,7 +25,7 @@ For top to bottom, the main path runs down the middle column through entry, proc
 
 Start from who initiates. A main path begins at a client or external system, even when the source only implies that hop. Draw it, and note the inference in the companion record.
 
-Place the services one element calls in the order it calls them, along the side it calls them from, so that numbered steps read top to bottom or left to right. Place a service that two flows share between those flows, so that both reach it directly; never leave it on one side for the other flow to reach by a long route.
+Place services by their role and lane first, and number the steps afterwards. A reader finds a sequence by following its numbers on the page, so numbers need not read top to bottom or left to right; never move an element out of its lane to put numbers in order. Place a service that two flows share between those flows, so that both reach it directly; never leave it on one side for the other flow to reach by a long route.
 
 Nest boundaries as the platform does: a deployment boundary such as a region or network contains logical groups, never the reverse. Draw a connector from the element that acts. Attach it to a frame only when every member acts, and then say so in its label.
 
@@ -46,7 +46,7 @@ Nest boundaries as the platform does: a deployment boundary such as a region or 
 - An icon's caption owns the space below it: the placement's `labelWidth` wide and about 20 units per line deep. Attach connectors to the other three sides. If a connection must leave downward, move the caption beside the icon or move the element; do not bend the connector around the caption.
 - Never bend a connector to avoid text. Move the label, the caption or the element instead. A detour reads as a real path.
 - Give each kind of flow its own lane, so the layout tells them apart. The runtime path runs through the middle. Build, ingestion and management flows run along the top or a side, and telemetry along the bottom or a side, so they do not cut through the runtime path. A long secondary connector therefore runs along its lane around the outside, with two bends, rather than across the middle; it never leaves a region that holds both its ends.
-- Order the ports on each side by meaning: numbered or sequential steps leave in reading order, top to bottom or left to right, toward targets placed in the same order. Connectors from one side then fan out without crossing, and the order reads as the sequence.
+- Order the ports on each side by where their targets sit, so that connectors from one side fan out without crossing. When two cross, swap their ports, even if their step numbers then read out of order.
 - A crossing that remains should be one the architecture forces, such as a monitoring line over a lane. Do not trade meaning for fewer crossings: never move an element out of its true region, merge elements or drop one to straighten a line.
 - A connector stays inside every region that holds both its ends, and crosses a region's outline at most once. Leaving and re-entering a region says the data left it; passing through a region says the data went there.
 - Keep horizontal runs and waypoints out of caption bands: below a row of captioned icons, the first connector track lies at least the caption depth plus 20 units under the icons.
