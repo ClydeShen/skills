@@ -272,6 +272,11 @@ export function checkLayout(xml) {
     if (startArrow && !['none', 'oval', 'dash'].includes(startArrow) && endArrow !== 'none') {
       errors.push(`Double-headed connector ${name(edge)}. Draw one arrow from the initiator, or two connectors.`);
     }
+    // Straight or curved connectors cut across the page; routes must run in lanes, horizontally and vertically.
+    if (edge.style.edgeStyle !== 'orthogonalEdgeStyle')
+      errors.push(
+        `Connector ${name(edge)} is not orthogonal. Set edgeStyle=orthogonalEdgeStyle and route it in its lane.`,
+      );
     if (edge.points.length > 3)
       warnings.push(`Connector ${name(edge)} has ${edge.points.length} bends. Move an element instead.`);
     const route = [

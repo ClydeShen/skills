@@ -413,7 +413,7 @@ const page = (cells) =>
 const box = (id, x, y, w, h, parent = '1', style = '') =>
   `<mxCell id="${id}" value="${id}" vertex="1" parent="${parent}" style="${style}"><mxGeometry x="${x}" y="${y}" width="${w}" height="${h}" as="geometry"/></mxCell>`;
 const line = (id, source, target, style = '', points = []) =>
-  `<mxCell id="${id}" edge="1" parent="1" source="${source}" target="${target}" style="${style}"><mxGeometry relative="1" as="geometry">${points.length ? `<Array as="points">${points.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('')}</Array>` : ''}</mxGeometry></mxCell>`;
+  `<mxCell id="${id}" edge="1" parent="1" source="${source}" target="${target}" style="edgeStyle=orthogonalEdgeStyle;${style}"><mxGeometry relative="1" as="geometry">${points.length ? `<Array as="points">${points.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('')}</Array>` : ''}</mxGeometry></mxCell>`;
 
 test('layout errors catch a broken parent edge, small text and double-headed arrows', () => {
   const good = page(
@@ -436,6 +436,11 @@ test('layout errors catch a broken parent edge, small text and double-headed arr
     box('a', 0, 0, 72, 72) + box('b', 200, 0, 72, 72) + line('e', 'a', 'b', 'startArrow=oval;endArrow=block;'),
   );
   assert.deepEqual(checkLayout(port).errors, []);
+  const straight = page(box('a', 0, 0, 72, 72) + box('b', 200, 200, 72, 72)).replace(
+    '</root>',
+    '<mxCell id="d" edge="1" parent="1" source="a" target="b" style="edgeStyle=none;endArrow=block;"><mxGeometry relative="1" as="geometry"/></mxCell></root>',
+  );
+  assert.match(checkLayout(straight).errors.join(' '), /Connector d is not orthogonal/);
 });
 
 test('layout warnings point at proportions, overlaps, detours and missing emphasis', () => {

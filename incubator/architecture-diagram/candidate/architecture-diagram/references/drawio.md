@@ -35,10 +35,10 @@ Use one `mxfile` / `diagram` / `mxGraphModel` page with root cells `0` and `1`. 
 
 For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`, `vendor` and `iconKey`. Its child `mxCell` has `vertex="1"`, the real parent ID, the selected style and an `mxGeometry`. Labels use escaped XML attributes and HTML line breaks when `html=1`. Keep inspection metadata separate from the short visible caption; print a type or technology only when it clarifies the element.
 
-Use `source` and `target` IDs on connectors, with explicit ports when routing needs them. Root-parented edge waypoints use page coordinates; do not mix those with child-local coordinates. Useful native connector settings are:
+Use `source` and `target` IDs on connectors, with explicit ports when routing needs them. Root-parented edge waypoints use page coordinates; do not mix those with child-local coordinates. Every connector is orthogonal: set `edgeStyle=orthogonalEdgeStyle`, never `none` or a curved style. Useful native connector settings are:
 
 ```text
-startArrow=none;endArrow=block;endFill=1;rounded=0;
+edgeStyle=orthogonalEdgeStyle;startArrow=none;endArrow=block;endFill=1;rounded=0;
 labelBackgroundColor=#ffffff;html=1;
 ```
 
