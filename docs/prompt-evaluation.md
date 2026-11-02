@@ -24,6 +24,8 @@ Local results go to `evals/.local/`, with a separate JSON report per run. Depend
 
 ## Real-model evaluation
 
+In a hosted workspace, prepare Node.js 24 and the network allowlist first; see [cloud environment setup](./HARNESS.md#cloud-environment-setup).
+
 ### NVIDIA trial endpoint
 
 Configure `NVIDIA_API_KEY` in the cloud or local environment, then run:
