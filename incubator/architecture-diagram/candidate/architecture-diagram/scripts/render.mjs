@@ -5,7 +5,7 @@ import { createServer } from 'node:http';
 import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
 import { upstreamCommit, upstreamVersion } from './catalog.mjs';
-import { annotationMetadata, pageSize, referencedAssets } from './render-inputs.mjs';
+import { annotationMetadata, editorLink, pageSize, referencedAssets } from './render-inputs.mjs';
 
 const [input, screenshot = input?.replace(/(\.drawio)?$/, '.png')] = process.argv.slice(2);
 if (!input) throw new Error('Usage: node scripts/render.mjs <diagram.drawio> [output.png]');
@@ -49,7 +49,7 @@ function findBrowser() {
     'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
   ];
   const found = paths.find((file) => existsSync(file));
-  if (!found) throw new Error('No draw.io Desktop, Chromium or Chrome found. The PNG was not produced.');
+  if (!found) throw new Error('no draw.io Desktop, Chromium or Chrome found.');
   return found;
 }
 
@@ -87,8 +87,22 @@ if (exportWithDesktop()) {
   process.exit(0);
 }
 
-const browserPath = findBrowser();
-const checkout = pinnedCheckout();
+// A system that cannot install anything still gets a usable diagram; say plainly what is missing.
+function giveUp(error) {
+  console.error(`PNG not produced: ${error.message.split('\n')[0]}`);
+  console.error('The .drawio file is complete. To view it and export a PNG in any browser, open:');
+  console.error(editorLink(readFileSync(input, 'utf8')));
+  process.exitCode = 3;
+}
+
+let browserPath, checkout;
+try {
+  browserPath = findBrowser();
+  checkout = pinnedCheckout();
+} catch (error) {
+  giveUp(error);
+  process.exit();
+}
 const source = readFileSync(input, 'utf8');
 const page = pageSize(source);
 const catalog = JSON.parse(readFileSync(new URL('../assets/catalog.json', import.meta.url), 'utf8'));
@@ -269,6 +283,8 @@ try {
     await exited;
   }
   console.log(`Rendered ${screenshot} and ${svgOutput} with the pinned draw.io viewer. Inspect the PNG.`);
+} catch (error) {
+  giveUp(error);
 } finally {
   server.closeAllConnections();
   await new Promise((resolve) => server.close(resolve));

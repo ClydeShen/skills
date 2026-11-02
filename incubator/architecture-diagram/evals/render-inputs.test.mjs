@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { inflateRawSync } from 'node:zlib';
 import {
   annotationMetadata,
+  editorLink,
   pageSize,
   referencedAssets,
 } from '../candidate/architecture-diagram/scripts/render-inputs.mjs';
@@ -38,4 +40,13 @@ test('render pages are bounded and SVG assets require an exact usable catalog ma
     'data:image/svg+xml,raw',
   ])
     assert.throws(() => referencedAssets(`image=${image};`, catalog));
+});
+
+test('the no-install link carries the whole diagram after the fragment marker', () => {
+  const xml = '<mxfile><diagram name="Résumé">a&amp;b</diagram></mxfile>';
+  const url = new URL(editorLink(xml));
+  assert.equal(url.origin + url.pathname, 'https://app.diagrams.net/');
+  assert.equal(url.search, '');
+  const data = Buffer.from(decodeURIComponent(url.hash.slice(2)), 'base64');
+  assert.equal(decodeURIComponent(inflateRawSync(data).toString()), xml);
 });

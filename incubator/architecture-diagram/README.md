@@ -14,7 +14,7 @@ Start with a specific interaction, such as a sign-in flow or a request crossing 
 
 ## Quick start: install and test the candidate
 
-Use Codex or Claude Code with file access, Node.js 24 and draw.io Desktop. Without Desktop, Git and Chromium or Chrome can produce the PNG. The candidate targets draw.io 32.6.1. Use your normal client authentication; no separate evaluation API key or authoring-repository checkout is needed.
+Use Codex or Claude Code with file access and Node.js 24. Nothing else is required: draw.io Desktop gives the best PNG, Git and Chromium or Chrome also produce one, and otherwise you get the `.drawio` and a browser link to view and export it. The candidate targets draw.io 32.6.1. Use your normal client authentication; no separate evaluation API key or authoring-repository checkout is needed.
 
 Review the [candidate package](./candidate/architecture-diagram/SKILL.md). Run the appropriate command in a disposable test project, outside this authoring repository.
 

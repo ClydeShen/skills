@@ -1,7 +1,7 @@
 ---
 name: architecture-diagram
 description: Create an editable draw.io architecture diagram and a PNG for documents and wikis from a text scenario, or refine a generated diagram against its source. Use for request, event, authentication or cross-cloud flows with deployment and system boundaries. Not for general flowcharts, infrastructure inventories, code/IaC reverse engineering or image tracing.
-compatibility: Requires file access, Node.js 24, and draw.io Desktop for PNG export. Without Desktop, Git and Chromium or Chrome work; that first export needs network access. Targets draw.io v32.6.1. Catalog regeneration also requires the pinned draw.io source checkout. No model endpoint is required.
+compatibility: Requires file access and Node.js 24. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. With neither, it delivers the .drawio and a browser link for viewing and export. Targets draw.io v32.6.1. Catalog regeneration also requires the pinned draw.io source checkout. No model endpoint is required.
 metadata:
   internal: true
 ---
@@ -34,7 +34,7 @@ Read [notation.md](references/notation.md) and [relationships.md](references/rel
 
 ## Inspect and deliver
 
-Run `node scripts/check-text.mjs <diagram.drawio>` and fix what it reports. Run `node scripts/render.mjs <diagram.drawio>` and read the PNG. Check the actual image, not XML alone, and repeat after every fix. The work is unfinished until the PNG has been inspected.
+Run `node scripts/check-text.mjs <diagram.drawio>` and fix what it reports. Run `node scripts/render.mjs <diagram.drawio>` and read the PNG. Check the actual image, not XML alone, and repeat after every fix. If the script exits with code 3, nothing more can be rendered here: deliver the `.drawio`, pass on the link it prints, and state that the image was not inspected. Otherwise the work is unfinished until the PNG has been inspected.
 
 Trace every entry through its intended destination, including auxiliary calls and explicit failures. Verify instances, memberships, protocols and conditions against the source. Check that branch selection cannot be mistaken for broadcast.
 
