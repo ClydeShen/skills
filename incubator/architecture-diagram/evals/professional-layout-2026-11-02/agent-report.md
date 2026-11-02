@@ -1,0 +1,53 @@
+# Architecture diagram companion account
+
+## Deliverables and scope
+
+`diagram.drawio` is an editable, uncompressed draw.io v32.6.1 diagram derived from `scenario.md`. It shows customer entry and DNS, order processing, private database access and HA, accepted-order events and invoice storage, static image delivery, and monitoring. All source services and both named zones are represented. No source material was excluded; there was no struck-out text or unrelated business-rule detail.
+
+`diagram-view.html` contains a browser link for viewing and PNG export. A PNG could not be produced in this environment; see verification below.
+
+## Source fidelity and representation
+
+- One project contains the named global `orders-vpc`. Its regional `orders-subnet` is labeled `europe-west1`; a single regional managed instance group spans the two named VM zones. The two VM symbols represent zonal fleets, not an asserted total of two VMs.
+- Customers resolve `shop.example.com` through Cloud DNS and separately send requests to the global external Application Load Balancer. The DNS association identifies the returned endpoint, rather than forwarding application requests through DNS.
+- The load balancer has distinct order and product-image branches. These denote request-dependent selection, not broadcast. Exact URL map rules are unspecified.
+- The order branch reaches the VM group, which reads and writes Cloud SQL by private IP. A small boundary port denotes private access without selecting a connection technology. Cloud SQL is outside the application subnet and VPC enclosure, with its own HA grouping, region, primary zone and standby zone.
+- The synchronous HA connector summarizes the source's replication statement. Google documents synchronous replication to persistent disks in both zones before commit; the diagram does not assert PostgreSQL streaming replication between servers. See [Cloud SQL HA](https://docs.cloud.google.com/sql/docs/postgres/high-availability).
+- Accepted orders are published to Pub/Sub; the topic-to-Cloud Run edge represents logical event delivery. Cloud Run writes invoices to a separate Cloud Storage bucket. The product-image bucket is reached through Cloud CDN on the same load-balancer branch; the CDN-to-bucket edge denotes origin fetching. Normal content and request responses are folded into their request relationships.
+- Cloud Monitoring appears as a shared operational band that explicitly names both metric sources. It does not assert an application API call or a metric transport protocol.
+- Exact core-product catalog entries are used for Compute Engine, Cloud SQL, Cloud Run and Cloud Storage. The pinned catalog's Networking category represents DNS, the load balancer and CDN under their exact service labels; Observability represents Monitoring. Pub/Sub uses the plain-box fallback because this catalog has no exact Pub/Sub product entry.
+
+## Assumptions and unresolved details
+
+The customer's request hop is implicit in “customers reach” and drawn explicitly. No additional infrastructure is recommended or presented as deployed.
+
+Cloud Run's region, both buckets' locations, instance counts, VM external addresses, application and database transport protocols, TLS termination, IAM, firewall rules and database private-access configuration are unspecified. Cloud Run and buckets are therefore outside the named subnet without an invented regional placement. Region and zone membership are expressed locally; no enclosure incorrectly makes a regional subnet global or a global service regional.
+
+The Pub/Sub subscription resource, delivery mode and authentication are not specified. Its delivery edge is a logical relation, not an operational claim that a topic directly invokes Cloud Run without configuration. A push subscription is one documented implementation, but was not selected on the canvas: [Pub/Sub with Cloud Run](https://docs.cloud.google.com/pubsub/docs/use-with-cloud-run).
+
+The private-access port does not choose Private Service Access or Private Service Connect. The source does not establish either. The standby is not shown as a read target or a separately configured client endpoint. The diagram adds no failover request, retry, error return or denial path because none is specified.
+
+## Engineering review and design risks
+
+Traffic enters visibly from customers at the shared global load balancer. Application traffic crosses into the application VPC/subnet; database access leaves that enclosure for the managed service over the specified private-IP relationship. Pub/Sub traffic leaves the VM network for a managed service. Static content and invoice processing stay outside the application subnet.
+
+The VM group covers two zones, and the SQL primary and standby occupy the two stated zones. This provides zonal redundancy in the described structure, but health checking, failover timing, VM capacity after a zone outage and application reconnection behavior are not established. Cloud SQL HA does not establish resilience to a region outage; the order path still depends on `europe-west1`. No cross-region recovery is specified. See [Cloud SQL disaster recovery](https://docs.cloud.google.com/sql/docs/postgres/intro-to-cloud-sql-disaster-recovery).
+
+The diagram has one shared ingress configuration, one database service and one event topic; managed-service symbols do not imply single underlying machines. Atomicity between saving an order and publishing its event, redelivery handling and invoice idempotency are unspecified and remain design risks. No outbox, dead-letter queue or additional recovery infrastructure was invented.
+
+## Checks actually performed
+
+- Parsed the XML and verified unique IDs, existing parents and connector endpoints.
+- Verified every vendor icon against a usable entry in the bundled pinned catalog, preserving its identity and colors.
+- Ran `node .agents/skills/architecture-diagram/scripts/check-text.mjs diagram.drawio`: passed.
+- Ran `node .agents/skills/architecture-diagram/scripts/check-layout.mjs diagram.drawio` after the final changes: zero errors and zero items to check.
+- Traced the source relationships against the XML separately from technical plausibility, including both request branches, private access, synchronous HA, accepted-order delivery, both buckets and the monitoring scope.
+- Ran the skill's renderer. It exited with code 3: `listen EPERM: operation not permitted 127.0.0.1`. The environment prevented its local HTTP listener, so no PNG was produced. Following the skill's fallback, rendering was not retried. Final geometry checks passed after subsequent placement and labeling adjustments.
+
+**The image was not visually inspected. Offline draw.io Desktop compatibility was not verified.** Automated checks cannot establish collision-free rendering or prove a deployed architecture is correct.
+
+## Browser viewing and PNG export
+
+Open `diagram-view.html`, or use the link below, then choose File > Export as > PNG in draw.io. The link encodes the final editable diagram.
+
+[Open the diagram in draw.io](https://app.diagrams.net/#R7V1rc5s6Gv41zOx%2BsAckbv6Ya9vZps02Z3rOftoRQmBtAFEhO8n59TviZkAkNXZi7ARPJmNLQgj0PO9NL0KDF%2FFjQCOiAX3JMqHBSw0AlKZzn6KQozibJ0RoAGhAXxOeUZYUTSCY23NDVsArTT%2FTgC7%2F4EV5mAZ06hctGfcJz4ouEhSTovR7WaojjpdUECxWnHS7qzqNHz9xlC5vmE8iDej%2BY9GHYep60a%2F%2FVJQsqoKQV6c3NgV39O%2Fy7EbZLEUhaTWTBX9SXyy7Z5AVnwkNl6JzJg%2Fh%2B5CzVVKeTwMwyD%2F9F1NdEmdMPFu9ue4LEkWNe1meUwPXw4%2Btr5CTROzfnaAiIiUwULRqTqsG9IzwNcUSVSzRgP6JsTDH2EXEVn4NJ0Eenx1bWZSJp6jseyniSIOXhgbPA5aIaxTTSM77ZxKtiaAYlRXlNBt2%2BfuCRYznXUBgQwBdDZ4L8ig0eJ4Jzu5J1SBhCZHH0CjqFKGIhhL4mCSCcA2ey8FTjKKzsiKmvh%2BR9gCApcHzl1CggJywmAj%2BpAG9vC%2FAKu5CCW%2Bj%2FPnQQCi0yllcNtAJ7aIMZcXvsO552%2FnWwHU55YORkXL2P4KFgo0uCPR2wzHhgFkiEE3k1OYdYhZFKM2ol59M1%2BB5znDil7%2BaENkQvosnDUAEke85dU0lWowGpiISiB5ECZbKw1KEaRJ%2BzdtcGuam6A9Zf2no%2B2OskmQlyBxdBZnh9IDMWegjogyvMsHiWrM0cHbRqRkTWBvY5FPOcXUQGIIi07aARVQUzfeXMLA9%2Babu9My%2B1TP5B5x75hViop57PynnNkIeicpZL4XK5be7at4Tv7yBiuiR9RSz5F%2BkvO4Qp3BGiOnYemBBkzgB8EHRThC8TFjEwrLpNyIeGL%2BnSVjUY%2FOPp7SEDicZW3H8jCHzIq5%2FA9OWrHwjsGb3ROBlKeIaHfeLpvze37KMisIoVHTj104DjwnB4j5t2hxgdSV35TXq6oD1%2FCM7ylJ5T%2BBlQB8lyc5TRmWXV2uSiKwcfbZE%2BfTEj6E0IudyqqVRW02iwsMFQjqye%2B5bS%2FI61S2o2egOkcUvcdJpa31b1fq2qTLSNud7cnI4MzVwXZJzMIcjT6Hwp4h5SHKBPArCE%2FnVjqRu9LgG7FB%2BO0vTiGKUI0qp%2FMqQlADnKEIJlmboJAYmMTCOGGgeM0RJDxAL0FQNtdOTC4pdx1LVotvKkDsENfb1E6zACRan6ie4HVNRVUuu2eMmLKwRLcWYJVQwXkvphrbZWT04JjF17HkmgMBAQb96%2BO7JEAjyaETF0yE1RM2fSTvsqx1Yaw6Pz078fXTIclU%2BWu5J6QM5Mop7vPzS37tpMLxrEN5Ux%2BoBZzImfcHidCUkxa%2BSkCbyy8%2BbPAqd%2BI3A1I9VspXKeWuuHSJKmQ9gP81gGG3NYEAFiI7eoxkqa2WU%2BNE6xQqmiqWKWV4lj%2FtHWHkkP28v5PJFYS7%2B893YIycdt3Q74s9V5R%2B0ekJX0B4zbpmtvM2KmgK9qrYryciKs5TMHkgmjK3QV8P7OJFH%2FMAM8Ikiz2gDz%2BrBHejBHRg1Xh7TUAHdDxJSlsdZ9BglKCRS%2BdEkEzJ%2Bki%2BaslW6FdyaqD5OxI0s63yULet1gFeFX094sPa5WvAzxgzZr2M13rerB%2Bb52LSJubB97FuGRfo9MNXWO5wTVpNtcsL2dcJwMY2kmEOF1iZwrcAc0Qkz3TYbbTUo12f66sfshPWwF0%2Fsndj7%2FthruPD90Vf1dWNvVjC3awHm0Y%2BXnI2Zt5X999aUOUgkZP9sio5pZkA1EmL0uQamM2YkJMY7owNP6BiCDvME4cFJyklGEoEEXasZnz9v5Lw%2BxR6LinReqbN7j%2FkAGIGvLkFcQ%2FXu7D7vDo4Z0%2Fqlyo4qln73768y%2Fs5kVvAty0TISV7UFSufabiU418jGtXLZjLoOjj0dQqBVzdAJxv%2BcsxOuL8v8NoXgYCjLgWnnMaoOlfDj7mtyrczg4a6O9iAhuFgA5mODzD0nnF3mmw5nKdTE3fydPb2dOQMyvt5hE6O2V0o3jKjEM5NaLt6%2FdmTvsNJvEfIQgaxfU%2Bl%2B11Vvp1dO9F9ovuJ073viY5Tp3vPQ0d0jQSZpYyri6tHsWJawYhEEU2znmDYOM9%2FdHWD46o%2BaU8EzHBHNOWwnyhyvRKpF5ffdpXdU%2BL3hxHfJ%2FX8h%2FEeEr0VEtMYhUR9juuWM39VNCwbdA212ngSjMvnt3dke%2BB71gKBhePpHjAqzj1rqTVPNlH%2BBCmfW2z%2Fzcp5PD6zrV5oGk57Q3cXrgUcc2E75ilZbYKlVE3DvF15Gri%2Bk%2F%2F1Zovx6bJjhlGtUdSg3p7W2wLMu8qiZ4%2BAvscyrDENOL5SDbgvyZoVW0bUm0c8J%2Fkb%2BdlDpb6DyCLwsB%2B4HrZxxafnpH59oknin6rEl1A7PmHfjaFvLezh3Hagtag%2FxyvsVYOvILhq8n2pKyZTbyL%2BBzD1DF3%2FeLYeJ79WJFODc9mSpXPyiOI0IjJfrGhAfGVnLnXPloKNRUiovemLQDwkZetqp4E34pUcaQVnxsWShTKl%2FmpT2rEat43ugTy6lwnExRnn7GGTm0ASvyrxIobvi6JrGlXXlMP2vN6YrM9GJY9U%2FFU2l9%2F%2FI0eXn5Ekgj%2F9VQ42%2F7Gpa94Tc3frlZOoSAxpzuYomQt%2Bks1%2BrUh1ttazERmLqtyVV0RjvXfNicHReEMwth6OqJBZorHC5m%2BQ%2BdZIHCLyzzhHT41%2Bcr2VDetlM9pbefRGd7hOO15vO8OkfYM0xTgHqIj6xr0xI1GSPdT7t2woeeb7nGTZbpSsefcOVMPIXDRaXNwojYqnJ68VmluWdje33BF%2BFdKa6HvrlMePYplAY%2FEeUJf9imacIP%2BBU6Hm2e4GuxpiTdypa%2BUTAH8LwAJkY5ogbw7AChd96bw%2FiNxb7brE5kW%2Be2veWgP6l9vdwKnisIPSTb7mBNC9fbeTh%2BcSzbKnRF0uuntK8JKzhK121M0tpDUh2MohPDEIHtxGfAGNxuHReDT%2BmqHsm2aCXTy27U9gWe%2FMJczkY0Q9y8RKpshrGeZ1ftmpcf4gakdvEd2dAjNFZ6CzC5ZpG6%2FK827%2FjrGTHBlI82eHY7VH08k8Y0GQVfvBDFyHOIREYZyGNFEkyveyWA%2FypbLdQr%2BV7GgKlKaAmmTKZMoijEkqiN%2BDwOL9Ke0Gr%2BL1NzKpJgj2qbWPFeP0SUTXfQtfFQRJscy%2BEwAbWGtCsE77mgA4ycA8lDRrJwU1YPhnEWnS2w2GArFGXEsbt7qcsDhh8Z6ocvCyCHIAHbMkIVgwnmnwrHrDjC6TwaJV8SIKPd%2Fd4PNZsfPF5gUVYOzXDx1k04s9EkHqB17azoSrqxujWG5PEjM4wMYoeZtnXtdXuSybtxM22%2BS11QsRi4rygPyNi%2FDq%2Fw%3D%3D)

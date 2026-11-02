@@ -82,7 +82,8 @@ function exportWithDesktop() {
   return null;
 }
 
-if (exportWithDesktop()) {
+// Inside the Codex sandbox draw.io cannot reach the window server, and macOS reports a crash to the user.
+if (!process.env.CODEX_SANDBOX && exportWithDesktop()) {
   console.log(`Rendered ${screenshot} with draw.io Desktop; it embeds an editable copy. Inspect the PNG.`);
   process.exit(0);
 }
