@@ -6,24 +6,24 @@ This file defines the authoritative locations, folder rules, and lifecycle for t
 
 A source of truth owns one kind of fact. Other files link to it or contain an explicitly derived representation.
 
-| Fact | Authoritative artifact | Other representations |
-| --- | --- | --- |
-| Shared agent operating instructions | Root `AGENTS.md` | `CLAUDE.md` imports it |
-| Repository structure, ownership and lifecycle | This file | Root README and directory READMEs provide navigation |
-| Project document formats | `docs/DOCUMENT-FORMATS.md` | Templates illustrate those formats |
-| Shared vocabulary | Root `GLOSSARY.md` | Definitions are referenced, not redefined |
-| Evidence and dated findings | `research/<category>/<topic>/` | Knowledge cites the research |
-| Architectural decision history | `research/<category>/adr/NNNN-<slug>.md` | Repository docs state current rules and link to the decision |
-| Current reusable domain guidance | `knowledge/<topic>/` | Skill instructions adapt the relevant guidance |
-| Initiative stage, active package path and trial status | `incubator/<initiative>/README.md` | Root README links to it |
-| Executable skill behavior and runtime resources | The one active package's `SKILL.md`, `references/`, `scripts/`, `assets/` | No independently maintained candidate/release copies |
-| Initiative cases and assertions | `incubator/<initiative>/evals/` | `evaluation.md` records runs and interpretation |
-| Shared evaluation implementation | Root `evals/` | npm scripts and CI call it |
-| Repository checks and client-neutral hook implementation | Root `harness/` | Client adapters, Git hooks and CI reuse it; `docs/HARNESS.md` explains coverage and activation |
-| Git workflow and session/cleanup instructions | `docs/HARNESS.md` Git strategy | `AGENTS.md` links the procedure; `harness/git-policy.mjs`, Git hooks and CI enforce observable rules |
-| Executable project commands and dependencies | `package.json` and `package-lock.json` | Agent instructions link to documented commands |
-| Optional stricter `main` protection preset | `.github/main-protection.json` | GitHub holds actual enforcement state; `docs/HARNESS.md` records the accepted soft policy and any separately requested activation |
-| Imported development-skill provenance | `skills-lock.json` and its upstream sources | `.agents/skills/` is the canonical installed tree; `.claude/skills/` is a synchronized projection |
+| Fact                                                     | Authoritative artifact                                                    | Other representations                                                                                                             |
+| -------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Shared agent operating instructions                      | Root `AGENTS.md`                                                          | `CLAUDE.md` imports it                                                                                                            |
+| Repository structure, ownership and lifecycle            | This file                                                                 | Root README and directory READMEs provide navigation                                                                              |
+| Project document formats                                 | `docs/DOCUMENT-FORMATS.md`                                                | Templates illustrate those formats                                                                                                |
+| Shared vocabulary                                        | Root `GLOSSARY.md`                                                        | Definitions are referenced, not redefined                                                                                         |
+| Evidence and dated findings                              | `research/<category>/<topic>/`                                            | Knowledge cites the research                                                                                                      |
+| Architectural decision history                           | `research/<category>/adr/NNNN-<slug>.md`                                  | Repository docs state current rules and link to the decision                                                                      |
+| Current reusable domain guidance                         | `knowledge/<topic>/`                                                      | Skill instructions adapt the relevant guidance                                                                                    |
+| Initiative stage, active package path and trial status   | `incubator/<initiative>/README.md`                                        | Root README links to it                                                                                                           |
+| Executable skill behavior and runtime resources          | The one active package's `SKILL.md`, `references/`, `scripts/`, `assets/` | No independently maintained candidate/release copies                                                                              |
+| Initiative cases and assertions                          | `incubator/<initiative>/evals/`                                           | `evaluation.md` records runs and interpretation                                                                                   |
+| Shared evaluation implementation                         | Root `evals/`                                                             | npm scripts and CI call it                                                                                                        |
+| Repository checks and client-neutral hook implementation | Root `harness/`                                                           | Client adapters, Git hooks and CI reuse it; `docs/HARNESS.md` explains coverage and activation                                    |
+| Git workflow and session/cleanup instructions            | `docs/HARNESS.md` Git strategy                                            | `AGENTS.md` links the procedure; `harness/git-policy.mjs`, Git hooks and CI enforce observable rules                              |
+| Executable project commands and dependencies             | `package.json` and `package-lock.json`                                    | Agent instructions link to documented commands                                                                                    |
+| Optional stricter `main` protection preset               | `.github/main-protection.json`                                            | GitHub holds actual enforcement state; `docs/HARNESS.md` records the accepted soft policy and any separately requested activation |
+| Imported development-skill provenance                    | `skills-lock.json` and its upstream sources                               | `.agents/skills/` is the canonical installed tree; `.claude/skills/` is a synchronized projection                                 |
 
 Reusable knowledge explains mechanisms and limits. A package defines installed behavior. These are distinct responsibilities: a runtime instruction must not require the knowledge tree to be installed. The initiative README records which knowledge informed the package.
 
@@ -62,14 +62,14 @@ Keep generated run output in ignored `evals/.local/`. Record a concise reproduci
 
 The owner defined these stages on 2026-10-29. Record the current stage and its basis in the initiative README. A stage describes the work underway; keep evaluation outcomes and remaining gaps explicit in the evaluation record.
 
-| Stage | Meaning | Basis for assigning the stage |
-| --- | --- | --- |
-| `init` | A new idea emerging from discussion | The idea and intended problem have been recorded. |
-| `plan` | Collecting information and discussing the idea | Research, requirements and design discussion are underway. |
-| `draft` | Information is substantially available; skill incubation begins | Enough context exists to start authoring the standard skill package. |
+| Stage      | Meaning                                                           | Basis for assigning the stage                                                                                                                                                                                                                                                                        |
+| ---------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `init`     | A new idea emerging from discussion                               | The idea and intended problem have been recorded.                                                                                                                                                                                                                                                    |
+| `plan`     | Collecting information and discussing the idea                    | Research, requirements and design discussion are underway.                                                                                                                                                                                                                                           |
+| `draft`    | Information is substantially available; skill incubation begins   | Enough context exists to start authoring the standard skill package.                                                                                                                                                                                                                                 |
 | `internal` | The skill has been written and internal evaluation is established | The package has runnable evaluation cases in the shared [Promptfoo runner](./prompt-evaluation.md), grading criteria and a result-recording path. Until these exist, it remains `draft`. Record fixture, model and host results separately; entering this stage does not mean evaluation has passed. |
-| `public` | The candidate can be directly installed and tested | Its README provides usable installation and first-trial instructions. Completed external trials are not a prerequisite for this stage. |
-| `release` | The skill is published in the release tree | The package has moved into `skills/`, with applicable skills.sh configuration, package best practices and release checks completed. |
+| `public`   | The candidate can be directly installed and tested                | Its README provides usable installation and first-trial instructions. Completed external trials are not a prerequisite for this stage.                                                                                                                                                               |
+| `release`  | The skill is published in the release tree                        | The package has moved into `skills/`, with applicable skills.sh configuration, package best practices and release checks completed.                                                                                                                                                                  |
 
 Owner rule, 2026-10-30: a skill at `draft` or an earlier stage is very early, so authors may use custom programs and methods to check feasibility and initial effect. Once evaluation cases are built for `internal`, they use the shared Promptfoo runner and no skill-specific evaluation framework. Draft-era methods, such as the Architecture Diagram round-trip, may remain as dated history or temporary diagnostics until the skill settles, then retire; they do not count as `internal` evaluation.
 

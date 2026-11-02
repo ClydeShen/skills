@@ -1,15 +1,36 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { gradeDecision, modelProvider, nvidiaDefaultModel, nvidiaApiBaseUrl, parseArgs, readSkill, renderPrompt } from './lib.mjs';
+import test from 'node:test';
 import { createSuite } from '../incubator/meta-thinking/evals/suite.mjs';
+import {
+  gradeDecision,
+  modelProvider,
+  nvidiaApiBaseUrl,
+  nvidiaDefaultModel,
+  parseArgs,
+  readSkill,
+  renderPrompt,
+} from './lib.mjs';
 
 const expected = { approach: ['continue'], memory: ['skip'], cause: ['unknown'] };
-const good = { approach: 'continue', memory: 'skip', cause: 'unknown', explanation: 'Clear task', next_action: 'Translate the sentence.' };
+const good = {
+  approach: 'continue',
+  memory: 'skip',
+  cause: 'unknown',
+  explanation: 'Clear task',
+  next_action: 'Translate the sentence.',
+};
 
 test('grading rejects malformed responses and unsafe decision substitutions', () => {
   assert.equal(gradeDecision(JSON.stringify(good), expected).pass, true);
-  for (const output of ['null', '[]', 'not JSON', JSON.stringify({ ...good, memory: 'record' }), JSON.stringify({ ...good, cause: 'supported' }), JSON.stringify({ ...good, next_action: '' })]) {
+  for (const output of [
+    'null',
+    '[]',
+    'not JSON',
+    JSON.stringify({ ...good, memory: 'record' }),
+    JSON.stringify({ ...good, cause: 'supported' }),
+    JSON.stringify({ ...good, next_action: '' }),
+  ]) {
     assert.equal(gradeDecision(output, expected).pass, false, output);
   }
 });
@@ -21,7 +42,10 @@ test('all 14 cases reach assertions without leaking grading labels or fixtures i
     assert.deepEqual(Object.keys(t.vars).sort(), ['case_id', 'conversation']);
     const response = await suite.providers[0]('', { vars: t.vars });
     assert.equal(t.assert[0].value(response.output).pass, true);
-    assert.equal(t.assert[0].value(JSON.stringify({ ...JSON.parse(response.output), approach: 'invalid' })).pass, false);
+    assert.equal(
+      t.assert[0].value(JSON.stringify({ ...JSON.parse(response.output), approach: 'invalid' })).pass,
+      false,
+    );
     for (const prompt of suite.prompts) {
       const messages = JSON.parse(await prompt.function({ vars: t.vars }));
       assert.equal(messages[1].content, t.vars.conversation);
@@ -43,8 +67,14 @@ test('current skill and both runtime references are included only in the full ca
 
 test('model mode requires explicit settings and never silently selects a paid provider', () => {
   assert.throws(() => modelProvider({}), /requires/);
-  assert.throws(() => modelProvider({ EVAL_MODEL: 'example', EVAL_API_BASE_URL: 'https://example.com/v1' }), /explicit EVAL_API_KEY/);
-  assert.throws(() => modelProvider({ EVAL_MODEL: 'example', EVAL_API_BASE_URL: 'https://secret@example.com/v1' }), /without credentials/);
+  assert.throws(
+    () => modelProvider({ EVAL_MODEL: 'example', EVAL_API_BASE_URL: 'https://example.com/v1' }),
+    /explicit EVAL_API_KEY/,
+  );
+  assert.throws(
+    () => modelProvider({ EVAL_MODEL: 'example', EVAL_API_BASE_URL: 'https://secret@example.com/v1' }),
+    /without credentials/,
+  );
   const local = modelProvider({ EVAL_MODEL: 'local-model', EVAL_API_BASE_URL: 'http://localhost:11434/v1' });
   assert.equal(local.config.apiBaseUrl, 'http://localhost:11434/v1');
   assert.equal(local.config.useDefaultApiKey, false);
@@ -83,6 +113,11 @@ test('NVIDIA preset uses only its key at the fixed endpoint and records explicit
 });
 
 test('empty profile template remains empty; evaluation reads no actual user profile', async () => {
-  const data = JSON.parse(await readFile(new URL('../incubator/meta-thinking/candidate/meta-thinking/assets/profile.empty.json', import.meta.url), 'utf8'));
+  const data = JSON.parse(
+    await readFile(
+      new URL('../incubator/meta-thinking/candidate/meta-thinking/assets/profile.empty.json', import.meta.url),
+      'utf8',
+    ),
+  );
   assert.deepEqual(data, { version: 1, episodes: [], patterns: [] });
 });

@@ -3,6 +3,7 @@
 Date: 2026-10-19. Subject: Whether `skills/tech-humanizer/references/technical-terms.json` has current, well-organized coverage of technical terms that a prose humanizer must not casually paraphrase. Context: The skill needs to remove AI-shaped prose without replacing accepted technical language with vague or incorrect wording. This note records the pre-change audit and the resulting implementation.
 
 Confidence markers:
+
 - **[official]**: the relevant part of official docs, a specification, or a project's own documentation was read.
 - **[official · summary only]**: only an overview or summary was read, or the page does not cover the detail.
 - **[secondhand]**: a third-party description; none is used as evidence in this note.
@@ -11,12 +12,12 @@ Confidence markers:
 
 ## Overview
 
-| Question | Recommendation | Strength of evidence | Confidence |
-|---|---|---|---|
-| 1. Does the current file cover the important domains? | Keep its eight-domain base. It is broad, but the AI, observability, platform, web-protocol, software-supply-chain, and modern data layers need focused additions. | strong for the inventory; medium for prioritization | [measured], [official], [inference] |
-| 2. Are entries obsolete or duplicated? | Do not delete exact terms. There are no exact case-insensitive duplicates. Treat acronym/expanded-name pairs as aliases, and tag legacy, deprecated, emerging, and vendor-specific terms instead of silently removing them. | strong | [measured], [official] |
-| 3. Is the current organization suitable for safe rewriting? | Replace arrays of bare strings with records that distinguish canonical names, aliases, maturity, match policy, source, and verification date. Generic words must require technical context. | medium | [inference] |
-| 4. What should be added first? | Add a small high-value set: current AI interfaces and evaluation terms; OpenTelemetry and OCI terminology; Gateway API and current transport names; WebAuthn and supply-chain security terms; modern table-format terminology; SemVer and JSON Schema. | strong for term existence; medium for scope | [official], [inference] |
+| Question                                                    | Recommendation                                                                                                                                                                                                                                         | Strength of evidence                                | Confidence                          |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------- | ----------------------------------- |
+| 1. Does the current file cover the important domains?       | Keep its eight-domain base. It is broad, but the AI, observability, platform, web-protocol, software-supply-chain, and modern data layers need focused additions.                                                                                      | strong for the inventory; medium for prioritization | [measured], [official], [inference] |
+| 2. Are entries obsolete or duplicated?                      | Do not delete exact terms. There are no exact case-insensitive duplicates. Treat acronym/expanded-name pairs as aliases, and tag legacy, deprecated, emerging, and vendor-specific terms instead of silently removing them.                            | strong                                              | [measured], [official]              |
+| 3. Is the current organization suitable for safe rewriting? | Replace arrays of bare strings with records that distinguish canonical names, aliases, maturity, match policy, source, and verification date. Generic words must require technical context.                                                            | medium                                              | [inference]                         |
+| 4. What should be added first?                              | Add a small high-value set: current AI interfaces and evaluation terms; OpenTelemetry and OCI terminology; Gateway API and current transport names; WebAuthn and supply-chain security terms; modern table-format terminology; SemVer and JSON Schema. | strong for term existence; medium for scope         | [official], [inference]             |
 
 ## 1. Pre-change coverage
 
@@ -28,13 +29,13 @@ Coverage is strongest for conventional infrastructure, delivery, testing, and pr
 
 The list mixes five different kinds of entry without saying which kind each is:
 
-| Kind | Examples in the current file | Why the distinction matters |
-|---|---|---|
-| Canonical concept | `distributed tracing`, `eventual consistency` | Preserve the established phrase. |
-| Alias or abbreviation | `k8s`, `OIDC`, `MoE` | Preserve the form the author chose; do not expand or normalize it unless asked. |
-| Product or project name | `Kubernetes`, `Terraform`, `Kafka` | Preserve spelling and capitalization. |
-| Technical verb or adjective | `provision`, `quantized`, `stateless` | Protect it only when used technically. |
-| Generic word with a technical sense | `model`, `agent`, `token`, `vector`, `stack`, `branch`, `query`, `index`, `schema`, `dependency` | A global exact-match lock creates false positives in ordinary prose. |
+| Kind                                | Examples in the current file                                                                     | Why the distinction matters                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| Canonical concept                   | `distributed tracing`, `eventual consistency`                                                    | Preserve the established phrase.                                                |
+| Alias or abbreviation               | `k8s`, `OIDC`, `MoE`                                                                             | Preserve the form the author chose; do not expand or normalize it unless asked. |
+| Product or project name             | `Kubernetes`, `Terraform`, `Kafka`                                                               | Preserve spelling and capitalization.                                           |
+| Technical verb or adjective         | `provision`, `quantized`, `stateless`                                                            | Protect it only when used technically.                                          |
+| Generic word with a technical sense | `model`, `agent`, `token`, `vector`, `stack`, `branch`, `query`, `index`, `schema`, `dependency` | A global exact-match lock creates false positives in ordinary prose.            |
 
 ### Recommendation for the project
 
@@ -142,14 +143,14 @@ The clearest current lifecycle case is MCP `roots` and `sampling`: official SDK 
 
 Several existing entries need review or context controls rather than removal:
 
-| Entry or group | Problem | Recommendation |
-|---|---|---|
-| `SSL` | Often appears as a legacy or loose label beside current TLS terminology. | Keep for exact preservation; tag `legacy`; never silently rewrite to `TLS`. |
-| `backlog grooming` | Older team vocabulary coexists with `backlog refinement`. | Keep as a source alias; prefer neither during preservation. |
-| `closed-weight` | Less consistently standardized than `open-weight`. | Mark `review`; require a source before treating it as canonical. |
-| `agentic workflow`, `guardrails`, `hallucination` | Broad terms whose meaning varies by vendor and context. | Keep, but tag `context_required`; do not use them as automatic replacements. |
-| `model`, `agent`, `prompt`, `token`, `vector`, `interface`, `stack`, `branch`, `commit`, `query`, `index`, `schema`, `migration`, `dependency` | Common English or cross-domain words. | Protect only when a technical-context check succeeds. |
-| Vendor/project names | They age at different rates from standards. | Move to a vendor-specific layer with an owner and review date. |
+| Entry or group                                                                                                                                 | Problem                                                                  | Recommendation                                                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `SSL`                                                                                                                                          | Often appears as a legacy or loose label beside current TLS terminology. | Keep for exact preservation; tag `legacy`; never silently rewrite to `TLS`.  |
+| `backlog grooming`                                                                                                                             | Older team vocabulary coexists with `backlog refinement`.                | Keep as a source alias; prefer neither during preservation.                  |
+| `closed-weight`                                                                                                                                | Less consistently standardized than `open-weight`.                       | Mark `review`; require a source before treating it as canonical.             |
+| `agentic workflow`, `guardrails`, `hallucination`                                                                                              | Broad terms whose meaning varies by vendor and context.                  | Keep, but tag `context_required`; do not use them as automatic replacements. |
+| `model`, `agent`, `prompt`, `token`, `vector`, `interface`, `stack`, `branch`, `commit`, `query`, `index`, `schema`, `migration`, `dependency` | Common English or cross-domain words.                                    | Protect only when a technical-context check succeeds.                        |
+| Vendor/project names                                                                                                                           | They age at different rates from standards.                              | Move to a vendor-specific layer with an owner and review date.               |
 
 ### Recommendation for the project
 

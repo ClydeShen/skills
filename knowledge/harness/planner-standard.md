@@ -55,17 +55,17 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 
 4.3 Write the issue with these sections, in this sequence:
 
-| Section | Content |
-|---|---|
-| Parent | The parent link to the epic. |
-| Background | What is wrong or missing. Give the evidence for each fact. Give the root cause if you know it. |
-| Scope | What the implementer must do. Use a list. One item gives one change. |
-| Acceptance | Conditions that a person can examine and mark as done or not done. Each condition has a command, a visible result, or a value. |
-| Out of scope | What the implementer must not change in this issue, and the issue that owns it, if one exists. |
-| Files | The files and modules that the issue changes, and the existing patterns and files to follow. Use this list to find the conflict group. |
-| Decision log | Each decision that the issue needs: the date, who decided, and the confidence level. |
-| How to finish | The project's Definition of Done, plus what this issue adds (for example, a document to update or a live smoke test). |
-| Design rules | Only for user interface work. Name the design guideline source, the copy-language rule, and the component rules of the project. |
+| Section       | Content                                                                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Parent        | The parent link to the epic.                                                                                                           |
+| Background    | What is wrong or missing. Give the evidence for each fact. Give the root cause if you know it.                                         |
+| Scope         | What the implementer must do. Use a list. One item gives one change.                                                                   |
+| Acceptance    | Conditions that a person can examine and mark as done or not done. Each condition has a command, a visible result, or a value.         |
+| Out of scope  | What the implementer must not change in this issue, and the issue that owns it, if one exists.                                         |
+| Files         | The files and modules that the issue changes, and the existing patterns and files to follow. Use this list to find the conflict group. |
+| Decision log  | Each decision that the issue needs: the date, who decided, and the confidence level.                                                   |
+| How to finish | The project's Definition of Done, plus what this issue adds (for example, a document to update or a live smoke test).                  |
+| Design rules  | Only for user interface work. Name the design guideline source, the copy-language rule, and the component rules of the project.        |
 
 4.4 Make each acceptance condition clear and complete. Use words such as "each", "all", and "no" when the scope is a full set.
 
@@ -150,17 +150,17 @@ The terms are in the repository [GLOSSARY.md](../../GLOSSARY.md). Use the functi
 
 6.4 Use these status values in the table:
 
-| Status | Text |
-|---|---|
-| Closed | 🟢 closed (date) |
-| In progress | 🟡 in progress (claimed by <implementer>) |
-| Ready | 🔵 ready |
-| Blocked | ⚫ blocked by <issue or reason> |
-| Waiting | ⚪ waiting (capacity) |
-| On hold | ⏸ on hold (reason, revisit date) |
-| In review | 🟣 in review (reviewer, round <n>) |
-| Verifying | 🔍 verifying (round <n>) |
-| Done in part and kept open | 🟠 reason |
+| Status                     | Text                                      |
+| -------------------------- | ----------------------------------------- |
+| Closed                     | 🟢 closed (date)                          |
+| In progress                | 🟡 in progress (claimed by <implementer>) |
+| Ready                      | 🔵 ready                                  |
+| Blocked                    | ⚫ blocked by <issue or reason>           |
+| Waiting                    | ⚪ waiting (capacity)                     |
+| On hold                    | ⏸ on hold (reason, revisit date)          |
+| In review                  | 🟣 in review (reviewer, round <n>)        |
+| Verifying                  | 🔍 verifying (round <n>)                  |
+| Done in part and kept open | 🟠 reason                                 |
 
 6.5 In the order table, put ✅ before the short name of each closed issue.
 
@@ -334,18 +334,18 @@ Use the task "classify a stop" in [issue-workflow-standard.md](./issue-workflow-
 
 10.1 Make sure that the tracker, or a written convention, gives each of these functions:
 
-| Function | If the tracker does not have it |
-|---|---|
-| Ready mark | Use a fixed word in the issue title or the first line. |
-| Claim | Use the assignee field, or write "Claimed by <implementer>" as a comment, with the date. |
-| Parent link | Write "Part of <epic>" on the first line of the issue. |
-| Dependency link | Write "Blocked by <issue>" on the second line of the issue. |
+| Function                 | If the tracker does not have it                                                                             |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Ready mark               | Use a fixed word in the issue title or the first line.                                                      |
+| Claim                    | Use the assignee field, or write "Claimed by <implementer>" as a comment, with the date.                    |
+| Parent link              | Write "Part of <epic>" on the first line of the issue.                                                      |
+| Dependency link          | Write "Blocked by <issue>" on the second line of the issue.                                                 |
 | Text diagram in the epic | Keep the diagram text in the epic. The text is the source, even if the tracker cannot show it as a picture. |
-| Comments | Write each report and each decision as a dated section at the end of the issue. |
+| Comments                 | Write each report and each decision as a dated section at the end of the issue.                             |
 
 10.2 Example of the progress section. The syntax is mermaid. Use the same rules in other diagram formats.
 
-~~~text
+````text
 <!-- progress-diagram:start -->
 ```mermaid
 flowchart TD
@@ -370,4 +370,4 @@ flowchart TD
 
 **Current status** (YYYY-MM-DD): ...
 <!-- progress-diagram:end -->
-~~~
+````

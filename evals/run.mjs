@@ -1,7 +1,7 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { digest, modelProvider, parseArgs } from './lib.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -26,33 +26,47 @@ async function main() {
     if (!suite.tests.length) throw new Error('No test matches the requested case ID.');
   }
   const { default: promptfoo } = await import('promptfoo');
-  const record = await promptfoo.evaluate({
-    ...suite,
-    ...(provider && !suiteProviders ? { providers: [provider] } : {}),
-    writeLatestResults: false,
-    sharing: false,
-  }, { cache: false, maxConcurrency: 1 });
+  const record = await promptfoo.evaluate(
+    {
+      ...suite,
+      ...(provider && !suiteProviders ? { providers: [provider] } : {}),
+      writeLatestResults: false,
+      sharing: false,
+    },
+    { cache: false, maxConcurrency: 1 },
+  );
   const summary = await record.toEvaluateSummary();
   const packageInfo = JSON.parse(await readFile(resolve(root, 'node_modules/promptfoo/package.json'), 'utf8'));
   // Select report fields: SDK configs may contain provider credentials.
   const report = {
     created_at: new Date().toISOString(),
     mode,
-    scope: mode === 'fixture' ? 'Synthetic replay: harness and assertions only; no model was evaluated.' : suiteProviders && suite.description ? suite.description : 'Prompt decision checks; no agent tools or persistent memory execution.',
+    scope:
+      mode === 'fixture'
+        ? 'Synthetic replay: harness and assertions only; no model was evaluated.'
+        : suiteProviders && suite.description
+          ? suite.description
+          : 'Prompt decision checks; no agent tools or persistent memory execution.',
     suite: suitePath,
     case_filter: caseId || null,
     suite_sha256: digest(await readFile(resolve(root, suitePath), 'utf8')),
     framework: { name: 'promptfoo', version: packageInfo.version },
     runtime: { node: process.version, platform: process.platform, arch: process.arch },
     model: provider && !suiteProviders ? provider.id.replace(/^openai:chat:/, '') : null,
-    suite_providers: mode === 'model' && suiteProviders ? suite.providers.map((p) => (typeof p.id === 'function' ? p.id() : null)).filter(Boolean) : undefined,
-    parameters: provider && !suiteProviders ? {
-      endpoint: provider.config.apiBaseUrl,
-      temperature: provider.config.temperature,
-      top_p: provider.config.top_p,
-      max_tokens: provider.config.max_tokens,
-      reasoning_effort: provider.config.passthrough?.reasoning_effort,
-    } : null,
+    suite_providers:
+      mode === 'model' && suiteProviders
+        ? suite.providers.map((p) => (typeof p.id === 'function' ? p.id() : null)).filter(Boolean)
+        : undefined,
+    parameters:
+      provider && !suiteProviders
+        ? {
+            endpoint: provider.config.apiBaseUrl,
+            temperature: provider.config.temperature,
+            top_p: provider.config.top_p,
+            max_tokens: provider.config.max_tokens,
+            reasoning_effort: provider.config.passthrough?.reasoning_effort,
+          }
+        : null,
     stats: summary.stats,
     results: summary.results.map((r) => ({
       case_id: r.vars?.case_id,
@@ -70,12 +84,18 @@ async function main() {
   await mkdir(dirname(file), { recursive: true });
   await writeFile(file, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
   const failures = report.results.filter((r) => !r.success).length;
-  console.log(`\n${report.scope}\n${report.results.length - failures}/${report.results.length} checks passed.\nReport: ${file}`);
+  console.log(
+    `\n${report.scope}\n${report.results.length - failures}/${report.results.length} checks passed.\nReport: ${file}`,
+  );
   process.exitCode = failures ? 1 : 0;
 }
 
 main().catch((error) => {
   // Do not echo provider request bodies or credentials on an SDK error.
-  console.error(error instanceof Error && !error.message.includes('Bearer') ? error.message : 'Evaluation failed. Check configuration.');
+  console.error(
+    error instanceof Error && !error.message.includes('Bearer')
+      ? error.message
+      : 'Evaluation failed. Check configuration.',
+  );
   process.exitCode = 1;
 });

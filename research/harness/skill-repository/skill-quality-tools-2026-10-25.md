@@ -8,13 +8,13 @@ Evidence markers: `[official]` means maintainer documentation or source was read
 
 ## Overview
 
-| Question | Recommendation | Evidence and limits | Judgment confidence |
-| --- | --- | --- | --- |
-| Does the skill conform to the format? | Retain skills-ref compatibility checks and add repository constraints | Official reference implementation, explicitly described as a demonstration | Medium, J1 |
-| Are multi-agent configurations correct? | Start agnix in reporting mode; block clear errors after tuning noise | Supports skills and multiple tools; does not prove behavior | Medium, J2 |
-| Does the skill provide actual value? | Reuse Promptfoo and add with/without comparisons in a real host | Official evaluation guidance; fixtures are insufficient | Medium, J3 |
-| Should security scanning be enabled by default? | Use Cisco Skill Scanner as an optional release or third-party import layer | Best-effort coverage, extra runtime, and false-positive costs | Medium, J4 |
-| Can an agent change checks and declare success? | Protected branches, required checks, and independent review of check configuration | Server controls must actually be enabled; CODEOWNERS alone is insufficient | Medium, J5 |
+| Question                                        | Recommendation                                                                     | Evidence and limits                                                        | Judgment confidence |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------------- |
+| Does the skill conform to the format?           | Retain skills-ref compatibility checks and add repository constraints              | Official reference implementation, explicitly described as a demonstration | Medium, J1          |
+| Are multi-agent configurations correct?         | Start agnix in reporting mode; block clear errors after tuning noise               | Supports skills and multiple tools; does not prove behavior                | Medium, J2          |
+| Does the skill provide actual value?            | Reuse Promptfoo and add with/without comparisons in a real host                    | Official evaluation guidance; fixtures are insufficient                    | Medium, J3          |
+| Should security scanning be enabled by default? | Use Cisco Skill Scanner as an optional release or third-party import layer         | Best-effort coverage, extra runtime, and false-positive costs              | Medium, J4          |
+| Can an agent change checks and declare success? | Protected branches, required checks, and independent review of check configuration | Server controls must actually be enabled; CODEOWNERS alone is insufficient | Medium, J5          |
 
 ## 1. Repository gaps at the time of investigation
 

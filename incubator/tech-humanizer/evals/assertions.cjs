@@ -1,13 +1,15 @@
 function parseOutput(output) {
   const value = typeof output === 'string' ? JSON.parse(output) : output;
-  if (!value || typeof value.text !== 'string' ||
-      !Object.hasOwn(value, 'user_profile') ||
-      !Object.hasOwn(value, 'project_profile')) {
+  if (
+    !value ||
+    typeof value.text !== 'string' ||
+    !Object.hasOwn(value, 'user_profile') ||
+    !Object.hasOwn(value, 'project_profile')
+  ) {
     throw new Error('Expected text, user_profile, and project_profile fields');
   }
   for (const name of ['user_profile', 'project_profile']) {
-    if (value[name] !== null &&
-        (typeof value[name] !== 'object' || Array.isArray(value[name]))) {
+    if (value[name] !== null && (typeof value[name] !== 'object' || Array.isArray(value[name]))) {
       throw new Error(name + ' must be an object or null');
     }
   }
@@ -50,13 +52,18 @@ function check(output, context) {
     const profile = result.user_profile || {};
     const global = profile.global_voice || {};
     const scope = expected.profile_rule.scope;
-    const entries = scope === 'global'
-      ? [...(global.preferences || []), ...(global.patterns || []), ...(global.do_not_change || [])]
-      : (profile.contexts?.[scope]?.patterns || []);
-    if (!entries.some((entry) =>
-      new RegExp(expected.profile_rule.pattern, 'i').test(JSON.stringify(entry)) &&
-      (!expected.profile_rule.confidence || entry.confidence === expected.profile_rule.confidence)
-    )) failures.push('Expected profile rule missing from ' + scope);
+    const entries =
+      scope === 'global'
+        ? [...(global.preferences || []), ...(global.patterns || []), ...(global.do_not_change || [])]
+        : profile.contexts?.[scope]?.patterns || [];
+    if (
+      !entries.some(
+        (entry) =>
+          new RegExp(expected.profile_rule.pattern, 'i').test(JSON.stringify(entry)) &&
+          (!expected.profile_rule.confidence || entry.confidence === expected.profile_rule.confidence),
+      )
+    )
+      failures.push('Expected profile rule missing from ' + scope);
   }
   if (expected.candidate_only) {
     const profile = result.user_profile || {};

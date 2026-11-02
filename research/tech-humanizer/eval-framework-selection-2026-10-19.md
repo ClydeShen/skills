@@ -8,10 +8,10 @@ Confidence markers: **[official]** means primary documentation was read; **[meas
 
 ## Overview
 
-| Question | Recommendation | Strength of evidence | Confidence |
-|---|---|---|---|
-| Which runner best fits this skill? | Promptfoo: local CLI, configurable assertions, and documented agent-skill comparisons. | Strong capability evidence; fit is a judgment. | [official], [inference] |
-| Which candidate is most popular? | Promptfoo leads these four by GitHub stars. Treat stars as interest, not usage or quality. | Strong for this limited metric. | [measured], [inference] |
+| Question                                   | Recommendation                                                                                           | Strength of evidence                                             | Confidence              |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | ----------------------- |
+| Which runner best fits this skill?         | Promptfoo: local CLI, configurable assertions, and documented agent-skill comparisons.                   | Strong capability evidence; fit is a judgment.                   | [official], [inference] |
+| Which candidate is most popular?           | Promptfoo leads these four by GitHub stars. Treat stars as interest, not usage or quality.               | Strong for this limited metric.                                  | [measured], [inference] |
 | Does a prose test verify self-improvement? | Test profile decisions with fixtures, then test actual writes and later-session reuse with an agent SDK. | Strong distinction between model outputs and filesystem effects. | [official], [inference] |
 
 ## 1. Current candidates
@@ -20,12 +20,12 @@ Confidence markers: **[official]** means primary documentation was read; **[meas
 
 The GitHub repository APIs and package registries returned the following snapshot. Dates are UTC. Registry versions describe the main evaluation package; a GitHub repository's latest release can belong to a separate component. [measured]
 
-| Framework | GitHub stars | Repository last push | Current package | Project fit |
-|---|---:|---|---|---|
-| Promptfoo | 26,127 | 2026-10-19 | npm `promptfoo` 0.124.1 | Local configuration, comparison UI, deterministic and model graders, agent SDK providers. |
-| DeepEval | 18,942 | 2026-10-16 | PyPI `deepeval` 4.3.1; uploaded 2026-10-16 | Python test suites and trace-based component or agent evaluation. |
-| Ragas | 16,068 | 2026-02-24 | PyPI `ragas` 0.4.3; uploaded 2026-01-13 | Prompt, RAG, workflow, and agent evaluation; useful when retrieval metrics are central. |
-| Inspect AI | 3,041 | 2026-10-17 | PyPI `inspect-ai` 0.3.281; uploaded 2026-10-15 | Python tasks, datasets, solvers, scorers, tool-using agents, and sandbox execution. |
+| Framework  | GitHub stars | Repository last push | Current package                                | Project fit                                                                               |
+| ---------- | -----------: | -------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Promptfoo  |       26,127 | 2026-10-19           | npm `promptfoo` 0.124.1                        | Local configuration, comparison UI, deterministic and model graders, agent SDK providers. |
+| DeepEval   |       18,942 | 2026-10-16           | PyPI `deepeval` 4.3.1; uploaded 2026-10-16     | Python test suites and trace-based component or agent evaluation.                         |
+| Ragas      |       16,068 | 2026-02-24           | PyPI `ragas` 0.4.3; uploaded 2026-01-13        | Prompt, RAG, workflow, and agent evaluation; useful when retrieval metrics are central.   |
+| Inspect AI |        3,041 | 2026-10-17           | PyPI `inspect-ai` 0.3.281; uploaded 2026-10-15 | Python tasks, datasets, solvers, scorers, tool-using agents, and sandbox execution.       |
 
 The first four columns are measured. The fit descriptions summarize the official guides listed below. Ragas moved from `explodinggradients/ragas` to `vibrantlabsai/ragas`; the API redirect was followed. [measured], [official]
 

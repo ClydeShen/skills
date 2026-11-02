@@ -21,12 +21,12 @@ These statements narrow the product assumptions behind the general Meta Reasonin
 
 ## Overview
 
-| Question | Finding and candidate direction | Evidence and limits | Judgment |
-| --- | --- | --- | --- |
-| Does changing one's mind mean going in circles? | Preferences may be forming; check for new trade-offs and understanding | Preference-construction research provides adjacent evidence | J1, medium |
-| Is additional reflection necessarily helpful? | Observe effectiveness and user burden together | A specific AI-assisted decision experiment supports a trade-off | J2, medium |
-| How can agent design require fewer steps? | Identify the flexibility and feedback the task requires before choosing patterns | First-party engineering guidance, not a controlled experiment | J3, medium |
-| How can a skill proactively detect stalled progress? | Activation descriptions must be visible; deeper diagnosis follows activation | The standard explains loading, not activation accuracy | J4, medium |
+| Question                                             | Finding and candidate direction                                                  | Evidence and limits                                             | Judgment   |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------- |
+| Does changing one's mind mean going in circles?      | Preferences may be forming; check for new trade-offs and understanding           | Preference-construction research provides adjacent evidence     | J1, medium |
+| Is additional reflection necessarily helpful?        | Observe effectiveness and user burden together                                   | A specific AI-assisted decision experiment supports a trade-off | J2, medium |
+| How can agent design require fewer steps?            | Identify the flexibility and feedback the task requires before choosing patterns | First-party engineering guidance, not a controlled experiment   | J3, medium |
+| How can a skill proactively detect stalled progress? | Activation descriptions must be visible; deeper diagnosis follows activation     | The standard explains loading, not activation accuracy          | J4, medium |
 
 ## 1. User goals may form through interaction
 
@@ -100,12 +100,12 @@ This addresses implicit activation, user-level memory, and lightweight interacti
 
 [inference] Start with a few anonymized or synthetic conversations to evaluate these boundaries, without building a complete system:
 
-| Conversation | Desired behavior | Failure signal |
-| --- | --- | --- |
-| The goal is clear and progress continues | Complete the task normally | Introduce unnecessary reflection |
-| The user keeps comparing options and gradually clarifies preferences | Help form trade-offs | Misdiagnose normal exploration as a thinking problem |
-| Several turns return to the same obstacle without new information | Offer a testable diagnosis and a different next step | Continue repeating, or assert an unsupported root cause |
-| Failure comes from repetitive agent behavior or tool limits | Correct agent behavior or supply missing conditions | Record it as a negative user habit |
+| Conversation                                                         | Desired behavior                                     | Failure signal                                          |
+| -------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------- |
+| The goal is clear and progress continues                             | Complete the task normally                           | Introduce unnecessary reflection                        |
+| The user keeps comparing options and gradually clarifies preferences | Help form trade-offs                                 | Misdiagnose normal exploration as a thinking problem    |
+| Several turns return to the same obstacle without new information    | Offer a testable diagnosis and a different next step | Continue repeating, or assert an unsupported root cause |
+| Failure comes from repetitive agent behavior or tool limits          | Correct agent behavior or supply missing conditions  | Record it as a negative user habit                      |
 
 [inference] First compare lightweight intervention with the existing interaction, recording false triggers, task improvement, extra questions, and user burden. Long-term learning benefits and profile effectiveness require separate later validation.
 

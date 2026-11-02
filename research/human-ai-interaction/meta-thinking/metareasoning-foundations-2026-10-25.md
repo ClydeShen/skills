@@ -8,12 +8,12 @@ Evidence markers follow the [research template](../../../knowledge/harness/templ
 
 ## Overview
 
-| Question | Current recommendation | Evidence strength and scope | Judgment confidence |
-| --- | --- | --- | --- |
-| Is there a foundation for choosing how to think? | Investigate rational metareasoning: treat computation as a resource-consuming decision | Strong theoretical connection; project implementation remains untested | Medium, 3.0 |
-| When should analysis stop? | Record each candidate action's expected change, cost, and stopping condition | Supported by resource-constraint theory; thresholds need experiments | Medium, 3.0 |
-| When should AI proactively ask or change direction? | Consider goal uncertainty, intervention benefit, and interruption cost together | Supported by primary mixed-initiative research; conversational adaptation remains untested | Medium, 3.0 |
-| Can Centaur, Critic, and Checkpoint be parallel categories? | Describe function, allocation, reasoning operation, and control authority separately | Automation research directly supports separating function and degree; other dimensions are inferences | Medium, 3.0 |
+| Question                                                    | Current recommendation                                                                 | Evidence strength and scope                                                                           | Judgment confidence |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------- |
+| Is there a foundation for choosing how to think?            | Investigate rational metareasoning: treat computation as a resource-consuming decision | Strong theoretical connection; project implementation remains untested                                | Medium, 3.0         |
+| When should analysis stop?                                  | Record each candidate action's expected change, cost, and stopping condition           | Supported by resource-constraint theory; thresholds need experiments                                  | Medium, 3.0         |
+| When should AI proactively ask or change direction?         | Consider goal uncertainty, intervention benefit, and interruption cost together        | Supported by primary mixed-initiative research; conversational adaptation remains untested            | Medium, 3.0         |
+| Can Centaur, Critic, and Checkpoint be parallel categories? | Describe function, allocation, reasoning operation, and control authority separately   | Automation research directly supports separating function and degree; other dimensions are inferences | Medium, 3.0         |
 
 Scores follow the [judgment practices](../../../knowledge/harness/judgment-practices.md): owner 1 (exploration authorized), research 0.5 (relevant primary theory, indirect evidence for this project), reasoning 1 (recommendations imply inspectable mechanisms), project history 0.5 (direction exists in the draft, without measurements), totaling 3.0. This records support for the recommendations, not statistical probability or product effectiveness.
 
@@ -29,14 +29,14 @@ Scores follow the [judgment practices](../../../knowledge/harness/judgment-pract
 
 [inference] Record the following fields for each candidate action, then observe actual effects:
 
-| Field | Question to answer |
-| --- | --- |
-| Current decision | What exactly must be decided next? |
-| Key uncertainty | Which unknown could change the choice? |
-| Candidate action | Which query, clarification, challenge, simulation, or experiment? |
-| Expected change | What result would cause a switch to another option? |
-| Cost | How much time, computation, and user attention are required? |
-| Stopping condition | What result is sufficient to take the next step? |
+| Field              | Question to answer                                                |
+| ------------------ | ----------------------------------------------------------------- |
+| Current decision   | What exactly must be decided next?                                |
+| Key uncertainty    | Which unknown could change the choice?                            |
+| Candidate action   | Which query, clarification, challenge, simulation, or experiment? |
+| Expected change    | What result would cause a switch to another option?               |
+| Cost               | How much time, computation, and user attention are required?      |
+| Stopping condition | What result is sufficient to take the next step?                  |
 
 [inference] This makes philosophical mappings testable: if invoking a principle changes neither candidate actions, information needs, nor stopping conditions, there is not yet evidence to count it as a framework benefit.
 
@@ -92,12 +92,12 @@ Corresponds to the Mixed-Initiative, Socratic, and Human Checkpoint candidates a
 
 [inference] Describing examples along the following candidate dimensions enables comparison before assigning every term a unique level. These are working hypotheses, not additions to the shared glossary.
 
-| Candidate dimension | Example question |
-| --- | --- |
-| Work function | Are we collecting, analyzing, deciding, or executing? |
-| Human–AI allocation | Who proposes, verifies, and completes the work? |
+| Candidate dimension | Example question                                                         |
+| ------------------- | ------------------------------------------------------------------------ |
+| Work function       | Are we collecting, analyzing, deciding, or executing?                    |
+| Human–AI allocation | Who proposes, verifies, and completes the work?                          |
 | Reasoning operation | Are we expanding options, challenging assumptions, or checking evidence? |
-| Control authority | Who can decide, pause, modify, or revoke? |
+| Control authority   | Who can decide, pause, modify, or revoke?                                |
 
 ### Relation to existing constraints
 

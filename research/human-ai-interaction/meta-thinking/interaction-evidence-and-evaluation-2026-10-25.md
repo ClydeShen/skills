@@ -8,12 +8,12 @@ Evidence markers: `[official]` means relevant paper text was read; `[official ·
 
 ## Overview
 
-| Question | Recommendation | Evidence strength and limits | Judgment confidence |
-| --- | --- | --- | --- |
-| Is upward abstraction useful? | Test one relevant abstraction step, then return to the original problem | Medium: experimental support for particular models and tasks | Medium; see J1 |
-| Does Critic mean verification? | Separate generating critique, verifying critique, and revising answers | Medium: both negative and positive conditional results exist | Medium; see J2 |
-| Is human–AI collaboration inherently better? | Retain human-only, AI-only, and collaboration baselines | Medium: cross-experiment synthesis with limited scope | Medium; see J3 |
-| How can framework value be established? | Compare adaptive selection with fixed workflows at equal budgets | Weak: no project experiments yet | Medium; see J4 |
+| Question                                     | Recommendation                                                          | Evidence strength and limits                                 | Judgment confidence |
+| -------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------ | ------------------- |
+| Is upward abstraction useful?                | Test one relevant abstraction step, then return to the original problem | Medium: experimental support for particular models and tasks | Medium; see J1      |
+| Does Critic mean verification?               | Separate generating critique, verifying critique, and revising answers  | Medium: both negative and positive conditional results exist | Medium; see J2      |
+| Is human–AI collaboration inherently better? | Retain human-only, AI-only, and collaboration baselines                 | Medium: cross-experiment synthesis with limited scope        | Medium; see J3      |
+| How can framework value be established?      | Compare adaptive selection with fixed workflows at equal budgets        | Weak: no project experiments yet                             | Medium; see J4      |
 
 ## 1. Upward abstraction: adjacent evidence does not establish a complete hierarchy
 
@@ -73,13 +73,13 @@ Corresponds to the draft's concern about heterogeneous L4 concepts. This evidenc
 
 [inference · J4] Build a small controlled case set before expanding the concept catalog. The following are proposed experiments, not completed tests:
 
-| Case | Comparison | What to observe |
-| --- | --- | --- |
-| Simple task with a clear goal | Direct execution vs. framework | Unnecessary questions and added time |
-| Choice with hidden constraints | Direct answer vs. proactive investigation | Whether discovered constraints change the final choice |
-| Repeated unsuccessful revisions | Further iteration vs. reframing | Detection of a wrong goal or critical assumption |
-| Reasoning with a known answer | Self-critique vs. condition verification vs. tools | Proportions of corrected and newly introduced errors |
-| Open-ended creation | Fast iteration vs. abstraction first | Blind-rated quality, user effort, and completion time |
+| Case                            | Comparison                                         | What to observe                                        |
+| ------------------------------- | -------------------------------------------------- | ------------------------------------------------------ |
+| Simple task with a clear goal   | Direct execution vs. framework                     | Unnecessary questions and added time                   |
+| Choice with hidden constraints  | Direct answer vs. proactive investigation          | Whether discovered constraints change the final choice |
+| Repeated unsuccessful revisions | Further iteration vs. reframing                    | Detection of a wrong goal or critical assumption       |
+| Reasoning with a known answer   | Self-critique vs. condition verification vs. tools | Proportions of corrected and newly introduced errors   |
+| Open-ended creation             | Fast iteration vs. abstraction first               | Blind-rated quality, user effort, and completion time  |
 
 [inference] Record discoverable hidden factors and their effects beforehand. Distinguish evidence-backed discoveries, reasonable questions for investigation, and unsupported guesses. Controlled hidden factors test local discovery, not coverage of all real-world unknown unknowns.
 
@@ -93,12 +93,12 @@ Corresponds to the draft's Success Criteria and its requirement not to overcompl
 
 Scores express how well each recommendation fits current project evidence, not statistical probabilities. The order is Owner / Research / Reasoning / Project history, with each dimension scored 0–1.
 
-| Judgment | Four-dimensional scores | Total and level | Main limitation |
-| --- | --- | --- | --- |
-| J1 Test abstraction locally | 0.5 / 0.5 / 1 / 0.5 | 2.5, medium | No project tests yet |
-| J2 Distinguish critique and verification mechanisms | 0.5 / 1 / 1 / 0.5 | 3, medium | Transfer across models and tasks is unverified |
-| J3 Retain distinct collaboration baselines | 0.5 / 1 / 1 / 0.5 | 3, medium | Historical samples do not represent current systems |
-| J4 Build a controlled case set first | 0.5 / 0.5 / 1 / 0.5 | 2.5, medium | Specific cases and budgets remain unselected |
+| Judgment                                            | Four-dimensional scores | Total and level | Main limitation                                     |
+| --------------------------------------------------- | ----------------------- | --------------- | --------------------------------------------------- |
+| J1 Test abstraction locally                         | 0.5 / 0.5 / 1 / 0.5     | 2.5, medium     | No project tests yet                                |
+| J2 Distinguish critique and verification mechanisms | 0.5 / 1 / 1 / 0.5       | 3, medium       | Transfer across models and tasks is unverified      |
+| J3 Retain distinct collaboration baselines          | 0.5 / 1 / 1 / 0.5       | 3, medium       | Historical samples do not represent current systems |
+| J4 Build a controlled case set first                | 0.5 / 0.5 / 1 / 0.5     | 2.5, medium     | Specific cases and budgets remain unselected        |
 
 ## Not verified
 

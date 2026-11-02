@@ -22,17 +22,17 @@ npm run check
 
 `package.json` owns command definitions and exact dependency versions; the lockfile owns resolved npm dependencies. No Python, Bash or model key is required for the core gate. The optional Git hook uses Git's shell, available with Git for Windows.
 
-| Entry | Purpose | Gate |
-| --- | --- | --- |
-| `npm run check:repo` | Fast repository contracts | Blocking |
-| `npm run git:setup` | Enable reviewed repository Git hooks in this clone; refuses conflicting hooks | Explicit local setup |
-| `npm run git:check` | Check current branch, authoring state and local hook activation, or CI source/target refs | Blocking; also part of `check:repo` |
-| `npm test` | Shared checker and evaluation-harness regression tests | Blocking |
-| `npm run eval` | Offline synthetic replay of initiative cases | Blocking harness smoke, not skill quality |
-| `npm run check` | Runs the three entries above, stopping at the first failure | Shared handoff/CI gate |
-| `npm run test:transport` | Loopback HTTP provider contract tests; no remote model | Additional CI gate; needs local socket access |
-| `npm run lint:agents` | Pinned agnix diagnostics for skills and agent configuration | Advisory CI job; nonzero exit remains visible |
-| `npm run skills:sync` | Explicitly copy reviewed canonical development tools to the Claude projection | Mutation, followed by `check:repo` |
+| Entry                    | Purpose                                                                                   | Gate                                          |
+| ------------------------ | ----------------------------------------------------------------------------------------- | --------------------------------------------- |
+| `npm run check:repo`     | Fast repository contracts                                                                 | Blocking                                      |
+| `npm run git:setup`      | Enable reviewed repository Git hooks in this clone; refuses conflicting hooks             | Explicit local setup                          |
+| `npm run git:check`      | Check current branch, authoring state and local hook activation, or CI source/target refs | Blocking; also part of `check:repo`           |
+| `npm test`               | Shared checker and evaluation-harness regression tests                                    | Blocking                                      |
+| `npm run eval`           | Offline synthetic replay of initiative cases                                              | Blocking harness smoke, not skill quality     |
+| `npm run check`          | Runs the three entries above, stopping at the first failure                               | Shared handoff/CI gate                        |
+| `npm run test:transport` | Loopback HTTP provider contract tests; no remote model                                    | Additional CI gate; needs local socket access |
+| `npm run lint:agents`    | Pinned agnix diagnostics for skills and agent configuration                               | Advisory CI job; nonzero exit remains visible |
+| `npm run skills:sync`    | Explicitly copy reviewed canonical development tools to the Claude projection             | Mutation, followed by `check:repo`            |
 
 Real-model commands and configuration remain in [prompt evaluation](./prompt-evaluation.md). They are explicit, quota-consuming checks and are never triggered by hooks or the default gate. Evaluation output stays in ignored `evals/.local/`. The repository checker does not open actual user profiles or ignored environment files; the evaluation runner loads `.env.evaluation` only in explicit model mode.
 

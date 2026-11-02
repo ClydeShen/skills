@@ -3,6 +3,7 @@
 Date: YYYY-MM-DD. Subject: <the question to answer>. Context: <why the research is needed and which decision it feeds>.
 
 Confidence markers:
+
 - **[official]**: the relevant part of official docs, a specification, a tool's README, or a paper page was read.
 - **[official · summary only]**: only an abstract or overview was read, or the page does not cover the detail.
 - **[secondhand]**: a third-party description, such as a search result summary; not traced to a primary source.
@@ -11,28 +12,34 @@ Confidence markers:
 
 ## Overview
 
-| Question | Recommendation | Strength of evidence | Confidence |
-|---|---|---|---|
-| 1. <question> | <recommendation> | strong / medium / weak | [marker] |
+| Question      | Recommendation   | Strength of evidence   | Confidence |
+| ------------- | ---------------- | ---------------------- | ---------- |
+| 1. <question> | <recommendation> | strong / medium / weak | [marker]   |
 
 ## 1. <Question 1>
 
 ### Evidence
+
 <What was read, with sources. Write only what was actually read.>
 
 ### Recommendation for the project
+
 <Concrete paths, file names, commands.>
 
 ### Relation to existing constraints
+
 <Which constraint or ADR it touches.>
 
 ## Not verified
+
 - <Items that were not verified. Do not state them as conclusions.>
 
 ## Decisions for the owner
+
 - <Only questions that cannot be looked up and are a matter of preference. Do not ask what can be looked up.>
 
 ## Sources
+
 - <URL>: <one sentence. Each source must be a page that was actually opened.>
 
 <!--

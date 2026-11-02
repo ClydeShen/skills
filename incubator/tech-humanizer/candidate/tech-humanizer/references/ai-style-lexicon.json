@@ -1,34 +1,34 @@
 {
   "version": "2.1.0",
   "high_density_ai_vocabulary": [
-    {"term": "additionally", "era": "2023-2024"},
-    {"term": "align with", "era": "2024-2025"},
-    {"term": "bolster", "era": "2023-2024"},
-    {"term": "bolstered", "era": "2023-2024"},
-    {"term": "crucial", "era": "2023-2024"},
-    {"term": "delve", "era": "2023-2024"},
-    {"term": "enduring", "era": "2023-2024"},
-    {"term": "enhance", "era": "2024-2025"},
-    {"term": "foster", "era": "2024-2025"},
-    {"term": "fostering", "era": "2024-2025"},
-    {"term": "garner", "era": "ongoing"},
-    {"term": "highlight", "era": "2024-2025"},
-    {"term": "interplay", "era": "ongoing"},
-    {"term": "intricate", "era": "2023-2024"},
-    {"term": "intricacies", "era": "2023-2024"},
-    {"term": "key", "era": "ongoing"},
-    {"term": "landscape", "era": "2023-2024"},
-    {"term": "meticulous", "era": "2023-2024"},
-    {"term": "meticulously", "era": "2023-2024"},
-    {"term": "pivotal", "era": "2023-2024"},
-    {"term": "robust", "era": "ongoing"},
-    {"term": "showcase", "era": "2024-2025"},
-    {"term": "showcasing", "era": "2024-2025"},
-    {"term": "tapestry", "era": "2023-2024"},
-    {"term": "testament", "era": "2023-2024"},
-    {"term": "underscore", "era": "2024-2025"},
-    {"term": "valuable", "era": "ongoing"},
-    {"term": "vibrant", "era": "2023-2024"}
+    { "term": "additionally", "era": "2023-2024" },
+    { "term": "align with", "era": "2024-2025" },
+    { "term": "bolster", "era": "2023-2024" },
+    { "term": "bolstered", "era": "2023-2024" },
+    { "term": "crucial", "era": "2023-2024" },
+    { "term": "delve", "era": "2023-2024" },
+    { "term": "enduring", "era": "2023-2024" },
+    { "term": "enhance", "era": "2024-2025" },
+    { "term": "foster", "era": "2024-2025" },
+    { "term": "fostering", "era": "2024-2025" },
+    { "term": "garner", "era": "ongoing" },
+    { "term": "highlight", "era": "2024-2025" },
+    { "term": "interplay", "era": "ongoing" },
+    { "term": "intricate", "era": "2023-2024" },
+    { "term": "intricacies", "era": "2023-2024" },
+    { "term": "key", "era": "ongoing" },
+    { "term": "landscape", "era": "2023-2024" },
+    { "term": "meticulous", "era": "2023-2024" },
+    { "term": "meticulously", "era": "2023-2024" },
+    { "term": "pivotal", "era": "2023-2024" },
+    { "term": "robust", "era": "ongoing" },
+    { "term": "showcase", "era": "2024-2025" },
+    { "term": "showcasing", "era": "2024-2025" },
+    { "term": "tapestry", "era": "2023-2024" },
+    { "term": "testament", "era": "2023-2024" },
+    { "term": "underscore", "era": "2024-2025" },
+    { "term": "valuable", "era": "ongoing" },
+    { "term": "vibrant", "era": "2023-2024" }
   ],
   "assistant_service_language": [
     "certainly",
@@ -100,30 +100,17 @@
     "_meta": {
       "direction": "slang_to_term_only",
       "scope_guard": "Replace only when the slang stands in for a real technical concept. This map runs one direction only (slang -> term); never run it in reverse to de-formalize good documentation. Never formalize plain verbs (see never_formalize). Preserve standard event-driven phrasing (see preserve_verbatim).",
-      "never_formalize": [
-        "get",
-        "find",
-        "open",
-        "show up",
-        "shows up",
-        "run",
-        "read",
-        "use",
-        "set up"
-      ],
-      "preserve_verbatim": [
-        "fires",
-        "trigger fires"
-      ]
+      "never_formalize": ["get", "find", "open", "show up", "shows up", "run", "read", "use", "set up"],
+      "preserve_verbatim": ["fires", "trigger fires"]
     },
     "map": [
-      {"slang": "baked into the build", "term": "set at build time"},
-      {"slang": "baked in", "term": "set at build time"},
-      {"slang": "spin up", "term": "deploy"},
-      {"slang": "wire up", "term": "integrate"},
-      {"slang": "under the hood", "term": "internally"},
-      {"slang": "pick up a secret", "term": "load a secret"},
-      {"slang": "pick up the config", "term": "load the config"}
+      { "slang": "baked into the build", "term": "set at build time" },
+      { "slang": "baked in", "term": "set at build time" },
+      { "slang": "spin up", "term": "deploy" },
+      { "slang": "wire up", "term": "integrate" },
+      { "slang": "under the hood", "term": "internally" },
+      { "slang": "pick up a secret", "term": "load a secret" },
+      { "slang": "pick up the config", "term": "load the config" }
     ]
   }
 }

@@ -6,11 +6,11 @@ Start with what exists and where, how it interacts, and what constrains those in
 
 ## Choose one primary reading direction
 
-| View's main question | Useful default | When to adapt |
-| --- | --- | --- |
-| How does a request or event progress? | Left-to-right stages; parallel branches on aligned rows | A tall page or established convention may favor top-to-bottom. |
-| What does this client depend on? | Clients above entry, application and deeper dependencies | Do not rank peer environments or identity providers as deeper just to fit the grid. |
-| How do domains connect? | Peer domains side by side; ingress/egress face the relevant neighbor | Physical geography or multiple entry points may need another arrangement. |
+| View's main question                  | Useful default                                                       | When to adapt                                                                       |
+| ------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| How does a request or event progress? | Left-to-right stages; parallel branches on aligned rows              | A tall page or established convention may favor top-to-bottom.                      |
+| What does this client depend on?      | Clients above entry, application and deeper dependencies             | Do not rank peer environments or identity providers as deeper just to fit the grid. |
+| How do domains connect?               | Peer domains side by side; ingress/egress face the relevant neighbor | Physical geography or multiple entry points may need another arrangement.           |
 
 These are English-diagram defaults, not universal perceptual laws. Use a secondary axis for a genuine distinction such as environment or parallel branch. Avoid making both axes imply different execution sequences. Arrows and labels remain authoritative; position reinforces them.
 

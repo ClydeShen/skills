@@ -3,20 +3,21 @@ const cases = require('./cases.json');
 module.exports = {
   description: 'tech-humanizer: rewrite quality and profile-state decisions',
   prompts: ['file://prompt.cjs'],
-  providers: [{
-    id: process.env.EVAL_TARGET_PROVIDER || 'openai:chat:configure-target',
-    config: {
-      ...(process.env.EVAL_API_BASE_URL ? { apiBaseUrl: process.env.EVAL_API_BASE_URL } : {}),
+  providers: [
+    {
+      id: process.env.EVAL_TARGET_PROVIDER || 'openai:chat:configure-target',
+      config: {
+        ...(process.env.EVAL_API_BASE_URL ? { apiBaseUrl: process.env.EVAL_API_BASE_URL } : {}),
+      },
     },
-  }],
+  ],
   defaultTest: {
     options: {
       disableVarExpansion: true,
       provider: {
         id: process.env.EVAL_GRADER_PROVIDER || 'openai:chat:configure-grader',
         config: {
-          ...(process.env.EVAL_GRADER_API_BASE_URL
-            ? { apiBaseUrl: process.env.EVAL_GRADER_API_BASE_URL } : {}),
+          ...(process.env.EVAL_GRADER_API_BASE_URL ? { apiBaseUrl: process.env.EVAL_GRADER_API_BASE_URL } : {}),
         },
       },
     },

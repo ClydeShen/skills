@@ -20,10 +20,10 @@ Approved by the owner on 2026-10-28, including the E1 recommendation that may re
 
 **Natural errors the skill must raise with a recommendation:**
 
-| # | Source claim | Recommendation | Evidence |
-|---|---|---|---|
-| E1 | The Route 53 Resolver outbound endpoint forwards the request to the API Gateway VPC endpoint. | An outbound endpoint forwards DNS queries out of a VPC, not application requests. The Transit Gateway routes the HTTPS request to the execute-api interface VPC endpoint. The outbound endpoint may be unnecessary here; ask whether to keep it. | AWS Route 53 Developer Guide, "Forwarding outbound DNS queries to your network", accessed 2026-10-28 |
-| E2 | A private hosted zone is attached to the Route 53 Resolver inbound endpoint. | Associate the private hosted zone with the VPC, here the ingress VPC that holds the inbound endpoint. | AWS Route 53 Developer Guide, "Forwarding inbound DNS queries to your VPCs", accessed 2026-10-28. That a zone cannot attach to an endpoint is not quoted there; the skill rechecks at run time. |
+| #   | Source claim                                                                                  | Recommendation                                                                                                                                                                                                                                   | Evidence                                                                                                                                                                                        |
+| --- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| E1  | The Route 53 Resolver outbound endpoint forwards the request to the API Gateway VPC endpoint. | An outbound endpoint forwards DNS queries out of a VPC, not application requests. The Transit Gateway routes the HTTPS request to the execute-api interface VPC endpoint. The outbound endpoint may be unnecessary here; ask whether to keep it. | AWS Route 53 Developer Guide, "Forwarding outbound DNS queries to your network", accessed 2026-10-28                                                                                            |
+| E2  | A private hosted zone is attached to the Route 53 Resolver inbound endpoint.                  | Associate the private hosted zone with the VPC, here the ingress VPC that holds the inbound endpoint.                                                                                                                                            | AWS Route 53 Developer Guide, "Forwarding inbound DNS queries to your VPCs", accessed 2026-10-28. That a zone cannot attach to an endpoint is not quoted there; the skill rechecks at run time. |
 
 **Other questions before drawing:** whether DNS queries also pass AWS Network Firewall (the port 53 rule suggests yes; recommend yes); the Lambda runtime (recommend `[Container: AWS Lambda]` when unknown).
 
@@ -31,17 +31,17 @@ Approved by the owner on 2026-10-28, including the E1 recommendation that may re
 
 **Expected relationships:**
 
-| Flow | # | From → to | Line | Label content |
-|---|---|---|---|---|
-| A, DNS | A1 | Function app → Private Resolver inbound endpoint | dashed | Resolve execute-api name [DNS] |
-| | A2 | Private Resolver outbound endpoint → Route 53 inbound endpoint, through Azure Firewall, VPN and Transit Gateway | dashed | Forward query by rule [DNS 53] |
-| | A3 | Route 53 inbound endpoint → private hosted zone | dashed | Returns the VPC endpoint private IP |
-| B, API call | B1 | Function app → Azure Firewall | solid | API request [HTTPS 443] |
-| | B2 | Azure VPN Gateway → AWS Site-to-Site VPN → Transit Gateway | solid | [IPsec] |
-| | B3 | Transit Gateway → Network Firewall | solid | Inspect (IDPS) |
-| | B4 | → execute-api VPC endpoint | solid | [HTTPS] |
-| | B5 | VPC endpoint → API Gateway in the workload account | solid | Invoke private API, allowed by resource policy |
-| | B6 | API Gateway → Lambda | solid | Invoke |
+| Flow        | #   | From → to                                                                                                       | Line   | Label content                                  |
+| ----------- | --- | --------------------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------- |
+| A, DNS      | A1  | Function app → Private Resolver inbound endpoint                                                                | dashed | Resolve execute-api name [DNS]                 |
+|             | A2  | Private Resolver outbound endpoint → Route 53 inbound endpoint, through Azure Firewall, VPN and Transit Gateway | dashed | Forward query by rule [DNS 53]                 |
+|             | A3  | Route 53 inbound endpoint → private hosted zone                                                                 | dashed | Returns the VPC endpoint private IP            |
+| B, API call | B1  | Function app → Azure Firewall                                                                                   | solid  | API request [HTTPS 443]                        |
+|             | B2  | Azure VPN Gateway → AWS Site-to-Site VPN → Transit Gateway                                                      | solid  | [IPsec]                                        |
+|             | B3  | Transit Gateway → Network Firewall                                                                              | solid  | Inspect (IDPS)                                 |
+|             | B4  | → execute-api VPC endpoint                                                                                      | solid  | [HTTPS]                                        |
+|             | B5  | VPC endpoint → API Gateway in the workload account                                                              | solid  | Invoke private API, allowed by resource policy |
+|             | B6  | API Gateway → Lambda                                                                                            | solid  | Invoke                                         |
 
 The outbound endpoint is left out if the user confirms its removal.
 

@@ -29,11 +29,13 @@ export async function createSuite({ mode, env = {} }) {
     };
   });
   return {
-    description: 'Architecture diagram image facts: a judge model reads each saved diagram image and confirms or rejects claims. Not agent execution; owner spot checks of the images remain.',
+    description:
+      'Architecture diagram image facts: a judge model reads each saved diagram image and confirms or rejects claims. Not agent execution; owner spot checks of the images remain.',
     prompts: [{ label: 'image-facts', raw: 'image-facts', function: () => 'image-facts' }],
-    providers: mode === 'model'
-      ? [createVisionJudgeProvider(judgeConfig(env))]
-      : [async (_prompt, context) => ({ output: fixtureJudgement(context.vars.claims) })],
+    providers:
+      mode === 'model'
+        ? [createVisionJudgeProvider(judgeConfig(env))]
+        : [async (_prompt, context) => ({ output: fixtureJudgement(context.vars.claims) })],
     tests,
   };
 }

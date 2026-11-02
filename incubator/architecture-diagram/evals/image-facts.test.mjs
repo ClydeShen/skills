@@ -1,7 +1,7 @@
-import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
+import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { buildJudgeMessages } from '../../../evals/vision-judge.mjs';
 import { createSuite, fixtureJudgement, withNeutralIds } from './image-facts-suite.mjs';
@@ -20,14 +20,18 @@ test('every case has an existing image and source and enough expected and plante
       assert.ok(claim.text?.trim() && claim.basis?.trim(), `${c.id}/${claim.key}`);
       assert.ok([undefined, 'not_drawn'].includes(claim.expect), `${c.id}/${claim.key}`);
     }
-    assert.ok(c.claims.filter((claim) => !claim.expect && claim.critical !== false).length >= 10, `${c.id}: critical claims`);
+    assert.ok(
+      c.claims.filter((claim) => !claim.expect && claim.critical !== false).length >= 10,
+      `${c.id}: critical claims`,
+    );
     assert.ok(c.claims.filter((claim) => claim.expect === 'not_drawn').length >= 8, `${c.id}: planted claims`);
   }
 });
 
 test('Case B keeps the three unconfirmed paths as must-not-be-drawn claims', () => {
   const b = cases.find((c) => c.id === 'three-tier-b');
-  for (const key of ['web-to-app-arrow', 'cache-to-rds', 'standby-to-s3']) assert.equal(b.claims.find((claim) => claim.key === key)?.expect, 'not_drawn', key);
+  for (const key of ['web-to-app-arrow', 'cache-to-rds', 'standby-to-s3'])
+    assert.equal(b.claims.find((claim) => claim.key === key)?.expect, 'not_drawn', key);
 });
 
 test('judge prompts carry only neutral ids and claim text, never keys, bases or labels', () => {
@@ -35,7 +39,10 @@ test('judge prompts carry only neutral ids and claim text, never keys, bases or 
     const claims = withNeutralIds(c.claims, index);
     assert.ok(claims.every((claim) => /^c\d\d$/.test(claim.id)));
     const half = claims.slice(0, Math.ceil(claims.length / 2));
-    assert.ok(half.some((claim) => claim.expect === 'not_drawn') && half.some((claim) => !claim.expect), `${c.id}: ids must not group by truth`);
+    assert.ok(
+      half.some((claim) => claim.expect === 'not_drawn') && half.some((claim) => !claim.expect),
+      `${c.id}: ids must not group by truth`,
+    );
     const prompt = JSON.stringify(buildJudgeMessages({ image: 'data:image/png;base64,AA==', claims }).messages);
     assert.doesNotMatch(prompt, /not_drawn|critical|basis|planted|ledger|handoff/);
     for (const claim of claims) assert.ok(prompt.includes(claim.text.replace(/"/g, '\\"')), claim.key);
@@ -54,7 +61,9 @@ test('fixture judgements pass every case, and a confirmed false claim or a rejec
     const critical = t.vars.claims.find((claim) => !claim.expect && claim.critical !== false);
     const flip = (id, verdict) => {
       const judgement = JSON.parse(output);
-      judgement.verdicts = judgement.verdicts.map((v) => (v.id === id ? { ...v, verdict, votes: { [verdict]: 1 } } : v));
+      judgement.verdicts = judgement.verdicts.map((v) =>
+        v.id === id ? { ...v, verdict, votes: { [verdict]: 1 } } : v,
+      );
       return judgement;
     };
     const confirmed = grade(flip(planted.id, 'drawn_correctly'));

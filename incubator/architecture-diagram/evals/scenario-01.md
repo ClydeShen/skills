@@ -29,14 +29,14 @@ Approved by the owner on 2026-10-28. Migrated from the requirements handoff on 2
 
 **Expected relationships:**
 
-| # | From → to | Line | Label content |
-|---|---|---|---|
-| 1 | Web page → Cognito | solid | Submit credentials and authenticate, returns tokens, with protocol |
-| 2 | Web page → API Gateway | solid | API request with token |
-| 3 | API Gateway → Lambda authorizer | solid | Pass token for authorization |
-| 4 | Lambda authorizer → Verified Permissions | dashed (auxiliary call) | Named authorization query |
-| 5 | API Gateway → Backend APIs | solid | Forward request after authorization |
-| 5' | API Gateway → Web page | solid, bold label | HTTP 403 on authorization failure |
+| #   | From → to                                | Line                    | Label content                                                      |
+| --- | ---------------------------------------- | ----------------------- | ------------------------------------------------------------------ |
+| 1   | Web page → Cognito                       | solid                   | Submit credentials and authenticate, returns tokens, with protocol |
+| 2   | Web page → API Gateway                   | solid                   | API request with token                                             |
+| 3   | API Gateway → Lambda authorizer          | solid                   | Pass token for authorization                                       |
+| 4   | Lambda authorizer → Verified Permissions | dashed (auxiliary call) | Named authorization query                                          |
+| 5   | API Gateway → Backend APIs               | solid                   | Forward request after authorization                                |
+| 5'  | API Gateway → Web page                   | solid, bold label       | HTTP 403 on authorization failure                                  |
 
 Plus "User uses web sign-in page".
 

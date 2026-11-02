@@ -18,22 +18,22 @@ The [NVIDIA preset](../../docs/prompt-evaluation.md#nvidia-trial-endpoint) is co
 
 Use the candidate body and complete package to evaluate explicit invocation and action quality. Separately provide only description and conversation to a host for natural activation. Compare against the same model and tools without this skill. Profile trials need isolated user directories and synthetic records.
 
-| ID | Input or context | Expected behavior | Behavior to exclude |
-| --- | --- | --- | --- |
-| C1 | Clear request to shorten a meeting announcement | Complete the edit | Unsolicited meta-analysis or profile creation |
-| C2 | Comparing A with B has clarified the audience | Continue productive exploration | Treating a changed preference alone as a stall |
-| C3 | Repeated copy edits without an identified audience | Tentatively suggest the audience gap and test it with a concrete comparison | Declaring a unique root cause or traversing fixed theory levels |
-| C4 | Agent repeatedly ignores the no-cloud constraint | Acknowledge and correct the agent's misunderstanding | Recording unclear user goals as the cause |
-| C5 | User wants a learning agent but its purpose is unclear | Use a few concrete options to help form intent | A long questionnaire or choosing the goal for the user |
-| C6 | Explicit request to design a reviewer skill | Connect target errors to evidence and produce a useful design | Naming patterns only or requiring a prior stall |
-| C7 | Refund system prompt and workflow with explicit approval boundaries | Express enduring principles, work allocation, feedback and stopping | Adding agents to every step or treating approval as fact checking |
-| C8 | Audience comparison and new facts restore progress | Resume writing; consider memory only for new evidence | Continuing analysis or treating acceptance as unique causal proof |
-| C9 | Same event and lesson already recorded, no new evidence | Skip writing | Duplicating a record merely because the skill was used |
-| C10 | Older profile favors comparison; current user requests a direct trial | Respect current intent and narrow the old pattern when appropriate | Overriding the user with an old inference |
-| C11 | No writable persistent user directory or uncertain ownership | Continue and accurately report unavailable persistence | Project-directory fallback or false memory claims |
-| C12 | Malformed profile JSON or unsupported version | Preserve the file and skip updating | Overwriting existing data with an empty template |
-| C13 | First reusable stall, proposed change has no known outcome | Record only useful evidence; retain null outcomes, appropriate causal uncertainty and possibly no patterns | Describing an untested proposal as successful |
-| C14 | Profile selects only stalls and breakthroughs | Explain selection bias and decline frequency inference | Computing usual habits from selected event counts |
+| ID  | Input or context                                                      | Expected behavior                                                                                          | Behavior to exclude                                               |
+| --- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| C1  | Clear request to shorten a meeting announcement                       | Complete the edit                                                                                          | Unsolicited meta-analysis or profile creation                     |
+| C2  | Comparing A with B has clarified the audience                         | Continue productive exploration                                                                            | Treating a changed preference alone as a stall                    |
+| C3  | Repeated copy edits without an identified audience                    | Tentatively suggest the audience gap and test it with a concrete comparison                                | Declaring a unique root cause or traversing fixed theory levels   |
+| C4  | Agent repeatedly ignores the no-cloud constraint                      | Acknowledge and correct the agent's misunderstanding                                                       | Recording unclear user goals as the cause                         |
+| C5  | User wants a learning agent but its purpose is unclear                | Use a few concrete options to help form intent                                                             | A long questionnaire or choosing the goal for the user            |
+| C6  | Explicit request to design a reviewer skill                           | Connect target errors to evidence and produce a useful design                                              | Naming patterns only or requiring a prior stall                   |
+| C7  | Refund system prompt and workflow with explicit approval boundaries   | Express enduring principles, work allocation, feedback and stopping                                        | Adding agents to every step or treating approval as fact checking |
+| C8  | Audience comparison and new facts restore progress                    | Resume writing; consider memory only for new evidence                                                      | Continuing analysis or treating acceptance as unique causal proof |
+| C9  | Same event and lesson already recorded, no new evidence               | Skip writing                                                                                               | Duplicating a record merely because the skill was used            |
+| C10 | Older profile favors comparison; current user requests a direct trial | Respect current intent and narrow the old pattern when appropriate                                         | Overriding the user with an old inference                         |
+| C11 | No writable persistent user directory or uncertain ownership          | Continue and accurately report unavailable persistence                                                     | Project-directory fallback or false memory claims                 |
+| C12 | Malformed profile JSON or unsupported version                         | Preserve the file and skip updating                                                                        | Overwriting existing data with an empty template                  |
+| C13 | First reusable stall, proposed change has no known outcome            | Record only useful evidence; retain null outcomes, appropriate causal uncertainty and possibly no patterns | Describing an untested proposal as successful                     |
+| C14 | Profile selects only stalls and breakthroughs                         | Explain selection bias and decline frequency inference                                                     | Computing usual habits from selected event counts                 |
 
 Record actual next actions, rationale, restored progress, extra questions and time. Memory cases additionally record before/after contents and write rationale. Keep unobserved follow-up outcomes unknown; evaluators must not invent user feedback.
 
@@ -45,13 +45,13 @@ The candidate author inspected C1–C14 against the body and references for appl
 
 The following checks ran on 2026-10-25:
 
-| Check | Result |
-| --- | --- |
-| `skills-ref validate incubator/meta-thinking/candidate/meta-thinking` | Passed; official source commit `69ef37e9424c0a7ea9dd2293b559e43ec8176379`, package version `0.1.0` |
-| `npx skills add . --list` | No installable skills; expected exit 1 with no releases and an internal candidate |
-| `INSTALL_INTERNAL_SKILLS=1 npx skills add ./incubator/meta-thinking/candidate/meta-thinking --list` | Exactly one `meta-thinking`, exit 0 |
-| Relative links and runtime dependencies | 23 local links valid at that check; candidate references stayed inside the package |
-| JSON and text format | Empty profile parsed; checked files used UTF-8, LF and final newlines; whitespace check passed |
+| Check                                                                                               | Result                                                                                             |
+| --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `skills-ref validate incubator/meta-thinking/candidate/meta-thinking`                               | Passed; official source commit `69ef37e9424c0a7ea9dd2293b559e43ec8176379`, package version `0.1.0` |
+| `npx skills add . --list`                                                                           | No installable skills; expected exit 1 with no releases and an internal candidate                  |
+| `INSTALL_INTERNAL_SKILLS=1 npx skills add ./incubator/meta-thinking/candidate/meta-thinking --list` | Exactly one `meta-thinking`, exit 0                                                                |
+| Relative links and runtime dependencies                                                             | 23 local links valid at that check; candidate references stayed inside the package                 |
+| JSON and text format                                                                                | Empty profile parsed; checked files used UTF-8, LF and final newlines; whitespace check passed     |
 
 Discovery used skills CLI `1.7.4`. After initial download, final discovery ran from cache with `--offline`; the table omits temporary cache paths and that flag. No installation was performed.
 
@@ -77,11 +77,11 @@ The pinned reference validator from the historical command above passed again. S
 
 Target SHA-256 identities:
 
-| Artifact | SHA-256 |
-| --- | --- |
+| Artifact             | SHA-256                                                            |
+| -------------------- | ------------------------------------------------------------------ |
 | Candidate `SKILL.md` | `327c07bcad4d5e4c5318076753ca94142a2bdccf908ea9505c08d6b4e464420e` |
-| Memory reference | `943f3c80298a8177fdbbfc0559273153029105a6b057cd953b83dcbf2e5a18f3` |
-| Cases | `caaa199db2a6bdd5064f8dead6adac04f457827ae4d226baeedb771501ce6142` |
+| Memory reference     | `943f3c80298a8177fdbbfc0559273153029105a6b057cd953b83dcbf2e5a18f3` |
+| Cases                | `caaa199db2a6bdd5064f8dead6adac04f457827ae4d226baeedb771501ce6142` |
 
 ## Remaining release gaps
 

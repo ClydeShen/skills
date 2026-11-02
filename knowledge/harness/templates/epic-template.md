@@ -1,38 +1,44 @@
 Title: `Epic: <leading word>: <goal>`
 
 ## Theme
+
 **<Leading word>**: <one sentence that gives the goal. The leading word is a short word the team already uses. It names the one quality that every issue of this epic makes better.>
 
 ## Exit criterion
+
 <The condition that closes this epic. Make it observable and checkable by a command. Include: the cleanup story of this epic is done.>
 
 ## Epic order
+
 1. #<epic> <leading word>
 2. #<epic> <leading word> (hard dependency on #<previous epic>) ← this epic
 3. ...
 
 ## Parallel work
+
 - WIP limit: <maximum number of issues of this epic in progress at the same time>
 - Conflict groups: <for each group, the issues that change the same files; none of them run at the same time>
 
 ## All issues
 
-| Issue | Title | Type | Status |
-|---|---|---|---|
-| #<n> | <title> | story | 🟡 in progress (claimed by <implementer>) |
-| #<n> | <title> | story | 🔵 ready |
-| #<n> | <title> | story | ⚫ blocked by #<n> |
+| Issue | Title   | Type  | Status                                    |
+| ----- | ------- | ----- | ----------------------------------------- |
+| #<n>  | <title> | story | 🟡 in progress (claimed by <implementer>) |
+| #<n>  | <title> | story | 🔵 ready                                  |
+| #<n>  | <title> | story | ⚫ blocked by #<n>                        |
 
 Status values: 🟢 closed (date) · 🟡 in progress (claimed by …) · 🔵 ready · ⚫ blocked by #n or reason · ⚪ waiting (capacity) · ⏸ on hold (reason, revisit date) · 🟣 in review (reviewer, round n) · 🔍 verifying (round n) · 🟠 done in part and kept open (reason)
 
 ## Suggested order (YYYY-MM-DD)
 
-| # | Issue | Short name | Reason |
-|---|---|---|---|
-| 1 | #<n> | <short name> | <leading word>: <how this issue serves the theme> (rule that selected the epic: <hard dependency / theme / same change area / new theme / maintenance>) |
+| #   | Issue | Short name   | Reason                                                                                                                                                  |
+| --- | ----- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | #<n>  | <short name> | <leading word>: <how this issue serves the theme> (rule that selected the epic: <hard dependency / theme / same change area / new theme / maintenance>) |
 
 ## Progress
+
 <!-- progress-diagram:start -->
+
 ```mermaid
 flowchart TD
     subgraph G1["<group name>"]
@@ -49,6 +55,7 @@ flowchart TD
     class I1 ready
     class I2,I9 blocked
 ```
+
 **Legend:** green = closed · orange = in progress · blue = ready · gray = blocked · dotted arrow = suggested order · thick arrow = hard dependency.
 
 **Current status** (YYYY-MM-DD): <closed>/<total> closed, <in progress> in progress (claimed by …), <open> open. Next: #<n> <short name>.

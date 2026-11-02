@@ -19,10 +19,11 @@ export async function readSkill(directory) {
   if (!match) throw new Error('Skill frontmatter is missing.');
   const description = match[1].match(/^description:\s*(.+)$/m)?.[1];
   if (!description) throw new Error('Skill description is missing.');
-  const resources = await Promise.all([
-    'references/interaction-options.md',
-    'references/memory.md',
-  ].map(async (name) => `## ${name}\n${await readFile(new URL(name, directory), 'utf8')}`));
+  const resources = await Promise.all(
+    ['references/interaction-options.md', 'references/memory.md'].map(
+      async (name) => `## ${name}\n${await readFile(new URL(name, directory), 'utf8')}`,
+    ),
+  );
   return { description, full: [match[2], ...resources].join('\n\n') };
 }
 
@@ -52,30 +53,41 @@ export function gradeDecision(output, expected) {
   for (const key of ['explanation', 'next_action']) {
     if (typeof decision[key] !== 'string' || !decision[key].trim()) errors.push(`${key} is empty.`);
   }
-  return { pass: errors.length === 0, score: errors.length ? 0 : 1, reason: errors.join('; ') || 'Decision checks passed; inspect the response quality manually.' };
+  return {
+    pass: errors.length === 0,
+    score: errors.length ? 0 : 1,
+    reason: errors.join('; ') || 'Decision checks passed; inspect the response quality manually.',
+  };
 }
 
 export function parseArgs(args) {
   const options = { mode: 'fixture', provider: 'auto', suite: 'incubator/meta-thinking/evals/suite.mjs' };
   for (let i = 0; i < args.length; i += 2) {
-    if (!['--mode', '--suite', '--provider', '--case'].includes(args[i]) || !args[i + 1]) throw new Error('Usage: npm run eval -- [--mode fixture|model] [--provider auto|generic|nvidia] [--suite path/to/suite.mjs] [--case case-id]');
+    if (!['--mode', '--suite', '--provider', '--case'].includes(args[i]) || !args[i + 1])
+      throw new Error(
+        'Usage: npm run eval -- [--mode fixture|model] [--provider auto|generic|nvidia] [--suite path/to/suite.mjs] [--case case-id]',
+      );
     options[args[i].slice(2)] = args[i + 1];
   }
   if (!['fixture', 'model'].includes(options.mode)) throw new Error('Mode must be fixture or model.');
-  if (!['auto', 'generic', 'nvidia'].includes(options.provider)) throw new Error('Provider must be auto, generic, or nvidia.');
+  if (!['auto', 'generic', 'nvidia'].includes(options.provider))
+    throw new Error('Provider must be auto, generic, or nvidia.');
   return options;
 }
 
 export function modelProvider(env, selection = 'auto') {
   if (!['auto', 'generic', 'nvidia'].includes(selection)) throw new Error('Unknown provider selection.');
-  const useNvidia = selection === 'nvidia' || (selection === 'auto' && env.NVIDIA_API_KEY && !env.EVAL_API_BASE_URL && !env.EVAL_MODEL);
+  const useNvidia =
+    selection === 'nvidia' || (selection === 'auto' && env.NVIDIA_API_KEY && !env.EVAL_API_BASE_URL && !env.EVAL_MODEL);
   if (useNvidia) {
     if (!env.NVIDIA_API_KEY) throw new Error('NVIDIA evaluation requires NVIDIA_API_KEY.');
     const model = env.NVIDIA_MODEL || nvidiaDefaultModel;
     const effort = env.NVIDIA_REASONING_EFFORT || (model === nvidiaDefaultModel ? 'none' : undefined);
-    if (effort && !['none', 'low', 'high'].includes(effort)) throw new Error('NVIDIA_REASONING_EFFORT must be none, low, or high.');
+    if (effort && !['none', 'low', 'high'].includes(effort))
+      throw new Error('NVIDIA_REASONING_EFFORT must be none, low, or high.');
     const maxTokens = env.EVAL_MAX_TOKENS ? Number(env.EVAL_MAX_TOKENS) : effort && effort !== 'none' ? 16384 : 4096;
-    if (!Number.isInteger(maxTokens) || maxTokens < 1 || maxTokens > 131072) throw new Error('EVAL_MAX_TOKENS must be an integer from 1 to 131072.');
+    if (!Number.isInteger(maxTokens) || maxTokens < 1 || maxTokens > 131072)
+      throw new Error('EVAL_MAX_TOKENS must be an integer from 1 to 131072.');
     return {
       id: `openai:chat:${model}`,
       config: {
@@ -89,7 +101,8 @@ export function modelProvider(env, selection = 'auto') {
       },
     };
   }
-  if (!env.EVAL_MODEL || !env.EVAL_API_BASE_URL) throw new Error('Model mode requires EVAL_MODEL and EVAL_API_BASE_URL in .env.evaluation or the environment.');
+  if (!env.EVAL_MODEL || !env.EVAL_API_BASE_URL)
+    throw new Error('Model mode requires EVAL_MODEL and EVAL_API_BASE_URL in .env.evaluation or the environment.');
   const base = new URL(env.EVAL_API_BASE_URL);
   if (!['http:', 'https:'].includes(base.protocol) || base.username || base.password || base.search || base.hash) {
     throw new Error('Use an HTTP(S) API base URL without credentials, query parameters, or a fragment.');
@@ -112,11 +125,24 @@ export const judgeDefaultModel = 'mistralai/mistral-large-4-1t-a52b';
 
 // Image judge settings. The judge model is separate from the generation model; it never inherits its reasoning or token settings.
 export function judgeConfig(env) {
-  const provider = modelProvider({
-    ...env, NVIDIA_MODEL: env.NVIDIA_JUDGE_MODEL || judgeDefaultModel, NVIDIA_REASONING_EFFORT: '', EVAL_MAX_TOKENS: '',
-  }, 'nvidia');
+  const provider = modelProvider(
+    {
+      ...env,
+      NVIDIA_MODEL: env.NVIDIA_JUDGE_MODEL || judgeDefaultModel,
+      NVIDIA_REASONING_EFFORT: '',
+      EVAL_MAX_TOKENS: '',
+    },
+    'nvidia',
+  );
   const { apiBaseUrl, apiKey, max_tokens: maxTokens, passthrough } = provider.config;
-  return { model: provider.id.replace(/^openai:chat:/, ''), apiBaseUrl, apiKey, temperature: 0.6, maxTokens, extraBody: passthrough };
+  return {
+    model: provider.id.replace(/^openai:chat:/, ''),
+    apiBaseUrl,
+    apiKey,
+    temperature: 0.6,
+    maxTokens,
+    extraBody: passthrough,
+  };
 }
 
 export function digest(text) {

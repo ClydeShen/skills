@@ -8,12 +8,12 @@ Markers: `[official]` identifies relevant official documentation that was read; 
 
 ## Overview
 
-| Question | Recommendation | Evidence and limits | Confidence |
-| --- | --- | --- | --- |
-| How should instructions be shared? | Keep AGENTS.md authoritative; use CLAUDE.md for imports and accurate command entry points | The repository already imported it, but tooling descriptions were stale | Medium, J1 |
-| Can the clients share one hook configuration? | Share a Node checker, with separate configuration and event-result adapters | Similar events do not imply identical control semantics or loading scope | Medium, J2 |
-| Can edits to checks and credential reads be restricted? | Combine file-tool rules, OS isolation, and host-managed policy | Text instructions and tool-level deny rules do not cover all indirect IO | Medium, J3 |
-| How can agents be prevented from changing their own rules? | Place important boundaries on a host or server they cannot modify | Project overrides and trust mechanisms have explicit limits | Medium, J3 |
+| Question                                                   | Recommendation                                                                            | Evidence and limits                                                      | Confidence |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------- |
+| How should instructions be shared?                         | Keep AGENTS.md authoritative; use CLAUDE.md for imports and accurate command entry points | The repository already imported it, but tooling descriptions were stale  | Medium, J1 |
+| Can the clients share one hook configuration?              | Share a Node checker, with separate configuration and event-result adapters               | Similar events do not imply identical control semantics or loading scope | Medium, J2 |
+| Can edits to checks and credential reads be restricted?    | Combine file-tool rules, OS isolation, and host-managed policy                            | Text instructions and tool-level deny rules do not cover all indirect IO | Medium, J3 |
+| How can agents be prevented from changing their own rules? | Place important boundaries on a host or server they cannot modify                         | Project overrides and trust mechanisms have explicit limits              | Medium, J3 |
 
 ## 1. Observations in this repository
 

@@ -9,10 +9,25 @@ export async function createSuite({ mode }) {
     description: 'Meta Thinking: proposed decisions, not filesystem actions or end-to-end skill execution.',
     prompts: [
       { label: 'baseline', raw: 'baseline', function: ({ vars }) => renderPrompt('', vars) },
-      { label: 'description-only', raw: 'description-only', function: ({ vars }) => renderPrompt(`Available skill: meta-thinking\n${skill.description}\nDecide whether this approach is useful; full instructions are not loaded.`, vars) },
-      { label: 'candidate-with-references', raw: 'candidate-with-references', function: ({ vars }) => renderPrompt(skill.full, vars) },
+      {
+        label: 'description-only',
+        raw: 'description-only',
+        function: ({ vars }) =>
+          renderPrompt(
+            `Available skill: meta-thinking\n${skill.description}\nDecide whether this approach is useful; full instructions are not loaded.`,
+            vars,
+          ),
+      },
+      {
+        label: 'candidate-with-references',
+        raw: 'candidate-with-references',
+        function: ({ vars }) => renderPrompt(skill.full, vars),
+      },
     ],
-    providers: mode === 'fixture' ? [async (_prompt, context) => ({ output: JSON.stringify(fixtures.get(context.vars.case_id)) })] : [],
+    providers:
+      mode === 'fixture'
+        ? [async (_prompt, context) => ({ output: JSON.stringify(fixtures.get(context.vars.case_id)) })]
+        : [],
     tests: cases.map((test) => ({
       description: test.id,
       vars: { case_id: test.id, conversation: test.conversation },

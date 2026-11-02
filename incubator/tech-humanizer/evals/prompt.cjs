@@ -23,18 +23,17 @@ function loadSkill(extraReferences = []) {
 }
 
 function manifest() {
-  return loadSkill(['references/asd-ste100.md', 'references/source-and-markup-integrity.md'])
-    .map(({ file, content }) => ({
+  return loadSkill(['references/asd-ste100.md', 'references/source-and-markup-integrity.md']).map(
+    ({ file, content }) => ({
       file,
       sha256: crypto.createHash('sha256').update(content).digest('hex'),
-    }));
+    }),
+  );
 }
 
 function buildPrompt({ vars }) {
   const sources = loadSkill(vars.references || []);
-  const system = sources.map(({ file, content }) =>
-    'FILE: ' + file + '\n' + content
-  ).join('\n\n');
+  const system = sources.map(({ file, content }) => 'FILE: ' + file + '\n' + content).join('\n\n');
   const initialState = {
     user_profile: vars.user_profile || null,
     project_profile: vars.project_profile || null,

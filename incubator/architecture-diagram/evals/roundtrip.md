@@ -19,16 +19,16 @@ After L4, compare L0/L2, L2/L4 and L0/L4. The judge may see those three descript
 
 ## Semantic dimensions
 
-| Dimension | Facts to preserve |
-| --- | --- |
-| Elements | Identity, type, technology, presence and environment/count distinctions |
+| Dimension        | Facts to preserve                                                                                                 |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Elements         | Identity, type, technology, presence and environment/count distinctions                                           |
 | Responsibilities | Who authenticates, verifies, routes, authorizes, stores or transforms; qualifiers that change that responsibility |
-| Relationships | Which parties interact, the action, request/response and main/auxiliary/failure meaning |
-| Directions | Initiator and callee; polling versus publishing; a folded response is not a reversed call |
-| Protocols | Named transport/API, private connectivity and security mechanisms where specified |
-| Boundaries | Domain ownership, nesting, membership and domains crossed by each interaction |
-| Conditions | Per-request behavior, prerequisites, allowed/denied alternatives and failure outcomes |
-| Notes | Architecture-bearing examples and constraints; not incidental placement or decoration |
+| Relationships    | Which parties interact, the action, request/response and main/auxiliary/failure meaning                           |
+| Directions       | Initiator and callee; polling versus publishing; a folded response is not a reversed call                         |
+| Protocols        | Named transport/API, private connectivity and security mechanisms where specified                                 |
+| Boundaries       | Domain ownership, nesting, membership and domains crossed by each interaction                                     |
+| Conditions       | Per-request behavior, prerequisites, allowed/denied alternatives and failure outcomes                             |
+| Notes            | Architecture-bearing examples and constraints; not incidental placement or decoration                             |
 
 Extract atomic propositions with exact supporting text. Align paraphrases semantically, not by literal wording, matching keywords or shared service names. Preserve unknown/uncertain distinctions; do not invent standard vendor behavior. Mark each aligned item `preserved`, `omitted`, `added`, `changed` or `uncertain`, with source evidence and a reason. Multi-fact alignments may account for split/merged phrasing within one dimension. Every extracted fact must be accounted for in each pair. Complete coverage of an extracted ledger does not prove extraction completeness; inspect the source descriptions as well.
 

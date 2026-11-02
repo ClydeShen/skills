@@ -22,13 +22,13 @@ State each rule or fact in its authoritative location. Elsewhere, provide only t
 
 A README introduces its containing folder and directs readers to relevant detail. Choose its structure by role:
 
-| README role | Lead with | Keep elsewhere |
-| --- | --- | --- |
-| Repository overview | Project purpose, useful entry points and contributor startup | Detailed procedures, individual trial histories and repeated folder inventories |
-| Skill or skill initiative | Who it helps, the useful outcome, a concrete example, how to try it and honest maturity/limits | Authoring history, tool internals and full evaluation reports |
-| Functional folder or tool | Function, prerequisites, minimal usage, inputs/outputs and necessary cautions | Project-wide background and unrelated functionality |
-| Engineering or agent context | Local responsibilities, invariants, commands and links needed to work safely | Rules already owned by parent instructions and chronological work logs |
-| Knowledge or evidence collection | The question or subject, current conclusion/status and a selective reading path | Full contents of the linked sources |
+| README role                      | Lead with                                                                                      | Keep elsewhere                                                                  |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| Repository overview              | Project purpose, useful entry points and contributor startup                                   | Detailed procedures, individual trial histories and repeated folder inventories |
+| Skill or skill initiative        | Who it helps, the useful outcome, a concrete example, how to try it and honest maturity/limits | Authoring history, tool internals and full evaluation reports                   |
+| Functional folder or tool        | Function, prerequisites, minimal usage, inputs/outputs and necessary cautions                  | Project-wide background and unrelated functionality                             |
+| Engineering or agent context     | Local responsibilities, invariants, commands and links needed to work safely                   | Rules already owned by parent instructions and chronological work logs          |
+| Knowledge or evidence collection | The question or subject, current conclusion/status and a selective reading path                | Full contents of the linked sources                                             |
 
 Present a skill's value attractively through concrete uses and outputs; distinguish intended benefits from verified results. Omit inapplicable sections rather than imposing one README template everywhere. Optimize for understanding and useful context, not an arbitrary word or token limit. Apply the same purpose-and-scope review to every document type, including templates and agent instructions.
 
@@ -42,14 +42,14 @@ The repository checker rejects lowercase or mixed-case variants of the establish
 
 ## Required shapes
 
-| Artifact | Required content | Scaffold or authority |
-| --- | --- | --- |
-| Research note | Date, question, context, conclusion, evidence, project implications, unverified items and opened sources | Existing [research template](../knowledge/harness/templates/research-note-template.md) |
-| ADR | Status, date, decision authority, context, chosen rules, alternatives and consequences | Existing [ADR template](../knowledge/harness/templates/adr-template.md) |
-| Knowledge topic | Current guidance, applicability, evidence/uncertainty, source links and revision record | [Knowledge scaffold](./templates/knowledge-topic-template.md) |
-| Initiative README | User value and scope, stage and basis, usage appropriate to that stage, active package, key knowledge/evaluation links and material limits | [Initiative scaffold](./templates/initiative-template.md) |
-| Evaluation record | Scope, case/target version, mode, model/parameters where applicable, environment, result and limitations | [Evaluation scaffold](./templates/evaluation-record-template.md) |
-| Skill package | Standard frontmatter, focused instructions, declared resource load conditions and package-local runtime files | Agent Skills format plus the rules below |
+| Artifact          | Required content                                                                                                                           | Scaffold or authority                                                                  |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| Research note     | Date, question, context, conclusion, evidence, project implications, unverified items and opened sources                                   | Existing [research template](../knowledge/harness/templates/research-note-template.md) |
+| ADR               | Status, date, decision authority, context, chosen rules, alternatives and consequences                                                     | Existing [ADR template](../knowledge/harness/templates/adr-template.md)                |
+| Knowledge topic   | Current guidance, applicability, evidence/uncertainty, source links and revision record                                                    | [Knowledge scaffold](./templates/knowledge-topic-template.md)                          |
+| Initiative README | User value and scope, stage and basis, usage appropriate to that stage, active package, key knowledge/evaluation links and material limits | [Initiative scaffold](./templates/initiative-template.md)                              |
+| Evaluation record | Scope, case/target version, mode, model/parameters where applicable, environment, result and limitations                                   | [Evaluation scaffold](./templates/evaluation-record-template.md)                       |
+| Skill package     | Standard frontmatter, focused instructions, declared resource load conditions and package-local runtime files                              | Agent Skills format plus the rules below                                               |
 
 Use scaffolds selectively. Preserve necessary historical evidence in its owning record; current guidance should describe the current state. Git retains retired text. Do not rewrite frozen measurements or erase the provenance needed to interpret them.
 

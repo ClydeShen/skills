@@ -2,9 +2,7 @@
   {
     "id": "S01",
     "source": "scenario-01.md",
-    "findings": [
-      "Cognito[\\s\\S]*(?:password|credential)|(?:password|credential)[\\s\\S]*Cognito"
-    ],
+    "findings": ["Cognito[\\s\\S]*(?:password|credential)|(?:password|credential)[\\s\\S]*Cognito"],
     "fixture": {
       "action": "clarify",
       "questions": [
@@ -24,10 +22,7 @@
   {
     "id": "S02",
     "source": "scenario-02.md",
-    "findings": [
-      "outbound[\\s\\S]*DNS",
-      "(?:hosted zone|zone)[\\s\\S]*VPC"
-    ],
+    "findings": ["outbound[\\s\\S]*DNS", "(?:hosted zone|zone)[\\s\\S]*VPC"],
     "fixture": {
       "action": "clarify",
       "questions": [
@@ -51,11 +46,7 @@
   {
     "id": "S03",
     "source": "scenario-03.md",
-    "findings": [
-      "(?:amend|amendment)",
-      "ManageDocuments",
-      "(?:HTTPS|JSON)"
-    ],
+    "findings": ["(?:amend|amendment)", "ManageDocuments", "(?:HTTPS|JSON)"],
     "ignored_min": 2,
     "fixture": {
       "action": "clarify",
@@ -73,10 +64,7 @@
           "recommendation": "Use HTTPS/JSON without an invented operation until the API specification is supplied."
         }
       ],
-      "ignored": [
-        "The struck-out accessible-registrations lookup.",
-        "The struck-out orders query."
-      ],
+      "ignored": ["The struck-out accessible-registrations lookup.", "The struck-out orders query."],
       "omitted": []
     }
   },
