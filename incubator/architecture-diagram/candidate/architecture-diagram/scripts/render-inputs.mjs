@@ -1,3 +1,4 @@
+import { deflateRawSync } from 'node:zlib';
 import { styleMap } from './catalog.mjs';
 
 // draw.io stores user-object attributes on cell.value, not always on mxCell.
@@ -36,4 +37,10 @@ export function referencedAssets(source, catalog) {
       throw new Error(`Uncatalogued or unsafe render image: ${ref}`);
   }
   return refs;
+}
+
+// Needs no installation. Browsers do not send the part after # to the server, so the diagram stays on the device.
+export function editorLink(xml) {
+  const data = deflateRawSync(encodeURIComponent(xml)).toString('base64');
+  return `https://app.diagrams.net/#R${encodeURIComponent(data)}`;
 }

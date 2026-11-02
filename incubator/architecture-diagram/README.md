@@ -8,13 +8,13 @@ Stage: **public**. Updated: 2026-10-29. Basis: verified candidate installation a
 
 ## What you get
 
-One editable `.drawio` architecture diagram, with a logical, deployment or flow emphasis supported by your English scenario description. Unresolved source claims and implementation choices stay in a concise companion account. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable.
+One editable `.drawio` architecture diagram and its PNG for documents, Markdown and wikis, with a logical, deployment or flow emphasis supported by your English scenario description. Unresolved source claims and implementation choices stay in a concise companion account. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable.
 
-Start with a specific interaction, such as a sign-in flow or a request crossing cloud and on-premises boundaries. Code/IaC input, automatic redraw and exported images as product deliverables are outside current scope.
+Start with a specific interaction, such as a sign-in flow or a request crossing cloud and on-premises boundaries. Code/IaC input, and automatic redraw are outside current scope. Static export is the core goal; an interactive HTML and SVG version may follow.
 
 ## Quick start: install and test the candidate
 
-Use Codex or Claude Code with file access, Node.js 24, Git and a draw.io editor/viewer. The candidate targets draw.io 32.6.1. Use your normal client authentication; no separate evaluation API key or authoring-repository checkout is needed.
+Use Codex or Claude Code with file access and Node.js 24. Nothing else is required: draw.io Desktop gives the best PNG, Git and Chromium or Chrome also produce one, and otherwise you get the `.drawio` and a browser link to view and export it. The candidate targets draw.io 32.6.1. Use your normal client authentication; no separate evaluation API key or authoring-repository checkout is needed.
 
 Review the [candidate package](./candidate/architecture-diagram/SKILL.md). Run the appropriate command in a disposable test project, outside this authoring repository.
 

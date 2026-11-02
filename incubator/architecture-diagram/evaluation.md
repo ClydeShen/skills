@@ -116,13 +116,17 @@ Remote installation check, 2026-10-29: the `main` candidate at `07bb667e7a5ddb59
 
 Current [skills CLI authoring documentation](https://github.com/vercel-labs/skills/blob/main/docs/creating-skills.md), read on 2026-10-29, documents standard `skills/` discovery, bounded category nesting, the internal-marker extension and optional custom paths. No custom discovery configuration was added: the project uses standard locations and keeps candidates hidden by default. The repository lifecycle now applies identical package practices to candidates and releases, with continuous pruning and minimal promotion changes. This is the owner's project policy; the boolean internal marker remains a CLI-specific extension.
 
+## Channel rule and static export trial
+
+On 2026-11-02 the owner set static PNG export as the core goal and required each channel to have one job. Two fresh Claude Code sessions generated the same scenario, the first real installed-skill runs on this machine. Both passed the text check; the second, with package rendering and relationship guidance, removed overlaps and kept source relationships as connectors. It still has no client entry. draw.io Desktop 32.6.1 exported the diagrams. Details: [trial record](./evals/channel-rule-2026-11-02/README.md). Two runs on one model show direction, not repeatability. Codex was not run.
+
 ## Open verification
 
 The owner's subsequent architecture-expression review rated the restrained-layout Case A 8.0/10 and Case B 6.5/10. The [semantic-clarity trial](./evals/semantic-clarity-2026-10-29/README.md) records the resulting view/evidence/relationship changes and two new text-only generations. These subjective scores do not rate those new outputs or certify AWS compliance.
 
 - Owner comparison and broader verification of the two fresh-context restrained-layout generations. The preceding reference-informed revision is not a blind run; the 60/100 baseline and overall 85/100 feedback remain distinct from any new result.
 - Owner acceptance of icon size, element descriptions and layout density.
-- Offline draw.io Desktop at the pinned version; browser evidence does not settle Desktop support.
+- Interactive editing in draw.io Desktop; the CLI export at the pinned version works on macOS.
 - Broader Azure catalog/viewer coverage and actual GCP3/Kubernetes rendering; participating Azure symbols are verified for these browser runs only.
 - Repeated isolated full chains and held-out/controlled-mutation cases; four fresh chains now exist, one per Scenario 01-04.
 - Verify the repaired policy and corrected baselines with complete new same-information chains and controlled prompt comparisons; artifact repairs and initial blind readouts are complete.

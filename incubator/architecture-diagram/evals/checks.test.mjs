@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { findForbiddenText } from '../candidate/architecture-diagram/scripts/check-text.mjs';
 import { validateBoundaryRoutes, validateDiagram, validateRender } from '../tools/validate.mjs';
 import { createSuite, gradeClarification } from './suite.mjs';
 
@@ -362,4 +363,45 @@ test('native Misc Note retains automatic text fitting without changing architect
       catalog,
     ).some((e) => e.includes('Wrong relationship font')),
   );
+});
+
+test('visible text cannot imitate a connector or separate terms with a symbol', () => {
+  const cell = (value) => `<mxCell id="a" value="${value}"/>`;
+  for (const [value, symbol] of [
+    ['DNS → ELB', '→'],
+    ['DNS &#8594; ELB', '→'],
+    ['DNS &amp;rarr; ELB', '→'],
+    ['DNS &#x2192; ELB', '→'],
+    ['A -&gt; B', '->'],
+    ['A &lt;- B', '<-'],
+    ['A =&gt; B', '=>'],
+    ['A ↔ B', '↔'],
+    ['SES · email delivery', '·'],
+    ['A &amp;middot; B', '·'],
+    ['A • B', '•'],
+    ['&lt;b&gt;Web → App&lt;/b&gt;', '→'],
+    ['Purpose&lt;br&gt;unspecified', 'unspecified'],
+    ['Relationship only', 'Relationship only'],
+    ['Two instances as illustrated in the source', 'in the source'],
+    ['Web and App are not explicitly connected', 'not explicitly'],
+  ]) {
+    assert.equal(findForbiddenText(cell(value))[0]?.symbol, symbol, value);
+  }
+  assert.equal(findForbiddenText('<diagram name="Web → App"/>').length, 1);
+  for (const value of [
+    'Resolves to ELB',
+    'HTTPS: 443',
+    'Web/App (primary)',
+    'Multi-AZ',
+    'a &lt; b',
+    '&lt;b&gt;Web&lt;/b&gt;&lt;br&gt;EC2',
+  ]) {
+    assert.deepEqual(findForbiddenText(cell(value)), [], value);
+  }
+  assert.deepEqual(findForbiddenText('<mxCell style="endArrow=block;" edge="1"/>'), []);
+});
+
+test('the first supporting-services delivery is the known counterexample', () => {
+  const found = findForbiddenText(read('./three-tier-supporting-2026-10-29/first.drawio'));
+  assert.deepEqual(new Set(found.map(({ symbol }) => symbol)), new Set(['·', '→', 'Relationship only', 'unspecified']));
 });

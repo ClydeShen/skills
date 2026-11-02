@@ -22,6 +22,20 @@ Use muted region fills, thin outlines and a restrained palette with stable meani
 
 Use a small, consistent text hierarchy for the title, names and secondary details. Keep all architectural text readable at the intended viewing scale; do not shrink a difficult label to fit. Remove redundant detail or adjust spacing instead. A compact, readable composition is preferable to an enormous sparse canvas.
 
+## What each channel says
+
+Give each fact to the channel that can state it. Do not say it twice, and do not make one channel imitate another.
+
+| Channel                                    | Says                                                                        |
+| ------------------------------------------ | --------------------------------------------------------------------------- |
+| Symbols, boundaries and position           | What exists and where it belongs                                            |
+| Connectors, their direction and line style | Who relates to whom, and in which direction                                 |
+| Text                                       | Names, and what a drawing cannot state: protocol, condition, transformation |
+| Companion record                           | Gaps, assumptions and doubts about the source                               |
+| Special characters                         | Nothing. No `→`, `↔`, `->`, `·` or `•` in any visible text                  |
+
+A label that breaks this is a signal, so do not reword it to pass. If the drawing already says it, remove the label. If the drawing does not, the diagram is wrong or missing logic, so fix the drawing. If the source leaves it open, move it to the companion record.
+
 ## Relationships
 
 For established runtime calls, use direct orthogonal connectors with one filled arrowhead from initiator to callee. Keep a poller's arrow toward the queried service, not toward the returned data's recipient. Label origin retrieval distinctly from content delivery. Show DNS as resolution, not HTTP forwarding; a separate response arrow is useful only when its answer needs explicit depiction.
@@ -32,7 +46,7 @@ Number interactions when execution order is needed and layout alone cannot estab
 
 Fold normal responses into the request relationship; label a response when its content matters. Use a separate return arrow for an explicitly specified failure, with its condition/result. Do not invent denial behavior.
 
-Solid arrows show established runtime traffic. Dashed relationships require a specific meaning such as DNS resolution, replication, management or monitoring association; label that meaning rather than relying on a catch-all legend. A monitoring association does not assert an application call to an alarm. If its exact metric or caller is unknown, retain that unresolved endpoint at logical scope without inventing a component or API. Keep unconfirmed operational paths in the companion assumptions record, not mixed into established flows. In an explicitly requested source-transcription view, isolate and label such source claims as unverified.
+Solid arrows show established runtime traffic. Dashed relationships need a specific meaning such as DNS resolution, replication, management or monitoring; label it with one word. An unexplained source relationship stays unlabeled, as [relationships.md](relationships.md) describes. A monitoring association does not assert an application call to an alarm. If its exact metric or caller is unknown, retain that unresolved endpoint at logical scope without inventing a component or API. Keep unconfirmed operational paths in the companion assumptions record, not mixed into established flows. In an explicitly requested source-transcription view, isolate and label such source claims as unverified.
 
 Shared managed services may be drawn once without asserting a physical host between AZs. Distinguish logical service scope from actual subnet attachments. Do not infer load-balancer type, exposure, network classification or target-group configuration from target placement. Logical management overlays are not network boundaries. Add deployment detail only when supplied or confirmed.
 
