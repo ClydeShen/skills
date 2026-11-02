@@ -4,6 +4,6 @@ title = "Repository secret scan"
 useDefault = true
 
 [allowlist]
-description = "Generated diagrams and icon catalogs contain encoded image data, not credentials."
-paths = ['''\.drawio$''', '''\.svg$''', '''assets/catalog\.json$''', '''prototype/catalog\.json$''']
+description = "Generated diagrams and icon catalogs contain encoded image data and public upstream commit IDs, not credentials."
+paths = ['''\.drawio$''', '''\.svg$''', '''assets/catalog\.json$''', '''assets/vendor-icons\.json$''', '''prototype/catalog\.json$''']
 regexes = ['''aws4-[0-9a-f]{16}''']
