@@ -1,6 +1,6 @@
 # Architecture Diagram handoff
 
-Updated: 2026-11-03. Branch: `work/diagram-professional-layout`, open as [PR #25](https://github.com/ClydeShen/skills/pull/25). This is a continuation guide for the current initiative, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md) before making changes.
+Updated: 2026-11-03. The last change, [PR #25](https://github.com/ClydeShen/skills/pull/25), is merged into `main`; start new work on a task branch from `origin/main`. This is a continuation guide for the current initiative, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md) before making changes.
 
 ## Start here
 
@@ -27,7 +27,7 @@ Updated: 2026-11-03. Branch: `work/diagram-professional-layout`, open as [PR #25
 
 1. Step order. Fresh sessions still place called services out of step order (round 3 A reads 1, 3, 2). The rule exists in `composition.md`; it is not followed reliably. Consider a check that compares numbered labels with their targets' order along the caller's side.
 2. Shared services. Round 3 B still left AI Search to one side, so the ingestion write takes a long route and crosses `3. Store conversation`. The rule exists; consider stronger guidance or an example.
-3. Fresh sessions in the Codex sandbox cannot render (`listen EPERM`, and draw.io Desktop cannot reach its Mach port), so they never see their image. Static checks partly compensate. A renderer that needs no local listener would close the gap.
+3. Fresh sessions in the Codex sandbox cannot render: `render.mjs` stops with `listen EPERM` (see the [round 1 agent report](./evals/semantic-routing-2026-11-02/round1-a/agent-report.md)), so they never see their image. Static checks partly compensate. A renderer that needs no local listener would close the gap.
 4. Round 3 was cut off before agent reports and was not reviewed independently. Rerun both scenarios with the current package, then have a context-free reviewer score the images, as in round 1 (A 8/10, B 6/10).
 5. Not verified: repeatability across several runs, Claude Code sessions (usage limit hit during this work), offline Desktop use on another machine, and redistribution terms for icons whose licence requires attribution (Jenkins, CC-BY-SA-3.0) or limits use (Microsoft Fabric).
 
