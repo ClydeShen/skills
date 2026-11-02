@@ -59,3 +59,15 @@ The independent reviewer scored 7/10. Findings:
 - All 15 connectors use `edgeStyle=none`: straight diagonal lines. No segment is shared, but only because nothing is orthogonal. The package asks for orthogonal routes in prose and never names the style, and the layout check computes orthogonal routes only, so it said almost nothing. The reviewer did not count the diagonals against the image.
 - The `westeurope` frame still encloses every Azure service. The agent report justifies it, consistent with `cloud-conventions.md`, which says a regional service sits in its region; that rule overrides the new one in practice.
 - `1 sign in` and `2 question` were numbered into the query sequence, so the source's three steps became 3 to 5. The ingestion path runs along the whole bottom edge and back up, and is not numbered.
+
+## B after requiring orthogonal connectors and stated regions
+
+Commit `c14828a` makes a non-orthogonal connector a layout error, says in `drawio.md` that every connector uses `edgeStyle=orthogonalEdgeStyle`, makes `cloud-conventions.md` place a regional service only in the region the source names for it, and numbers only the steps the source orders. One rerun of B with the same setup: [image](./b-orthogonal/diagram.png), [file](./b-orthogonal/diagram.drawio), [report](./b-orthogonal/agent-report.md); 18 turns, 186 s; layout check 0 errors, 4 items.
+
+Every connector is orthogonal, none shares a segment, only the source's three steps are numbered and they do not cross, and Key Vault and Application Insights sit in a shared-services band. The independent reviewer scored 7/10 and followed the sequence. Findings that hold:
+
+- Secrets and telemetry connectors end on the shared-services band, not on Key Vault or Application Insights, and the web app's has no label.
+- Deploy and auxiliary runtime connectors share one dashed style, and each deploy line runs close beside a runtime riser.
+- The `westeurope` frame still encloses every service except people, Entra ID and DevOps; the agent report states this without a reason, despite the revised conventions.
+
+Under the owner's tolerance for small imprecision across scenarios, the remaining misleading issue is region membership; spacing and attachment points are minor.
