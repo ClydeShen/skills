@@ -2,25 +2,34 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { digest, modelProvider, parseArgs } from './lib.mjs';
+import { armSummary, digest, modelProvider, parseArgs } from './lib.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const local = resolve(root, 'evals/.local');
 const envFile = resolve(root, '.env.evaluation');
 
 async function main() {
-  const { mode, provider: selection, suite: suitePath, case: caseId } = parseArgs(process.argv.slice(2));
+  const {
+    mode,
+    provider: selection,
+    suite: suitePath,
+    case: caseId,
+    skill,
+    agent,
+    baseline,
+    repeat,
+  } = parseArgs(process.argv.slice(2));
   // Offline repository gates must not load the user's model credentials.
   if (mode === 'model' && existsSync(envFile)) process.loadEnvFile(envFile);
-  const provider = mode === 'model' ? modelProvider(process.env, selection) : null;
   process.env.PROMPTFOO_DISABLE_TELEMETRY = '1';
   process.env.PROMPTFOO_DISABLE_UPDATE = '1';
   process.env.PROMPTFOO_CACHE_ENABLED = 'false';
   process.env.PROMPTFOO_CONFIG_DIR = resolve(local, 'promptfoo');
   const { createSuite } = await import(pathToFileURL(resolve(root, suitePath)).href);
-  const suite = await createSuite({ mode, env: process.env });
-  // A suite that supplies its own providers, such as the image judge, keeps them in model mode.
+  const suite = await createSuite({ mode, env: process.env, options: { skill, agent, baseline } });
+  // A suite that supplies its own providers, such as the image judge or a real agent, keeps them in model mode.
   const suiteProviders = Boolean(suite.providers?.length);
+  const provider = mode === 'model' && !suiteProviders ? modelProvider(process.env, selection) : null;
   if (caseId) {
     suite.tests = suite.tests.filter((test) => test.vars?.case_id === caseId);
     if (!suite.tests.length) throw new Error('No test matches the requested case ID.');
@@ -33,7 +42,7 @@ async function main() {
       writeLatestResults: false,
       sharing: false,
     },
-    { cache: false, maxConcurrency: 1 },
+    { cache: false, maxConcurrency: 1, repeat },
   );
   const summary = await record.toEvaluateSummary();
   const packageInfo = JSON.parse(await readFile(resolve(root, 'node_modules/promptfoo/package.json'), 'utf8'));
@@ -70,6 +79,11 @@ async function main() {
     stats: summary.stats,
     results: summary.results.map((r) => ({
       case_id: r.vars?.case_id,
+      provider_label: r.provider?.label,
+      skill_calls: r.response?.metadata?.skillCalls,
+      cost: r.cost,
+      latency_ms: r.latencyMs,
+      token_usage: r.tokenUsage ?? r.response?.tokenUsage,
       prompt_label: r.prompt?.label,
       prompt_sha256: digest(r.prompt?.raw || ''),
       prompt: r.prompt?.raw,
@@ -82,11 +96,12 @@ async function main() {
   };
   const file = resolve(local, `${mode}-${report.created_at.replace(/[:.]/g, '-')}.json`);
   await mkdir(dirname(file), { recursive: true });
-  await writeFile(file, JSON.stringify(report, null, 2) + '\n', { flag: 'wx' });
+  await writeFile(file, `${JSON.stringify(report, null, 2)}\n`, { flag: 'wx' });
   const failures = report.results.filter((r) => !r.success).length;
   console.log(
     `\n${report.scope}\n${report.results.length - failures}/${report.results.length} checks passed.\nReport: ${file}`,
   );
+  if (suiteProviders && mode === 'model') console.log(armSummary(report.results));
   process.exitCode = failures ? 1 : 0;
 }
 

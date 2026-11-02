@@ -10,7 +10,7 @@ function parseOutput(output) {
   }
   for (const name of ['user_profile', 'project_profile']) {
     if (value[name] !== null && (typeof value[name] !== 'object' || Array.isArray(value[name]))) {
-      throw new Error(name + ' must be an object or null');
+      throw new Error(`${name} must be an object or null`);
     }
   }
   return value;
@@ -26,11 +26,11 @@ function check(output, context) {
   const failures = [];
   const expected = context.vars.checks || {};
   for (const term of expected.contains || []) {
-    if (!result.text.includes(term)) failures.push('Missing protected text: ' + term);
+    if (!result.text.includes(term)) failures.push(`Missing protected text: ${term}`);
   }
   for (const expression of expected.forbidden || []) {
     if (new RegExp(expression, 'i').test(result.text)) {
-      failures.push('Unexpected output pattern: ' + expression);
+      failures.push(`Unexpected output pattern: ${expression}`);
     }
   }
   if (expected.exact !== undefined && result.text.trim() !== expected.exact) {
@@ -43,7 +43,7 @@ function check(output, context) {
         // Property order is irrelevant; compare parsed structures.
         const { isDeepStrictEqual } = require('node:util');
         if (!isDeepStrictEqual(result[name], before)) {
-          failures.push('Unexpected profile update: ' + name);
+          failures.push(`Unexpected profile update: ${name}`);
         }
       }
     }
@@ -63,7 +63,7 @@ function check(output, context) {
           (!expected.profile_rule.confidence || entry.confidence === expected.profile_rule.confidence),
       )
     )
-      failures.push('Expected profile rule missing from ' + scope);
+      failures.push(`Expected profile rule missing from ${scope}`);
   }
   if (expected.candidate_only) {
     const profile = result.user_profile || {};
@@ -91,4 +91,3 @@ function check(output, context) {
 }
 
 module.exports = check;
-module.exports.parseOutput = parseOutput;

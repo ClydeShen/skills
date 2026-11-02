@@ -6,7 +6,7 @@ const pkg = require('./package.json');
 
 for (const name of ['EVAL_TARGET_PROVIDER', 'EVAL_GRADER_PROVIDER']) {
   if (!process.env[name]) {
-    console.error('Set ' + name + ' to a Promptfoo provider ID before running model evaluations.');
+    console.error(`Set ${name} to a Promptfoo provider ID before running model evaluations.`);
     process.exit(2);
   }
 }
@@ -14,7 +14,7 @@ process.chdir(__dirname);
 fs.mkdirSync('results', { recursive: true });
 fs.writeFileSync(
   'results/manifest.json',
-  JSON.stringify(
+  `${JSON.stringify(
     {
       created_at: new Date().toISOString(),
       promptfoo: pkg.devDependencies.promptfoo,
@@ -24,7 +24,7 @@ fs.writeFileSync(
     },
     null,
     2,
-  ) + '\n',
+  )}\n`,
 );
 const installedPackage = path.join(__dirname, 'node_modules/promptfoo');
 const installedMetadata = JSON.parse(fs.readFileSync(path.join(installedPackage, 'package.json'), 'utf8'));

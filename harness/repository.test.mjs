@@ -305,6 +305,7 @@ test('hook entrypoint works through directory aliases with spaces and preserved 
 test('client hook configurations point to the shared implementation and do not grant permissions', () => {
   const claude = JSON.parse(readFileSync(path.join(repositoryRoot, '.claude/settings.json')));
   assert.equal(claude.permissions, undefined);
+  // biome-ignore lint/suspicious/noTemplateCurlyInString: Claude Code expands this literal, not JavaScript.
   assert.deepEqual(claude.hooks.Stop[0].hooks[0].args, ['${CLAUDE_PROJECT_DIR}/harness/stop-hook.mjs']);
   const codex = JSON.parse(readFileSync(path.join(repositoryRoot, '.codex/hooks.json')));
   const handler = codex.hooks.Stop[0].hooks[0];

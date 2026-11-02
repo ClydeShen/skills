@@ -22,7 +22,7 @@ test('actual prototype XML passes static checks; unknown and altered vendor icon
 test('invalid XML, DTDs, compressed pages, duplicate ids and bidirectional arrows fail', () => {
   for (const changed of [
     '<bad>',
-    '<!DOCTYPE mxfile>' + diagram,
+    `<!DOCTYPE mxfile>${diagram}`,
     diagram.replace('mxGraphModel', 'compressedModel'),
     diagram.replace('id="user"', 'id="web"'),
     diagram.replace('startArrow=none', 'startArrow=block'),
@@ -41,7 +41,7 @@ test('shared path segments and declared routes through captions are detected', (
   );
   const clone = original.replace('id="authenticate"', 'id="duplicate-route"');
   assert.ok(
-    validateDiagram(diagram.replace('</root>', clone + '</root>'), catalog).some((e) => e.includes('Shared path')),
+    validateDiagram(diagram.replace('</root>', `${clone}</root>`), catalog).some((e) => e.includes('Shared path')),
   );
 });
 

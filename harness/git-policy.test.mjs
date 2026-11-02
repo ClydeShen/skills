@@ -17,10 +17,15 @@ function fixture(t) {
   git(cwd, 'config', 'user.email', 'policy@example.invalid');
   mkdirSync(path.join(cwd, '.githooks'));
   mkdirSync(path.join(cwd, 'harness'));
-  for (const f of ['.githooks/pre-commit', 'harness/git-policy.mjs'])
-    writeFileSync(path.join(cwd, f), readFileSync(path.join(source, f)));
-  writeFileSync(path.join(cwd, '.githooks/pre-push'), '#!/bin/sh\nexit 0\n');
-  for (const name of ['pre-commit', 'pre-push']) chmodSync(path.join(cwd, '.githooks', name), 0o755);
+  for (const f of ['harness/git-policy.mjs']) writeFileSync(path.join(cwd, f), readFileSync(path.join(source, f)));
+  // The real hook adds format and secret checks that need installed tools; the policy line is what these tests exercise.
+  writeFileSync(
+    path.join(cwd, '.githooks/pre-commit'),
+    readFileSync(path.join(source, '.githooks/pre-commit'), 'utf8').replace('node harness/staged.mjs\n', ''),
+  );
+  for (const name of ['pre-push', 'commit-msg'])
+    writeFileSync(path.join(cwd, '.githooks', name), '#!/bin/sh\nexit 0\n');
+  for (const name of ['pre-commit', 'commit-msg', 'pre-push']) chmodSync(path.join(cwd, '.githooks', name), 0o755);
   git(cwd, 'add', '.');
   git(cwd, 'commit', '-qm', 'Initial fixture');
   return cwd;

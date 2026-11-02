@@ -19,7 +19,7 @@ const assets = referencedAssets(source, catalog);
 const assetUris = Object.fromEntries(
   assets.map((ref) => [
     ref,
-    'data:image/svg+xml,' + encodeURIComponent(readFileSync(path.join(checkout, 'src/main/webapp', ref), 'utf8')),
+    `data:image/svg+xml,${encodeURIComponent(readFileSync(path.join(checkout, 'src/main/webapp', ref), 'utf8'))}`,
   ]),
 );
 const files = new Map([
@@ -37,7 +37,7 @@ execFileSync(
     '--exit-code',
     'HEAD',
     '--',
-    ...[...files.values(), ...assets].map((file) => 'src/main/webapp/' + file),
+    ...[...files.values(), ...assets].map((file) => `src/main/webapp/${file}`),
   ],
   { stdio: 'pipe' },
 );
@@ -119,7 +119,7 @@ try {
     const endpoint = await new Promise((resolve, reject) => {
       let stderr = '';
       const startup = setTimeout(
-        () => reject(new Error('Browser did not expose a local debugging endpoint: ' + stderr.slice(-1000))),
+        () => reject(new Error(`Browser did not expose a local debugging endpoint: ${stderr.slice(-1000)}`)),
         12_000,
       );
       child.once('error', reject);
@@ -167,11 +167,11 @@ try {
     const result = evaluation.result?.value || evaluation.exceptionDetails?.text || 'ERROR: No result';
     if (!result.startsWith('JSON:')) throw new Error(result);
     const rendered = JSON.parse(Buffer.from(result.slice(5), 'base64').toString('utf8'));
-    writeFileSync(svgOutput, rendered.svg + '\n');
+    writeFileSync(svgOutput, `${rendered.svg}\n`);
     const browser = await call('Browser.getVersion', {}, false);
     writeFileSync(
       svgOutput.replace(/\.svg$/, '.render.json'),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           renderer: 'Chromium with pinned local draw.io viewer',
           drawio_version: upstreamVersion,
@@ -181,7 +181,7 @@ try {
         },
         null,
         2,
-      ) + '\n',
+      )}\n`,
     );
     const capture = await call('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
     writeFileSync(screenshot, Buffer.from(capture.data, 'base64'));

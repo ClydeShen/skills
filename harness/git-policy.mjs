@@ -39,7 +39,7 @@ export function checkGit(cwd = root, { commit = false, env = process.env } = {})
       'Repository hooks are inactive or overridden. Run npm run git:setup; reconcile existing hooks first.',
     );
   }
-  for (const name of ['pre-commit', 'pre-push']) {
+  for (const name of ['pre-commit', 'commit-msg', 'pre-push']) {
     if (!existsSync(path.join(cwd, '.githooks', name))) throw new Error(`Missing Git hook: ${name}`);
   }
   return branch;
@@ -55,7 +55,7 @@ export function setupHooks(cwd = root) {
       throw new Error('Existing default Git hooks must be reconciled before setup.');
     }
   }
-  for (const name of ['pre-commit', 'pre-push']) chmodSync(path.join(cwd, '.githooks', name), 0o755);
+  for (const name of ['pre-commit', 'commit-msg', 'pre-push']) chmodSync(path.join(cwd, '.githooks', name), 0o755);
   git(cwd, ['config', '--local', 'core.hooksPath', '.githooks']);
   return 'Repository Git hooks enabled; other clones must run setup separately.';
 }

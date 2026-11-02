@@ -3,12 +3,12 @@ import { readFile } from 'node:fs/promises';
 // Image judge: reads one image and checks a list of claims against what is visible.
 // Claims are { id, text, key?, critical?: boolean, expect?: 'drawn' | 'not_drawn' }; id is what the judge sees, key labels reports. A 'not_drawn' claim is a
 // planted false claim; the judge must never confirm it. Labels stay on the grading side, outside prompts.
-export const verdictValues = ['drawn_correctly', 'drawn_incorrectly', 'not_shown', 'unclear'];
+const verdictValues = ['drawn_correctly', 'drawn_incorrectly', 'not_shown', 'unclear'];
 
 const instruction =
   'You are checking an architecture diagram image. Use only what is visible in the image. For each claim, first quote the visible evidence, then give one verdict: "drawn_correctly" (the image clearly shows it), "drawn_incorrectly" (the image shows something that contradicts it), "not_shown" (the image does not show it), or "unclear". Copy each bracketed claim id exactly. Respond with JSON only.';
 
-export const verdictSchema = {
+const verdictSchema = {
   type: 'object',
   required: ['verdicts'],
   additionalProperties: false,

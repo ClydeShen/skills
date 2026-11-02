@@ -90,15 +90,15 @@ test('runner passes only images to distinct fresh readers and L2 to the second g
   const adapter = {
     generate: async (packet) => {
       calls.push(['generate', packet]);
-      return { context: { id: `g${++n}`, fresh: true }, output: 'diagram' + n };
+      return { context: { id: `g${++n}`, fresh: true }, output: `diagram${n}` };
     },
     render: async (packet) => {
       calls.push(['render', packet]);
-      return { mimeType: 'image/png', image: 'raster:' + packet.diagram };
+      return { mimeType: 'image/png', image: `raster:${packet.diagram}` };
     },
     read: async (packet) => {
       calls.push(['read', packet]);
-      return { context: { id: `r${++n}`, fresh: true }, output: 'description' + n };
+      return { context: { id: `r${++n}`, fresh: true }, output: `description${n}` };
     },
     judge: async (packet) => {
       calls.push(['judge', packet]);

@@ -48,8 +48,8 @@ test('parsing accepts bracketed ids, list numbers, fences and trailing junk, and
   assert.equal(parseVerdicts(bracketed, order).get('a-in-cloud').verdict, 'drawn_correctly');
   const numbered = JSON.stringify({ verdicts: [{ id: '2', evidence: 'e', verdict: 'drawn_correctly' }] });
   assert.equal(parseVerdicts(numbered, order).get('b-calls-a').verdict, 'drawn_correctly');
-  assert.equal(parseVerdicts('```json\n' + answer(good) + '\n```', order).size, 4);
-  assert.equal(parseVerdicts(answer(good) + ')', order).size, 4);
+  assert.equal(parseVerdicts(`\`\`\`json\n${answer(good)}\n\`\`\``, order).size, 4);
+  assert.equal(parseVerdicts(`${answer(good)})`, order).size, 4);
   assert.equal(parseVerdicts(JSON.parse(answer(good)), order).size, 4);
   const unknown = JSON.stringify({
     verdicts: [

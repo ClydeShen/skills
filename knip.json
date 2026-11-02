@@ -2,7 +2,6 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": [
     "harness/*.mjs",
-    "evals/run.mjs",
     "evals/*.test.mjs",
     "incubator/*/evals/suite.mjs",
     "incubator/*/evals/image-facts-suite.mjs",
@@ -10,9 +9,8 @@
     "incubator/*/evals/{run,promptfooconfig}.cjs",
     "incubator/*/candidate/*/scripts/*.mjs",
     "incubator/*/tools/*.mjs",
-    "*.config.mjs",
-    ".dependency-cruiser.cjs"
+    "*.config.mjs"
   ],
   "project": ["harness/**", "evals/**", "incubator/**/*.{mjs,cjs}", "!incubator/*/evals/*-20??-??-??/**"],
-  "ignoreDependencies": ["promptfoo", "agnix"]
+  "ignoreDependencies": ["@commitlint/cli", "dependency-cruiser"]
 }

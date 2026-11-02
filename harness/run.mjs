@@ -4,7 +4,7 @@ import { repositoryRoot } from './repository.mjs';
 // Use the npm executable JS entry point rather than a platform-specific .cmd shim.
 const npm = process.env.npm_execpath;
 if (!npm) throw new Error('Use npm run check so npm_execpath is available.');
-for (const script of ['check:repo', 'test', 'eval']) {
+for (const script of ['check:repo', 'check:static', 'test', 'eval']) {
   const result = spawnSync(process.execPath, [npm, 'run', script], {
     cwd: repositoryRoot,
     stdio: 'inherit',

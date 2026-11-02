@@ -5,7 +5,7 @@
 1. Read [`README.md`](README.md) for the lifecycle and repository map.
 2. Read [`GLOSSARY.md`](GLOSSARY.md) before naming or changing a repository-wide concept.
 3. Inspect the working tree. Preserve changes outside the task.
-   Run `npm run git:setup` once per clone, then `npm run git:check` at session start. Resume the task's existing branch/worktree, or create `work/<kebab-case-topic>` from freshly fetched `origin/main` before editing. Concurrent independent sessions use separate worktrees. Follow [Git strategy](docs/HARNESS.md#git-strategy) for integration and cleanup.
+   `npm ci` enables the Git hooks. Run `npm run git:check` at session start. Resume the task's existing branch/worktree, or create `work/<kebab-case-topic>` from freshly fetched `origin/main` before editing. Concurrent independent sessions use separate worktrees. Follow [Git strategy](docs/HARNESS.md#git-strategy) for integration and cleanup.
    Git workflow checks are bypassable safeguards. Use a task-justified exception when needed and record its reason and skipped checks. Server-side protection is optional, not a setup blocker. Keep changes within the user's authorization and report actual verification results.
 4. Search for the topic, its authoritative document, and inbound links. Start editing only after every affected artifact has an identified location.
 5. Read [the source-of-truth and folder contract](docs/REPOSITORY-STRUCTURE.md) and [document formats](docs/DOCUMENT-FORMATS.md) before introducing or moving artifacts. Use uppercase stems for harness framework documents, as defined there.
@@ -40,7 +40,7 @@ Use the same package best practices during incubation and after release. Keep ru
 
 ## Project tools
 
-Use `package.json` as the command source. Run `npm run check` before handing off a change. Use `npm run check:repo` for fast feedback. Read [prompt evaluation setup](docs/prompt-evaluation.md) for model configuration and test limits. `npm test` checks the harness; `npm run eval` is synthetic replay, not a model-quality gate. Keep credentials and local run results out of commits. Never weaken a gate just to make the task pass; report pre-existing failures and unavailable checks.
+Use `package.json` as the command source. Run `npm run check` before handing off a change. Use `npm run check:repo` for fast feedback. Do not spend judgment on what a tool decides: run `npm run fix` for format and lint, and let the hooks check commits. Write commit messages by [the commit instructions](.github/commit-instructions.md) and pull requests by [the template](.github/pull_request_template.md). After changing a skill, run `npm run skill:check`; follow [Skill Quality Governance](docs/HARNESS.md#skill-quality-governance). Read [prompt evaluation setup](docs/prompt-evaluation.md) for model configuration and test limits. `npm test` checks the harness; `npm run eval` is synthetic replay, not a model-quality gate. Keep credentials and local run results out of commits. Never weaken a gate just to make the task pass; report pre-existing failures and unavailable checks.
 
 Validate `knowledge/harness/setup-checklist.yaml` against its adjacent schema when either changes. Keep stable checklist IDs and schema constraints consistent.
 

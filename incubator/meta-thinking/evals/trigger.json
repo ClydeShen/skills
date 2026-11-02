@@ -1,0 +1,31 @@
+{
+  "note": "Real-agent trigger cases. 'skip' cases are near misses that the skill must leave alone.",
+  "cases": [
+    {
+      "id": "explicit-request",
+      "request": "Use Meta Thinking on this: our onboarding doc keeps getting rewritten and nobody can say why it is still not good enough.",
+      "expect": "trigger"
+    },
+    {
+      "id": "repeated-attempts",
+      "request": "This is the fourth time we changed the retry settings and the job still fails the same way. I keep doing the same thing without learning anything new. Help me work out a different next move.",
+      "expect": "trigger"
+    },
+    {
+      "id": "unresolved-goal",
+      "request": "I cannot decide between these two directions because I am no longer sure what I am trying to achieve with this project. Help me find a useful next step.",
+      "expect": "trigger"
+    },
+    { "id": "plain-fact", "request": "What does the HTTP 409 status code mean?", "expect": "skip" },
+    {
+      "id": "direct-edit",
+      "request": "Rename the variable total to subtotal in this snippet: const total = a + b; return total;",
+      "expect": "skip"
+    },
+    {
+      "id": "clear-comparison",
+      "request": "Compare JSON and YAML for a small configuration file in two sentences.",
+      "expect": "skip"
+    }
+  ]
+}

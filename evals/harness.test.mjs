@@ -84,6 +84,10 @@ test('portable options accept suite paths with spaces and reject unknown flags',
   assert.equal(parseArgs([]).mode, 'fixture');
   assert.equal(parseArgs(['--suite', 'a folder/suite.mjs']).suite, 'a folder/suite.mjs');
   assert.throws(() => parseArgs(['--mode', 'unknown']));
+  assert.equal(parseArgs(['--repeat', '3']).repeat, 3);
+  assert.equal(parseArgs([]).repeat, 1);
+  assert.throws(() => parseArgs(['--repeat', '0']));
+  assert.throws(() => parseArgs(['--repeat', 'many']));
   assert.throws(() => parseArgs(['--typo', 'value']));
   assert.throws(() => parseArgs(['--mode']));
   assert.equal(parseArgs(['--provider', 'nvidia']).provider, 'nvidia');

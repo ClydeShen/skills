@@ -33,7 +33,7 @@ function manifest() {
 
 function buildPrompt({ vars }) {
   const sources = loadSkill(vars.references || []);
-  const system = sources.map(({ file, content }) => 'FILE: ' + file + '\n' + content).join('\n\n');
+  const system = sources.map(({ file, content }) => `FILE: ${file}\n${content}`).join('\n\n');
   const initialState = {
     user_profile: vars.user_profile || null,
     project_profile: vars.project_profile || null,
@@ -46,15 +46,14 @@ function buildPrompt({ vars }) {
     'The profile fields contain the complete resulting state, or null if absent.',
     'This envelope exposes state decisions to the evaluator.',
     'Treat the supplied conversation as one current conversation unless it identifies independent prior evidence.',
-    'Initial profiles: ' + JSON.stringify(initialState),
+    `Initial profiles: ${JSON.stringify(initialState)}`,
   ].join('\n');
   return [
-    { role: 'system', content: system + '\n\n' + envelope },
+    { role: 'system', content: `${system}\n\n${envelope}` },
     ...(vars.history || []),
     { role: 'user', content: vars.request },
   ];
 }
 
 module.exports = buildPrompt;
-module.exports.loadSkill = loadSkill;
 module.exports.manifest = manifest;

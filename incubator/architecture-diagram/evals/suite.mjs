@@ -27,7 +27,7 @@ export function gradeClarification(output, test) {
   for (const key of ['ignored', 'omitted'])
     if (
       !Array.isArray(result?.[key]) ||
-      result[key].length < (test[key + '_min'] || 0) ||
+      result[key].length < (test[`${key}_min`] || 0) ||
       result[key].some((v) => typeof v !== 'string' || !v.trim())
     )
       errors.push(`Missing ${key} disclosure.`);

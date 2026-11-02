@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const dimensions = Object.freeze([
+const dimensions = Object.freeze([
   'elements',
   'responsibilities',
   'relationships',
@@ -11,7 +11,7 @@ export const dimensions = Object.freeze([
   'conditions',
   'notes',
 ]);
-export const comparisonPairs = Object.freeze([
+const comparisonPairs = Object.freeze([
   [0, 2],
   [2, 4],
   [0, 4],

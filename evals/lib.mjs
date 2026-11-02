@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 export const nvidiaDefaultModel = 'nvidia/nemotron-3.5-super-vl-120b-a12b';
 export const nvidiaApiBaseUrl = 'https://integrate.api.nvidia.com/v1';
 
-export const responseContract = `For this evaluation only, return one JSON object with:
+const responseContract = `For this evaluation only, return one JSON object with:
 approach: continue | reframe | explore | design
 memory: skip | record | revise | unavailable
 cause: unknown | tentative | supported
@@ -63,15 +63,22 @@ export function gradeDecision(output, expected) {
 export function parseArgs(args) {
   const options = { mode: 'fixture', provider: 'auto', suite: 'incubator/meta-thinking/evals/suite.mjs' };
   for (let i = 0; i < args.length; i += 2) {
-    if (!['--mode', '--suite', '--provider', '--case'].includes(args[i]) || !args[i + 1])
+    if (
+      !['--mode', '--suite', '--provider', '--case', '--skill', '--agent', '--baseline', '--repeat'].includes(
+        args[i],
+      ) ||
+      !args[i + 1]
+    )
       throw new Error(
-        'Usage: npm run eval -- [--mode fixture|model] [--provider auto|generic|nvidia] [--suite path/to/suite.mjs] [--case case-id]',
+        'Usage: npm run eval -- [--mode fixture|model] [--provider auto|generic|nvidia] [--suite path/to/suite.mjs] [--case case-id] [--skill name] [--agent all|claude|codex] [--baseline git-ref] [--repeat n]',
       );
     options[args[i].slice(2)] = args[i + 1];
   }
   if (!['fixture', 'model'].includes(options.mode)) throw new Error('Mode must be fixture or model.');
   if (!['auto', 'generic', 'nvidia'].includes(options.provider))
     throw new Error('Provider must be auto, generic, or nvidia.');
+  options.repeat = Number(options.repeat ?? 1);
+  if (!Number.isInteger(options.repeat) || options.repeat < 1) throw new Error('Repeat must be a positive integer.');
   return options;
 }
 
@@ -147,4 +154,17 @@ export function judgeConfig(env) {
 
 export function digest(text) {
   return createHash('sha256').update(text).digest('hex');
+}
+
+// Correctness, cost and time per provider, so that two versions of a skill can be compared at a glance.
+export function armSummary(results) {
+  const arms = Map.groupBy(results, (result) => result.provider_label ?? 'default');
+  const rows = [...arms].map(([label, runs]) => {
+    const passed = runs.filter((run) => run.success).length;
+    const mean = (values) => values.reduce((sum, value) => sum + value, 0) / values.length;
+    const cost = mean(runs.map((run) => run.cost ?? 0)).toFixed(4);
+    const seconds = (mean(runs.map((run) => run.latency_ms ?? 0)) / 1000).toFixed(1);
+    return `${label}: ${passed}/${runs.length} passed; mean cost ${cost}; mean time ${seconds}s`;
+  });
+  return rows.join('\n');
 }

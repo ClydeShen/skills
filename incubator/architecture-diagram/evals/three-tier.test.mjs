@@ -8,15 +8,15 @@ import { collect as collectRevision } from './three-tier-2026-10-29/revised/coll
 
 const read = (name) => readFileSync(new URL(name, import.meta.url));
 const location = './three-tier-2026-10-29/';
-const manifest = JSON.parse(read(location + 'case.json'));
-const xml = read(location + 'baseline.drawio').toString();
-const render = JSON.parse(read(location + 'baseline.render.json'));
+const manifest = JSON.parse(read(`${location}case.json`));
+const xml = read(`${location}baseline.drawio`).toString();
+const render = JSON.parse(read(`${location}baseline.render.json`));
 const catalog = JSON.parse(read('../candidate/architecture-diagram/assets/catalog.json'));
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', parseAttributeValue: false });
 
 test('reference-informed revision preserves architecture and saved evidence without claiming a blind quality result', () => {
   const actual = collectRevision();
-  assert.deepEqual(actual, JSON.parse(read(location + 'revised/verification.json')));
+  assert.deepEqual(actual, JSON.parse(read(`${location}revised/verification.json`)));
   assert.deepEqual(actual.checks.errors, []);
   assert.equal(actual.reference_seen, true);
   assert.equal(actual.fresh_context, false);
@@ -34,7 +34,7 @@ test('three-tier evidence remains byte-identical to the pre-reference baseline',
       file,
     );
   }
-  const original = JSON.parse(read(location + 'baseline-verification.json'));
+  const original = JSON.parse(read(`${location}baseline-verification.json`));
   assert.equal(original.reference_image_seen, false);
   assert.equal(original.source_repository_commit, '96a9ec0c045c0a18803142cdaea97048024e642b');
   assert.equal(original.static_diagnostics.length, 3, 'Do not rewrite the historical result after fixing the checker.');

@@ -35,17 +35,15 @@ const shapeStyle = (entry) => {
     labelWidth: 200,
     spacingTop: 8,
   });
-  return (
-    Object.entries(style)
-      .map(([k, v]) => `${k}=${v}`)
-      .join(';') + ';'
-  );
+  return `${Object.entries(style)
+    .map(([k, v]) => `${k}=${v}`)
+    .join(';')};`;
 };
 function vertex(id, label, type, technology, parent, x, y, width, height, entry = null, description = '') {
   const style = entry
     ? shapeStyle(entry)
     : `rounded=0;whiteSpace=wrap;html=0;fillColor=#ffffff;strokeColor=#8c939d;fontFamily=Arial;fontSize=12;fontStyle=${type === 'Software system boundary' ? 1 : 0};${type.endsWith('boundary') ? 'align=left;verticalAlign=top;spacing=12;' : ''}${type === 'Person' ? 'shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;labelWidth=120;' : ''}`;
-  const full = [label, `[${type}${technology ? ': ' + technology : ''}]`, description].filter(Boolean).join('\n');
+  const full = [label, `[${type}${technology ? `: ${technology}` : ''}]`, description].filter(Boolean).join('\n');
   cells.push(
     `<object id="${id}" label="${xml(full)}" c4Type="${xml(type)}" technology="${xml(technology)}" vendor="${entry?.vendor || ''}" iconKey="${entry?.id || ''}"><mxCell vertex="1" parent="${parent}" style="${xml(style)}"><mxGeometry x="${x}" y="${y}" width="${width}" height="${height}" as="geometry"/></mxCell></object>`,
   );
@@ -79,13 +77,13 @@ function legendTable(x, y) {
   cells.push(
     `<mxCell id="legend" value="Legend" annotationKind="legend" vertex="1" parent="1" style="rounded=0;html=0;align=left;verticalAlign=top;spacing=8;fillColor=none;strokeColor=#c4c9cf;fontFamily=Arial;fontSize=12;fontStyle=1;"><mxGeometry x="${x}" y="${y}" width="460" height="${28 + rows.length * rowHeight}" as="geometry"/></mxCell>`,
   );
-  rows.forEach((row, r) =>
+  rows.forEach((row, r) => {
     row.forEach((value, c) => {
       cells.push(
         `<mxCell id="legend-${r}-${c}" value="${xml(value)}" vertex="1" parent="legend" style="rounded=0;html=0;whiteSpace=wrap;align=left;verticalAlign=middle;spacing=8;fillColor=${r ? '#ffffff' : '#f5f6f7'};strokeColor=#c4c9cf;fontFamily=Arial;fontSize=12;fontStyle=${r ? 0 : 1};"><mxGeometry x="${c ? widths[0] : 0}" y="${28 + r * rowHeight}" width="${widths[c]}" height="${rowHeight}" as="geometry"/></mxCell>`,
       );
-    }),
-  );
+    });
+  });
 }
 function edge(
   id,
@@ -97,7 +95,7 @@ function edge(
 ) {
   const style = `edgeStyle=orthogonalEdgeStyle;rounded=0;html=0;endArrow=block;endFill=1;startArrow=none;strokeColor=#545b64;strokeWidth=1.5;fontFamily=Arial;fontSize=12;fontStyle=${bold ? 1 : 0};dashed=${dashed ? 1 : 0};labelBackgroundColor=#ffffff;exitX=${exitX};exitY=${exitY};exitPerimeter=0;entryX=${entryX};entryY=${entryY};entryPerimeter=0;`;
   cells.push(
-    `<mxCell id="${id}" value="${xml(label)}" edge="1" parent="1" source="${from}" target="${to}" style="${style}"><mxGeometry x="${labelX}" y="${labelY}" relative="1" as="geometry">${points.length ? '<Array as="points">' + points.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('') + '</Array>' : ''}</mxGeometry></mxCell>`,
+    `<mxCell id="${id}" value="${xml(label)}" edge="1" parent="1" source="${from}" target="${to}" style="${style}"><mxGeometry x="${labelX}" y="${labelY}" relative="1" as="geometry">${points.length ? `<Array as="points">${points.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('')}</Array>` : ''}</mxGeometry></mxCell>`,
   );
 }
 

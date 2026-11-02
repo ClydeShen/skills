@@ -99,7 +99,7 @@ export function buildCatalog(checkout) {
           problems.push(`Missing or wrong-case image: ${properties.image}`);
         const normalizedTitle = (title || label || '').replaceAll('\n', ' ').trim();
         entries.push({
-          id: `${library}-${digest(style + '\n' + normalizedTitle).slice(0, 16)}`,
+          id: `${library}-${digest(`${style}\n${normalizedTitle}`).slice(0, 16)}`,
           vendor,
           library,
           palette,
@@ -144,7 +144,7 @@ export function catalogMain([checkout, output]) {
   writeFileSync(
     output,
     JSON.stringify(header, null, 2).replace(/\n}$/, ',\n  "entries": [\n') +
-      entries.map((e) => '    ' + JSON.stringify(e)).join(',\n') +
+      entries.map((e) => `    ${JSON.stringify(e)}`).join(',\n') +
       '\n  ]\n}\n',
   );
   console.log(

@@ -117,7 +117,7 @@ if (
 ) {
   if (process.argv.length < 3 || process.argv.length > 4)
     throw new Error('Usage: node collect-roundtrips.mjs <run-directory> [output.json]');
-  const report = JSON.stringify(collectRoundTrips(process.argv[2]), null, 2) + '\n';
+  const report = `${JSON.stringify(collectRoundTrips(process.argv[2]), null, 2)}\n`;
   if (process.argv[3]) writeFileSync(process.argv[3], report);
   else console.log(report);
 }
