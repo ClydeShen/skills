@@ -120,6 +120,10 @@ Current [skills CLI authoring documentation](https://github.com/vercel-labs/skil
 
 On 2026-11-02 the owner set static PNG export as the core goal and required each channel to have one job. Two fresh Claude Code sessions generated the same scenario, the first real installed-skill runs on this machine. Both passed the text check; the second, with package rendering and relationship guidance, removed overlaps and kept source relationships as connectors. It still has no client entry. draw.io Desktop 32.6.1 exported the diagrams. Details: [trial record](./evals/channel-rule-2026-11-02/README.md). Two runs on one model show direction, not repeatability. Codex was not run.
 
+## Professional layout trial
+
+On 2026-11-02 five real generations ran across AWS, Azure and Google Cloud after composition guidance, cloud conventions and a layout check were added. Mirrored zones, spanning groups and a visible main path improved; a usage limit interrupted three sessions, and Codex could not export a PNG in its sandbox. Details: [trial record](./evals/professional-layout-2026-11-02/README.md). The owner has not reviewed these yet.
+
 ## Open verification
 
 The owner's subsequent architecture-expression review rated the restrained-layout Case A 8.0/10 and Case B 6.5/10. The [semantic-clarity trial](./evals/semantic-clarity-2026-10-29/README.md) records the resulting view/evidence/relationship changes and two new text-only generations. These subjective scores do not rate those new outputs or certify AWS compliance.

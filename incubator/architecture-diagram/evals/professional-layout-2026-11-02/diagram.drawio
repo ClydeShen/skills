@@ -1,0 +1,161 @@
+<mxfile host="app.diagrams.net" version="32.6.1">
+  <diagram id="orders" name="Orders architecture">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" page="1" pageWidth="1400" pageHeight="900" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Order service on Google Cloud" vertex="1" parent="1" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=25;">
+          <mxGeometry x="25" y="15" width="1350" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="project" value="Google Cloud project" vertex="1" parent="1" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;container=1;collapsible=0;rounded=0;fillColor=#ffffff;strokeColor=#a3adb7;strokeWidth=1;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;">
+          <mxGeometry x="200" y="70" width="1170" height="790" as="geometry" />
+        </mxCell>
+        <mxCell id="customers" value="Customers" vertex="1" parent="1" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;rounded=1;arcSize=12;fillColor=#ffffff;strokeColor=#46525e;strokeWidth=1.5;">
+          <mxGeometry x="30" y="407" width="115" height="70" as="geometry" />
+        </mxCell>
+        <object id="dns" label="Cloud DNS" vendor="Google Cloud" iconKey="gcp3-ee4760f534e7f2d2" technology="Networking" c4Type="resource">
+          <mxCell vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.networking;fillColor=#9aa0a6;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="75" y="65" width="64" height="64.0" as="geometry" />
+          </mxCell>
+        </object>
+        <object id="lb" label="Global external&lt;br&gt;Application&lt;br&gt;Load Balancer" vendor="Google Cloud" iconKey="gcp3-ee4760f534e7f2d2" technology="Networking" c4Type="resource">
+          <mxCell vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.networking;fillColor=#9aa0a6;fontSize=16;spacingTop=7;labelWidth=180;fontSize=15;">
+            <mxGeometry x="75" y="340" width="64" height="64.0" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="ops" value="" vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;container=1;collapsible=0;rounded=0;fillColor=#f5f7f9;strokeColor=#a3adb7;strokeWidth=1;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;">
+          <mxGeometry x="280" y="45" width="840" height="95" as="geometry" />
+        </mxCell>
+        <object id="monitoring" label="" vendor="Google Cloud" iconKey="gcp3-e74e40cbb42321af" technology="Observability" c4Type="resource">
+          <mxCell vertex="1" parent="ops" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.observability;fillColor=#9aa0a6;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="25" y="15" width="58" height="58.0" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="metrics" value="Cloud Monitoring&lt;br&gt;Metrics from Compute Engine VMs and Cloud Run" vertex="1" parent="ops" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=16;">
+          <mxGeometry x="110" y="13" width="700" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="vpc" value="orders-vpc  (global VPC network)" vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;container=1;collapsible=0;rounded=0;fillColor=#ffffff;strokeColor=#a3adb7;strokeWidth=1;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;">
+          <mxGeometry x="285" y="185" width="355" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="subnet" value="orders-subnet&lt;br&gt;europe-west1" vertex="1" parent="vpc" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;container=1;collapsible=0;rounded=0;fillColor=#edf4fc;strokeColor=#a3adb7;strokeWidth=1;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;">
+          <mxGeometry x="15" y="55" width="325" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="mig" value="Regional managed instance group" vertex="1" parent="subnet" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;container=1;collapsible=0;rounded=0;fillColor=#ffffff;strokeColor=#a3adb7;strokeWidth=1;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;dashed=1;">
+          <mxGeometry x="15" y="65" width="295" height="210" as="geometry" />
+        </mxCell>
+        <object id="vmb" label="" vendor="Google Cloud" iconKey="gcp3-bdc46e496dcd515e" technology="Compute Engine" c4Type="resource">
+          <mxCell vertex="1" parent="mig" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.computeengine;fillColor=#4285f4;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="48" y="66" width="60" height="60.0" as="geometry" />
+          </mxCell>
+        </object>
+        <object id="vmc" label="" vendor="Google Cloud" iconKey="gcp3-bdc46e496dcd515e" technology="Compute Engine" c4Type="resource">
+          <mxCell vertex="1" parent="mig" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.computeengine;fillColor=#4285f4;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="183" y="66" width="60" height="60.0" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="vmb-label" value="VMs&lt;br&gt;europe-west1-b" vertex="1" parent="mig" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;">
+          <mxGeometry x="15" y="133" width="125" height="47" as="geometry" />
+        </mxCell>
+        <mxCell id="vmc-label" value="VMs&lt;br&gt;europe-west1-c" vertex="1" parent="mig" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=15;">
+          <mxGeometry x="154" y="133" width="125" height="47" as="geometry" />
+        </mxCell>
+        <mxCell id="representative" value="VM symbols are representative" vertex="1" parent="mig" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;">
+          <mxGeometry x="15" y="181" width="265" height="23" as="geometry" />
+        </mxCell>
+        <mxCell id="sql" value="Cloud SQL for PostgreSQL&lt;br&gt;High availability, europe-west1" vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;container=1;collapsible=0;rounded=0;fillColor=#f8fafc;strokeColor=#a3adb7;strokeWidth=1;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;">
+          <mxGeometry x="740" y="185" width="395" height="395" as="geometry" />
+        </mxCell>
+        <object id="primary" label="Primary&lt;br&gt;europe-west1-b" vendor="Google Cloud" iconKey="gcp3-c13117c1a47d2c3b" technology="Cloud SQL" c4Type="resource">
+          <mxCell vertex="1" parent="sql" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloudsql;fillColor=#4285f4;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="145" y="155" width="64" height="63.436800000000005" as="geometry" />
+          </mxCell>
+        </object>
+        <object id="standby" label="Standby&lt;br&gt;europe-west1-c" vendor="Google Cloud" iconKey="gcp3-c13117c1a47d2c3b" technology="Cloud SQL" c4Type="resource">
+          <mxCell vertex="1" parent="sql" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloudsql;fillColor=#4285f4;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="145" y="270" width="64" height="63.436800000000005" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="private-port" value="" vertex="1" parent="vpc" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;shape=ellipse;fillColor=#ffffff;strokeColor=#46525e;strokeWidth=1.5;">
+          <mxGeometry x="345" y="178" width="10" height="18" as="geometry" />
+        </mxCell>
+        <object id="cdn" label="Cloud CDN" vendor="Google Cloud" iconKey="gcp3-ee4760f534e7f2d2" technology="Networking" c4Type="resource">
+          <mxCell vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.networking;fillColor=#9aa0a6;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="75" y="610" width="64" height="64.0" as="geometry" />
+          </mxCell>
+        </object>
+        <object id="images" label="Product images&lt;br&gt;Cloud Storage" vendor="Google Cloud" iconKey="gcp3-fdb59a297b0b2121" technology="Cloud Storage" c4Type="resource">
+          <mxCell vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloud_storage;fillColor=#4285f4;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="260" y="610" width="64" height="64.10898527496745" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="topic" value="Pub/Sub topic" vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;rounded=0;fillColor=#ffffff;strokeColor=#9aa0a6;strokeWidth=1;">
+          <mxGeometry x="392.5" y="615" width="140" height="58" as="geometry" />
+        </mxCell>
+        <object id="run" label="Invoice service&lt;br&gt;Cloud Run" vendor="Google Cloud" iconKey="gcp3-7ae9fbcdf8bc6c64" technology="Cloud Run" c4Type="resource">
+          <mxCell vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloudrun;fillColor=#4285f4;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="740" y="610" width="64" height="63.67359999999999" as="geometry" />
+          </mxCell>
+        </object>
+        <object id="invoices" label="Invoices&lt;br&gt;Cloud Storage" vendor="Google Cloud" iconKey="gcp3-fdb59a297b0b2121" technology="Cloud Storage" c4Type="resource">
+          <mxCell vertex="1" parent="project" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;sketch=0;html=1;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;align=center;fontSize=11;fontStyle=0;fontColor=#000000;aspect=fixed;pointerEvents=1;shape=mxgraph.gcp3.cloud_storage;fillColor=#4285f4;fontSize=16;spacingTop=7;labelWidth=180;">
+            <mxGeometry x="1000" y="610" width="64" height="64.10898527496745" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="request" value="shop.example.com" edge="1" parent="1" source="customers" target="lb" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=2.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;fontSize=14;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dns-query" value="Resolve" edge="1" parent="1" source="customers" target="dns" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=1;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;dashed=1;exitX=0.5;exitY=0;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="87" y="167" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="dns-answer" value="Address" edge="1" parent="1" source="dns" target="lb" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=1;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;dashed=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="orders" value="Orders" edge="1" parent="1" source="lb" target="mig" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=2.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.319;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sql-readwrite" value="" edge="1" parent="1" source="mig" target="private-port" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=2.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.319;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="private-sql" value="Read/write, private IP" edge="1" parent="1" source="private-port" target="primary" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=2.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ha-sync" value="Synchronous" edge="1" parent="1" source="primary" target="standby" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=1;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;dashed=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1280" y="442" />
+              <mxPoint x="1280" y="557" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="static" value="Product images" edge="1" parent="1" source="lb" target="cdn" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=1.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=0;exitY=0.8;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="461" />
+              <mxPoint x="210" y="712" />
+            </Array>
+            <mxPoint x="50" y="0" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="origin" value="Origin fetch" edge="1" parent="1" source="cdn" target="images" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=1.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="accepted" value="Order accepted" edge="1" parent="1" source="mig" target="topic" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=1.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="delivery" value="Order events" edge="1" parent="1" source="topic" target="run" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=1.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="write-invoices" value="Write invoices" edge="1" parent="1" source="run" target="invoices" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#46525e;strokeWidth=1.5;startArrow=none;endArrow=block;endFill=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="key" value="Dashed connectors: DNS resolution or HA replication" vertex="1" parent="1" style="html=1;fontFamily=Helvetica;fontSize=16;fontColor=#263238;text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;">
+          <mxGeometry x="750" y="803" width="580" height="27" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

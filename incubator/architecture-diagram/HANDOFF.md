@@ -1,36 +1,41 @@
 # Architecture Diagram handoff
 
-Updated: 2026-10-29. Integration: [PR #20](https://github.com/ClydeShen/skills/pull/20). This is a continuation guide for the current initiative, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md) before making changes.
+Updated: 2026-11-03. Branch: `work/diagram-professional-layout`, open as [PR #25](https://github.com/ClydeShen/skills/pull/25). This is a continuation guide for the current initiative, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md) before making changes.
 
 ## Start here
 
-- Active package: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md). It remains an installable public-stage candidate, not a release in `skills/`. The [initiative README](./README.md) owns installation and lifecycle status.
-- Latest diagrams and comparison links: [semantic-clarity trial](./evals/semantic-clarity-2026-10-29/README.md). Each case includes PNG, SVG, editable draw.io, generation/check scripts and `assumptions.md`.
-- Evidence history and outstanding verification: [evaluation.md](./evaluation.md). Preserve frozen earlier cases when improving subsequent outputs.
+- Active package: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md), a public-stage candidate, not a release. The [initiative README](./README.md) owns installation and lifecycle status.
+- Latest evidence: [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), then [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
 
-## Current behavior and owner direction
+## Owner direction
 
-Optimize information accuracy and readable architecture expression. Keep the skill concise and allow contextual layout choices. Avoid mechanical symmetry, fixed service positions, excessive frames, labels or explanatory Notes. Preserve distinct instances, real boundary membership and essential relationships.
+- Improve the skill, not one diagram. A good result must come from a fresh session that has only the package and a scenario, not from an agent repairing output with this conversation's context.
+- Layout must express meaning, not mathematical tidiness. Runtime path in the middle; build, ingestion, management and telemetry in their own lanes; numbered steps in reading order; true boundary nesting. Avoid detours: a line that leaves and re-enters a region reads as data leaving it. Never delete, merge or move an element out of its region to clear a check.
+- Icons must be real upstream artwork that travels with the package, shown at one standard size. Never draw or recolor an icon; use the plain-box fallback when none exists.
+- Output must import into Lucidchart as well as open in draw.io.
+- Talk to the owner in Chinese; write repository content in English.
 
-Select a view supported by the input. Source-stated connections, technical capabilities, inferences and design recommendations have different evidential strength. Keep unconfirmed operational paths in a concise companion record, preserving the source claim and why it is absent from runtime flows. Do not invent ALB type/exposure, subnet attachments, protocols, security settings or full-application high availability.
+## What the package does now
 
-Latest Case A preserves two AZs, six CIDRs, shared logical ELBs, separate shared compute scaling groups and synchronous RDS primary/standby replication. The parent's final repair replaces ASG enclosures around ELBs with compute-member markers and management associations. ELB subnet attachments remain unknown.
+- `find-icon.mjs` looks up the draw.io catalog (AWS, Azure, Google Cloud, Kubernetes) and `assets/vendor-icons.json` (92 platform and AI vendor icons from pinned `@thesvg/icons`, `@fabric-msft/svg-icons` and official repositories, with licence and SHA-256). It returns a standard placement: symbols in a 72 square, wide marks 40 high, captions below at 16 point with `labelWidth` 160, or the plain-box fallback.
+- `finalize.mjs` embeds vendor artwork and rewrites the file in draw.io's own layout, one element per line. Lucidchart rejects any other layout of the same XML; this was confirmed by owner import tests on 2026-11-02. `check-layout.mjs` errors and `render.mjs` refuses until the file is finalized.
+- `check-layout.mjs` estimates caption, frame-title and connector-label boxes and connector routes, and reports text collisions, labels away from their line or on a bend, connectors through captions, leaving and re-entering or passing through regions, detours, jogs, crossings and ports to swap. Estimates were calibrated against exact render geometry: every real overlap was found; extra reports were near misses.
+- `composition.md` holds the placement and routing rules above; `SKILL.md` says the checks report symptoms and must not be satisfied by changing meaning.
+- Authoring tools: `tools/build-vendor-icons.mjs` regenerates the vendor icons and `--check-latest` reports newer upstream versions. Research behind the sources: [vendor icon sources](../../research/diagrams/architecture-diagram/vendor-icon-sources-2026-11-02.md).
 
-Latest Case B separates DNS resolution from direct client requests, preserves DynamoDB's two directions, and treats monitoring as an association. Implied Web → App, undefined Cache → RDS and standby → S3 operations are recorded in its companion assumptions, without operational arrows.
+## Open problems
 
-## Evidence and limitations
+1. Step order. Fresh sessions still place called services out of step order (round 3 A reads 1, 3, 2). The rule exists in `composition.md`; it is not followed reliably. Consider a check that compares numbered labels with their targets' order along the caller's side.
+2. Shared services. Round 3 B still left AI Search to one side, so the ingestion write takes a long route and crosses `3. Store conversation`. The rule exists; consider stronger guidance or an example.
+3. Fresh sessions in the Codex sandbox cannot render (`listen EPERM`, and draw.io Desktop cannot reach its Mach port), so they never see their image. Static checks partly compensate. A renderer that needs no local listener would close the gap.
+4. Round 3 was cut off before agent reports and was not reviewed independently. Rerun both scenarios with the current package, then have a context-free reviewer score the images, as in round 1 (A 8/10, B 6/10).
+5. Not verified: repeatability across several runs, Claude Code sessions (usage limit hit during this work), offline Desktop use on another machine, and redistribution terms for icons whose licence requires attribution (Jenkins, CC-BY-SA-3.0) or limits use (Microsoft Fabric).
 
-The two latest diagrams began in separate fresh contexts with only their respective original text and current skill. Parent review then requested semantic/catalog corrections. They are independently initiated generations with supervised repairs, not untouched blind evaluations. Shared filesystem isolation was procedural. No new external model endpoint was called. The second supplied reference image was not archived, as requested.
+## How to evaluate a change
 
-The prior layout outputs received subjective owner review scores of 8.0/10 (A) and 6.5/10 (B). Earlier overall simple-diagram feedback was 85/100. None of these scores evaluates the latest semantic-clarity outputs; owner comparison remains pending. Source fidelity, technical plausibility, rendering and aesthetics must be assessed separately.
+1. Copy `candidate/architecture-diagram` into `<tmp>/.agents/skills/`, add one scenario as `scenario.md`, run `git init`, and run `codex exec -s workspace-write "Use the architecture-diagram skill to create diagram.drawio from scenario.md. Write your companion account to agent-report.md."` there. Set up the directory before starting the session, not in parallel.
+2. Render with `node candidate/architecture-diagram/scripts/render.mjs <diagram.drawio>` outside the sandbox and inspect the PNG.
+3. Ask a read-only subagent with no other context to read scenario and image and score fidelity, meaning of layout and misleading geometry.
+4. Record the run and review in a new `evals/<topic>-<date>/README.md`. Finish repository changes with `npm run check` and `npm run skill:check`.
 
-Local checks passed: 63 regression tests, 42 synthetic assertions, loopback provider contracts, pinned package validation/discovery and bounded diagram checks. Browser rendering uses draw.io 32.6.1 at commit `84487b4891cbc0f32d7e30f34cf878c87cb1f414`. Offline Desktop behavior and actual deployed correctness are unverified. GitHub CI and merged status should be checked on the linked PR rather than inferred from this document.
-
-## Continue
-
-1. Obtain owner comparison of the two latest images before further stylistic changes. Review ASG member/management markings and unresolved logical endpoints for possible remaining ambiguity.
-2. Use a new result directory for repairs; retain frozen trial evidence. Record parent intervention and distinguish sourced facts from recommendations.
-3. Recheck the saved latest artifacts with `node incubator/architecture-diagram/evals/semantic-clarity-2026-10-29/verify.mjs`. For new diagrams, run static/render checks and inspect the actual image. Finish repository changes with `npm run check`.
-4. Broader verification still needs repeated independent generations, image-only readouts and source/technical review. Scenario 05 and Desktop integration remain open; do not infer release readiness from synthetic checks.
-
-All repository content stays English. Keep task tracking in GitHub issues, evaluation evidence in its existing records, and runtime behavior in the single active package. Update this handoff by consolidation when the continuation state changes.
+Update this handoff by consolidation when the continuation state changes.

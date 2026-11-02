@@ -8,6 +8,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const local = (file) => path.join(root, 'node_modules', file);
 
 try {
+  // Scan what this branch would publish. Other local refs can hold another session's snapshots of public web pages.
   const steps = [
     ['Knip', process.execPath, [local('knip/bin/knip.js'), '--no-progress']],
     [
@@ -23,7 +24,11 @@ try {
         'err',
       ],
     ],
-    ['Gitleaks', requireTool('gitleaks'), ['git', '--redact', '--no-banner', '--log-level=warn', '.']],
+    [
+      'Gitleaks',
+      requireTool('gitleaks'),
+      ['git', '--redact', '--no-banner', '--log-level=warn', '--log-opts=HEAD', '.'],
+    ],
   ];
   for (const [label, command, args] of steps) {
     const result = spawnSync(command, args, { cwd: root, stdio: 'inherit' });

@@ -5,11 +5,19 @@ import { createServer } from 'node:http';
 import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
 import { upstreamCommit, upstreamVersion } from './catalog.mjs';
+import { isFormatted } from './drawio-format.mjs';
+import { loadVendorIcons } from './icons.mjs';
 import { annotationMetadata, editorLink, pageSize, referencedAssets } from './render-inputs.mjs';
 
 const [input, screenshot = input?.replace(/(\.drawio)?$/, '.png')] = process.argv.slice(2);
 if (!input) throw new Error('Usage: node scripts/render.mjs <diagram.drawio> [output.png]');
 const svgOutput = screenshot.replace(/\.png$/, '.svg');
+const source = readFileSync(input, 'utf8');
+if (!isFormatted(source))
+  throw new Error(`Run node scripts/finalize.mjs ${input} first: it embeds icons and writes draw.io's file layout.`);
+const catalog = JSON.parse(readFileSync(new URL('../assets/catalog.json', import.meta.url), 'utf8'));
+// Validate before any export path, so every renderer sees only catalogued artwork.
+const assets = referencedAssets(source, catalog, loadVendorIcons());
 const git = (args, options = {}) => execFileSync('git', args, { encoding: 'utf8', ...options }).trim();
 
 // The first run fetches the pinned draw.io viewer once; later runs work offline.
@@ -60,29 +68,30 @@ function exportWithDesktop() {
     'drawio',
     path.join(homedir(), 'Applications/draw.io.app/Contents/MacOS/draw.io'),
     '/Applications/draw.io.app/Contents/MacOS/draw.io',
+    'C:/Program Files/draw.io/draw.io.exe',
   ];
-  const shell = process.platform === 'win32';
+  const args = [
+    '--export',
+    '--format',
+    'png',
+    '--embed-diagram',
+    '--border',
+    '20',
+    '--scale',
+    '2',
+    '--output',
+    screenshot,
+    input,
+  ];
+  // Never run these through a shell: the paths come from the caller.
   for (const cli of candidates.filter(Boolean)) {
-    const args = [
-      '--export',
-      '--format',
-      'png',
-      '--embed-diagram',
-      '--border',
-      '20',
-      '--scale',
-      '2',
-      '--output',
-      screenshot,
-      input,
-    ];
-    if (spawnSync(cli, args, { stdio: 'ignore', timeout: 60_000, shell }).status === 0 && existsSync(screenshot))
-      return cli;
+    if (spawnSync(cli, args, { stdio: 'ignore', timeout: 60_000 }).status === 0 && existsSync(screenshot)) return cli;
   }
   return null;
 }
 
-if (exportWithDesktop()) {
+// Inside the Codex sandbox draw.io cannot reach the window server, and macOS reports a crash to the user.
+if (!process.env.CODEX_SANDBOX && exportWithDesktop()) {
   console.log(`Rendered ${screenshot} with draw.io Desktop; it embeds an editable copy. Inspect the PNG.`);
   process.exit(0);
 }
@@ -103,10 +112,7 @@ try {
   giveUp(error);
   process.exit();
 }
-const source = readFileSync(input, 'utf8');
 const page = pageSize(source);
-const catalog = JSON.parse(readFileSync(new URL('../assets/catalog.json', import.meta.url), 'utf8'));
-const assets = referencedAssets(source, catalog);
 const assetUris = Object.fromEntries(
   assets.map((ref) => [
     ref,
