@@ -4,10 +4,8 @@ Prefer position and nesting, then connectors, then shape and line style. The ima
 
 ## Visual grammar
 
-- **Three line weights:** the main request path is heaviest, other runtime calls are normal, auxiliary relationships are thin and dashed.
 - **Neutral lines:** vendor symbols carry the color. Lines stay one dark neutral; only a failure path may use one accent, plus its own line style.
 - **Two outline families:** solid or vendor-styled for deployment boundaries, light fill for logical groups.
-- **Reading order:** the main path runs in one direction and stays straightest. Auxiliary services sit to the side.
 - **Text hierarchy:** title, then boundary names, then element names, then connector labels, which are the smallest.
 
 ## The drawing is enough
@@ -50,29 +48,25 @@ Prefer position and nesting, then connectors, then shape and line style. The ima
 
 ## Cloud relationships
 
-| Concern    | Relationship                                         | Draw                                                                                                    |
-| ---------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Placement  | Organization, account, region, zone, network, subnet | Nest in that order, showing only levels that matter                                                     |
-| Placement  | Regional or global service                           | Place outside zones, at the level of its real scope                                                     |
-| Network    | Peering, VPN, private link between networks          | Undirected line between the two network boundaries                                                      |
-| Network    | Gateway, NAT or firewall on a path                   | A symbol on the path, splitting the connector into hops                                                 |
-| Network    | Private endpoint                                     | A symbol on the boundary, with the caller connected to it                                               |
-| Traffic    | Load balancing                                       | One line into the balancer, then one to the target group                                                |
-| Traffic    | CDN and its origin                                   | Arrow from CDN to origin; viewers connect to the CDN                                                    |
-| Traffic    | DNS                                                  | Thin dashed line from the resolving client to the DNS symbol, and from there to the endpoint it returns |
-| Compute    | Scaling group, cluster, pod                          | Nest instances in its boundary and repeat the symbol                                                    |
-| Data       | Read, write                                          | Arrow from the initiator; one verb only if it matters                                                   |
-| Data       | Cache in front of a database                         | The application connects to each; no cache-to-database line unless stated                               |
-| Data       | Replication, standby                                 | Dashed line between same symbols in their own domains                                                   |
-| Data       | Backup, archive                                      | Thin dashed line to the store, with one word                                                            |
-| Events     | Queue, topic, stream, schedule                       | A node between the parties; the consumer's arrow shows whether it polls                                 |
-| Identity   | Sign-in and tokens                                   | Connectors in order, with the token named once                                                          |
-| Identity   | Role, key vault, secrets                             | Thin dashed line to one identity or key symbol                                                          |
-| Security   | Firewall rules across many pairs                     | A table of allowances, when topology would be unreadable                                                |
-| Operations | Monitoring, logging across many resources            | One shared band or group, not a line per resource                                                       |
-| Operations | Deployment pipeline                                  | A separate view, or a visually separate control band                                                    |
-| Resilience | Multi-zone                                           | The same symbol repeated across zones                                                                   |
-| Resilience | Failover, disaster recovery                          | A second boundary holding the standby, with one dashed relationship                                     |
+| Concern    | Relationship                                | Draw                                                                                                    |
+| ---------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Network    | Peering, VPN, private link between networks | Undirected line between the two network boundaries                                                      |
+| Network    | Gateway, NAT or firewall on a path          | A symbol on the path, splitting the connector into hops                                                 |
+| Network    | Private endpoint                            | A symbol on the boundary, with the caller connected to it                                               |
+| Traffic    | Load balancing                              | One line into the balancer, then one to the target group                                                |
+| Traffic    | CDN and its origin                          | Arrow from CDN to origin; viewers connect to the CDN                                                    |
+| Traffic    | DNS                                         | Thin dashed line from the resolving client to the DNS symbol, and from there to the endpoint it returns |
+| Data       | Read, write                                 | Arrow from the initiator; one verb only if it matters                                                   |
+| Data       | Cache in front of a database                | The application connects to each; no cache-to-database line unless stated                               |
+| Data       | Replication, standby                        | Dashed line between same symbols in their own domains                                                   |
+| Data       | Backup, archive                             | Thin dashed line to the store, with one word                                                            |
+| Events     | Queue, topic, stream, schedule              | A node between the parties; the consumer's arrow shows whether it polls                                 |
+| Identity   | Sign-in and tokens                          | Connectors in order, with the token named once                                                          |
+| Identity   | Role, key vault, secrets                    | Thin dashed line to one identity or key symbol                                                          |
+| Security   | Firewall rules across many pairs            | A table of allowances, when topology would be unreadable                                                |
+| Operations | Monitoring, logging across many resources   | One shared band or group, not a line per resource                                                       |
+| Operations | Deployment pipeline                         | A separate view, or a visually separate control band                                                    |
+| Resilience | Failover, disaster recovery                 | A second boundary holding the standby, with one dashed relationship                                     |
 
 ## Text limits
 

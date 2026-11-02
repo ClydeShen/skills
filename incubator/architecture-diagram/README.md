@@ -45,6 +45,8 @@ Use the architecture-diagram skill to create an editable .drawio architecture di
 
 Open the result in draw.io. Check components, boundaries, arrow directions and conditions against the input. Save the first diagram before requesting corrections. If the agent cannot inspect a rendered image, treat the visual result as unverified.
 
+The package runs local programs: its Node scripts start draw.io Desktop or a browser and may run `git clone` for the pinned draw.io viewer, without a shell. Review them before installing.
+
 ## Status and feedback
 
 CLI delivery was checked on Linux for Codex and Claude Code. Real client activation, Windows command execution and offline draw.io Desktop remain unverified. Earlier diagram trials found information drift; authored repairs still need fresh end-to-end trials. See the [evaluation record](./evaluation.md) for evidence and remaining gaps.

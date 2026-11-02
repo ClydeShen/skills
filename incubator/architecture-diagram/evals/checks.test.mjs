@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { checkLayout } from '../candidate/architecture-diagram/scripts/check-layout.mjs';
 import { findForbiddenText } from '../candidate/architecture-diagram/scripts/check-text.mjs';
 import { validateBoundaryRoutes, validateDiagram, validateRender } from '../tools/validate.mjs';
 import { createSuite, gradeClarification } from './suite.mjs';
@@ -404,4 +405,70 @@ test('visible text cannot imitate a connector or separate terms with a symbol', 
 test('the first supporting-services delivery is the known counterexample', () => {
   const found = findForbiddenText(read('./three-tier-supporting-2026-10-29/first.drawio'));
   assert.deepEqual(new Set(found.map(({ symbol }) => symbol)), new Set(['·', '→', 'Relationship only', 'unspecified']));
+});
+
+const page = (cells) => `<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>${cells}</root></mxGraphModel>`;
+const box = (id, x, y, w, h, parent = '1', style = '') =>
+  `<mxCell id="${id}" value="${id}" vertex="1" parent="${parent}" style="${style}"><mxGeometry x="${x}" y="${y}" width="${w}" height="${h}" as="geometry"/></mxCell>`;
+const line = (id, source, target, style = '', points = []) =>
+  `<mxCell id="${id}" edge="1" parent="1" source="${source}" target="${target}" style="${style}"><mxGeometry relative="1" as="geometry">${points.length ? `<Array as="points">${points.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('')}</Array>` : ''}</mxGeometry></mxCell>`;
+
+test('layout errors catch a broken parent edge, small text and double-headed arrows', () => {
+  const good = page(
+    box('zone', 0, 0, 400, 300) +
+      box('vm', 40, 40, 72, 72, 'zone') +
+      box('db', 500, 40, 72, 72) +
+      line('e', 'vm', 'db', 'strokeWidth=2.5;endArrow=block;'),
+  );
+  assert.deepEqual(checkLayout(good).errors, []);
+  assert.match(
+    checkLayout(page(box('zone', 0, 0, 100, 100) + box('vm', 60, 40, 72, 72, 'zone'))).errors[0],
+    /crosses the edge/,
+  );
+  assert.match(checkLayout(page(box('a', 0, 0, 72, 72, '1', 'fontSize=9;'))).errors[0], /smaller than 12/);
+  const both = page(
+    box('a', 0, 0, 72, 72) + box('b', 200, 0, 72, 72) + line('e', 'a', 'b', 'startArrow=block;endArrow=block;'),
+  );
+  assert.match(checkLayout(both).errors[0], /Double-headed/);
+  const port = page(
+    box('a', 0, 0, 72, 72) + box('b', 200, 0, 72, 72) + line('e', 'a', 'b', 'startArrow=oval;endArrow=block;'),
+  );
+  assert.deepEqual(checkLayout(port).errors, []);
+});
+
+test('layout warnings point at proportions, overlaps, detours and missing emphasis', () => {
+  const messages = (cells) => checkLayout(page(cells)).warnings.join(' ');
+  assert.match(messages(box('a', 0, 0, 1800, 500)), /Over 1600/);
+  assert.match(messages(box('a', 0, 0, 400, 900)), /taller than wide/);
+  assert.match(messages(box('a', 0, 0, 100, 100) + box('b', 50, 50, 100, 100)), /overlap/);
+  const route = box('a', 0, 0, 72, 72) + box('b', 600, 0, 72, 72) + box('c', 300, 200, 72, 72);
+  assert.match(
+    messages(
+      route +
+        line('e', 'a', 'b', '', [
+          [36, 236],
+          [636, 236],
+        ]),
+    ),
+    /passes over c/,
+  );
+  assert.match(
+    messages(
+      route +
+        line('e', 'a', 'b', '', [
+          [1, 1],
+          [2, 2],
+          [3, 3],
+          [4, 4],
+        ]),
+    ),
+    /4 bends/,
+  );
+  const same = ['e1', 'e2', 'e3', 'e4'].map((id) => line(id, 'a', 'b')).join('');
+  assert.match(messages(route + same), /same weight/);
+});
+
+test('object-wrapped cells and nested parents use absolute positions', () => {
+  const wrapped = `<object id="vm" label="VM"><mxCell vertex="1" parent="zone" style=""><mxGeometry x="10" y="10" width="72" height="72" as="geometry"/></mxCell></object>`;
+  assert.deepEqual(checkLayout(page(box('zone', 500, 500, 200, 200) + wrapped)).errors, []);
 });

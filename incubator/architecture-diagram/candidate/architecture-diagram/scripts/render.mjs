@@ -60,24 +60,24 @@ function exportWithDesktop() {
     'drawio',
     path.join(homedir(), 'Applications/draw.io.app/Contents/MacOS/draw.io'),
     '/Applications/draw.io.app/Contents/MacOS/draw.io',
+    'C:/Program Files/draw.io/draw.io.exe',
   ];
-  const shell = process.platform === 'win32';
+  const args = [
+    '--export',
+    '--format',
+    'png',
+    '--embed-diagram',
+    '--border',
+    '20',
+    '--scale',
+    '2',
+    '--output',
+    screenshot,
+    input,
+  ];
+  // Never run these through a shell: the paths come from the caller.
   for (const cli of candidates.filter(Boolean)) {
-    const args = [
-      '--export',
-      '--format',
-      'png',
-      '--embed-diagram',
-      '--border',
-      '20',
-      '--scale',
-      '2',
-      '--output',
-      screenshot,
-      input,
-    ];
-    if (spawnSync(cli, args, { stdio: 'ignore', timeout: 60_000, shell }).status === 0 && existsSync(screenshot))
-      return cli;
+    if (spawnSync(cli, args, { stdio: 'ignore', timeout: 60_000 }).status === 0 && existsSync(screenshot)) return cli;
   }
   return null;
 }

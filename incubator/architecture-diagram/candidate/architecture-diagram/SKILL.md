@@ -22,7 +22,7 @@ For a high-level view, draw the supported architecture and keep unresolved or te
 
 ## Draw the meaning
 
-Read [notation.md](references/notation.md) and [relationships.md](references/relationships.md) before composing the view. Read [drawio.md](references/drawio.md) when authoring or modifying the file.
+Before composing the view, read [composition.md](references/composition.md), [relationships.md](references/relationships.md), [notation.md](references/notation.md) and the sections of [cloud-conventions.md](references/cloud-conventions.md) for the clouds involved. Answer its engineering review. Read [drawio.md](references/drawio.md) when authoring or modifying the file.
 
 - Choose a readable arrangement around the main relationships before routing. Alignment, proximity and whitespace should help the reader recognize the structure; use a second axis when it expresses a real distinction, not to impose a template.
 - Show distinct instances in their actual domains and connect every participating group. Express fleets with repeated or stacked symbols and disclose representative counts; do not replace multiplicity or essential paths with prose.
@@ -34,10 +34,10 @@ Read [notation.md](references/notation.md) and [relationships.md](references/rel
 
 ## Inspect and deliver
 
-Run `node scripts/check-text.mjs <diagram.drawio>` and fix what it reports. Run `node scripts/render.mjs <diagram.drawio>` and read the PNG. Check the actual image, not XML alone, and repeat after every fix. If the script exits with code 3, nothing more can be rendered here: deliver the `.drawio`, pass on the link it prints, and state that the image was not inspected. Otherwise the work is unfinished until the PNG has been inspected.
+Run `node scripts/check-text.mjs <diagram.drawio>` and `node scripts/check-layout.mjs <diagram.drawio>`, and fix what they report. Run `node scripts/render.mjs <diagram.drawio>` and read the PNG. Squint at it: the main path and its start must stand out. Check the actual image, not XML alone, and repeat after every fix. If the script exits with code 3, nothing more can be rendered here: deliver the `.drawio`, pass on the link it prints, and state that the image was not inspected. Otherwise the work is unfinished until the PNG has been inspected.
 
 Trace every entry through its intended destination, including auxiliary calls and explicit failures. Verify instances, memberships, protocols and conditions against the source. Check that branch selection cannot be mistaken for broadcast.
 
 Inspect both the whole view and readable detail. Can the reader recognize the tiers, peers, shared services and exceptions without reading every caption? Remove frames and labels that repeat information already clear in the view. Keep readable typography, distinct paths and necessary qualifiers; fix collisions without changing meaning. Leave clear arrangements alone; change a layout choice when it resolves a visible reading problem, not merely to satisfy a design preference. Fewer words, Notes or bends alone do not establish quality.
 
-Return the editable file, the PNG and a brief companion account of scope, unresolved assumptions, source deviations and checks actually performed. Keep that account off the canvas. State when visual or Desktop verification was unavailable. Check source fidelity separately from technical plausibility; neither a clean render nor faithful transcription proves the real deployment is correct.
+Return the editable file, the PNG and a brief companion account of scope, unresolved assumptions, design risks, source deviations and checks actually performed. Keep that account off the canvas. State when visual or Desktop verification was unavailable. Check source fidelity separately from technical plausibility; neither a clean render nor faithful transcription proves the real deployment is correct.
