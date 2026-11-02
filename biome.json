@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true, "defaultBranch": "main" },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!**/*.svg",
+      "!**/*.drawio",
+      "!**/*.md",
+      "!package-lock.json",
+      "!skills-lock.json",
+      "!.agents/skills",
+      "!.claude/skills",
+      "!incubator/*/evals/*-20*-*-*",
+      "!incubator/architecture-diagram/candidate/architecture-diagram/assets/catalog.json",
+      "!incubator/architecture-diagram/prototype"
+    ]
+  },
+  "formatter": { "useEditorconfig": true, "lineWidth": 120 },
+  "javascript": { "formatter": { "quoteStyle": "single" } },
+  "linter": { "rules": { "preset": "recommended" } }
+}

@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+cd "$(git rev-parse --show-toplevel)"
+if [ ! -f node_modules/@commitlint/cli/cli.js ]; then
+  echo "Commit message check unavailable. Run npm ci." >&2
+  exit 1
+fi
+node node_modules/@commitlint/cli/cli.js --edit "$1"

@@ -10,12 +10,12 @@ Translation and source recheck: 2026-10-25. The installation, Node SDK, evaluati
 
 ## Overview
 
-| Question | Recommendation | Evidence strength | Confidence |
-| --- | --- | --- | --- |
-| Is it suitable for multiple platforms? | Use Node.js 24 and an npm project dependency | Strong: official installation guidance and upstream three-platform CI; project-specific platform runs remain unverified | Medium, J1 |
-| Is a hosted service required? | Use the local SDK, file results, and a replaceable provider | Strong: official SDK and custom-provider documentation | Medium, J2 |
-| How can paid calls be excluded by default? | Use an explicitly labeled local fixture/smoke provider; provide a separate entry point for real models | Strong: providers are customizable; the proposed separation is an inference | Medium, J3 |
-| How can fixture success be kept distinct from skill effectiveness? | Report pipeline checks, real outputs, and human evaluation separately | Methodological recommendation without project effectiveness evidence | Medium, J3 |
+| Question                                                           | Recommendation                                                                                         | Evidence strength                                                                                                       | Confidence |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Is it suitable for multiple platforms?                             | Use Node.js 24 and an npm project dependency                                                           | Strong: official installation guidance and upstream three-platform CI; project-specific platform runs remain unverified | Medium, J1 |
+| Is a hosted service required?                                      | Use the local SDK, file results, and a replaceable provider                                            | Strong: official SDK and custom-provider documentation                                                                  | Medium, J2 |
+| How can paid calls be excluded by default?                         | Use an explicitly labeled local fixture/smoke provider; provide a separate entry point for real models | Strong: providers are customizable; the proposed separation is an inference                                             | Medium, J3 |
+| How can fixture success be kept distinct from skill effectiveness? | Report pipeline checks, real outputs, and human evaluation separately                                  | Methodological recommendation without project effectiveness evidence                                                    | Medium, J3 |
 
 ## 1. Runtime and platform boundaries
 

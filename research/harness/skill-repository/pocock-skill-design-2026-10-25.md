@@ -10,11 +10,11 @@ Subsequent status (2026-10-25): in the next discussion, the owner endorsed this 
 
 ## Overview
 
-| Question | Recommendation | Evidence and limits | Judgment |
-| --- | --- | --- | --- |
-| Why can a short skill be useful? | Find the few instructions that change default behavior; retain required dependencies | Source behavior is inspectable; actual gains need trials | J1, medium |
-| Where does generality come from? | Extract the task structure and get project facts from the environment at runtime | The author explicitly calls for deliberate generalization beyond a single run | J2, medium |
-| How can skills stay compact? | Add rules for observed failures; delete lines through behavior comparisons | Maintenance policy and writing guidance agree | J3, medium |
+| Question                                 | Recommendation                                                                                           | Evidence and limits                                                                     | Judgment   |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ---------- |
+| Why can a short skill be useful?         | Find the few instructions that change default behavior; retain required dependencies                     | Source behavior is inspectable; actual gains need trials                                | J1, medium |
+| Where does generality come from?         | Extract the task structure and get project facts from the environment at runtime                         | The author explicitly calls for deliberate generalization beyond a single run           | J2, medium |
+| How can skills stay compact?             | Add rules for observed failures; delete lines through behavior comparisons                               | Maintenance policy and writing guidance agree                                           | J3, medium |
 | What should Meta Thinking improve first? | Verify intervention quality and burden, then ablate instructions; do not prioritize word-count reduction | A short body and layered references already exist, but effectiveness remains unverified | J4, medium |
 
 ## 1. Research scope and version
@@ -27,15 +27,15 @@ Subsequent status (2026-10-25): in the next discussion, the owner endorsed this 
 
 [measured] Git blob `size` was counted for every `SKILL.md` under `skills/engineering/` and `skills/productivity/`: 27 files, minimum 157 bytes, median 4123 bytes, maximum 12594 bytes; six files were below 1024 bytes. Counts include frontmatter and exclude supporting resources, `in-progress`, and frozen `misc`. They are neither token counts nor total runtime loading costs.[S2]
 
-| Sample | Main file size (bytes) | Additional structure or dependencies |
-| --- | ---: | --- |
-| `grill-me` | 157 | Entry point invokes `grilling` |
-| `grilling` | 2049 | Conversation rounds; requires subagents for fact-finding |
-| `tdd` | 3629 | `tests.md`, `mocking.md`, and conditional `codebase-design` invocation |
-| `to-spec` | 3043 | Configured issue tracker and domain context |
-| `to-tickets` | 5812 | Tracker configuration, dependencies, and output templates |
-| `improve-codebase-architecture` | 6000 | HTML reference, other skills, subagent, browser, and CDN |
-| `writing-for-agents` | 10886 | Reads `SKILL-MECHANICS.md` when writing a skill |
+| Sample                          | Main file size (bytes) | Additional structure or dependencies                                   |
+| ------------------------------- | ---------------------: | ---------------------------------------------------------------------- |
+| `grill-me`                      |                    157 | Entry point invokes `grilling`                                         |
+| `grilling`                      |                   2049 | Conversation rounds; requires subagents for fact-finding               |
+| `tdd`                           |                   3629 | `tests.md`, `mocking.md`, and conditional `codebase-design` invocation |
+| `to-spec`                       |                   3043 | Configured issue tracker and domain context                            |
+| `to-tickets`                    |                   5812 | Tracker configuration, dependencies, and output templates              |
+| `improve-codebase-architecture` |                   6000 | HTML reference, other skills, subagent, browser, and CDN               |
+| `writing-for-agents`            |                  10886 | Reads `SKILL-MECHANICS.md` when writing a skill                        |
 
 ### Recommendation for the project
 

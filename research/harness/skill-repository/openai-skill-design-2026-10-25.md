@@ -10,12 +10,12 @@ Translation and source recheck: 2026-10-25. The pinned Codex sample, both commit
 
 ## Overview
 
-| Question | Useful direction | Evidence and limits | Judgment |
-| --- | --- | --- | --- |
-| Should instructions teach what the model already knows? | Include information that changes decisions or artifacts | Explicit in the current skill-creator; redundancy must be observed for the target model | J1, medium |
-| Strict steps or goals? | Outcomes and criteria for open tasks; deterministic steps for fragile operations | The guidance distinguishes by risk rather than choosing one approach universally | J2, medium |
-| How is human control preserved? | Preserve expressed intent and scope; ask when an important decision is genuinely missing | Automatic discovery does not grant execution permission | J3, medium |
-| How can usefulness be assessed? | Inspect execution, artifacts, and efficiency; retain negative trigger cases | Official behavioral evaluation guidance exists; it was not executed here | J4, medium |
+| Question                                                | Useful direction                                                                         | Evidence and limits                                                                     | Judgment   |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ---------- |
+| Should instructions teach what the model already knows? | Include information that changes decisions or artifacts                                  | Explicit in the current skill-creator; redundancy must be observed for the target model | J1, medium |
+| Strict steps or goals?                                  | Outcomes and criteria for open tasks; deterministic steps for fragile operations         | The guidance distinguishes by risk rather than choosing one approach universally        | J2, medium |
+| How is human control preserved?                         | Preserve expressed intent and scope; ask when an important decision is genuinely missing | Automatic discovery does not grant execution permission                                 | J3, medium |
+| How can usefulness be assessed?                         | Inspect execution, artifacts, and efficiency; retain negative trigger cases              | Official behavioral evaluation guidance exists; it was not executed here                | J4, medium |
 
 ## 1. Reading scope and version differences
 
@@ -99,13 +99,13 @@ This follows the fixture, model, and host-integration boundaries in the [local e
 
 ## 5. Synthesis with Matt's philosophy
 
-| Topic | Shared principle | Difference to preserve |
-| --- | --- | --- |
-| Concision | Remove information that does not change behavior; protect task context | Fixed word counts do not define quality; necessary boundaries remain |
-| Abstraction | Retain reusable relationships; remove incidental details from one example | Capability and defaults depend on the model rather than remaining constant |
-| Control | People decide goals and important trade-offs; agents provide evidence and action | Manual orchestration is not the only design; automatic discovery is not authorization |
-| Constraints | Clear outcomes and boundaries make behavior more predictable | Open exploration should not inherit fixed sequences from fragile operations |
-| Verification | Improve through real use and inspect instructions' behavioral contribution | OpenAI supplies trace/artifact evaluation methods; an author's manual experience is not automatic proof of quality |
+| Topic        | Shared principle                                                                 | Difference to preserve                                                                                             |
+| ------------ | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Concision    | Remove information that does not change behavior; protect task context           | Fixed word counts do not define quality; necessary boundaries remain                                               |
+| Abstraction  | Retain reusable relationships; remove incidental details from one example        | Capability and defaults depend on the model rather than remaining constant                                         |
+| Control      | People decide goals and important trade-offs; agents provide evidence and action | Manual orchestration is not the only design; automatic discovery is not authorization                              |
+| Constraints  | Clear outcomes and boundaries make behavior more predictable                     | Open exploration should not inherit fixed sequences from fragile operations                                        |
+| Verification | Improve through real use and inspect instructions' behavioral contribution       | OpenAI supplies trace/artifact evaluation methods; an author's manual experience is not automatic proof of quality |
 
 [inference] The project can synthesize these ideas as follows: provide the minimum guidance sufficient to improve decisions, preserve the freedom needed to complete the task, test results against real evidence, and match interaction cost to task needs. This is a cross-source project recommendation, not an OpenAI quotation or a completed effectiveness evaluation.
 

@@ -3,6 +3,7 @@
 Date: 2026-10-28. Subject: Which features of the owner's house style (see [requirements and observed style](requirements-and-observed-style-2026-10-28.md), sections 2.3 and 2.5) are official vendor conventions, which are C4 conventions, and which are team habit. Context: Feeds the open owner decisions on line semantics (decision 5), icon-set version (decision 4), C4 levels (decision 9) and the zone styles. It also resolves the first item of "Not verified" in that note. Primary sources only: vendor pages and downloadable guideline files, c4model.com and Structurizr docs. All sources were accessed on 2026-10-28.
 
 Confidence markers:
+
 - **[official]**: the relevant part of an official page, guideline file or specification was read.
 - **[official · summary only]**: only an overview was read, or the page does not cover the detail.
 - **[measured]**: read directly from an official downloadable file (SVG, PPTX, library) on the stated date, by a command. The file states the value; no page text explains it.
@@ -12,16 +13,16 @@ Confidence markers:
 
 ## Overview
 
-The house style is mostly the **AWS Architecture Icons group system**, as rendered by the **draw.io AWS 4 library**. The cloud zone, the account zone, the grey logical group, the coloured service tiles and the orthogonal arrows all have an AWS source. The pink account *title* comes from draw.io's library, not from AWS's own deck. No vendor and not C4 prescribe dashed lines for authentication or queries; that use is team habit. Azure and Google Cloud publish icon rules but no grouping or boundary conventions. C4 prescribes no line style or colour; it requires a key, unidirectional labelled lines, numbered steps in dynamic diagrams, and allows nested deployment nodes and vendor icons.
+The house style is mostly the **AWS Architecture Icons group system**, as rendered by the **draw.io AWS 4 library**. The cloud zone, the account zone, the grey logical group, the coloured service tiles and the orthogonal arrows all have an AWS source. The pink account _title_ comes from draw.io's library, not from AWS's own deck. No vendor and not C4 prescribe dashed lines for authentication or queries; that use is team habit. Azure and Google Cloud publish icon rules but no grouping or boundary conventions. C4 prescribes no line style or colour; it requires a key, unidirectional labelled lines, numbered steps in dynamic diagrams, and allows nested deployment nodes and vendor icons.
 
-| Question | Finding | Strength of evidence | Confidence |
-|---|---|---|---|
-| 1. AWS conventions | Full group, colour, arrow, label and callout rules exist in the official PPTX deck, release 24, 2026-07-31 | strong | [official], [measured] |
-| 2. Azure conventions | Icon do's and don'ts and terms only; diagram practices in Well-Architected; no boundary styles | strong | [official] |
-| 3. Google Cloud conventions | Icon library and overview PDF only; no grouping guidance found; diagramming tool URL now redirects away | medium | [official], [measured] |
-| 4. Kubernetes, Red Hat, Docker, Argo CD | K8s icon set (Apache-2.0 or CC-BY-4.0); Red Hat technology icons and a draw.io tooling project; Docker logos need authorization; Argo has only a project logo in CNCF artwork | medium | [official] |
-| 5. C4 rules | Notation independent; key required; unidirectional lines; numbered dynamic steps; nested deployment nodes; vendor icons allowed with a key | strong | [official] |
-| 6. Verdicts | See section 6 | medium | mixed |
+| Question                                | Finding                                                                                                                                                                       | Strength of evidence | Confidence             |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ---------------------- |
+| 1. AWS conventions                      | Full group, colour, arrow, label and callout rules exist in the official PPTX deck, release 24, 2026-07-31                                                                    | strong               | [official], [measured] |
+| 2. Azure conventions                    | Icon do's and don'ts and terms only; diagram practices in Well-Architected; no boundary styles                                                                                | strong               | [official]             |
+| 3. Google Cloud conventions             | Icon library and overview PDF only; no grouping guidance found; diagramming tool URL now redirects away                                                                       | medium               | [official], [measured] |
+| 4. Kubernetes, Red Hat, Docker, Argo CD | K8s icon set (Apache-2.0 or CC-BY-4.0); Red Hat technology icons and a draw.io tooling project; Docker logos need authorization; Argo has only a project logo in CNCF artwork | medium               | [official]             |
+| 5. C4 rules                             | Notation independent; key required; unidirectional lines; numbered dynamic steps; nested deployment nodes; vendor icons allowed with a key                                    | strong               | [official]             |
+| 6. Verdicts                             | See section 6                                                                                                                                                                 | medium               | mixed                  |
 
 ## 1. AWS Architecture Icons
 
@@ -37,26 +38,27 @@ The house style is mostly the **AWS Architecture Icons group system**, as render
 
 **Groups (deck slide "Groups 1/5").** Read from the shapes in the light-background deck. The border width of every group is 15875 EMU (1.25 pt). Labels are 12 pt in the theme text colour (black in the light deck); no group label is bold or coloured. [measured]
 
-| Group | Border colour | Border style | Corner badge |
-|---|---|---|---|
-| AWS Cloud (AWS logo, or cloud glyph where the AWS logo cannot be used) | theme text colour (black in light deck) | solid | yes, badge fill `#242F3E` (`#232F3E` in the dark variant) |
-| Region | `#00A4A6` | system dash | yes, `#00A4A6` |
-| Availability Zone | `#00A4A6` | dashed | no badge |
-| Security group | `#DD344C` | solid | no badge |
-| Auto Scaling group | `#ED7100` | dashed | yes |
-| Virtual private cloud (VPC) | `#8C4FFF` | solid | yes |
-| Private subnet | `#00A4A6` | solid | yes |
-| Public subnet | `#7AA116` | solid | yes |
-| Server contents; Corporate data center | `#7D8998` | solid | yes |
-| EC2 instance contents; Spot Fleet; Elastic Beanstalk container | `#ED7100` | solid | yes |
-| AWS account | `#E7157B` | solid | yes, badge fill `#E7157B` |
-| AWS IoT Greengrass; Greengrass Deployment | `#7AA116` | solid | yes |
-| AWS Step Functions workflow | `#E7157B` | solid | yes |
-| Generic group | `#7D8998` | one dashed and one solid variant | no badge |
+| Group                                                                  | Border colour                           | Border style                     | Corner badge                                              |
+| ---------------------------------------------------------------------- | --------------------------------------- | -------------------------------- | --------------------------------------------------------- |
+| AWS Cloud (AWS logo, or cloud glyph where the AWS logo cannot be used) | theme text colour (black in light deck) | solid                            | yes, badge fill `#242F3E` (`#232F3E` in the dark variant) |
+| Region                                                                 | `#00A4A6`                               | system dash                      | yes, `#00A4A6`                                            |
+| Availability Zone                                                      | `#00A4A6`                               | dashed                           | no badge                                                  |
+| Security group                                                         | `#DD344C`                               | solid                            | no badge                                                  |
+| Auto Scaling group                                                     | `#ED7100`                               | dashed                           | yes                                                       |
+| Virtual private cloud (VPC)                                            | `#8C4FFF`                               | solid                            | yes                                                       |
+| Private subnet                                                         | `#00A4A6`                               | solid                            | yes                                                       |
+| Public subnet                                                          | `#7AA116`                               | solid                            | yes                                                       |
+| Server contents; Corporate data center                                 | `#7D8998`                               | solid                            | yes                                                       |
+| EC2 instance contents; Spot Fleet; Elastic Beanstalk container         | `#ED7100`                               | solid                            | yes                                                       |
+| AWS account                                                            | `#E7157B`                               | solid                            | yes, badge fill `#E7157B`                                 |
+| AWS IoT Greengrass; Greengrass Deployment                              | `#7AA116`                               | solid                            | yes                                                       |
+| AWS Step Functions workflow                                            | `#E7157B`                               | solid                            | yes                                                       |
+| Generic group                                                          | `#7D8998`                               | one dashed and one solid variant | no badge                                                  |
 
 All borders above come from the deck shapes; badge fills come from the group SVGs in the package. [measured] The example slide (Chef Automate) draws the public subnet with a dashed border, unlike the solid preset; the deck is internally inconsistent here. [measured]
 
 Group rules, quoted from the deck. [official]
+
 - "Each group consists of an icon and a label. Colors and lines help to differentiate groups."
 - "Some groups cross multiple groups, such as Auto Scaling, while others are meant to nest inside another, such as a VPC and subnets."
 - Nested groups: "inner groups should have at least .05" buffer on all sides."
@@ -66,16 +68,16 @@ Group rules, quoted from the deck. [official]
 
 **Category colours.** Each category icon has one fill. Every service SVG in a category folder uses that category's fill. [measured]
 
-| Fill | Categories |
-|---|---|
-| `#ED7100` | Compute, Containers, Blockchain, Media Services, Quantum Technologies |
-| `#8C4FFF` | Analytics, Networking & Content Delivery, Games, Serverless |
-| `#7AA116` | Storage, Internet of Things, Cloud Financial Management |
-| `#C925D1` | Databases, Developer Tools, Customer Enablement, Satellite |
-| `#E7157B` | Application Integration, Management Tools, Multicloud & Hybrid |
+| Fill      | Categories                                                                              |
+| --------- | --------------------------------------------------------------------------------------- |
+| `#ED7100` | Compute, Containers, Blockchain, Media Services, Quantum Technologies                   |
+| `#8C4FFF` | Analytics, Networking & Content Delivery, Games, Serverless                             |
+| `#7AA116` | Storage, Internet of Things, Cloud Financial Management                                 |
+| `#C925D1` | Databases, Developer Tools, Customer Enablement, Satellite                              |
+| `#E7157B` | Application Integration, Management Tools, Multicloud & Hybrid                          |
 | `#DD344C` | Security & Identity, Business Applications, Customer Experience, Front-End Web & Mobile |
-| `#01A88D` | Artificial Intelligence, End User Computing, Migration & Modernization |
-| `#232F3E` | General icons |
+| `#01A88D` | Artificial Intelligence, End User Computing, Migration & Modernization                  |
+| `#232F3E` | General icons                                                                           |
 
 The deck does not state these values as a colour table. They are read from the files. [measured]
 
@@ -91,13 +93,13 @@ The deck does not state these values as a colour table. They are read from the f
 
 **draw.io rendering.** draw.io's AWS 4 sidebar (`Sidebar-AWS4.js`, last commit 2026-09-08) styles the groups with slightly different values from the deck. [measured]
 
-| Group | draw.io stroke | draw.io label colour | Dashed |
-|---|---|---|---|
-| AWS Cloud (alt) | `#232F3E` | `#232F3E` | no |
-| AWS account | `#CD2264` | `#CD2264` | no |
-| Region | `#00A4A6` | `#147EBA` | yes |
-| VPC | `#8C4FFF` | `#AAB7B8` | no |
-| Security group | `#00A4A6`, fill `#E6F6F7` | `#147EBA` | no |
+| Group           | draw.io stroke            | draw.io label colour | Dashed |
+| --------------- | ------------------------- | -------------------- | ------ |
+| AWS Cloud (alt) | `#232F3E`                 | `#232F3E`            | no     |
+| AWS account     | `#CD2264`                 | `#CD2264`            | no     |
+| Region          | `#00A4A6`                 | `#147EBA`            | yes    |
+| VPC             | `#8C4FFF`                 | `#AAB7B8`            | no     |
+| Security group  | `#00A4A6`, fill `#E6F6F7` | `#147EBA`            | no     |
 
 ### Recommendation for the project
 
@@ -127,7 +129,7 @@ The deck does not state these values as a colour table. They are read from the f
 ### Recommendation for the project
 
 - The Azure "second cloud" zone (light-blue border, vendor logo) has no Azure source. Treat its look as house style and explain it in the legend. [inference]
-- The dashed-equals-asynchronous example is a Microsoft *example* of a legend-backed semantic, not a rule. [official]
+- The dashed-equals-asynchronous example is a Microsoft _example_ of a legend-backed semantic, not a rule. [official]
 
 ## 3. Google Cloud
 
@@ -153,6 +155,7 @@ The deck does not state these values as a colour table. They are read from the f
 **Linux Foundation trademark usage.** Use official logo versions; do not change colours, design elements or scale; fair use of word marks must not imply endorsement. The page does not address diagrams. [official]
 
 **Red Hat.**
+
 - Standard icons are for "general technology concepts"; "Icons are paired with brief text in technical diagrams." Licence CC BY 4.0; attribution optional for individual uses such as a diagram. Don't combine, rotate or stretch icons; "Don't use icons from other companies or free icons from the internet"; "Never use AI to generate new icons." [official]
 - Technology icons identify products (such as OpenShift) and are used in "marketplaces and catalogs, diagrams, and favicons". "Use the icons as provided without modifications." "Use the full technology icon, including the rounded rectangle." "Do not co-brand a technology icon with a partner or customer logo." Download is through Red Hat's brand portal. No licence is stated. [official]
 - The Portfolio Architecture team publishes draw.io tooling and libraries for "logical, schematic, detail diagrams" on GitLab (`redhatdemocentral/portfolio-architecture-tooling`). Its schematic library defines six coloured "Network" lines (solid, 2 px) and a grey solid "Data" line with a filled arrowhead; no dashed line style. Last project activity: 2022-09-17. No licence is stated. [measured]
@@ -188,23 +191,23 @@ The deck does not state these values as a colour table. They are read from the f
 
 ## 6. Verdicts on observed house-style features
 
-| Observed feature | Verdict | Basis |
-|---|---|---|
-| Cloud zone: thin dark border, dark square badge with cloud glyph (once a vendor wordmark), title beside it | **Official vendor convention (AWS)** | AWS Cloud group: badge `#242F3E`, AWS-logo and cloud-glyph variants, cloud glyph where the AWS logo cannot be used. The deck border is the theme text colour (black); draw.io uses `#232F3E`. [official], [measured] |
-| Account zone: pink/magenta border and pink badge | **Official vendor convention (AWS)** | AWS account group: border and badge `#E7157B`. [measured] |
-| Account zone: pink title | **Tool convention (draw.io), not AWS** | AWS deck label is black 12 pt; draw.io AWS 4 sets label colour `#CD2264`. [measured] |
-| Logical group: thin grey border | **Official vendor convention (AWS generic group)** | Generic group border `#7D8998`, solid or dashed, no badge. [measured] |
-| Logical group: bold title | **Not found (team habit)** | No AWS group label is bold. [measured] |
-| Service icons as coloured tiles, colour follows category | **Official vendor convention (AWS only)** | Every AWS service SVG uses its category fill. [measured] Azure (mostly blue) and Google (blue and grey for all categories) do not encode category by colour. [measured] |
-| Second-cloud zone: light-blue border, vendor logo | **Not found (team habit)** | Azure and Google publish no boundary styles. [official · summary only] |
-| Dashed line for authentication | **Not found (team habit)** | No dashed connector in AWS presets; Azure gives dashed = asynchronous only as a legend example; C4 prescribes nothing. [official], [measured] |
-| Dashed line for a query call | **Not found (team habit)** | Same sources as above. |
-| Orthogonal lines with arrowheads | **Official vendor convention (AWS)** | "Use straight lines and right angles ... wherever possible." Preset arrows are solid "Open Arrow" size 4 (open, not filled). [official] |
-| Double-headed arrows for two-way flows | **Allowed by AWS presets; discouraged by Azure and C4** | AWS preset sheet has double-headed arrows. [measured] Azure: "Avoid bidirectional arrows." C4: unidirectional lines. [official] |
-| Caption centred below the icon | **Consistent with AWS** | AWS example places 12 pt labels centred below icons. [measured] Azure asks for the name near the icon. [official] |
-| Step numbers `1a.`, `1b.` in labels | **C4 convention for numbering; letter format is team habit** | C4 dynamic diagrams number interactions. AWS callouts are black circles with numbers only and forbid letters. [official] |
-| Numbered yellow area circles (S9) | **Not found (team habit)** | AWS callouts are black with white type and mark process steps. [official] |
-| Legend, element type and technology (S10) | **C4 convention** | Key, type and technology required. [official] |
+| Observed feature                                                                                           | Verdict                                                      | Basis                                                                                                                                                                                                                |
+| ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cloud zone: thin dark border, dark square badge with cloud glyph (once a vendor wordmark), title beside it | **Official vendor convention (AWS)**                         | AWS Cloud group: badge `#242F3E`, AWS-logo and cloud-glyph variants, cloud glyph where the AWS logo cannot be used. The deck border is the theme text colour (black); draw.io uses `#232F3E`. [official], [measured] |
+| Account zone: pink/magenta border and pink badge                                                           | **Official vendor convention (AWS)**                         | AWS account group: border and badge `#E7157B`. [measured]                                                                                                                                                            |
+| Account zone: pink title                                                                                   | **Tool convention (draw.io), not AWS**                       | AWS deck label is black 12 pt; draw.io AWS 4 sets label colour `#CD2264`. [measured]                                                                                                                                 |
+| Logical group: thin grey border                                                                            | **Official vendor convention (AWS generic group)**           | Generic group border `#7D8998`, solid or dashed, no badge. [measured]                                                                                                                                                |
+| Logical group: bold title                                                                                  | **Not found (team habit)**                                   | No AWS group label is bold. [measured]                                                                                                                                                                               |
+| Service icons as coloured tiles, colour follows category                                                   | **Official vendor convention (AWS only)**                    | Every AWS service SVG uses its category fill. [measured] Azure (mostly blue) and Google (blue and grey for all categories) do not encode category by colour. [measured]                                              |
+| Second-cloud zone: light-blue border, vendor logo                                                          | **Not found (team habit)**                                   | Azure and Google publish no boundary styles. [official · summary only]                                                                                                                                               |
+| Dashed line for authentication                                                                             | **Not found (team habit)**                                   | No dashed connector in AWS presets; Azure gives dashed = asynchronous only as a legend example; C4 prescribes nothing. [official], [measured]                                                                        |
+| Dashed line for a query call                                                                               | **Not found (team habit)**                                   | Same sources as above.                                                                                                                                                                                               |
+| Orthogonal lines with arrowheads                                                                           | **Official vendor convention (AWS)**                         | "Use straight lines and right angles ... wherever possible." Preset arrows are solid "Open Arrow" size 4 (open, not filled). [official]                                                                              |
+| Double-headed arrows for two-way flows                                                                     | **Allowed by AWS presets; discouraged by Azure and C4**      | AWS preset sheet has double-headed arrows. [measured] Azure: "Avoid bidirectional arrows." C4: unidirectional lines. [official]                                                                                      |
+| Caption centred below the icon                                                                             | **Consistent with AWS**                                      | AWS example places 12 pt labels centred below icons. [measured] Azure asks for the name near the icon. [official]                                                                                                    |
+| Step numbers `1a.`, `1b.` in labels                                                                        | **C4 convention for numbering; letter format is team habit** | C4 dynamic diagrams number interactions. AWS callouts are black circles with numbers only and forbid letters. [official]                                                                                             |
+| Numbered yellow area circles (S9)                                                                          | **Not found (team habit)**                                   | AWS callouts are black with white type and mark process steps. [official]                                                                                                                                            |
+| Legend, element type and technology (S10)                                                                  | **C4 convention**                                            | Key, type and technology required. [official]                                                                                                                                                                        |
 
 ## Not verified
 

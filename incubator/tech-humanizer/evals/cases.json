@@ -4,18 +4,8 @@
     "vars": {
       "request": "Rewrite this technical update: Certainly! It is important to note that our robust Gateway API implementation seamlessly leverages HTTPRoute to route requests to the payments service. This marks a pivotal milestone in our innovative platform.",
       "checks": {
-        "contains": [
-          "Gateway API",
-          "HTTPRoute",
-          "payments service"
-        ],
-        "forbidden": [
-          "certainly",
-          "important to note",
-          "seamless",
-          "pivotal",
-          "innovative"
-        ],
+        "contains": ["Gateway API", "HTTPRoute", "payments service"],
+        "forbidden": ["certainly", "important to note", "seamless", "pivotal", "innovative"],
         "unchanged_profiles": true
       },
       "rubric": "State that Gateway API uses HTTPRoute to route requests to the payments service. Remove ceremonial framing and promotional evaluation. Add no new capability, metric, or deployment claim.",
@@ -30,17 +20,8 @@
     "vars": {
       "request": "Humanize this technical note: Our innovative platform leverages OpenTelemetry and OTLP for telemetry, while ML-KEM protects key establishment. The deployment uses a StatefulSet and a ConfigMap.",
       "checks": {
-        "contains": [
-          "OpenTelemetry",
-          "OTLP",
-          "ML-KEM",
-          "StatefulSet",
-          "ConfigMap"
-        ],
-        "forbidden": [
-          "innovative",
-          "leverages"
-        ],
+        "contains": ["OpenTelemetry", "OTLP", "ML-KEM", "StatefulSet", "ConfigMap"],
+        "forbidden": ["innovative", "leverages"],
         "unchanged_profiles": true
       },
       "rubric": "Keep each named term exactly, including case. Preserve which component performs each role. Use plain language.",
@@ -55,12 +36,7 @@
     "vars": {
       "request": "Humanize this compatibility note: It is important to note that QuasarLedger-v7 uses SSL for the legacy endpoint. New endpoints use TLS 1.3. The legacy endpoint will remain until 2027-03-01.",
       "checks": {
-        "contains": [
-          "QuasarLedger-v7",
-          "SSL",
-          "TLS 1.3",
-          "2027-03-01"
-        ],
+        "contains": ["QuasarLedger-v7", "SSL", "TLS 1.3", "2027-03-01"],
         "unchanged_profiles": true
       },
       "rubric": "Preserve the unlisted product identifier, legacy SSL distinction, and retirement commitment. Do not silently modernize SSL to TLS.",
@@ -90,18 +66,8 @@
     "vars": {
       "request": "Humanize this instruction: It is important to note that you can get the project number, open the console, and run the query. The trigger fires after the worker restarts.",
       "checks": {
-        "contains": [
-          "get",
-          "open",
-          "run",
-          "trigger fires"
-        ],
-        "forbidden": [
-          "retrieve",
-          "obtain",
-          "navigate to",
-          "important to note"
-        ],
+        "contains": ["get", "open", "run", "trigger fires"],
+        "forbidden": ["retrieve", "obtain", "navigate to", "important to note"],
         "unchanged_profiles": true
       },
       "rubric": "Remove the preamble while retaining ordinary verbs and the event-driven expression trigger fires.",
@@ -116,15 +82,8 @@
     "vars": {
       "request": "Humanize this business recommendation: This strategic renewal represents a pivotal opportunity to unlock value. We recommend renewing for two years because the supplier will hold the unit price at the current rate. The migration fee is waived.",
       "checks": {
-        "contains": [
-          "two years",
-          "unit price",
-          "migration fee"
-        ],
-        "forbidden": [
-          "pivotal",
-          "unlock value"
-        ],
+        "contains": ["two years", "unit price", "migration fee"],
+        "forbidden": ["pivotal", "unlock value"],
         "unchanged_profiles": true
       },
       "rubric": "Lead with the renewal recommendation and its two supplied commercial reasons. Use clear business prose; retain the two-year duration and fee waiver.",
@@ -139,14 +98,8 @@
     "vars": {
       "request": "Rewrite this email to a new client: Dear Priya, It is important to note that the migration finished at 14:30 UTC. The post-migration checks found no data loss. Kindly review the dashboard by Friday. Best regards, Alex",
       "checks": {
-        "contains": [
-          "Priya",
-          "14:30 UTC",
-          "Friday"
-        ],
-        "forbidden": [
-          "important to note"
-        ],
+        "contains": ["Priya", "14:30 UTC", "Friday"],
+        "forbidden": ["important to note"],
         "unchanged_profiles": true
       },
       "rubric": "Fit a new client email: concise greeting, courteous direct request, brief closing. Preserve the completed migration, check result, deadline, and signatory.",
@@ -199,10 +152,7 @@
     "vars": {
       "request": "Rewrite this message in an active teammate thread: Hello everyone, I am pleased to inform you that deployment is complete. We have not seen errors in the checks so far. Please check your dashboards.",
       "checks": {
-        "forbidden": [
-          "pleased to inform",
-          "hello everyone"
-        ],
+        "forbidden": ["pleased to inform", "hello everyone"],
         "unchanged_profiles": true
       },
       "rubric": "Use a brief conversational team message, omit the greeting, and follow message preferences. Keep the qualified check result rather than claiming there are no errors.",
@@ -255,14 +205,8 @@
     "vars": {
       "request": "Rewrite this executive business brief: We recommend postponing the launch because the access review is incomplete. Approval is required before launch.",
       "checks": {
-        "contains": [
-          "access review",
-          "before launch"
-        ],
-        "forbidden": [
-          "hey",
-          "ping me"
-        ],
+        "contains": ["access review", "before launch"],
+        "forbidden": ["hey", "ping me"],
         "unchanged_profiles": true
       },
       "rubric": "Use a formal concise recommendation and preserve the approval condition. Message-only habits such as omitting greetings or using contractions do not establish an executive-document voice.",
@@ -315,24 +259,15 @@
     "vars": {
       "request": "Humanize this report paragraph: It is important to note that the pilot reduced export time from 90 seconds to 20 seconds for 12 test accounts, according to the pilot report (https://example.org/pilot). This demonstrates that all customers will benefit.",
       "checks": {
-        "contains": [
-          "90 seconds",
-          "20 seconds",
-          "12 test accounts",
-          "https://example.org/pilot"
-        ],
-        "forbidden": [
-          "all customers will benefit"
-        ],
+        "contains": ["90 seconds", "20 seconds", "12 test accounts", "https://example.org/pilot"],
+        "forbidden": ["all customers will benefit"],
         "unchanged_profiles": true
       },
       "rubric": "Scope the measured result to the pilot's 12 accounts and retain the citation. Remove the unsupported universal extrapolation; invent no further evidence.",
       "user_profile": null,
       "project_profile": null,
       "history": [],
-      "references": [
-        "references/source-and-markup-integrity.md"
-      ]
+      "references": ["references/source-and-markup-integrity.md"]
     }
   },
   {
@@ -345,9 +280,7 @@
           "Do not disable certificate verification.",
           "Retry only after the certificate chain has been repaired."
         ],
-        "forbidden": [
-          "worth noting"
-        ],
+        "forbidden": ["worth noting"],
         "unchanged_profiles": true
       },
       "rubric": "Keep the real uncertainty, failure condition, and exact safety and prerequisite sentences. Use direct language without softening the instructions.",
@@ -513,10 +446,7 @@
             "language": "en",
             "context": "message",
             "observation_count": 2,
-            "evidence": [
-              "Independent message sample on 2026-10-12",
-              "Independent message sample on 2026-10-15"
-            ],
+            "evidence": ["Independent message sample on 2026-10-12", "Independent message sample on 2026-10-15"],
             "updated_at": "2026-10-15"
           }
         ]
@@ -545,21 +475,15 @@
     "vars": {
       "request": "Rewrite this maintenance instruction using ASD-STE100 principles: Prior to commencing inspection, ensure that the unit is disconnected from the power supply. You have only the bundled principles, not the complete standard or dictionary.",
       "checks": {
-        "contains": [
-          "ASD-STE100-inspired"
-        ],
-        "forbidden": [
-          "ASD-STE100 compliant"
-        ],
+        "contains": ["ASD-STE100-inspired"],
+        "forbidden": ["ASD-STE100 compliant"],
         "unchanged_profiles": true
       },
       "rubric": "Produce a short direct maintenance instruction retaining disconnection before inspection. Identify the result as ASD-STE100-inspired because a full conformance check is unavailable.",
       "user_profile": null,
       "project_profile": null,
       "history": [],
-      "references": [
-        "references/asd-ste100.md"
-      ]
+      "references": ["references/asd-ste100.md"]
     }
   },
   {
@@ -567,15 +491,8 @@
     "vars": {
       "request": "Humanize this ordinary client email: Hi Priya, please review the access report by Friday. Thanks, Alex.",
       "checks": {
-        "contains": [
-          "Priya",
-          "Friday",
-          "Alex"
-        ],
-        "forbidden": [
-          "ASD-STE100",
-          "controlled dictionary"
-        ],
+        "contains": ["Priya", "Friday", "Alex"],
+        "forbidden": ["ASD-STE100", "controlled dictionary"],
         "unchanged_profiles": true
       },
       "rubric": "Keep an ordinary courteous email. Do not activate controlled-English mode or add conformance commentary.",

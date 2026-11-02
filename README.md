@@ -27,7 +27,6 @@ Start with [AGENTS.md](./AGENTS.md); Codex and Claude share these instructions. 
 
 ```sh
 npm ci
-npm run git:setup
 npm run check
 ```
 

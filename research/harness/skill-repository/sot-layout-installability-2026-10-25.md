@@ -8,13 +8,13 @@ Evidence markers: `[official]` means the maintainers' documentation or source wa
 
 ## Overview
 
-| Question | Recommendation at the time | Limit |
-| --- | --- | --- |
-| What determines an installable directory? | Check both discovery by a fixed CLI version and filesystem invariants | Default deduplication can hide conflicts |
-| Can internal alone hide drafts? | Treat it as a CLI visibility extension | It is not a cross-client security or permission boundary |
+| Question                                           | Recommendation at the time                                                | Limit                                                                     |
+| -------------------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| What determines an installable directory?          | Check both discovery by a fixed CLI version and filesystem invariants     | Default deduplication can hide conflicts                                  |
+| Can internal alone hide drafts?                    | Treat it as a CLI visibility extension                                    | It is not a cross-client security or permission boundary                  |
 | Should both candidate and release packages remain? | Keep one editable runtime source; do not maintain a copied release source | Separate release artifacts may be generated, but not edited independently |
-| Where should evaluation live? | A stable project-level `evals/suites/<name>/` | Runtime packages must still be self-contained |
-| Should a catalog be maintained manually? | Derive listings and package inventories from actual SKILL frontmatter | A third-party skills lock is not an authored-release registry |
+| Where should evaluation live?                      | A stable project-level `evals/suites/<name>/`                             | Runtime packages must still be self-contained                             |
+| Should a catalog be maintained manually?           | Derive listings and package inventories from actual SKILL frontmatter     | A third-party skills lock is not an authored-release registry             |
 
 ## 1. What discovery rules mean in practice
 

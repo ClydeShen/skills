@@ -1,0 +1,8 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "editor.codeActionsOnSave": { "source.fixAll.biome": "explicit" },
+  "github.copilot.chat.commitMessageGeneration.instructions": [{ "file": ".github/commit-instructions.md" }],
+  "github.copilot.chat.pullRequestDescriptionGeneration.instructions": [{ "file": ".github/pull_request_template.md" }]
+}

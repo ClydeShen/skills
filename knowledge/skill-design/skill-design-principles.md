@@ -34,11 +34,11 @@ Use established, precise domain concepts. Explain unfamiliar or easily confused 
 
 Open-ended work needs room to choose methods. Fragile or consequential operations need explicit boundaries. Strictness should follow real risk, task invariants and observed failures, not a preference for writing MUST. [A][O][S]
 
-| Situation | Appropriate guidance | Evidence of completion |
-| --- | --- | --- |
-| Intent exploration, creation, option comparison | Goals, constraints, decision criteria and a few contrasting examples | A useful trade-off or testable artifact |
-| A preferred method with varying context | Default method, reason and adaptation conditions | The artifact meets the goal; deviations have task-based reasons |
-| Wrong ordering could damage data, exceed authority or lose verification evidence | Explicit prerequisites, fixed steps or verified scripts | Actual state or an independent check satisfies the conditions |
+| Situation                                                                        | Appropriate guidance                                                 | Evidence of completion                                          |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Intent exploration, creation, option comparison                                  | Goals, constraints, decision criteria and a few contrasting examples | A useful trade-off or testable artifact                         |
+| A preferred method with varying context                                          | Default method, reason and adaptation conditions                     | The artifact meets the goal; deviations have task-based reasons |
+| Wrong ordering could damage data, exceed authority or lose verification evidence | Explicit prerequisites, fixed steps or verified scripts              | Actual state or an independent check satisfies the conditions   |
 
 Prefer positive descriptions of target behavior and choose constraints for the failure type. Necessary prohibitions, authorization boundaries and recurring discipline failures may still need explicit rules. Repeating slogans does not strengthen enforcement. Automate suitable checks; skill text is not a permission system.
 
@@ -86,14 +86,14 @@ Revisit assumptions after model, tool or host upgrades. Capability scaffolding m
 
 These sources provide design hypotheses and engineering experience, not unanimous company conclusions for all models. Each research record retains source versions and reading scope.
 
-| Source | Main contribution | Boundary retained here |
-| --- | --- | --- |
-| Matt Pocock [M] | Precise behavior, completion criteria, branch resources, pruning through runs | Extensive interviews do not fit every low-burden task; count dependencies behind short entry points |
-| Anthropic [A] | Capabilities versus preferences, useful reasons, traces and artifacts, generalizing feedback | Scale evaluation cost; stronger descriptions intended to reduce missed triggers also need false-trigger checks |
-| OpenAI [O] | Assume capability, preserve user scope, risk-sensitive steps, prune after upgrades | Model-specific advice is not universal; discovery and execution authority are separate |
-| Superpowers [S] | Expose failure first, pressure testing, behavior under real constraints | Discipline-oriented constraints do not automatically fit exploration and creation |
-| Vercel [V] | Specialized knowledge, performance judgment, testing actual knowledge use | Framework-specific results do not generalize to every skill or host; choose the appropriate knowledge entry point |
-| Hamel / Shreya [H] | Human review of real samples, error analysis, calibrated criteria | Agent suggestions are not ground truth; error discovery and prevalence estimation differ |
+| Source             | Main contribution                                                                            | Boundary retained here                                                                                            |
+| ------------------ | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Matt Pocock [M]    | Precise behavior, completion criteria, branch resources, pruning through runs                | Extensive interviews do not fit every low-burden task; count dependencies behind short entry points               |
+| Anthropic [A]      | Capabilities versus preferences, useful reasons, traces and artifacts, generalizing feedback | Scale evaluation cost; stronger descriptions intended to reduce missed triggers also need false-trigger checks    |
+| OpenAI [O]         | Assume capability, preserve user scope, risk-sensitive steps, prune after upgrades           | Model-specific advice is not universal; discovery and execution authority are separate                            |
+| Superpowers [S]    | Expose failure first, pressure testing, behavior under real constraints                      | Discipline-oriented constraints do not automatically fit exploration and creation                                 |
+| Vercel [V]         | Specialized knowledge, performance judgment, testing actual knowledge use                    | Framework-specific results do not generalize to every skill or host; choose the appropriate knowledge entry point |
+| Hamel / Shreya [H] | Human review of real samples, error analysis, calibrated criteria                            | Agent suggestions are not ground truth; error discovery and prevalence estimation differ                          |
 
 We adopt Matt's economy and behavioral focus, combine them with Anthropic's and OpenAI's treatment of capability, feedback and authority, and use other practices to clarify pressure, activation and human evaluation. We do not resolve apparent differences by requiring both “always ask more questions” and “always execute directly,” or require every skill to have a full evaluation platform.
 

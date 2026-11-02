@@ -25,26 +25,26 @@ Use stable, locally unique IDs and absolute dates in `YYYY-MM-DD` format.
 
 An episode records an event:
 
-| Field | Meaning |
-| --- | --- |
-| `id` | Stable episode ID |
-| `date` | Date the event was recorded |
-| `context` | Task conditions relevant to reusing the lesson |
-| `observation` | What happened, including agent behavior when relevant |
-| `action` | The attempted change, or `null` if none was tried |
-| `outcome` | Observed result; use `null` while unknown |
-| `cause` | `null`, or an object with `hypothesis` and `confidence` |
-| `evidence` | A short factual anchor from the conversation or a retrievable reference |
+| Field         | Meaning                                                                 |
+| ------------- | ----------------------------------------------------------------------- |
+| `id`          | Stable episode ID                                                       |
+| `date`        | Date the event was recorded                                             |
+| `context`     | Task conditions relevant to reusing the lesson                          |
+| `observation` | What happened, including agent behavior when relevant                   |
+| `action`      | The attempted change, or `null` if none was tried                       |
+| `outcome`     | Observed result; use `null` while unknown                               |
+| `cause`       | `null`, or an object with `hypothesis` and `confidence`                 |
+| `evidence`    | A short factual anchor from the conversation or a retrievable reference |
 
 A pattern summarizes a conditional lesson:
 
-| Field | Meaning |
-| --- | --- |
-| `id` | Stable pattern ID |
-| `context` | Conditions under which the lesson may apply |
-| `claim` | The provisional thinking pattern or useful intervention |
-| `confidence` | `tentative` or `supported` |
-| `evidence` | IDs of supporting episodes |
+| Field             | Meaning                                                      |
+| ----------------- | ------------------------------------------------------------ |
+| `id`              | Stable pattern ID                                            |
+| `context`         | Conditions under which the lesson may apply                  |
+| `claim`           | The provisional thinking pattern or useful intervention      |
+| `confidence`      | `tentative` or `supported`                                   |
+| `evidence`        | IDs of supporting episodes                                   |
 | `counterevidence` | IDs of conflicting episodes; an empty array if none recorded |
 
 For `cause.confidence`, also use `tentative` or `supported`.

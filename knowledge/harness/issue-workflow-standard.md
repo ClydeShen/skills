@@ -12,16 +12,16 @@ This standard gives the states of an issue, the transitions between them, and th
 
 ## 2. States
 
-| State | Meaning | State owner |
-|---|---|---|
-| Backlog | The issue exists. It does not meet the Definition of Ready, or it has an open hard dependency. | Planner |
-| Ready | The issue meets the Definition of Ready and has no open hard dependency. | Implementer (who claims it) |
-| In progress | One implementer claimed the issue and works on it. | Implementer |
-| In review | The implementer reported the change as done. A reviewer examines it until it is merged. | Reviewer |
-| Verifying | The change is merged. A planner checks the acceptance on the merged result. | Planner |
-| Closed | The acceptance and the Definition of Done are verified. | — |
-| Blocked | The work cannot move forward, also if someone with capacity picks it up now. | The role that can remove the cause |
-| On hold | The business decided "not now". The issue is outside the flow until the owner continues it. | Owner |
+| State       | Meaning                                                                                        | State owner                        |
+| ----------- | ---------------------------------------------------------------------------------------------- | ---------------------------------- |
+| Backlog     | The issue exists. It does not meet the Definition of Ready, or it has an open hard dependency. | Planner                            |
+| Ready       | The issue meets the Definition of Ready and has no open hard dependency.                       | Implementer (who claims it)        |
+| In progress | One implementer claimed the issue and works on it.                                             | Implementer                        |
+| In review   | The implementer reported the change as done. A reviewer examines it until it is merged.        | Reviewer                           |
+| Verifying   | The change is merged. A planner checks the acceptance on the merged result.                    | Planner                            |
+| Closed      | The acceptance and the Definition of Done are verified.                                        | —                                  |
+| Blocked     | The work cannot move forward, also if someone with capacity picks it up now.                   | The role that can remove the cause |
+| On hold     | The business decided "not now". The issue is outside the flow until the owner continues it.    | Owner                              |
 
 "Waiting" is not a state. It is a ready issue that nobody can claim now, because no person, agent, or resource is free. It shows a capacity problem, not a block.
 
@@ -59,21 +59,21 @@ When an issue is blocked, stop. Write the reason, the role that can remove the c
 
 ## 3. Transitions
 
-| From | To | Who moves it | Condition |
-|---|---|---|---|
-| Backlog | Ready | Planner | The issue meets the Definition of Ready and has no open hard dependency. |
-| Ready | In progress | Implementer | The implementer claims it. No issue of its conflict group is in progress. The WIP limit is not reached. |
-| In progress | Ready | Implementer | The implementer removes its claim. The issue says what is done and the next step. |
-| In progress | In review | Implementer | The one-command check passes. The report in the issue has the command and the output of each acceptance condition, and says how to undo the change. The change is ready to merge (for example, a pull request). |
-| In review | In progress | Reviewer | A required check fails, the merge queue rejects the change, or there is a confirmed blocking finding. Count one round. |
-| In review | Verifying | Reviewer approves; the implementer or the merge queue merges | No confirmed blocking finding. The approvals of the risk tier are given ([reviewer-standard.md](./reviewer-standard.md), section 6). The full check passes at the last gate ([guardrails-standard.md](./guardrails-standard.md), section 1). The change is merged. |
-| Verifying | In progress | Planner | An acceptance condition or the Definition of Done is not satisfied on the merged result. Count one round. |
-| Verifying | Closed | Planner | The Definition of Done is satisfied (section 2.2). |
-| Closed | Verifying | Planner | The issue was closed without verification (for example, by a closing keyword in a merged pull request). |
-| In progress, In review, Verifying | Blocked | The state owner | The Definition of Blocked is satisfied. |
-| Blocked | The state before the block | The role that can remove the cause | The condition to continue is satisfied. |
-| Backlog, Ready, In progress, In review, Verifying, Blocked | On hold | Owner | The business decided "not now". Remove the claim and the ready mark. Write the reason and the date to revisit. |
-| On hold | Backlog | Owner | The owner continues the issue, at the latest on the revisit date. |
+| From                                                       | To                         | Who moves it                                                 | Condition                                                                                                                                                                                                                                                          |
+| ---------------------------------------------------------- | -------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Backlog                                                    | Ready                      | Planner                                                      | The issue meets the Definition of Ready and has no open hard dependency.                                                                                                                                                                                           |
+| Ready                                                      | In progress                | Implementer                                                  | The implementer claims it. No issue of its conflict group is in progress. The WIP limit is not reached.                                                                                                                                                            |
+| In progress                                                | Ready                      | Implementer                                                  | The implementer removes its claim. The issue says what is done and the next step.                                                                                                                                                                                  |
+| In progress                                                | In review                  | Implementer                                                  | The one-command check passes. The report in the issue has the command and the output of each acceptance condition, and says how to undo the change. The change is ready to merge (for example, a pull request).                                                    |
+| In review                                                  | In progress                | Reviewer                                                     | A required check fails, the merge queue rejects the change, or there is a confirmed blocking finding. Count one round.                                                                                                                                             |
+| In review                                                  | Verifying                  | Reviewer approves; the implementer or the merge queue merges | No confirmed blocking finding. The approvals of the risk tier are given ([reviewer-standard.md](./reviewer-standard.md), section 6). The full check passes at the last gate ([guardrails-standard.md](./guardrails-standard.md), section 1). The change is merged. |
+| Verifying                                                  | In progress                | Planner                                                      | An acceptance condition or the Definition of Done is not satisfied on the merged result. Count one round.                                                                                                                                                          |
+| Verifying                                                  | Closed                     | Planner                                                      | The Definition of Done is satisfied (section 2.2).                                                                                                                                                                                                                 |
+| Closed                                                     | Verifying                  | Planner                                                      | The issue was closed without verification (for example, by a closing keyword in a merged pull request).                                                                                                                                                            |
+| In progress, In review, Verifying                          | Blocked                    | The state owner                                              | The Definition of Blocked is satisfied.                                                                                                                                                                                                                            |
+| Blocked                                                    | The state before the block | The role that can remove the cause                           | The condition to continue is satisfied.                                                                                                                                                                                                                            |
+| Backlog, Ready, In progress, In review, Verifying, Blocked | On hold                    | Owner                                                        | The business decided "not now". Remove the claim and the ready mark. Write the reason and the date to revisit.                                                                                                                                                     |
+| On hold                                                    | Backlog                    | Owner                                                        | The owner continues the issue, at the latest on the revisit date.                                                                                                                                                                                                  |
 
 ```mermaid
 stateDiagram-v2
@@ -123,11 +123,11 @@ The table is the source. The diagram shows the table.
 
 5.2 Ask these questions in sequence. Stop at the first "no":
 
-| # | Question | If "no" | Who acts | What to do |
-|---|---|---|---|---|
-| 1 | Does the business still want this now? | On hold | Owner | Move the issue to "on hold". Write the reason and the date to revisit. |
-| 2 | Can the work move forward if someone with capacity picks it up now? | Blocked | The role that can remove the cause | Mark it blocked. Write the reason, the role that can remove the cause, and the condition to continue. |
-| 3 | Is someone, or some resource, available to pick it up now? | Waiting | The role that allocates capacity | Leave it in "ready". |
+| #   | Question                                                            | If "no" | Who acts                           | What to do                                                                                            |
+| --- | ------------------------------------------------------------------- | ------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 1   | Does the business still want this now?                              | On hold | Owner                              | Move the issue to "on hold". Write the reason and the date to revisit.                                |
+| 2   | Can the work move forward if someone with capacity picks it up now? | Blocked | The role that can remove the cause | Mark it blocked. Write the reason, the role that can remove the cause, and the condition to continue. |
+| 3   | Is someone, or some resource, available to pick it up now?          | Waiting | The role that allocates capacity   | Leave it in "ready".                                                                                  |
 
 5.3 If the requirement is undecided or changes, the issue is blocked: a decision is missing. If the requirement is decided but deferred, the issue is on hold.
 
@@ -159,27 +159,27 @@ A closed issue is not in front of users. The release loop puts it there and chec
 
 7.1 The work moves through several loops. Describe each loop with one loop card:
 
-| Field | Content |
-|---|---|
-| Trigger | The event or the time that starts the loop. |
-| Who acts | The role. |
+| Field                 | Content                                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Trigger               | The event or the time that starts the loop.                                                                |
+| Who acts              | The role.                                                                                                  |
 | Verifier and evidence | Who decides that it worked, and with which evidence from outside the loop (a command, a test, monitoring). |
-| Done when | The result that ends the loop. Output that nobody uses does not count. |
-| Limit | The maximum number of rounds, the time, or the budget. |
-| Escalation | Who gets the work at the limit, or when a decision is missing. |
-| Record | Where the result and the lesson are written. |
+| Done when             | The result that ends the loop. Output that nobody uses does not count.                                     |
+| Limit                 | The maximum number of rounds, the time, or the budget.                                                     |
+| Escalation            | Who gets the work at the limit, or when a decision is missing.                                             |
+| Record                | Where the result and the lesson are written.                                                               |
 
 7.2 The loops of this playbook:
 
-| Loop | Trigger | Who acts | Verifier and evidence | Done when | Limit | Escalation | Record |
-|---|---|---|---|---|---|---|---|
-| Agent session | Each edit; the end of each turn | Implementer | Session hooks: lint, types, related tests | The checks pass | Attempts for the same failure (AGENTS.md) | Blocked; the owner | The issue |
-| Review | The issue enters "in review" | Reviewer, then implementer | Required checks; confirmed findings ([reviewer-standard.md](./reviewer-standard.md)) | Approved and merged | Round limit | Blocked; the owner | The issue |
-| Verification | The issue enters "verifying" | Planner | The acceptance commands, run on the merged result | Closed | Round limit | Blocked; the owner | The issue; the epic |
-| Release | The release trigger | Release role | Smoke test after release, with the live checks; logs and errors during the watch time | Released, and the smoke test passed | One rollback, then stop | The owner | The release record |
-| Incident | An alert or a user report | On-call role | Monitoring shows that the service is restored | Restored; each postmortem action is an issue | The dates of the actions | The owner | The postmortem; the feedback log |
-| Harness | The end of a milestone; a problem seen again | Reviewer, planner | The review of the checks; the feedback log ([feedback-loops-standard.md](./feedback-loops-standard.md), section 4) | Each repeated problem has a prevention or a reason | Once per milestone | The owner approves changes to protected paths | The feedback log |
-| Delivery health | Each sync, or a fixed interval | Planner | The signals in section 8, measured with a date | Each recurring cause has an issue | Once per interval | The owner | The report to the owner |
+| Loop            | Trigger                                      | Who acts                   | Verifier and evidence                                                                                              | Done when                                          | Limit                                     | Escalation                                    | Record                           |
+| --------------- | -------------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------- | ----------------------------------------- | --------------------------------------------- | -------------------------------- |
+| Agent session   | Each edit; the end of each turn              | Implementer                | Session hooks: lint, types, related tests                                                                          | The checks pass                                    | Attempts for the same failure (AGENTS.md) | Blocked; the owner                            | The issue                        |
+| Review          | The issue enters "in review"                 | Reviewer, then implementer | Required checks; confirmed findings ([reviewer-standard.md](./reviewer-standard.md))                               | Approved and merged                                | Round limit                               | Blocked; the owner                            | The issue                        |
+| Verification    | The issue enters "verifying"                 | Planner                    | The acceptance commands, run on the merged result                                                                  | Closed                                             | Round limit                               | Blocked; the owner                            | The issue; the epic              |
+| Release         | The release trigger                          | Release role               | Smoke test after release, with the live checks; logs and errors during the watch time                              | Released, and the smoke test passed                | One rollback, then stop                   | The owner                                     | The release record               |
+| Incident        | An alert or a user report                    | On-call role               | Monitoring shows that the service is restored                                                                      | Restored; each postmortem action is an issue       | The dates of the actions                  | The owner                                     | The postmortem; the feedback log |
+| Harness         | The end of a milestone; a problem seen again | Reviewer, planner          | The review of the checks; the feedback log ([feedback-loops-standard.md](./feedback-loops-standard.md), section 4) | Each repeated problem has a prevention or a reason | Once per milestone                        | The owner approves changes to protected paths | The feedback log                 |
+| Delivery health | Each sync, or a fixed interval               | Planner                    | The signals in section 8, measured with a date                                                                     | Each recurring cause has an issue                  | Once per interval                         | The owner                                     | The report to the owner          |
 
 7.3 **Closure rules.** Check the workflow and the loop cards against these rules when you set them up, and at the end of each milestone:
 
@@ -193,14 +193,14 @@ A closed issue is not in front of users. The release loop puts it there and chec
 
 The states of the issues show the health of the whole delivery system. A planner measures these signals (Task 7B in [planner-standard.md](./planner-standard.md)):
 
-| Signal | What it shows |
-|---|---|
-| Ready queue: the number of ready issues against how fast implementers consume them | A queue that keeps running dry means that producing ready issues is the bottleneck. |
-| False-ready rate: issues marked ready that implementers send back as blocked or ambiguous | The quality of the Definition of Ready itself. |
-| Reasons for "not ready" and "blocked", by the role that can fix them | Technical dependency (tech lead), architecture gap (architect), unclear story or acceptance (business analyst), missing test criteria (QA or business analyst), missing decision (owner). A cause that recurs needs a fix of the system, not only of the issue. |
-| Work that waits for human verification or approval | In an agent-driven project, capacity is often not coding speed. It is the attention of the people who verify and approve, environment slots (a GPU, rate limits, token budgets), and file conflicts. A queue of ready work is normal. A growing queue of work that waits for people is the signal. |
-| Review sampling: the share of agent changes that a person read, and whether a person read each change to a contract, core logic, security, or data | Comprehension debt ([GLOSSARY.md](../../GLOSSARY.md)). A share that falls while the output grows means that the team owns more code that it cannot explain. |
-| Cost per closed issue (tokens or money), with the number of agent sessions and rounds | Whether the loops converge. A cost that grows for issues of the same size shows a stuck loop or a vague issue ([feedback-loops-standard.md](./feedback-loops-standard.md), section 2.3). |
-| Revert rate and incident rate: the share of merged changes that were reverted, and the share that caused an incident | Whether the review lets defects pass. If these rise while the time that people spend on review falls, the time was not saved. It moved to later. |
+| Signal                                                                                                                                             | What it shows                                                                                                                                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ready queue: the number of ready issues against how fast implementers consume them                                                                 | A queue that keeps running dry means that producing ready issues is the bottleneck.                                                                                                                                                                                                                |
+| False-ready rate: issues marked ready that implementers send back as blocked or ambiguous                                                          | The quality of the Definition of Ready itself.                                                                                                                                                                                                                                                     |
+| Reasons for "not ready" and "blocked", by the role that can fix them                                                                               | Technical dependency (tech lead), architecture gap (architect), unclear story or acceptance (business analyst), missing test criteria (QA or business analyst), missing decision (owner). A cause that recurs needs a fix of the system, not only of the issue.                                    |
+| Work that waits for human verification or approval                                                                                                 | In an agent-driven project, capacity is often not coding speed. It is the attention of the people who verify and approve, environment slots (a GPU, rate limits, token budgets), and file conflicts. A queue of ready work is normal. A growing queue of work that waits for people is the signal. |
+| Review sampling: the share of agent changes that a person read, and whether a person read each change to a contract, core logic, security, or data | Comprehension debt ([GLOSSARY.md](../../GLOSSARY.md)). A share that falls while the output grows means that the team owns more code that it cannot explain.                                                                                                                                        |
+| Cost per closed issue (tokens or money), with the number of agent sessions and rounds                                                              | Whether the loops converge. A cost that grows for issues of the same size shows a stuck loop or a vague issue ([feedback-loops-standard.md](./feedback-loops-standard.md), section 2.3).                                                                                                           |
+| Revert rate and incident rate: the share of merged changes that were reverted, and the share that caused an incident                               | Whether the review lets defects pass. If these rise while the time that people spend on review falls, the time was not saved. It moved to later.                                                                                                                                                   |
 
 Count blocked, waiting, and on hold separately. If waiting is counted as blocked, the block signal is too high and a capacity problem is hidden. If on-hold work stays in progress, the cycle time and the work in progress are wrong.

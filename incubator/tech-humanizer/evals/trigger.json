@@ -1,0 +1,23 @@
+{
+  "note": "Real-agent trigger cases. 'skip' cases are near misses that the skill must leave alone.",
+  "cases": [
+    {
+      "id": "explicit-humanize",
+      "request": "Humanize this paragraph: In today's fast-paced world, our platform seamlessly empowers teams to unlock synergies and delve into actionable insights.",
+      "expect": "trigger"
+    },
+    {
+      "id": "ai-style-review",
+      "request": "Does this release note sound AI-written? Point out the patterns: We are thrilled to announce a game-changing update that revolutionizes your workflow.",
+      "expect": "trigger"
+    },
+    {
+      "id": "voice-rewrite",
+      "request": "Rewrite this update in my voice, so it stops sounding like a chatbot wrote it: The migration has been successfully completed, ensuring robust and seamless performance.",
+      "expect": "trigger"
+    },
+    { "id": "translate", "request": "Translate into French: The deployment finished at noon.", "expect": "skip" },
+    { "id": "grammar-only", "request": "Fix only the grammar: The servers was restarted yesterday.", "expect": "skip" },
+    { "id": "write-new", "request": "Write a regular expression that matches a four-digit year.", "expect": "skip" }
+  ]
+}

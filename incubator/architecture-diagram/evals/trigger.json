@@ -1,0 +1,35 @@
+{
+  "note": "Real-agent trigger cases. 'skip' cases are near misses named by the skill's own description.",
+  "cases": [
+    {
+      "id": "request-flow",
+      "request": "Create an editable draw.io architecture diagram from this scenario: a browser calls API Gateway, which calls a Lambda function that reads DynamoDB.",
+      "expect": "trigger"
+    },
+    {
+      "id": "auth-flow",
+      "request": "Draw the authentication flow as a draw.io architecture diagram: users sign in with Cognito, then call the API with a token that a Lambda authorizer checks.",
+      "expect": "trigger"
+    },
+    {
+      "id": "cross-cloud",
+      "request": "I need a draw.io diagram with deployment boundaries for this event flow: an Azure Function publishes to a queue, and an AWS Lambda consumes it across a VPN.",
+      "expect": "trigger"
+    },
+    {
+      "id": "flowchart",
+      "request": "Give me a simple flowchart of how to decide whether to approve a vacation request.",
+      "expect": "skip"
+    },
+    {
+      "id": "code-reverse",
+      "request": "Summarize in one sentence what this Terraform does: resource \"aws_s3_bucket\" \"logs\" { bucket = \"logs\" }",
+      "expect": "skip"
+    },
+    {
+      "id": "architecture-question",
+      "request": "In one sentence, what is the difference between a load balancer and an API gateway?",
+      "expect": "skip"
+    }
+  ]
+}

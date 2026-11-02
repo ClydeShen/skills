@@ -3,22 +3,36 @@ import { readFile } from 'node:fs/promises';
 // Image judge: reads one image and checks a list of claims against what is visible.
 // Claims are { id, text, key?, critical?: boolean, expect?: 'drawn' | 'not_drawn' }; id is what the judge sees, key labels reports. A 'not_drawn' claim is a
 // planted false claim; the judge must never confirm it. Labels stay on the grading side, outside prompts.
-export const verdictValues = ['drawn_correctly', 'drawn_incorrectly', 'not_shown', 'unclear'];
+const verdictValues = ['drawn_correctly', 'drawn_incorrectly', 'not_shown', 'unclear'];
 
-const instruction = 'You are checking an architecture diagram image. Use only what is visible in the image. For each claim, first quote the visible evidence, then give one verdict: "drawn_correctly" (the image clearly shows it), "drawn_incorrectly" (the image shows something that contradicts it), "not_shown" (the image does not show it), or "unclear". Copy each bracketed claim id exactly. Respond with JSON only.';
+const instruction =
+  'You are checking an architecture diagram image. Use only what is visible in the image. For each claim, first quote the visible evidence, then give one verdict: "drawn_correctly" (the image clearly shows it), "drawn_incorrectly" (the image shows something that contradicts it), "not_shown" (the image does not show it), or "unclear". Copy each bracketed claim id exactly. Respond with JSON only.';
 
-export const verdictSchema = {
-  type: 'object', required: ['verdicts'], additionalProperties: false,
-  properties: { verdicts: { type: 'array', items: {
-    type: 'object', required: ['id', 'evidence', 'verdict'], additionalProperties: false,
-    properties: { id: { type: 'string' }, evidence: { type: 'string' }, verdict: { type: 'string', enum: verdictValues } },
-  } } },
+const verdictSchema = {
+  type: 'object',
+  required: ['verdicts'],
+  additionalProperties: false,
+  properties: {
+    verdicts: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: ['id', 'evidence', 'verdict'],
+        additionalProperties: false,
+        properties: {
+          id: { type: 'string' },
+          evidence: { type: 'string' },
+          verdict: { type: 'string', enum: verdictValues },
+        },
+      },
+    },
+  },
 };
 
 // Deterministic shuffle so true and false claims are not grouped and each run sees another order.
 export function shuffled(items, seed) {
   const out = [...items];
-  let state = (seed + 1) * 2654435761 >>> 0;
+  let state = ((seed + 1) * 2654435761) >>> 0;
   for (let i = out.length - 1; i > 0; i--) {
     state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
     const j = state % (i + 1);
@@ -34,7 +48,13 @@ export function buildJudgeMessages({ image, claims, seed = 0 }) {
     order,
     messages: [
       { role: 'system', content: instruction },
-      { role: 'user', content: [{ type: 'image_url', image_url: { url: image, detail: 'high' } }, { type: 'text', text }] },
+      {
+        role: 'user',
+        content: [
+          { type: 'image_url', image_url: { url: image, detail: 'high' } },
+          { type: 'text', text },
+        ],
+      },
     ],
   };
 }
@@ -43,20 +63,32 @@ export function buildJudgeMessages({ image, claims, seed = 0 }) {
 export function parseVerdicts(output, order) {
   let data = output;
   if (typeof data === 'string') {
-    const start = data.indexOf('{'), end = data.lastIndexOf('}');
-    const arrayStart = data.indexOf('['), arrayEnd = data.lastIndexOf(']');
+    const start = data.indexOf('{'),
+      end = data.lastIndexOf('}');
+    const arrayStart = data.indexOf('['),
+      arrayEnd = data.lastIndexOf(']');
     const slices = [];
     if (start !== -1 && end > start) slices.push(data.slice(start, end + 1));
     if (arrayStart !== -1 && arrayEnd > arrayStart) slices.push(data.slice(arrayStart, arrayEnd + 1));
     data = undefined;
-    for (const slice of slices) { try { data = JSON.parse(slice); break; } catch { /* try the next slice */ } }
+    for (const slice of slices) {
+      try {
+        data = JSON.parse(slice);
+        break;
+      } catch {
+        /* try the next slice */
+      }
+    }
   }
   const list = Array.isArray(data) ? data : data?.verdicts;
   if (!Array.isArray(list)) return null;
   const known = new Set(order.map((claim) => claim.id));
   const verdicts = new Map();
   for (const entry of list) {
-    let id = String(entry?.id ?? '').trim().replace(/^\[|\]$/g, '').trim();
+    let id = String(entry?.id ?? '')
+      .trim()
+      .replace(/^\[|\]$/g, '')
+      .trim();
     // Some models answer with the list number instead of the bracketed id.
     if (/^\d+$/.test(id) && !known.has(id)) id = order[Number(id) - 1]?.id ?? id;
     if (!known.has(id) || verdicts.has(id)) continue;
@@ -89,7 +121,11 @@ export function aggregateRuns(runs, claims) {
 // A planted false claim that only some runs confirmed is reported as a flag.
 export function gradeJudgement(output, claims) {
   let judgement;
-  try { judgement = typeof output === 'string' ? JSON.parse(output) : output; } catch { judgement = null; }
+  try {
+    judgement = typeof output === 'string' ? JSON.parse(output) : output;
+  } catch {
+    judgement = null;
+  }
   if (!judgement?.verdicts || !judgement.runs_ok) return { pass: false, score: 0, reason: 'No usable judge verdicts.' };
   const byId = new Map(judgement.verdicts.map((v) => [v.id, v]));
   const failures = [];
@@ -105,13 +141,16 @@ export function gradeJudgement(output, claims) {
       else if (confirmed) flags.push(`${claim.key ?? claim.id} confirmed in ${confirmed} of ${judgement.runs_ok} runs`);
     } else if (claim.critical !== false) {
       checked++;
-      if (confirmed * 2 <= judgement.runs_ok) failures.push(`critical claim not confirmed: ${claim.key ?? claim.id} (${result?.verdict ?? 'missing'})`);
+      if (confirmed * 2 <= judgement.runs_ok)
+        failures.push(`critical claim not confirmed: ${claim.key ?? claim.id} (${result?.verdict ?? 'missing'})`);
     }
   }
   return {
     pass: failures.length === 0,
     score: checked ? (checked - failures.length) / checked : 0,
-    reason: failures.join('; ') || `All ${checked} checked claims behaved as expected over ${judgement.runs_ok} run(s)${flags.length ? `; flagged: ${flags.join(', ')}` : ''}; judge evidence still needs spot checks.`,
+    reason:
+      failures.join('; ') ||
+      `All ${checked} checked claims behaved as expected over ${judgement.runs_ok} run(s)${flags.length ? `; flagged: ${flags.join(', ')}` : ''}; judge evidence still needs spot checks.`,
   };
 }
 
@@ -120,7 +159,20 @@ const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // Promptfoo custom provider. Vars: image_path (file) and claims (array). Output: aggregated JSON string.
 // Messages and errors never include the request headers, so the API key cannot reach a report.
-export function createVisionJudgeProvider({ model, apiBaseUrl, apiKey, temperature = 0.6, maxTokens = 4096, extraBody = {}, runs = 3, retries = 3, backoffMs = 2000, timeoutMs = 300000, fetchImpl = fetch, sleep = pause }) {
+export function createVisionJudgeProvider({
+  model,
+  apiBaseUrl,
+  apiKey,
+  temperature = 0.6,
+  maxTokens = 4096,
+  extraBody = {},
+  runs = 3,
+  retries = 3,
+  backoffMs = 2000,
+  timeoutMs = 300000,
+  fetchImpl = fetch,
+  sleep = pause,
+}) {
   async function request(messages) {
     let lastError = 'request failed';
     for (let attempt = 0; attempt <= retries; attempt++) {
@@ -131,7 +183,11 @@ export function createVisionJudgeProvider({ model, apiBaseUrl, apiKey, temperatu
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
           signal: AbortSignal.timeout(timeoutMs),
           body: JSON.stringify({
-            model, messages, temperature, max_tokens: maxTokens, stream: false,
+            model,
+            messages,
+            temperature,
+            max_tokens: maxTokens,
+            stream: false,
             response_format: { type: 'json_schema', json_schema: { name: 'verdicts', schema: verdictSchema } },
             ...extraBody,
           }),
@@ -169,7 +225,10 @@ export function createVisionJudgeProvider({ model, apiBaseUrl, apiKey, temperatu
         }
       }
       const aggregate = aggregateRuns(results, claims);
-      if (!aggregate.runs_ok) return { error: `Judge produced no usable answer (${[...new Set(errors)].join(', ') || 'unparsable output'}).` };
+      if (!aggregate.runs_ok)
+        return {
+          error: `Judge produced no usable answer (${[...new Set(errors)].join(', ') || 'unparsable output'}).`,
+        };
       return { output: JSON.stringify({ ...aggregate, model }), tokenUsage: { total: tokens } };
     },
   };

@@ -8,21 +8,21 @@ Evidence markers: `[official]` means maintainer source code or the author's text
 
 ## Overview
 
-| Sample | Main contribution | Limit to retain | Judgment |
-| --- | --- | --- | --- |
-| Jesse Vincent / Superpowers | Observe unguided behavior, then choose instruction form by failure type | Mandatory workflows and pressure tests serve specific delivery goals, not every low-burden interaction | J1, medium |
-| Vercel | Prioritize expertise by impact; check whether skills are actually read; constrain advice with operational signals | Technical stack, version, tools, and experimental setting have explicit scopes | J2, medium |
-| Hamel Husain / Shreya Shankar | Real traces, expert judgment, and evolving evaluation criteria | Automated suggestions are not human labels; discovery samples do not establish prevalence | J3, medium |
+| Sample                        | Main contribution                                                                                                 | Limit to retain                                                                                        | Judgment   |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------- |
+| Jesse Vincent / Superpowers   | Observe unguided behavior, then choose instruction form by failure type                                           | Mandatory workflows and pressure tests serve specific delivery goals, not every low-burden interaction | J1, medium |
+| Vercel                        | Prioritize expertise by impact; check whether skills are actually read; constrain advice with operational signals | Technical stack, version, tools, and experimental setting have explicit scopes                         | J2, medium |
+| Hamel Husain / Shreya Shankar | Real traces, expert judgment, and evolving evaluation criteria                                                    | Automated suggestions are not human labels; discovery samples do not establish prevalence              | J3, medium |
 
 ## 1. Scope and pinned versions
 
 [measured] The latest-commit APIs for these repositories were read, then the returned SHAs were used to read the listed files. Dates are commit dates from the API, not project founding or method publication dates.
 
-| Repository | Pinned SHA | Commit date | Main reading scope |
-| --- | --- | --- | --- |
-| `obra/superpowers` | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 2026-10-21 | Bodies of `writing-skills` and `brainstorming` |
-| `vercel-labs/agent-skills` | `063bee94c3f4df8453406c830b0a7df0f2860278` | 2026-08-28 | README and bodies of `react-best-practices` and `vercel-optimize` |
-| `ai-evals-course/evals-skills` | `80d5f7b0127c7572ed9e9339937adbfd7240ffeb` | 2026-09-24 | `evals-start`, `error-discovery`, its review loop, and `validate-evaluator` |
+| Repository                     | Pinned SHA                                 | Commit date | Main reading scope                                                          |
+| ------------------------------ | ------------------------------------------ | ----------- | --------------------------------------------------------------------------- |
+| `obra/superpowers`             | `2ce8aa15d05bd57213e6f746f953aafb7ded7a8b` | 2026-10-21  | Bodies of `writing-skills` and `brainstorming`                              |
+| `vercel-labs/agent-skills`     | `063bee94c3f4df8453406c830b0a7df0f2860278` | 2026-08-28  | README and bodies of `react-best-practices` and `vercel-optimize`           |
+| `ai-evals-course/evals-skills` | `80d5f7b0127c7572ed9e9339937adbfd7240ffeb` | 2026-09-24  | `evals-start`, `error-discovery`, its review loop, and `validate-evaluator` |
 
 These are purposively selected samples with public methods and inspectable implementations, not a star ranking or exhaustive survey. No external skills were installed or executed, and no models were called to compare effectiveness.
 
@@ -100,14 +100,14 @@ This supports the existing [candidate evaluation](../../../incubator/meta-thinki
 
 ## 5. Boundaries of a synthesis with Matt's design philosophy
 
-| Tradeoff | Shared concern | Project synthesis |
-| --- | --- | --- |
-| Concise or detailed | Content should change behavior or supply needed capability | Preserve necessary depth and load by task need; do not optimize only main-file length |
-| Freedom or process | Reduce repeated failures | Constrain known failures and high-cost boundaries; retain freedom for exploration and reversible action |
-| Positive guidance or prohibition | Instructions must work in practice | Default to stating what to do; retain necessary prohibitions; choose by failure type and tests |
-| General or domain-specific | Reuse across instances | Generalize task relationships while obtaining concrete facts from the environment; domain skills may have explicit technical scope |
-| Human decision or agent execution | Solve real user problems | Humans handle intent, values, and quality judgments; agents check facts, generate options, and organize evidence; authority remains task-specific |
-| Automated scoring or human trials | Effectiveness claims require evidence | Machines check determinate rules; people inspect immature quality criteria; automated judgments need calibration |
+| Tradeoff                          | Shared concern                                             | Project synthesis                                                                                                                                 |
+| --------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Concise or detailed               | Content should change behavior or supply needed capability | Preserve necessary depth and load by task need; do not optimize only main-file length                                                             |
+| Freedom or process                | Reduce repeated failures                                   | Constrain known failures and high-cost boundaries; retain freedom for exploration and reversible action                                           |
+| Positive guidance or prohibition  | Instructions must work in practice                         | Default to stating what to do; retain necessary prohibitions; choose by failure type and tests                                                    |
+| General or domain-specific        | Reuse across instances                                     | Generalize task relationships while obtaining concrete facts from the environment; domain skills may have explicit technical scope                |
+| Human decision or agent execution | Solve real user problems                                   | Humans handle intent, values, and quality judgments; agents check facts, generate options, and organize evidence; authority remains task-specific |
+| Automated scoring or human trials | Effectiveness claims require evidence                      | Machines check determinate rules; people inspect immature quality criteria; automated judgments need calibration                                  |
 
 [inference] Matt's pruning, Superpowers' pressure testing, Vercel's evidence constraints, and Evals Skills' human error discovery can form a shared authoring feedback loop. They do not require a large, complete evaluation process for every skill. Effort should match reuse value, failure cost, and current uncertainty.
 

@@ -8,12 +8,12 @@ Store personal voice in `~/.tech-humanizer/profile.json` and project vocabulary 
 
 **Context voice** captures formality, warmth, structure, detail, greetings, and closings for a particular occasion:
 
-| Context | Includes |
-| --- | --- |
-| `business-document` | Proposals, reports, executive summaries, and client deliverables. |
+| Context              | Includes                                                            |
+| -------------------- | ------------------------------------------------------------------- |
+| `business-document`  | Proposals, reports, executive summaries, and client deliverables.   |
 | `technical-document` | Design documents, RFCs, guides, architecture notes, and procedures. |
-| `email` | Email, scoped by audience and relationship where relevant. |
-| `message` | Chat, SMS, Slack, Teams, and conversational exchanges. |
+| `email`              | Email, scoped by audience and relationship where relevant.          |
+| `message`            | Chat, SMS, Slack, Teams, and conversational exchanges.              |
 
 Choose the context from the text's purpose and format. Scope narrower habits by audience or relationship.
 
@@ -29,12 +29,12 @@ Prefer the more specific scope within a priority level. Ask about equally specif
 
 ## Evidence and promotion
 
-| Evidence | Action |
-| --- | --- |
-| Explicit preference, correction, or revert | Save immediately with `confidence: "explicit"`, scoped to the feature the user addressed. |
-| User-authored conversation or identified writing sample | Save an inferred habit in `candidates`. |
-| Three independent observations agree | Promote the candidate to a context pattern. |
-| Those observations span at least two contexts | Promote it to a global pattern. |
+| Evidence                                                | Action                                                                                    |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Explicit preference, correction, or revert              | Save immediately with `confidence: "explicit"`, scoped to the feature the user addressed. |
+| User-authored conversation or identified writing sample | Save an inferred habit in `candidates`.                                                   |
+| Three independent observations agree                    | Promote the candidate to a context pattern.                                               |
+| Those observations span at least two contexts           | Promote it to a global pattern.                                                           |
 
 Count one conversation or independently supplied sample as one observation per pattern. Short messages can establish word choices; infer sentence or passage habits from substantial prose. Use text known to be user-authored; exclude quotations and drafts supplied only for humanization.
 

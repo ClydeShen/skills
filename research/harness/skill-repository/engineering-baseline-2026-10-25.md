@@ -8,14 +8,14 @@ Evidence markers: `[measured]` means a read-only repository check during the ori
 
 ## Overview
 
-| Problem | Minimal recommendation | Enforcement strength and limits |
-| --- | --- | --- |
-| Incorrect instructions or skill formats | agnix, the reference validator, and package-reference checks | Check encoded rules; cannot prove semantic quality |
-| Repository rules are overlooked | One deterministic check entry point called by all layers | Local calls can be skipped; CI blocks merges only when the server is configured |
-| An agent ends after failed checks | Feedback through a supported client completion hook | Event, trust, version, and failure semantics differ; hooks do not replace a sandbox |
-| An agent changes out-of-scope files or accesses the network | Effective host permissions, OS sandboxing, and credential scope | Verify the actual tool paths covered, not only configuration text |
-| An agent changes checks to pass its own work | Protected check configuration, human review, and identities without bypass | Rule administrators or bypass identities may still circumvent controls |
-| A skill provides actual value | Behavioral cases and a no-skill comparison | Fixture success does not establish effectiveness |
+| Problem                                                     | Minimal recommendation                                                     | Enforcement strength and limits                                                     |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Incorrect instructions or skill formats                     | agnix, the reference validator, and package-reference checks               | Check encoded rules; cannot prove semantic quality                                  |
+| Repository rules are overlooked                             | One deterministic check entry point called by all layers                   | Local calls can be skipped; CI blocks merges only when the server is configured     |
+| An agent ends after failed checks                           | Feedback through a supported client completion hook                        | Event, trust, version, and failure semantics differ; hooks do not replace a sandbox |
+| An agent changes out-of-scope files or accesses the network | Effective host permissions, OS sandboxing, and credential scope            | Verify the actual tool paths covered, not only configuration text                   |
+| An agent changes checks to pass its own work                | Protected check configuration, human review, and identities without bypass | Rule administrators or bypass identities may still circumvent controls              |
+| A skill provides actual value                               | Behavioral cases and a no-skill comparison                                 | Fixture success does not establish effectiveness                                    |
 
 ## 1. Concrete repository gaps at the time of investigation
 
@@ -49,14 +49,14 @@ Official tool sources, installation details, and limits are in the [quality-tool
 
 [inference] `npm run check` should combine deterministic checks with separate responsibilities instead of asking one linter to cover everything:
 
-| Check | Applicable repository rules |
-| --- | --- |
-| Skill format | Frontmatter, directory-name agreement, description, and field compatibility |
-| Package boundaries | Local reference targets exist; runtime resources stay in the package and do not depend on external knowledge, research, or incubator paths |
-| Discovery and lifecycle | Released names are unique; candidates are not mistaken for releases; imported tools have their own scope |
-| Repository consistency | Documentation links, JSON/YAML/schema, and instructions agree with actual scripts |
-| Agent configuration | Run agnix for the actual target clients and file scopes |
-| Evaluation infrastructure | Existing `npm test` and fixture pipeline; label real-model results separately as behavioral evidence |
+| Check                     | Applicable repository rules                                                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Skill format              | Frontmatter, directory-name agreement, description, and field compatibility                                                                |
+| Package boundaries        | Local reference targets exist; runtime resources stay in the package and do not depend on external knowledge, research, or incubator paths |
+| Discovery and lifecycle   | Released names are unique; candidates are not mistaken for releases; imported tools have their own scope                                   |
+| Repository consistency    | Documentation links, JSON/YAML/schema, and instructions agree with actual scripts                                                          |
+| Agent configuration       | Run agnix for the actual target clients and file scopes                                                                                    |
+| Evaluation infrastructure | Existing `npm test` and fixture pipeline; label real-model results separately as behavioral evidence                                       |
 
 [inference] Initially report or warn about body size, description generality, and reference-depth heuristics. Missing fields, broken references, and clear out-of-package dependencies can block. Do not make every tool rule fatal or enable automatic fixes in CI.
 

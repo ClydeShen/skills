@@ -1,6 +1,17 @@
 {
-  "description": "Shared repository checks at handoff; review and trust through /hooks.",
+  "description": "Shared repository setup at session start and checks at handoff; review and trust through /hooks.",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"const c=require('node:child_process');const p=require('node:path');const root=c.execFileSync('git',['rev-parse','--show-toplevel'],{encoding:'utf8'}).trim();const r=c.spawnSync(process.execPath,[p.join(root,'harness','session-start.mjs')],{stdio:'inherit'});process.exit(Number.isInteger(r.status)?r.status:1)\"",
+            "timeout": 300
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

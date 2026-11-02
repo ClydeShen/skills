@@ -1,5 +1,5 @@
-import { createRequire } from 'node:module';
 import { readFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const buildPrompt = require('./prompt.cjs');
@@ -12,9 +12,10 @@ function fixtureFor({ checks, user_profile = null, project_profile = null }) {
   const rule = checks.profile_rule;
   if (rule) {
     const entry = { rule: rule.pattern.split('|')[0], confidence: rule.confidence };
-    user = rule.scope === 'global'
-      ? { global_voice: { preferences: [entry] } }
-      : { contexts: { [rule.scope]: { patterns: [entry] } } };
+    user =
+      rule.scope === 'global'
+        ? { global_voice: { preferences: [entry] } }
+        : { contexts: { [rule.scope]: { patterns: [entry] } } };
   }
   if (checks.candidate_only) user = { candidates: [{ note: 'one conversation' }] };
   if (checks.project_term) project = { terms: [{ term: checks.project_term }] };
@@ -29,11 +30,19 @@ export async function createSuite({ mode }) {
   const cases = JSON.parse(await readFile(new URL('./cases.json', import.meta.url), 'utf8'));
   const fixtures = new Map(cases.map((test) => [test.description, fixtureFor(test.vars)]));
   return {
-    description: 'tech-humanizer: deterministic behavior checks. Rubric-graded quality runs through promptfooconfig.cjs.',
+    description:
+      'tech-humanizer: deterministic behavior checks. Rubric-graded quality runs through promptfooconfig.cjs.',
     prompts: [
-      { label: 'candidate-with-references', raw: 'candidate-with-references', function: ({ vars }) => JSON.stringify(buildPrompt({ vars })) },
+      {
+        label: 'candidate-with-references',
+        raw: 'candidate-with-references',
+        function: ({ vars }) => JSON.stringify(buildPrompt({ vars })),
+      },
     ],
-    providers: mode === 'fixture' ? [async (_prompt, context) => ({ output: JSON.stringify(fixtures.get(context.vars.case_id)) })] : [],
+    providers:
+      mode === 'fixture'
+        ? [async (_prompt, context) => ({ output: JSON.stringify(fixtures.get(context.vars.case_id)) })]
+        : [],
     tests: cases.map((test) => ({
       description: test.description,
       options: { disableVarExpansion: true },

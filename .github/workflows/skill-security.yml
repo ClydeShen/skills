@@ -1,0 +1,33 @@
+name: Skill security report
+
+# Runs when third-party skills or executable skill files change. Findings need human review:
+# the scanner is best effort, so a clean result is not proof of safety and a finding is not a verdict.
+on:
+  pull_request:
+    paths:
+      - skills-lock.json
+      - .agents/skills/**
+      - incubator/*/candidate/*/scripts/**
+      - skills/*/scripts/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v6
+      - name: Scan each skill package
+        run: |
+          status=0
+          for skill in incubator/*/candidate/* skills/* .agents/skills/*; do
+            [ -f "$skill/SKILL.md" ] || continue
+            uvx --from cisco-ai-skill-scanner==2.3.2 skill-scanner scan "$skill" --format summary --fail-on-severity high || status=1
+          done
+          exit $status

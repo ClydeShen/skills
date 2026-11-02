@@ -8,12 +8,12 @@ Markers: `[official]` means the relevant primary-paper text was read; `[inferenc
 
 ## Overview
 
-| Question | Recommendation | Evidence strength | Judgment confidence |
-| --- | --- | --- | --- |
-| Record user types or specific experience first? | Traceable events, then contextual pattern hypotheses | Medium: related memory mechanisms and evaluation, not direct product validation | Medium, J1 |
-| Can updates skip turns? | Consider writes only for important new information | Weak: threshold-triggered precedents use different signals | Medium, J2 |
-| Does a breakthrough establish the root cause? | Separate observed change, causal hypotheses and verification | Medium: attribution difficulty is discussed; the project strategy is inferred | Medium, J3 |
-| How can profiles stay revisable? | Retain time, context, evidence and correction paths; abstain when evidence is insufficient | Medium: long-term memory tasks support temporal reasoning, updating and abstention | Medium, J4 |
+| Question                                        | Recommendation                                                                             | Evidence strength                                                                  | Judgment confidence |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ------------------- |
+| Record user types or specific experience first? | Traceable events, then contextual pattern hypotheses                                       | Medium: related memory mechanisms and evaluation, not direct product validation    | Medium, J1          |
+| Can updates skip turns?                         | Consider writes only for important new information                                         | Weak: threshold-triggered precedents use different signals                         | Medium, J2          |
+| Does a breakthrough establish the root cause?   | Separate observed change, causal hypotheses and verification                               | Medium: attribution difficulty is discussed; the project strategy is inferred      | Medium, J3          |
+| How can profiles stay revisable?                | Retain time, context, evidence and correction paths; abstain when evidence is insufficient | Medium: long-term memory tasks support temporal reasoning, updating and abstention | Medium, J4          |
 
 ## 1. Reusable experience need not start with fixed user types
 
@@ -85,12 +85,12 @@ Supports structured but revisable profiles. The benchmark primarily tests questi
 
 Scores are Owner / Research / Reasoning / Project history, each 0–1. Totals record project support, not statistical probabilities.
 
-| Judgment | Four scores | Total and level | Main gap |
-| --- | --- | --- | --- |
-| J1 Event evidence supports pattern hypotheses | 0.5 / 0.5 / 1 / 0.5 | 2.5, medium | No user-profile trial |
-| J2 Event-triggered rather than per-turn writes | 1 / 0.5 / 1 / 0.5 | 3, medium | Optimal trigger unknown |
-| J3 Separate causal hypotheses and observed outcomes | 0.5 / 0.5 / 1 / 0.5 | 2.5, medium | No causal comparison |
-| J4 Preserve context, time and correction | 0.5 / 1 / 1 / 0.5 | 3, medium | Transfer from history QA to behavioral profiles unverified |
+| Judgment                                            | Four scores         | Total and level | Main gap                                                   |
+| --------------------------------------------------- | ------------------- | --------------- | ---------------------------------------------------------- |
+| J1 Event evidence supports pattern hypotheses       | 0.5 / 0.5 / 1 / 0.5 | 2.5, medium     | No user-profile trial                                      |
+| J2 Event-triggered rather than per-turn writes      | 1 / 0.5 / 1 / 0.5   | 3, medium       | Optimal trigger unknown                                    |
+| J3 Separate causal hypotheses and observed outcomes | 0.5 / 0.5 / 1 / 0.5 | 2.5, medium     | No causal comparison                                       |
+| J4 Preserve context, time and correction            | 0.5 / 1 / 1 / 0.5   | 3, medium       | Transfer from history QA to behavioral profiles unverified |
 
 ## Not verified
 

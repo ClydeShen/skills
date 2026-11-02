@@ -53,14 +53,14 @@ The user wants executable meta thinking, not a static knowledge tree. Ideally, a
 
 The following levels are working hypotheses for discussion, not a settled taxonomy.
 
-| Level | Provisional meaning | Typical content | Current confidence |
-| --- | --- | --- | --- |
-| L1 | Worldview / Philosophy / Foundational thought | Epistemology, Pragmatism, Holism, Reductionism, Dialectics, Stoicism, Systems philosophy | Medium |
-| L2 | General thinking principles / reusable mental models | First Principles, Occam's Razor, Bayesian Updating, Emergence, Feedback Loop, Second-order Thinking | Low to medium |
-| L3 | Problem structure / abstract problem class | Decision under uncertainty, Search, Constraint satisfaction, Coordination, Causal inference, Principal-agent problem | Low |
-| L4 | AI reasoning / interaction pattern | Unknown Discovery, Socratic, Critic, Simulation, Verification-first, Cyborg, Centaur, Mixed Initiative, Vibe | Medium |
-| L5 | Method / technique | Premortem, Red Team, Blind Spot Scan, Assumption Inventory, What-if Analysis, 5 Whys | Medium |
-| L6 | Concrete interaction / action | Specific prompt, tool call, workflow step, approval gate, checklist | High |
+| Level | Provisional meaning                                  | Typical content                                                                                                      | Current confidence |
+| ----- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| L1    | Worldview / Philosophy / Foundational thought        | Epistemology, Pragmatism, Holism, Reductionism, Dialectics, Stoicism, Systems philosophy                             | Medium             |
+| L2    | General thinking principles / reusable mental models | First Principles, Occam's Razor, Bayesian Updating, Emergence, Feedback Loop, Second-order Thinking                  | Low to medium      |
+| L3    | Problem structure / abstract problem class           | Decision under uncertainty, Search, Constraint satisfaction, Coordination, Causal inference, Principal-agent problem | Low                |
+| L4    | AI reasoning / interaction pattern                   | Unknown Discovery, Socratic, Critic, Simulation, Verification-first, Cyborg, Centaur, Mixed Initiative, Vibe         | Medium             |
+| L5    | Method / technique                                   | Premortem, Red Team, Blind Spot Scan, Assumption Inventory, What-if Analysis, 5 Whys                                 | Medium             |
+| L6    | Concrete interaction / action                        | Specific prompt, tool call, workflow step, approval gate, checklist                                                  | High               |
 
 > Important reservation: The L2/L3 boundary is the least stable. First Principles, Goodhart's Law, Prisoner's Dilemma, Bayesian Updating and Dunning-Kruger are often grouped as mental models, but may be different concept types. Do not force them into one level for the sake of a tree.
 
@@ -103,40 +103,40 @@ Vibe should not be defined as a bad mode. It is an interaction strategy that use
 
 These are provisional L4 candidates, not necessarily concepts that ultimately belong at the same level. Investigate whether they mix relationship models, reasoning methods, workflow models and governance patterns.
 
-| Candidate | Core idea |
-| --- | --- |
-| Vibe Interaction | Generate, observe, revise and repeat rapidly. |
-| Cyborg Interaction | Human and AI alternate thinking frequently in a tight feedback loop. |
-| Centaur Interaction | Human and AI divide work explicitly, each handling suitable parts. |
-| Delegation / Self-Automation | Delegate a relatively complete task to AI; the human mainly sets goals and acceptance. |
-| Mixed-Initiative Interaction | AI may ask, remind or change the next step, not merely respond. |
-| Socratic Interaction | Questions help users expose assumptions and develop understanding. |
-| Critic / Adversarial Interaction | Attack the current proposal and seek counterexamples and failure modes. |
-| Unknown Discovery | Find questions the user does not realize need asking. |
-| Simulation Interaction | Run scenarios, roles, future states or failure paths. |
-| Co-learning | Human and AI adapt together through long-term feedback. |
-| Verification-first Interaction | Couple generation with verification; generation is not the endpoint. |
-| Progressive Specification | Add constraints and definition progressively rather than specify everything at once. |
-| Human Checkpoint | Human approval or intervention controls consequential risk points. |
-| Multi-perspective Interaction | Analyze independently from multiple roles, objectives or specialties, then combine. |
-| Exploration Switching | Deliberately switch between exploiting the current route and exploring new ones. |
+| Candidate                        | Core idea                                                                              |
+| -------------------------------- | -------------------------------------------------------------------------------------- |
+| Vibe Interaction                 | Generate, observe, revise and repeat rapidly.                                          |
+| Cyborg Interaction               | Human and AI alternate thinking frequently in a tight feedback loop.                   |
+| Centaur Interaction              | Human and AI divide work explicitly, each handling suitable parts.                     |
+| Delegation / Self-Automation     | Delegate a relatively complete task to AI; the human mainly sets goals and acceptance. |
+| Mixed-Initiative Interaction     | AI may ask, remind or change the next step, not merely respond.                        |
+| Socratic Interaction             | Questions help users expose assumptions and develop understanding.                     |
+| Critic / Adversarial Interaction | Attack the current proposal and seek counterexamples and failure modes.                |
+| Unknown Discovery                | Find questions the user does not realize need asking.                                  |
+| Simulation Interaction           | Run scenarios, roles, future states or failure paths.                                  |
+| Co-learning                      | Human and AI adapt together through long-term feedback.                                |
+| Verification-first Interaction   | Couple generation with verification; generation is not the endpoint.                   |
+| Progressive Specification        | Add constraints and definition progressively rather than specify everything at once.   |
+| Human Checkpoint                 | Human approval or intervention controls consequential risk points.                     |
+| Multi-perspective Interaction    | Analyze independently from multiple roles, objectives or specialties, then combine.    |
+| Exploration Switching            | Deliberately switch between exploiting the current route and exploring new ones.       |
 
 ## 8. Functional Requirements
 
-| ID | Requirement | Assessment |
-| --- | --- | --- |
-| FR-01 | Framework must help the user avoid defaulting immediately to vibe interaction. | Keep |
-| FR-02 | Framework must support reasoning upward from a concrete question to more abstract principles, problem structures, or worldview assumptions. | Keep |
-| FR-03 | Framework must support reasoning downward from abstract principles to interaction patterns, methods, tools and concrete prompts. | Keep |
-| FR-04 | Framework must expose multiple plausible reasoning paths instead of forcing one canonical path too early. | Keep |
-| FR-05 | Framework must actively surface unknown unknowns, hidden assumptions, missing stakeholders, missing constraints and alternative framings. | Keep |
-| FR-06 | Framework must support challenge and falsification of its own selected reasoning approach. | Keep |
-| FR-07 | Framework must distinguish between different concept types even when popular literature groups them together as mental models. | Keep |
-| FR-08 | Framework must work across domains, including technical design, business decisions, learning, everyday tasks and creative work. | Keep |
-| FR-09 | Framework must allow loops. A user may move from L6 back to L4, L3, L2 or L1 when feedback shows the framing is wrong. | Keep |
-| FR-10 | Framework should explain why a particular interaction pattern is suitable, not only recommend a prompt. | Keep |
-| FR-11 | Framework should preserve vibe interaction as a valid strategy when conditions make it suitable. | Keep |
-| FR-12 | Framework should be extensible as new AI interaction concepts and classical thinking models are discovered. | Keep |
+| ID    | Requirement                                                                                                                                 | Assessment |
+| ----- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| FR-01 | Framework must help the user avoid defaulting immediately to vibe interaction.                                                              | Keep       |
+| FR-02 | Framework must support reasoning upward from a concrete question to more abstract principles, problem structures, or worldview assumptions. | Keep       |
+| FR-03 | Framework must support reasoning downward from abstract principles to interaction patterns, methods, tools and concrete prompts.            | Keep       |
+| FR-04 | Framework must expose multiple plausible reasoning paths instead of forcing one canonical path too early.                                   | Keep       |
+| FR-05 | Framework must actively surface unknown unknowns, hidden assumptions, missing stakeholders, missing constraints and alternative framings.   | Keep       |
+| FR-06 | Framework must support challenge and falsification of its own selected reasoning approach.                                                  | Keep       |
+| FR-07 | Framework must distinguish between different concept types even when popular literature groups them together as mental models.              | Keep       |
+| FR-08 | Framework must work across domains, including technical design, business decisions, learning, everyday tasks and creative work.             | Keep       |
+| FR-09 | Framework must allow loops. A user may move from L6 back to L4, L3, L2 or L1 when feedback shows the framing is wrong.                      | Keep       |
+| FR-10 | Framework should explain why a particular interaction pattern is suitable, not only recommend a prompt.                                     | Keep       |
+| FR-11 | Framework should preserve vibe interaction as a valid strategy when conditions make it suitable.                                            | Keep       |
+| FR-12 | Framework should be extensible as new AI interaction concepts and classical thinking models are discovered.                                 | Keep       |
 
 ## 9. Non-Goals
 
@@ -170,15 +170,15 @@ These are provisional L4 candidates, not necessarily concepts that ultimately be
 
 ### 11.2 Unstable or potentially problematic assumptions
 
-| Open assumption / risk | Why it matters |
-| --- | --- |
-| Is L1 = philosophy too broad? | Philosophy, scientific method, control theory, information theory and economic models differ. L1 may become Foundations with multiple types. |
-| Can L2 thinking principles form one category? | First Principles, Goodhart's Law, Bayesian Updating and Emergence are different kinds of concepts; subtypes or a second dimension may be needed. |
-| Is L3 problem structure necessary? | A principle may directly suggest an interaction pattern. L3 may be an optional routing layer, not mandatory on every path. |
-| Are L4 concepts homogeneous? | Centaur is a division-of-labor model, Critic a reasoning mode, Human Checkpoint a governance pattern, and Vibe a workflow style. Type labels may be needed. |
-| Is a fixed number of levels necessary? | The structure may be a graph with typed edges; levels may be human-readable abstraction bands. |
-| Is upward reasoning always valuable? | Simple, low-risk problems should not be overanalyzed to use the framework. A judgment of whether abstraction is worth it is needed. |
-| Could classical-theory mapping create false depth? | Saying Vibe = cybernetics without a feedback mechanism is labeling. Require explainable mapping criteria. |
+| Open assumption / risk                             | Why it matters                                                                                                                                              |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Is L1 = philosophy too broad?                      | Philosophy, scientific method, control theory, information theory and economic models differ. L1 may become Foundations with multiple types.                |
+| Can L2 thinking principles form one category?      | First Principles, Goodhart's Law, Bayesian Updating and Emergence are different kinds of concepts; subtypes or a second dimension may be needed.            |
+| Is L3 problem structure necessary?                 | A principle may directly suggest an interaction pattern. L3 may be an optional routing layer, not mandatory on every path.                                  |
+| Are L4 concepts homogeneous?                       | Centaur is a division-of-labor model, Critic a reasoning mode, Human Checkpoint a governance pattern, and Vibe a workflow style. Type labels may be needed. |
+| Is a fixed number of levels necessary?             | The structure may be a graph with typed edges; levels may be human-readable abstraction bands.                                                              |
+| Is upward reasoning always valuable?               | Simple, low-risk problems should not be overanalyzed to use the framework. A judgment of whether abstraction is worth it is needed.                         |
+| Could classical-theory mapping create false depth? | Saying Vibe = cybernetics without a feedback mechanism is labeling. Require explainable mapping criteria.                                                   |
 
 ## 12. Key Open Questions
 
@@ -198,16 +198,16 @@ These are provisional L4 candidates, not necessarily concepts that ultimately be
 
 This is a current description of the intended workflow, not a final process.
 
-| Stage | Meaning |
-| --- | --- |
-| 0. Question arrives | The user raises a practical problem. |
-| 1. Mode check | Decide whether a direct answer suffices or a deeper reasoning strategy is needed. |
-| 2. L4 candidate discovery | Suggest suitable patterns such as Unknown Discovery, Critic, Simulation, Socratic or Vibe. |
-| 3. Reason upward | Ask why the patterns fit, what structure underlies the problem, and which principles or worldview assumptions matter. |
-| 4. Reframe if needed | Redefine an overly narrow or mistaken framing. |
-| 5. Reason downward | Reselect L4 from higher-level principles and move to L5 methods. |
-| 6. Concrete interaction | Produce a prompt, tool, workflow, checklist or action. |
-| 7. Observe and loop | Use results to continue execution or return to a higher level. |
+| Stage                     | Meaning                                                                                                               |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| 0. Question arrives       | The user raises a practical problem.                                                                                  |
+| 1. Mode check             | Decide whether a direct answer suffices or a deeper reasoning strategy is needed.                                     |
+| 2. L4 candidate discovery | Suggest suitable patterns such as Unknown Discovery, Critic, Simulation, Socratic or Vibe.                            |
+| 3. Reason upward          | Ask why the patterns fit, what structure underlies the problem, and which principles or worldview assumptions matter. |
+| 4. Reframe if needed      | Redefine an overly narrow or mistaken framing.                                                                        |
+| 5. Reason downward        | Reselect L4 from higher-level principles and move to L5 methods.                                                      |
+| 6. Concrete interaction   | Produce a prompt, tool, workflow, checklist or action.                                                                |
+| 7. Observe and loop       | Use results to continue execution or return to a higher level.                                                        |
 
 ## 14. Success Criteria
 

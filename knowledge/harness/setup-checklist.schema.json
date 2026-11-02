@@ -17,7 +17,18 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "phase", "level", "weight", "check", "done_when", "harness", "why", "weight_reason", "status"],
+        "required": [
+          "id",
+          "phase",
+          "level",
+          "weight",
+          "check",
+          "done_when",
+          "harness",
+          "why",
+          "weight_reason",
+          "status"
+        ],
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
           "phase": { "type": "integer", "minimum": 0, "maximum": 6 },
@@ -32,7 +43,9 @@
             "properties": {
               "role": { "enum": ["guide", "sensor", "guide+sensor", "foundation"] },
               "control": { "enum": ["computational", "inferential", "human"] },
-              "timing": { "enum": ["feedforward", "in-session", "pre-integration", "post-integration", "continuous", "setup"] }
+              "timing": {
+                "enum": ["feedforward", "in-session", "pre-integration", "post-integration", "continuous", "setup"]
+              }
             }
           },
           "why": { "type": "string" },

@@ -16,23 +16,27 @@ Use Node.js 24 and Git on Windows, macOS, Linux, WSL or a cloud workspace. Run t
 
 ```text
 npm ci
-npm run git:setup
 npm run check
 ```
 
-`package.json` owns command definitions and exact dependency versions; the lockfile owns resolved npm dependencies. No Python, Bash or model key is required for the core gate. The optional Git hook uses Git's shell, available with Git for Windows.
+`npm ci` also enables the Git hooks and downloads pinned tools; a failure there warns and surfaces later in the gate. `package.json` owns command definitions and exact dependency versions; the lockfile owns resolved npm dependencies. No Python, Bash or model key is required for the core gate. The optional Git hook uses Git's shell, available with Git for Windows.
 
-| Entry | Purpose | Gate |
-| --- | --- | --- |
-| `npm run check:repo` | Fast repository contracts | Blocking |
-| `npm run git:setup` | Enable reviewed repository Git hooks in this clone; refuses conflicting hooks | Explicit local setup |
-| `npm run git:check` | Check current branch, authoring state and local hook activation, or CI source/target refs | Blocking; also part of `check:repo` |
-| `npm test` | Shared checker and evaluation-harness regression tests | Blocking |
-| `npm run eval` | Offline synthetic replay of initiative cases | Blocking harness smoke, not skill quality |
-| `npm run check` | Runs the three entries above, stopping at the first failure | Shared handoff/CI gate |
-| `npm run test:transport` | Loopback HTTP provider contract tests; no remote model | Additional CI gate; needs local socket access |
-| `npm run lint:agents` | Pinned agnix diagnostics for skills and agent configuration | Advisory CI job; nonzero exit remains visible |
-| `npm run skills:sync` | Explicitly copy reviewed canonical development tools to the Claude projection | Mutation, followed by `check:repo` |
+| Entry                    | Purpose                                                                                   | Gate                                                    |
+| ------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `npm run check:repo`     | Fast repository contracts, Git policy, format and lint                                    | Blocking                                                |
+| `npm run check:static`   | Knip, dependency-cruiser, Gitleaks and skill package validation                           | Blocking                                                |
+| `npm run fix`            | Apply Biome and Prettier                                                                  | Mutation                                                |
+| `npm run skill:check`    | Validate all skills, or the named ones                                                    | Blocking; errors only                                   |
+| `npm run skill:report`   | Report skill token size against the base branch                                           | Report only                                             |
+| `npm run check:pr`       | Check the pull request title and description in CI                                        | Blocking in its own job                                 |
+| `npm run git:setup`      | Enable reviewed repository Git hooks in this clone; refuses conflicting hooks             | Runs from `npm ci`; repeat after reconciling a conflict |
+| `npm run git:check`      | Check current branch, authoring state and local hook activation, or CI source/target refs | Blocking; also part of `check:repo`                     |
+| `npm test`               | Shared checker and evaluation-harness regression tests                                    | Blocking                                                |
+| `npm run eval`           | Offline synthetic replay of initiative cases                                              | Blocking harness smoke, not skill quality               |
+| `npm run check`          | Runs `check:repo`, `check:static`, `test` and `eval`, stopping at the first failure       | Shared handoff/CI gate                                  |
+| `npm run test:transport` | Loopback HTTP provider contract tests; no remote model                                    | Additional CI gate; needs local socket access           |
+| `npm run lint:agents`    | Pinned agnix diagnostics for skills and agent configuration                               | Advisory CI job; nonzero exit remains visible           |
+| `npm run skills:sync`    | Explicitly copy reviewed canonical development tools to the Claude projection             | Mutation, followed by `check:repo`                      |
 
 Real-model commands and configuration remain in [prompt evaluation](./prompt-evaluation.md). They are explicit, quota-consuming checks and are never triggered by hooks or the default gate. Evaluation output stays in ignored `evals/.local/`. The repository checker does not open actual user profiles or ignored environment files; the evaluation runner loads `.env.evaluation` only in explicit model mode.
 
@@ -54,11 +58,45 @@ agnix is optional because its postinstall downloads a platform binary from GitHu
 
 On this cloud executor, the installer required Node's `NODE_USE_ENV_PROXY=1` environment setting to use the inherited proxy. Set it through the host's normal environment configuration when needed; do not unset proxy settings or disable TLS verification. Failed optional installation does not remove the core gate.
 
-The measured agnix 0.59.3 report includes AS-016 on the existing candidate's boolean `metadata.internal`. That is a documented skills CLI extension; the core checker validates it explicitly. Keep the incompatibility visible rather than broadly disabling YAML checks. The candidate marker is removed at authorized release. Other heuristics remain advisory until their usefulness and false positives are reviewed. Do not enable automatic fixes as a gate.
+The candidate's boolean `metadata.internal` is a documented skills CLI extension, and the core checker validates it explicitly. The candidate marker is removed at authorized release. Other heuristics remain advisory until their usefulness and false positives are reviewed. Do not enable automatic fixes as a gate. Repository-wide agnix now skips candidate packages: `npm run skill:check` runs agnix on an exported copy without the marker, because the parse error otherwise stopped every other check on those packages.
+
+## Skill Quality Governance
+
+Static rules run automatically, AI suggests semantic changes, and evaluation with human review decides what ships. [ADR 0003](../research/harness/adr/0003-static-tools-and-skill-quality-governance.md) records the choices.
+
+| Measure       | Question                                   | Evidence                                                     | Who decides                   |
+| ------------- | ------------------------------------------ | ------------------------------------------------------------ | ----------------------------- |
+| Correctness   | Is the package well formed and consistent? | `check:repo`, `check:static`                                 | Tools                         |
+| Effectiveness | Does it trigger correctly and help?        | `eval:trigger`, Promptfoo suites, comparison with a baseline | Evaluation results and people |
+| Efficiency    | What does it cost?                         | `skill:report`, cost and time in evaluation reports          | People                        |
+
+| Activity                     | When                                                       | Blocks a merge                                                               |
+| ---------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Static checks                | Each commit and pull request                               | Errors only                                                                  |
+| Security report              | Third-party skills or skill scripts change; before release | No; high findings need human review                                          |
+| Trigger and suite evaluation | After an important skill change, by hand                   | No; judge the results                                                        |
+| Baseline comparison          | Model upgrade or large skill change, by hand               | No; compare versions                                                         |
+| AI improvement               | A failure or regression                                    | No automatic merge; candidate changes only, with before and after evaluation |
+
+By stage: `draft` needs the static checks. `internal` adds Promptfoo evaluation. `public` and release add comparison evidence and the security report; release also runs the pinned reference validator.
+
+Never use a quality score as a gate. A score rewards adding rules. Treat growth as a cost: a skill that grows must say what the growth buys.
+
+### Environments
+
+| Environment                 | Hooks and setup                                                                                                                                                                             |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Local Claude Code and Codex | `npm ci` or session start enables everything. Codex must trust the project hooks.                                                                                                           |
+| VS Code                     | Git hooks run for its commits. The Copilot setting points at the commit instructions. Other generators get no instructions, so the hook rejects a wrong message.                            |
+| Claude cloud                | Repository hooks run in a single-repository session. Multi-repository sessions and project threads skip them; use a setup script with `npm ci`.                                             |
+| Codex cloud                 | Project hooks do not run with cloud orchestration. Add `npm ci` to the environment setup script in Codex settings; that also enables Git hooks and tools while network access is available. |
+| Any other path              | CI repeats the checks, including after `--no-verify`.                                                                                                                                       |
+
+Whether Git hooks fire on each cloud host has not been observed yet. Record it here when it has.
 
 ## Client and Git adapters
 
-`AGENTS.md` is shared instruction authority; `CLAUDE.md` imports it. Both client configurations call `harness/stop-hook.mjs`, which runs the same fast `check:repo` implementation. Hook checks do not replace the full handoff gate.
+`AGENTS.md` is shared instruction authority; `CLAUDE.md` imports it. Both client configurations call `harness/session-start.mjs`, which installs missing dependencies, and `harness/stop-hook.mjs`, which runs the same fast `check:repo` implementation. Hook checks do not replace the full handoff gate.
 
 The Stop hook asks for one repair pass after a failed check. If `stop_hook_active` is already true, it surfaces an incomplete-verification message without another continuation. Missing dependencies, failed child processes and timeouts are failures, not green checks. Malformed event input exits nonzero without claiming validation. Scope-limited blockers can be handed back; a hook is not permission to fix unrelated changes.
 
@@ -90,9 +128,9 @@ The owner reported enabling GitHub's automatic deletion of merged head branches 
 
 ### Git enforcement
 
-`npm run git:setup` sets local `core.hooksPath` to `.githooks`, enables executable hooks and refuses an existing custom path or default hooks. Reconcile conflicts instead of overwriting them. Installation is explicit and repeated for each clone; `npm ci` does not change Git configuration. Relative hook paths resolve within each linked worktree.
+`npm run git:setup` sets local `core.hooksPath` to `.githooks`, enables executable hooks and refuses an existing custom path or default hooks. Reconcile conflicts instead of overwriting them. `npm ci` runs this through `prepare` in each clone; a conflict produces a warning, and `git:check` then fails until it is reconciled. Relative hook paths resolve within each linked worktree.
 
-The pre-commit hook rejects `main`, detached HEAD and invalid task names. The pre-push hook reads every actual ref update: it rejects direct main updates/deletion, invalid or renamed task destinations, non-fast-forward or unverifiable updates, non-current task branches and changes/deletions of existing tags. New tags remain subject to release authorization. It then runs the complete shared gate. `check:repo` and client Stop hooks also check Git policy: local main must be clean, task naming valid and hooks enabled. A clean main may be inspected and tested normally.
+The pre-commit hook rejects `main`, detached HEAD and invalid task names. It then formats staged files and stages the result, validates the skills that the commit touches and scans for secrets. If a staged file also has unstaged changes, it checks without rewriting, so unstaged work is never staged. The commit-msg hook runs commitlint. The pre-push hook reads every actual ref update: it rejects direct main updates/deletion, invalid or renamed task destinations, non-fast-forward or unverifiable updates, non-current task branches and changes/deletions of existing tags. New tags remain subject to release authorization. It then runs the complete shared gate. `check:repo` and client Stop hooks also check Git policy: local main must be clean, task naming valid and hooks enabled. A clean main may be inspected and tested normally.
 
 CI checks real push/PR context, including detached checkouts: PR source must be `work/<topic>` and target must be `main`; pushes allow main, task branches and release tags. The check runs inside the existing three required platform jobs. Old inactive local branch names do not fail current-task checks; inspect and retire them separately.
 
@@ -100,7 +138,7 @@ These are bypassable workflow controls, as accepted by the owner. Hooks and CI p
 
 ## CI and protected integration
 
-The workflow runs the shared gate plus transport tests on Ubuntu, Windows and macOS, with no model key. The separate Linux agnix job reports advisory findings. WSL uses the same Node path but is not a separate CI runner. A workflow definition is not evidence of a successful remote run.
+The workflow runs the shared gate plus transport tests on Ubuntu, Windows and macOS, with no model key. The separate Linux agnix job reports advisory findings. The pull request conventions workflow checks the title and description and reports skill size. The skill security workflow reports Cisco Skill Scanner findings for third-party skills and skill scripts; it never blocks. WSL uses the same Node path but is not a separate CI runner. A workflow definition is not evidence of a successful remote run.
 
 The owner approved PR-based integration and three platform checks on 2026-10-24 (UTC). The clarification on 2026-10-28 retains these as the default workflow and makes server-side enforcement optional. [main-protection.json](../.github/main-protection.json) remains an optional stricter preset, not a required setup task. If applied, it requires the three `local-evaluation` matrix checks from the GitHub Actions app (observed app ID 15368), an up-to-date head and a pull request; it applies restrictions to administrators and disallows force pushes and deletion. agnix remains advisory. A regression test checks that the preset's names match the actual workflow matrix.
 

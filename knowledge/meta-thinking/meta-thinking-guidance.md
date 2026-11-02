@@ -20,11 +20,11 @@ This topic can inform skills, system prompts, collaboration workflows and memory
 
 Confirmed direction: use when explicitly requested or when interaction provides a worthwhile signal. Complete clear, progressing tasks normally.
 
-| Context | Signal worth investigating | Useful result |
-| --- | --- | --- |
-| Stalled interaction | The same obstacle returns without new evidence or usable progress | A testable causal hypothesis and a different attempt |
-| Intent exploration | The user cannot yet identify what matters, or candidate goals conflict | Clearer trade-offs and a next step |
-| Agent design | A skill, system prompt or agentic workflow is requested | Task conditions explain the reasoning, division of work and feedback selected |
+| Context             | Signal worth investigating                                             | Useful result                                                                 |
+| ------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Stalled interaction | The same obstacle returns without new evidence or usable progress      | A testable causal hypothesis and a different attempt                          |
+| Intent exploration  | The user cannot yet identify what matters, or candidate goals conflict | Clearer trade-offs and a next step                                            |
+| Agent design        | A skill, system prompt or agentic workflow is requested                | Task conditions explain the reasoning, division of work and feedback selected |
 
 Round counts, rejections, changed goals and discussion length are only clues. Research indicates that preferences sometimes form through expression and comparison; changing direction may reflect growing understanding. [R3]
 
@@ -36,14 +36,14 @@ The philosophical dimension examines what is worth pursuing, what is treated as 
 
 These relationships are a knowledge index, not required stages.
 
-| Question | Researched basis | What it can affect |
-| --- | --- | --- |
-| Is further thought worth its cost? | Rational metareasoning and resource-rational analysis [R1] | Retrieval, experiments versus action, time and stopping conditions |
-| Has the user's goal formed yet? | Preference construction [R3] | Concrete comparison, emerging trade-offs and goal revision |
-| Does the original framing hide a key relationship? | Local Step-Back Prompting experiments [R2] | Extracting relevant principles, then returning to original constraints |
-| Who should handle each part? | Automation functions and levels, mixed initiative [R1] | Evidence collection, analysis, decision and execution |
-| What supports this criticism? | Positive and negative self-correction findings, tool feedback [R2] | Separating criticism, verification and answer revision |
-| Which experiences deserve reuse? | Episodic memory, reflection and long-term memory evaluation [R4] | Preserving context and outcomes, revising stale or conflicting generalizations |
+| Question                                           | Researched basis                                                   | What it can affect                                                             |
+| -------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Is further thought worth its cost?                 | Rational metareasoning and resource-rational analysis [R1]         | Retrieval, experiments versus action, time and stopping conditions             |
+| Has the user's goal formed yet?                    | Preference construction [R3]                                       | Concrete comparison, emerging trade-offs and goal revision                     |
+| Does the original framing hide a key relationship? | Local Step-Back Prompting experiments [R2]                         | Extracting relevant principles, then returning to original constraints         |
+| Who should handle each part?                       | Automation functions and levels, mixed initiative [R1]             | Evidence collection, analysis, decision and execution                          |
+| What supports this criticism?                      | Positive and negative self-correction findings, tool feedback [R2] | Separating criticism, verification and answer revision                         |
+| Which experiences deserve reuse?                   | Episodic memory, reflection and long-term memory evaluation [R4]   | Preserving context and outcomes, revising stale or conflicting generalizations |
 
 First Principles, Holism and other draft concepts remain research leads; no reliable mapping to all interaction methods has been established. Investigate a relevant theory and its counterexamples when a concrete problem calls for it.
 
@@ -65,11 +65,11 @@ Confirmed direction: an explicit skill, system-prompt or agentic-workflow design
 
 Recommendation: explain how task conditions influence mechanism selection. A clear workflow may suffice when paths and standards are stable; dynamic selection is more justified when next steps depend on environmental feedback. Before adding evaluation-driven improvement, identify the feedback basis. [R3]
 
-| Design object | What the reasoning should produce |
-| --- | --- |
-| Skill | Applicability, necessary judgments, evidence and completion conditions |
-| System prompt | Persistent goals, decision principles and intervention boundaries |
-| Agentic workflow | Division of work, feedback, handoffs and stopping conditions |
+| Design object    | What the reasoning should produce                                      |
+| ---------------- | ---------------------------------------------------------------------- |
+| Skill            | Applicability, necessary judgments, evidence and completion conditions |
+| System prompt    | Persistent goals, decision principles and intervention boundaries      |
+| Agentic workflow | Division of work, feedback, handoffs and stopping conditions           |
 
 A reviewer design needs target error types and available evidence before choosing deterministic checks, exploratory criticism or tool verification. Adding a Critic role alone does not establish effective detection. [R2]
 
@@ -105,13 +105,13 @@ On 2026-10-25, under the owner's authorization, the agent recommended ending bro
 
 Confidence in that convergence recommendation was medium, 3.0: Owner 1 (explicit discretion to converge), Research 0.5 (related sources, no full-method validation), Reasoning 1, Project history 0.5 (research and requirements, no trials). This is not a probability of product success.
 
-| Open question | Evidence needed next | When more research is useful |
-| --- | --- | --- |
-| Is implicit activation accurate? | Conversations covering steady progress, normal exploration and actual stalls | Stable categories of false or missed activation |
-| Does intervention provide net benefit? | Quality, time and user burden compared with existing interaction | Repeated ineffective interventions with unclear causes |
-| Are the resulting agents better? | Inspect design rationale, then compare target-task behavior | Missing applicable design methods or reliable feedback |
+| Open question                          | Evidence needed next                                                                                | When more research is useful                              |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Is implicit activation accurate?       | Conversations covering steady progress, normal exploration and actual stalls                        | Stable categories of false or missed activation           |
+| Does intervention provide net benefit? | Quality, time and user burden compared with existing interaction                                    | Repeated ineffective interventions with unclear causes    |
+| Are the resulting agents better?       | Inspect design rationale, then compare target-task behavior                                         | Missing applicable design methods or reliable feedback    |
 | Do profiles improve later interaction? | No-profile versus relevant-profile comparisons, including stale, conflicting and irrelevant records | Bad transfer, distorted attribution or retrieval problems |
-| Does the user develop thinking skills? | Longitudinal evidence of independent application to new problems | Short-term efficiency with unclear learning or dependence |
+| Does the user develop thinking skills? | Longitudinal evidence of independent application to new problems                                    | Short-term efficiency with unclear learning or dependence |
 
 These questions inform evaluation; cases, thresholds and experiments belong to the initiative. Low-frequency activation value, long-term learning and profile net benefit remain unverified.
 

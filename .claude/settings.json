@@ -1,5 +1,17 @@
 {
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/harness/session-start.mjs"],
+            "timeout": 300
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

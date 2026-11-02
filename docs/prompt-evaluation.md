@@ -74,6 +74,20 @@ The JSON contract influences output; this is not natural conversation or full ag
 
 Fixture mode sends authored synthetic answers through the grading pipeline. All three conditions receive the same answer, so fixture scores cannot compare prompts or establish model effectiveness or working memory.
 
+## Skill trigger and version comparison
+
+Real-agent checks run Claude Code and Codex through Promptfoo's agent providers and use `skill-used` and `not-skill-used`. They use your existing Claude Code and Codex login when no API key is set, consume its quota, and never run from hooks or the default gate.
+
+```text
+npm run eval:agents:setup
+npm run eval:trigger -- --skill meta-thinking --agent claude
+npm run eval:trigger -- --skill meta-thinking --repeat 3 --baseline main
+```
+
+Each initiative keeps its cases in `incubator/<initiative>/evals/trigger.json`, with at least one near miss the skill must leave alone. `--baseline <git-ref>` adds the skill at that ref as a second arm. The run prints passes, mean cost and mean time per arm, and the report records skill calls for each run.
+
+Limits: Promptfoo infers Codex skill use from `SKILL.md` reads, so spot check the records. Agents run on the host, in a temporary project with read-only tools, not in a container. Claude loads project settings only; Codex still reads your own `CODEX_HOME`, so your global skills can influence it. These checks have only run as synthetic replay so far.
+
 ## Adding suites
 
 From the `internal` stage, every initiative's evaluation cases run through this runner; see the [stage rule](./REPOSITORY-STRUCTURE.md#incubation-stages). Add a module under `incubator/<initiative>/evals/`. Export `createSuite({ mode })` returning a Promptfoo test configuration. Fixture mode supplies a provider without external calls; model mode receives the explicitly configured endpoint from the runner. Keep cases and domain assertions in the initiative and reusable utilities in `evals/`.

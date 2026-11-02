@@ -8,13 +8,13 @@ Evidence markers: `[official]` means first-party engineering guidance, product d
 
 ## Overview
 
-| Question | Recommendation | Evidence and limits | Judgment |
-| --- | --- | --- | --- |
-| What does the skill add? | Distinguish capability gaps from user workflow preferences | An explicit official distinction; task-specific verification remains necessary | J1, medium |
-| How detailed should instructions be? | Adjust freedom to variability, fragility, and error consequences | Official authoring guidance agrees with the source implementation | J2, medium |
-| How can the model understand the task? | Give necessary reasons and representative examples, without enumerating every situation | Official engineering guidance; effects depend on the model | J3, medium |
-| How can useful simplification be identified? | Compare artifacts and traces, including quality, cost, and triggering | An inspectable evaluation implementation, not run in this project | J4, medium |
-| What should humans contribute? | Decide intent and preferences and assess artifacts; the model investigates and executes | Current skill-creator explicitly supports two-way collaboration | J5, medium |
+| Question                                     | Recommendation                                                                          | Evidence and limits                                                            | Judgment   |
+| -------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ---------- |
+| What does the skill add?                     | Distinguish capability gaps from user workflow preferences                              | An explicit official distinction; task-specific verification remains necessary | J1, medium |
+| How detailed should instructions be?         | Adjust freedom to variability, fragility, and error consequences                        | Official authoring guidance agrees with the source implementation              | J2, medium |
+| How can the model understand the task?       | Give necessary reasons and representative examples, without enumerating every situation | Official engineering guidance; effects depend on the model                     | J3, medium |
+| How can useful simplification be identified? | Compare artifacts and traces, including quality, cost, and triggering                   | An inspectable evaluation implementation, not run in this project              | J4, medium |
+| What should humans contribute?               | Decide intent and preferences and assess artifacts; the model investigates and executes | Current skill-creator explicitly supports two-way collaboration                | J5, medium |
 
 ## 1. Reading scope and version
 
@@ -104,14 +104,14 @@ Preserve the distinction between fixtures, model outputs, and host integration i
 
 ## 6. Synthesis with Matt and retained differences
 
-| Topic | Shared direction | Project choice |
-| --- | --- | --- |
-| Concision | Trust existing model knowledge and remove content without added value | Judge necessity through behavior comparisons; retain essential constraints |
-| Generalization | Extract transferable mechanisms from cases instead of accumulating exceptions | Test the same problem structure in different domains |
-| Completion | Use observable completion conditions | Meta Thinking stops when it can advance the next step; do not copy exhaustive interviewing |
-| Explanation | Matt emphasizes compression and familiar concepts; Anthropic emphasizes useful reasons | Keep reasons that change contextual judgment; remove background teaching and restatement |
-| Evaluation | Revise through real usage and feedback | Use lightweight comparisons and expand with risk; do not require a large benchmark for every skill |
-| Initiative | Discovery and selection affect usage cost | Preserve confirmed infrequent intervention and test explicit and natural activation separately |
+| Topic          | Shared direction                                                                       | Project choice                                                                                     |
+| -------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Concision      | Trust existing model knowledge and remove content without added value                  | Judge necessity through behavior comparisons; retain essential constraints                         |
+| Generalization | Extract transferable mechanisms from cases instead of accumulating exceptions          | Test the same problem structure in different domains                                               |
+| Completion     | Use observable completion conditions                                                   | Meta Thinking stops when it can advance the next step; do not copy exhaustive interviewing         |
+| Explanation    | Matt emphasizes compression and familiar concepts; Anthropic emphasizes useful reasons | Keep reasons that change contextual judgment; remove background teaching and restatement           |
+| Evaluation     | Revise through real usage and feedback                                                 | Use lightweight comparisons and expand with risk; do not require a large benchmark for every skill |
+| Initiative     | Discovery and selection affect usage cost                                              | Preserve confirmed infrequent intervention and test explicit and natural activation separately     |
 
 [inference] Matt contributes strong editing discipline; Anthropic adds capability hypotheses, freedom allocation, and feedback experiments. Together they support using as little instruction as is sufficient to change behavior reliably. They do not establish one optimal writing style for every model.
 
