@@ -214,3 +214,85 @@ test("files must use draw.io's own layout, which importers such as Lucidchart re
     '<mxfile>\n  <diagram id="z">eJxLTEoGAAJNASs=</diagram>\n</mxfile>\n',
   );
 });
+
+const waypoints = (...p) => `<Array as="points">${p.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('')}</Array>`;
+const simpler = (xml) => checkLayout(xml).warnings.filter((w) => /route is clear|to avoid the/.test(w));
+
+test('a clear one-bend route reports the extra bend of a Z', () => {
+  const xml = page(
+    icon('a', 0, 0, 'App'),
+    icon('b', 400, 300, 'Store'),
+    edge('z', 'a', 'b', 'exitX=1;exitY=0.5;entryX=0;entryY=0.5;', '', waypoints([236, 36], [236, 336])),
+  );
+  assert.deepEqual(simpler(xml), [
+    'Connector z bends 2 times, but a one-bend route is clear: leave the right of a and enter the top of b.',
+  ]);
+});
+
+test('a detour around a movable connector label is reported; one around a caption or element is not', () => {
+  // A tall label of another connector sits on the straight line between a and b.
+  const label = 'one&lt;br&gt;two&lt;br&gt;three&lt;br&gt;four';
+  const aroundLabel = page(
+    icon('a', 0, 0, 'App'),
+    icon('b', 600, 0, 'Store'),
+    icon('e', 250, -260, 'E'),
+    icon('f', 450, -260, 'F'),
+    edge('other', 'e', 'f', side, label, '<mxPoint x="-86" y="260" as="offset"/>'),
+    edge('z', 'a', 'b', 'exitX=0.5;exitY=0;entryX=0.5;entryY=0;', '', waypoints([36, -60], [636, -60])),
+  );
+  assert.deepEqual(simpler(aroundLabel), [
+    'Connector z bends 2 times to avoid the connector label other. A bend around text reads as part of the route; move an element or the text so that a straight route is clear.',
+  ]);
+  // The same detour around another element's caption is reasonable: the caption belongs to its icon.
+  const aroundCaption = page(
+    icon('a', 0, 0, 'App'),
+    icon('b', 600, 0, 'Store'),
+    icon('c', 300, -80, label),
+    edge('z', 'a', 'b', 'exitX=0.5;exitY=0;entryX=0.5;entryY=0;', '', waypoints([36, -200], [636, -200])),
+  );
+  assert.deepEqual(simpler(aroundCaption), []);
+});
+
+test('numbered steps report ports or targets out of order and are never told to swap ports', () => {
+  const steps = (ports, targets) =>
+    page(
+      icon('agent', 0, 200, 'Agent'),
+      icon('t1', 400, 0, 'One'),
+      icon('t2', 400, 200, 'Two'),
+      icon('t3', 400, 400, 'Three'),
+      ...[1, 2, 3].map((n, i) =>
+        edge(`s${n}`, 'agent', targets[i], `exitX=1;exitY=${ports[i]};entryX=0;entryY=0.5;`, `${n}. Step`, ''),
+      ),
+    );
+  const order = (xml) => checkLayout(xml).warnings.filter((w) => /^Steps? /.test(w));
+  assert.deepEqual(order(steps([0.25, 0.5, 0.75], ['t1', 't2', 't3'])), []);
+  assert.deepEqual(order(steps([0.25, 0.75, 0.5], ['t1', 't2', 't3'])), [
+    'Step 3 leaves the right of agent above step 2. Order the ports, and their targets, top to bottom in step order.',
+  ]);
+  const tangled = steps([0.25, 0.5, 0.75], ['t1', 't3', 't2']);
+  assert.deepEqual(order(tangled), [
+    'Steps 2 and 3 leave the right of agent in order, but t2 sits above t3. Move the targets into step order so the lines do not cross.',
+  ]);
+  assert.ok(!checkLayout(tangled).warnings.some((w) => w.includes('Swap their ports')));
+});
+
+test('round 3 semantic routing trials report the out-of-order steps and avoidable bends visible in their images', () => {
+  const trial = (name) =>
+    checkLayout(readFileSync(new URL(`./semantic-routing-2026-11-02/${name}/diagram.drawio`, import.meta.url), 'utf8'))
+      .warnings;
+  const a = trial('round3-a');
+  for (const expected of [
+    'Step 3 leaves the right of assistant above step 2. Order the ports, and their targets, top to bottom in step order.',
+    'Connector runTf bends 2 times, but a one-bend route is clear: leave the right of actions and enter the top of tf.',
+  ])
+    assert.ok(a.includes(expected), expected);
+  // Write embeddings goes around the Embeddings API icon; that channel is reasonable.
+  assert.ok(!a.some((w) => w.startsWith('Connector index ') && /route is clear|to avoid/.test(w)));
+  const b = trial('round3-b');
+  assert.ok(
+    b.includes(
+      'Steps 2 and 3 leave the right of web in order, but cosmos sits above openai. Move the targets into step order so the lines do not cross.',
+    ),
+  );
+  assert.ok(!b.some((w) => w.includes('Swap their ports')));
+});

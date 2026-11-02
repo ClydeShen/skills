@@ -42,7 +42,7 @@ Nest boundaries as the platform does: a deployment boundary such as a region or 
 - Elements usually take input on the side facing the origin and give output on the opposite side. Auxiliary connections use the other two sides.
 - Top and bottom rows join the main path vertically. They do not cross the middle row.
 - A failure path runs on its own track beside the main path, in reverse, and shares no segment with it.
-- Use orthogonal routes with at most two bends. A longer route means an element is in the wrong place; move it. Connectors never pass behind an element.
+- Use orthogonal routes with at most two bends, and no more than the ends need: straight when they line up, one bend when they do not. A longer route means an element or port is in the wrong place; move it. Connectors never pass behind an element.
 - An icon's caption owns the space below it: the placement's `labelWidth` wide and about 20 units per line deep. Attach connectors to the other three sides. If a connection must leave downward, move the caption beside the icon or move the element; do not bend the connector around the caption.
 - Never bend a connector to avoid text. Move the label, the caption or the element instead. A detour reads as a real path.
 - Give each kind of flow its own lane, so the layout tells them apart. The runtime path runs through the middle. Build, ingestion and management flows run along the top or a side, and telemetry along the bottom or a side, so they do not cut through the runtime path. A long secondary connector therefore runs along its lane around the outside, with two bends, rather than across the middle; it never leaves a region that holds both its ends.
