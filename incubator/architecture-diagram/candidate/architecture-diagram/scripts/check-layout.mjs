@@ -478,7 +478,10 @@ function crossings(edges, boxes) {
         found.push(
           `Connectors ${e.id} and ${f.id} cross. Reorder ports, move an element, or route one around the outside.`,
         );
-      if (shared > 10) found.push(`Connectors ${e.id} and ${f.id} share a ${Math.round(shared)}-unit segment.`);
+      if (shared > 10)
+        found.push(
+          `Connectors ${e.id} and ${f.id} share a ${Math.round(shared)}-unit segment, so they read as one connection. Give each its own port and route.`,
+        );
     }
   return found;
 }
