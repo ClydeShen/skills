@@ -25,7 +25,7 @@ For top to bottom, the main path runs down the middle column through entry, proc
 
 Start from who initiates. A main path begins at a client or external system, even when the source only implies that hop. Draw it, and note the inference in the companion record.
 
-Place services by their role and lane first, and number the steps afterwards. A reader finds a sequence by following its numbers on the page, so numbers need not read top to bottom or left to right; never move an element out of its lane to put numbers in order. Place a service that two flows share between those flows, so that both reach it directly; never leave it on one side for the other flow to reach by a long route.
+Treat a numbered list in the source as an unordered set of interactions while you lay out: place services by their role and lane, and route without regard to the numbers. Number the steps afterwards, from the execution order the architecture implies; see [notation](./notation.md). A reader finds a sequence by following its numbers on the page, so numbers need not read top to bottom or left to right; never move an element out of its lane to put numbers in order. Place a service that two flows share between those flows, so that both reach it directly; never leave it on one side for the other flow to reach by a long route.
 
 Nest boundaries as the platform does: a deployment boundary such as a region or network contains logical groups, never the reverse. Draw a connector from the element that acts. Attach it to a frame only when every member acts, and then say so in its label.
 
