@@ -4,7 +4,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-export const taskBranch = (name) => /^work\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name);
+// Task branches: work/<topic>, or claude/<topic> and codex/<topic> created by hosted coding agents.
+export const taskBranch = (name) => /^(?:work|claude|codex)\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name);
 const git = (cwd, args) => execFileSync('git', args, { cwd, encoding: 'utf8', timeout: 15_000 }).trim();
 const optionalGit = (cwd, args) => {
   const r = spawnSync('git', args, { cwd, encoding: 'utf8', timeout: 15_000 });
@@ -15,14 +16,15 @@ const optionalGit = (cwd, args) => {
 export function ciBranch(env) {
   if (env.GITHUB_EVENT_NAME === 'pull_request') {
     if (env.GITHUB_BASE_REF !== 'main' || !taskBranch(env.GITHUB_HEAD_REF)) {
-      throw new Error('Pull requests must target main and originate from work/<kebab-case-topic>.');
+      throw new Error('Pull requests must target main and originate from work/, claude/ or codex/<kebab-case-topic>.');
     }
     return env.GITHUB_HEAD_REF;
   }
   if (env.GITHUB_EVENT_NAME !== 'push') throw new Error('Unsupported CI event for Git policy.');
   if (env.GITHUB_REF?.startsWith('refs/tags/')) return env.GITHUB_REF;
   const branch = env.GITHUB_REF?.replace(/^refs\/heads\//, '');
-  if (branch !== 'main' && !taskBranch(branch)) throw new Error('CI branch must be main or work/<kebab-case-topic>.');
+  if (branch !== 'main' && !taskBranch(branch))
+    throw new Error('CI branch must be main or work/, claude/ or codex/<kebab-case-topic>.');
   return branch;
 }
 
@@ -30,7 +32,9 @@ export function checkGit(cwd = root, { commit = false, env = process.env } = {})
   if (!commit && env.GITHUB_ACTIONS === 'true') return ciBranch(env);
   const branch = optionalGit(cwd, ['symbolic-ref', '--quiet', '--short', 'HEAD']);
   if (branch !== 'main' && !taskBranch(branch))
-    throw new Error('Use a named work/<kebab-case-topic> branch; detached authoring is not allowed.');
+    throw new Error(
+      'Use a named work/, claude/ or codex/<kebab-case-topic> branch; detached authoring is not allowed.',
+    );
   if (branch === 'main' && (commit || git(cwd, ['status', '--porcelain']))) {
     throw new Error('main is for integration. Create or resume a task branch before editing or committing.');
   }
@@ -72,7 +76,7 @@ export function checkPush(input, cwd = root) {
     const [localRef, localOid, remoteRef, remoteOid] = fields;
     if (remoteRef.startsWith('refs/heads/')) {
       if (!taskBranch(remoteRef.slice('refs/heads/'.length)))
-        throw new Error('Push only work/<topic> branches; main updates require a pull request.');
+        throw new Error('Push only work/, claude/ or codex/<topic> branches; main updates require a pull request.');
       if (!zero(localOid) && localRef !== remoteRef) throw new Error('Local and remote task branch names must match.');
       if (!zero(localOid) && remoteRef !== `refs/heads/${git(cwd, ['symbolic-ref', '--short', 'HEAD'])}`) {
         throw new Error('Check out the task branch before pushing it so the gate checks the pushed work.');

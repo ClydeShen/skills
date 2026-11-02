@@ -32,18 +32,37 @@ function fixture(t) {
 }
 
 test('Git names and detached CI events distinguish main, task PRs and release tags', () => {
-  for (const name of ['work/meta-thinking-prompt', 'work/memory-knowledge', 'work/skill2']) assert.ok(taskBranch(name));
-  for (const name of ['', 'work', 'codex/topic', 'develop', 'work/Bad', 'work/a/b', 'work/a--b', 'work/-a'])
+  for (const name of [
+    'work/meta-thinking-prompt',
+    'work/memory-knowledge',
+    'work/skill2',
+    'claude/fix-icons',
+    'codex/topic',
+  ])
+    assert.ok(taskBranch(name));
+  for (const name of [
+    '',
+    'work',
+    'codex',
+    'copilot/topic',
+    'develop',
+    'work/Bad',
+    'claude/a/b',
+    'codex/a--b',
+    'work/-a',
+  ])
     assert.ok(!taskBranch(name));
   assert.equal(
     ciBranch({ GITHUB_EVENT_NAME: 'pull_request', GITHUB_BASE_REF: 'main', GITHUB_HEAD_REF: 'work/topic' }),
     'work/topic',
   );
+  for (const head of ['claude/topic', 'codex/topic'])
+    assert.equal(ciBranch({ GITHUB_EVENT_NAME: 'pull_request', GITHUB_BASE_REF: 'main', GITHUB_HEAD_REF: head }), head);
   assert.equal(ciBranch({ GITHUB_EVENT_NAME: 'push', GITHUB_REF: 'refs/heads/main' }), 'main');
   assert.equal(ciBranch({ GITHUB_EVENT_NAME: 'push', GITHUB_REF: 'refs/tags/v1' }), 'refs/tags/v1');
   for (const env of [
     { GITHUB_EVENT_NAME: 'pull_request', GITHUB_BASE_REF: 'develop', GITHUB_HEAD_REF: 'work/topic' },
-    { GITHUB_EVENT_NAME: 'pull_request', GITHUB_BASE_REF: 'main', GITHUB_HEAD_REF: 'codex/topic' },
+    { GITHUB_EVENT_NAME: 'pull_request', GITHUB_BASE_REF: 'main', GITHUB_HEAD_REF: 'copilot/topic' },
     { GITHUB_EVENT_NAME: 'push', GITHUB_REF: 'refs/heads/develop' },
     { GITHUB_EVENT_NAME: 'workflow_dispatch' },
   ])
