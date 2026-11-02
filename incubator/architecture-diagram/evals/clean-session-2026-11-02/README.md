@@ -26,3 +26,15 @@ AI Search now sits between the query and ingestion flows, which both reach direc
 - Laying out the steps as an unordered set gave an untangled fan-out in both cases.
 - Numbering afterwards worked in A and was skipped in B. The notation rule numbers interactions only "when execution order is needed and layout alone cannot establish it", which leaves room to drop them; nothing requires a sequence stated in the source to appear on the diagram.
 - Shared trunks and start stubs were reported by the layout check and kept as deliberate.
+
+## B after requiring stated steps
+
+Commit `f8ae813` requires every step the source orders to appear with a number and an action label; layout still treats the list as unordered. One rerun of B with the same setup: [image](./b-numbered/diagram.png), [file](./b-numbered/diagram.drawio), [report](./b-numbered/agent-report.md); 16 turns, 235 s; layout check 5 items, all connectors through the web app's or Function's caption.
+
+The query calls now read `1 search`, `2 answer` and `3 store`, fan out without crossing, and AI Search and Azure OpenAI sit between the two flows. The ingestion path is labeled but not numbered, as the source gives it no order. The independent reviewer scored 7/10 and followed the sequence. Findings that hold:
+
+- The `westeurope` frame encloses every Azure service, though the source places only the web app there. The earlier B run did the same.
+- Entra ID and AI Search are plain boxes while other services have icons.
+- Deploy, telemetry and `3 store` leave the web app's underside about 20 units apart, and the Function's caption sits away from its icon, so lines and captions are hard to attribute.
+
+The reviewer also read the secrets arrows as writes to Key Vault; the package draws arrows from initiator to callee, so that reading is not a defect.
