@@ -5,6 +5,8 @@ import { readFileSync } from 'node:fs';
 export const ICON_SIZE = 72;
 export const WIDE_HEIGHT = 40;
 export const WIDE_MAX_WIDTH = 200;
+// Captions get a fixed width, so they wrap to at most a few lines and their footprint is predictable.
+export const CAPTION_WIDTH = 160;
 const WIDE_RATIO = 1.6;
 const LABEL =
   'html=1;whiteSpace=wrap;labelPosition=center;verticalLabelPosition=bottom;align=center;verticalAlign=top;fontSize=16;';
@@ -17,6 +19,7 @@ const LABEL_KEYS = new Set([
   'align',
   'verticalAlign',
   'fontSize',
+  'labelWidth',
 ]);
 export const FALLBACK = {
   kind: 'fallback',
@@ -74,7 +77,7 @@ export function iconPlacement(entry) {
     ...(entry.wordmark ? { caption: 'The mark shows the name; caption only the role, or leave it empty.' } : {}),
     width: Math.round(width * 10) / 10,
     height: Math.round(height * 10) / 10,
-    style: `${base};${LABEL}`,
+    style: `${base};${LABEL}labelWidth=${Math.max(CAPTION_WIDTH, Math.ceil(width))};`,
   };
 }
 
@@ -108,10 +111,10 @@ export function checkEmbeddedIcons(xml, icons) {
     const id = vendorIconId(style);
     const data = style.match(/(?:^|;)image=data:image\/(?:svg\+xml|png),([^;]*)/)?.[1];
     if (id && !byId.has(id)) throw new Error(`Unknown vendorIcon ${id}.`);
-    if (id && !data) throw new Error(`vendorIcon ${id} has no artwork. Run node scripts/embed-icons.mjs.`);
+    if (id && !data) throw new Error(`vendorIcon ${id} has no artwork. Run node scripts/finalize.mjs.`);
     if (!data) continue;
     const hash = sha256(Buffer.from(data, 'base64'));
     if (id ? byId.get(id).sha256 !== hash : !hashes.has(hash))
-      throw new Error(`Embedded image ${id ?? '(unnamed)'} differs from the catalogued artwork. Run embed-icons.mjs.`);
+      throw new Error(`Embedded image ${id ?? '(unnamed)'} differs from the catalogued artwork. Run finalize.mjs.`);
   }
 }

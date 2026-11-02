@@ -57,7 +57,7 @@ test('placement gives every source the same size and caption standard', () => {
   for (const entry of [lambda, byId('thesvg-vault'), byId('fabric-lakehouse_64_item')]) {
     const p = iconPlacement(entry);
     assert.equal(Math.max(p.width, p.height), ICON_SIZE);
-    assert.match(p.style, /verticalLabelPosition=bottom;align=center;verticalAlign=top;fontSize=16;$/);
+    assert.match(p.style, /verticalLabelPosition=bottom;align=center;verticalAlign=top;fontSize=16;labelWidth=\d+;$/);
     assert.equal(p.style.match(/fontSize=/g).length, 1);
   }
   const mule = iconPlacement(byId('thesvg-mulesoft'));
@@ -96,7 +96,7 @@ test('relocated package embeds icons without the authoring repository', () => {
     cpSync(fileURLToPath(new URL('../candidate/architecture-diagram', import.meta.url)), moved, { recursive: true });
     const file = join(dir, 'diagram.drawio');
     writeFileSync(file, page(iconPlacement(byId('fabric-fabric_48_color')).style));
-    const run = spawnSync(process.execPath, [join(moved, 'scripts', 'embed-icons.mjs'), file], {
+    const run = spawnSync(process.execPath, [join(moved, 'scripts', 'finalize.mjs'), file], {
       cwd: dir,
       encoding: 'utf8',
     });

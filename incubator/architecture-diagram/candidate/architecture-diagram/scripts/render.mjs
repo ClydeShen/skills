@@ -5,6 +5,7 @@ import { createServer } from 'node:http';
 import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
 import { upstreamCommit, upstreamVersion } from './catalog.mjs';
+import { isFormatted } from './drawio-format.mjs';
 import { loadVendorIcons } from './icons.mjs';
 import { annotationMetadata, editorLink, pageSize, referencedAssets } from './render-inputs.mjs';
 
@@ -12,6 +13,8 @@ const [input, screenshot = input?.replace(/(\.drawio)?$/, '.png')] = process.arg
 if (!input) throw new Error('Usage: node scripts/render.mjs <diagram.drawio> [output.png]');
 const svgOutput = screenshot.replace(/\.png$/, '.svg');
 const source = readFileSync(input, 'utf8');
+if (!isFormatted(source))
+  throw new Error(`Run node scripts/finalize.mjs ${input} first: it embeds icons and writes draw.io's file layout.`);
 const catalog = JSON.parse(readFileSync(new URL('../assets/catalog.json', import.meta.url), 'utf8'));
 // Validate before any export path, so every renderer sees only catalogued artwork.
 const assets = referencedAssets(source, catalog, loadVendorIcons());

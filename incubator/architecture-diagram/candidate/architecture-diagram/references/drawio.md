@@ -15,9 +15,9 @@ node scripts/find-icon.mjs --vendor Azure --id azure2-dcd8189c36a60111
 
 Titles are upstream labels, not a complete service-alias dictionary. Compare a candidate entry's meaning with the required service. If several entries match, select the evidenced palette/ID explicitly. A missing or unusable entry requires the plain-box fallback, not fuzzy matching; the helper then returns the fallback's style and size. It makes no network call.
 
-Each match carries a `placement`: use its `style`, `width` and `height` unchanged, and set only the caption, position and parent. Symbols fit a 72-unit square; wide marks are 40 high and at most 200 wide. Captions sit below in 16-point text. A placement with a `caption` note is a wordmark that already shows the name: caption only the role, or leave it empty. Do not rotate, recolor, crop or imitate any artwork.
+Each match carries a `placement`: use its `style`, `width` and `height` unchanged, and set only the caption, position and parent. Keep the caption as the icon cell's own value, not a separate text cell, so that it moves with the icon and the checks can find it. Symbols fit a 72-unit square; wide marks are 40 high and at most 200 wide. Captions sit below in 16-point text, wrapped to a fixed `labelWidth` of at least 160 so that their footprint is predictable. A placement with a `caption` note is a wordmark that already shows the name: caption only the role, or leave it empty. Do not rotate, recolor, crop or imitate any artwork.
 
-A vendor-icon style names its artwork with `vendorIcon=<id>` and has no image yet. Run `node scripts/embed-icons.mjs <diagram.drawio>` to write the exact SVG into each such cell; rerun it after adding icons. The file then displays in any draw.io, offline, without this package. Rendering rejects a missing, altered or uncatalogued embedded image.
+A vendor-icon style names its artwork with `vendorIcon=<id>` and has no image yet. `node scripts/finalize.mjs <diagram.drawio>` writes the exact artwork into each such cell; rerun it after every edit. The file then displays in any draw.io, offline, without this package. Rendering rejects a missing, altered or uncatalogued embedded image.
 
 Built-in Azure SVG references resolve through draw.io's own installed assets; they are not remote URLs. Four known wrong-case paths are marked unusable. A valid catalog entry does not by itself prove Desktop rendering on the user's host.
 
@@ -31,7 +31,7 @@ This uses Node.js 24 and Git. Regeneration reads and executes pinned upstream pa
 
 ## XML essentials
 
-Use one `mxfile` / `diagram` / `mxGraphModel` page with root cells `0` and `1`. Use unique IDs. Set the file version to `32.6.1`. Parent child nodes to their actual boundary cells; coordinates of child vertices are relative to that parent.
+Use one `mxfile` / `diagram` / `mxGraphModel` page with root cells `0` and `1`. Use unique IDs. Set the file version to `32.6.1`. Parent child nodes to their actual boundary cells; coordinates of child vertices are relative to that parent. Write the XML in any layout; `finalize.mjs` rewrites it in draw.io's own layout, one element per line, because importers such as Lucidchart reject other layouts of the same valid XML.
 
 For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`, `vendor` and `iconKey`. Its child `mxCell` has `vertex="1"`, the real parent ID, the selected style and an `mxGeometry`. Labels use escaped XML attributes and HTML line breaks when `html=1`. Keep inspection metadata separate from the short visible caption; print a type or technology only when it clarifies the element.
 

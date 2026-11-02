@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { checkLayout } from '../candidate/architecture-diagram/scripts/check-layout.mjs';
 import { findForbiddenText } from '../candidate/architecture-diagram/scripts/check-text.mjs';
+import { formatDrawio } from '../candidate/architecture-diagram/scripts/drawio-format.mjs';
 import { validateBoundaryRoutes, validateDiagram, validateRender } from '../tools/validate.mjs';
 import { createSuite, gradeClarification } from './suite.mjs';
 
@@ -407,7 +408,8 @@ test('the first supporting-services delivery is the known counterexample', () =>
   assert.deepEqual(new Set(found.map(({ symbol }) => symbol)), new Set(['·', '→', 'Relationship only', 'unspecified']));
 });
 
-const page = (cells) => `<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>${cells}</root></mxGraphModel>`;
+const page = (cells) =>
+  formatDrawio(`<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>${cells}</root></mxGraphModel>`);
 const box = (id, x, y, w, h, parent = '1', style = '') =>
   `<mxCell id="${id}" value="${id}" vertex="1" parent="${parent}" style="${style}"><mxGeometry x="${x}" y="${y}" width="${w}" height="${h}" as="geometry"/></mxCell>`;
 const line = (id, source, target, style = '', points = []) =>

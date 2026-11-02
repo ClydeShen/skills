@@ -9,6 +9,7 @@ import {
   iconPlacement,
   loadVendorIcons,
 } from '../../candidate/architecture-diagram/scripts/icons.mjs';
+import { formatDrawio } from '../../candidate/architecture-diagram/scripts/drawio-format.mjs';
 
 const here = (file) => new URL(file, import.meta.url);
 const catalog = JSON.parse(readFileSync(here('../../candidate/architecture-diagram/assets/catalog.json'), 'utf8'));
@@ -96,7 +97,7 @@ const font = 'fontFamily=Helvetica;fontColor=#263238;';
 function sheet(name, title, groups) {
   const cells = [
     `<mxCell id="title" value="${esc(title)}" style="text;html=1;align=left;fontSize=24;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="20" width="1000" height="36" as="geometry"/></mxCell>`,
-    `<mxCell id="note" value="Placement and artwork from find-icon.mjs and embed-icons.mjs. Grey box: no usable icon (plain-box fallback)." style="text;html=1;align=left;fontSize=16;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="56" width="1300" height="26" as="geometry"/></mxCell>`,
+    `<mxCell id="note" value="Placement and artwork from find-icon.mjs and finalize.mjs. Grey box: no usable icon (plain-box fallback)." style="text;html=1;align=left;fontSize=16;${font}" vertex="1" parent="1"><mxGeometry x="${PAD}" y="56" width="1300" height="26" as="geometry"/></mxCell>`,
   ];
   let y = TOP, n = 0;
   for (const [group, items] of groups) {
@@ -121,7 +122,7 @@ function sheet(name, title, groups) {
   }
   const width = PAD * 2 + COL + PER_ROW * SLOT;
   const xml = `<mxfile host="drawio" version="32.6.1"><diagram id="icons" name="Icons"><mxGraphModel dx="0" dy="0" grid="0" page="1" pageWidth="${width}" pageHeight="${y + PAD}" background="#FFFFFF"><root><mxCell id="0"/><mxCell id="1" parent="0"/>${cells.join('')}</root></mxGraphModel></diagram></mxfile>\n`;
-  writeFileSync(here(`./${name}.drawio`), embedVendorIcons(xml, icons).xml);
+  writeFileSync(here(`./${name}.drawio`), formatDrawio(embedVendorIcons(xml, icons).xml));
   return groups.flatMap(([group, items]) =>
     items.map(({ caption, placement, source }) => ({ group, caption, kind: placement.kind, width: placement.width, height: placement.height, source })),
   );

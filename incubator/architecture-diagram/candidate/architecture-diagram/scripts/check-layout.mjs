@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { isFormatted } from './drawio-format.mjs';
 
 const attributes = (tag) => Object.fromEntries([...tag.matchAll(/([\w:-]+)="([^"]*)"/g)].map((m) => [m[1], m[2]]));
 const styleOf = (style = '') =>
@@ -44,6 +45,7 @@ export function readDiagram(xml) {
       };
     } else if (name === 'Array') inPoints = a.as === 'points';
     else if (name === 'mxPoint' && inPoints && current) current.points.push({ x: +a.x || 0, y: +a.y || 0 });
+    else if (name === 'mxPoint' && a.as === 'offset' && current) current.offset = { x: +a.x || 0, y: +a.y || 0 };
   }
   return cells;
 }
@@ -73,12 +75,169 @@ const ancestorIds = (cell, byId) => {
   for (let c = byId.get(cell.parent); c && !ids.has(c.id); c = byId.get(c.parent)) ids.add(c.id);
   return ids;
 };
-const isText = (cell) => cell.style.text !== undefined || cell.style.edgeLabel !== undefined;
+const isText = (cell) => 'text' in cell.style || 'edgeLabel' in cell.style;
+
+// Text geometry is estimated, not measured: Helvetica averages about 0.5 em per character.
+const plain = (value = '') =>
+  value
+    .replace(/&lt;br\s*\/?&gt;|<br\s*\/?>/gi, '\n')
+    .replace(/&lt;[^&]*&gt;|<[^>]*>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&nbsp;/g, ' ')
+    .trim();
+export function textSize(value, fontSize = 11, wrap = Infinity) {
+  const em = fontSize * 0.5;
+  let width = 0;
+  let lines = 0;
+  for (const paragraph of plain(value).split('\n')) {
+    let line = '';
+    for (const word of paragraph.split(/\s+/).filter(Boolean)) {
+      const next = line ? `${line} ${word}` : word;
+      if (line && next.length * em > wrap) {
+        width = Math.max(width, line.length * em);
+        lines++;
+        line = word;
+      } else line = next;
+    }
+    width = Math.max(width, line.length * em);
+    lines++;
+  }
+  return { w: Math.min(width, wrap), h: lines * fontSize * 1.2 };
+}
+
+// The caption of an icon whose label sits outside it, below or beside.
+function captionBox(cell, box) {
+  const text = plain(cell.value);
+  if (!text || isText(cell) || cell.style.container === '1') return null;
+  const { verticalLabelPosition: vertical, labelPosition: horizontal } = cell.style;
+  if (vertical !== 'bottom' && vertical !== 'top' && horizontal !== 'right' && horizontal !== 'left') return null;
+  const fontSize = Number(cell.style.fontSize) || 11;
+  const wrapWidth = Number(cell.style.labelWidth) || (cell.style.whiteSpace === 'wrap' ? box.w : Infinity);
+  const size = textSize(text, fontSize, wrapWidth);
+  if (vertical === 'bottom' || vertical === 'top') {
+    const y = vertical === 'bottom' ? box.y + box.h + 2 : box.y - 2 - size.h;
+    return { x: box.x + box.w / 2 - size.w / 2, y, w: size.w, h: size.h };
+  }
+  const x = horizontal === 'right' ? box.x + box.w + 2 : box.x - 2 - size.w;
+  return { x, y: box.y + box.h / 2 - size.h / 2, w: size.w, h: size.h };
+}
+
+// A standalone text cell, such as a caption drawn separately: its text, aligned within the cell.
+function freeTextBox(cell, box) {
+  const text = plain(cell.value);
+  if (!text || !('text' in cell.style)) return null;
+  const size = textSize(text, Number(cell.style.fontSize) || 11, cell.style.whiteSpace === 'wrap' ? box.w : Infinity);
+  const x = { left: box.x, right: box.x + box.w - size.w }[cell.style.align] ?? box.x + box.w / 2 - size.w / 2;
+  const y = { top: box.y, bottom: box.y + box.h - size.h }[cell.style.verticalAlign] ?? box.y + box.h / 2 - size.h / 2;
+  return { x, y, w: size.w, h: size.h };
+}
+
+// The title of a frame drawn inside its top edge.
+function titleBox(cell, box, holdsChildren) {
+  const text = plain(cell.value);
+  if (!text || !holdsChildren || cell.style.verticalAlign !== 'top') return null;
+  const fontSize = Number(cell.style.fontSize) || 11;
+  const size = textSize(text, fontSize, box.w - 8);
+  const spacing = Number(cell.style.spacing) || 2;
+  const left = box.x + spacing + (Number(cell.style.spacingLeft) || 0);
+  const x = cell.style.align === 'center' ? box.x + box.w / 2 - size.w / 2 : left;
+  return { x, y: box.y + spacing + (Number(cell.style.spacingTop) || 0), w: size.w, h: size.h };
+}
+
+// The route draw.io takes when both ports are fixed; elbows follow the side each end leaves from.
+// Without ports and waypoints, draw.io joins facing sides of aligned elements; other routes are its choice.
+const ICON_SPAN = 120;
+function defaultPorts(a, b, points) {
+  if (points.length) return {};
+  const columns = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+  const rows = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+  if (columns > 0) {
+    const x = (Math.max(a.x, b.x) + columns / 2 - a.x) / a.w;
+    const below = b.y > a.y;
+    return { exitX: x, exitY: below ? 1 : 0, entryX: (a.x + x * a.w - b.x) / b.w, entryY: below ? 0 : 1 };
+  }
+  if (rows > 0) {
+    const y = (Math.max(a.y, b.y) + rows / 2 - a.y) / a.h;
+    const right = b.x > a.x;
+    return { exitX: right ? 1 : 0, exitY: y, entryX: right ? 0 : 1, entryY: (a.y + y * a.h - b.y) / b.h };
+  }
+  return {};
+}
+function edgeRoute(edge, boxes) {
+  const [source, target] = [boxes.get(edge.source), boxes.get(edge.target)];
+  if (!source || !target) return null;
+  const s = { ...defaultPorts(source, target, edge.points), ...edge.style };
+  if (s.exitX === undefined || s.entryX === undefined) return null;
+  const port = (b, x, y) => ({
+    x: b.x + Number(x) * b.w,
+    y: b.y + Number(y) * b.h,
+    side: Number(x) === 0 || Number(x) === 1,
+  });
+  const start = port(source, s.exitX, s.exitY);
+  const end = port(target, s.entryX, s.entryY);
+  const route = [start];
+  // A port on a left or right side leaves horizontally; on the top or bottom, vertically.
+  let horizontal = start.side;
+  for (const q of [...edge.points, end]) {
+    const p = route.at(-1);
+    // draw.io treats ends within a couple of units as aligned and draws them straight.
+    if (Math.abs(p.x - q.x) < 2 || Math.abs(p.y - q.y) < 2) horizontal = Math.abs(p.y - q.y) < 2;
+    else if (q === end && end.side === horizontal) {
+      // Facing ports that are not level: draw.io steps across halfway, making a Z.
+      const mid = horizontal ? { x: (p.x + q.x) / 2 } : { y: (p.y + q.y) / 2 };
+      route.push(horizontal ? { x: mid.x, y: p.y } : { x: p.x, y: mid.y });
+      route.push(horizontal ? { x: mid.x, y: q.y } : { x: q.x, y: mid.y });
+    } else {
+      route.push(horizontal ? { x: q.x, y: p.y } : { x: p.x, y: q.y });
+      horizontal = !horizontal;
+    }
+    route.push(q);
+  }
+  return route.map(({ x, y }) => ({ x, y }));
+}
+
+function segments(route) {
+  return route.slice(1).map((q, i) => [route[i], q]);
+}
+
+// draw.io places an edge label at x in [-1, 1] along the whole path, then shifts it by the offset.
+function edgeLabelBox(edge, route) {
+  const text = plain(edge.value);
+  if (!text || !route) return null;
+  const lengths = segments(route).map(([p, q]) => Math.hypot(q.x - p.x, q.y - p.y));
+  const total = lengths.reduce((a, b) => a + b, 0);
+  let distance = (((edge.geometry?.x ?? 0) + 1) / 2) * total;
+  let at = route[0];
+  for (const [i, [p, q]] of segments(route).entries()) {
+    if (distance <= lengths[i] || i === lengths.length - 1) {
+      const t = lengths[i] ? Math.min(1, distance / lengths[i]) : 0;
+      at = { x: p.x + (q.x - p.x) * t, y: p.y + (q.y - p.y) * t };
+      break;
+    }
+    distance -= lengths[i];
+  }
+  const fontSize = Number(edge.style.fontSize) || 11;
+  const size = textSize(text, fontSize, Number(edge.style.labelWidth) || Infinity);
+  const x = at.x + (edge.offset?.x ?? 0) - size.w / 2 - 2;
+  const y = at.y + (edge.offset?.y ?? 0) - size.h / 2 - 1;
+  return { x, y, w: size.w + 4, h: size.h + 2 };
+}
+
+const crosses = ([p, q], b) =>
+  overlaps(
+    { x: Math.min(p.x, q.x), y: Math.min(p.y, q.y), w: Math.abs(p.x - q.x) || 1, h: Math.abs(p.y - q.y) || 1 },
+    b,
+  );
 
 // Errors are faults whatever the design; warnings ask a person or agent to look.
 export function checkLayout(xml) {
   const errors = [];
   const warnings = [];
+  if (!isFormatted(xml))
+    errors.push(
+      "The file is not in draw.io's own layout, which importers such as Lucidchart require. Run finalize.mjs.",
+    );
   const cells = readDiagram(xml);
   const { byId, boxes } = absolute(cells);
   const name = (cell) => cell.id;
@@ -184,7 +343,196 @@ export function checkLayout(xml) {
   const heaviest = Math.max(1, ...widths);
   if (edges.length > 3 && heaviest === Math.min(...widths))
     warnings.push('All connectors have the same weight. Make the main path the heaviest.');
+  warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
+  warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
+}
+
+// Regions are frames and large background areas; membership is geometric, as a reader sees it.
+function regionsOf(cells, boxes, vertices) {
+  const parents = new Set(cells.map((c) => c.parent));
+  return vertices.filter((c) => {
+    const b = boxes.get(c.id);
+    return !isText(c) && (parents.has(c.id) || c.style.container === '1' || (b.w > 2 * ICON_SPAN && b.h > ICON_SPAN));
+  });
+}
+
+// A route may cross a region's outline only where its ends require: once if one end is inside, never otherwise.
+// Extra crossings and long detours are reported, because a reader takes every bend and crossing as meaning.
+function routeIntegrity(cells, boxes, vertices, edges) {
+  const found = [];
+  const regions = regionsOf(cells, boxes, vertices);
+  const within = (p, b) => p.x > b.x && p.x < b.x + b.w && p.y > b.y && p.y < b.y + b.h;
+  for (const edge of edges) {
+    const route = edgeRoute(edge, boxes);
+    if (!route) continue;
+    const samples = [];
+    for (const [p, q] of segments(route)) {
+      const steps = Math.max(1, Math.ceil(Math.hypot(q.x - p.x, q.y - p.y) / 4));
+      for (let i = 0; i < steps; i++)
+        samples.push({ x: p.x + ((q.x - p.x) * i) / steps, y: p.y + ((q.y - p.y) * i) / steps });
+    }
+    samples.push(route.at(-1));
+    const centre = (id) => {
+      const b = boxes.get(id);
+      return { x: b.x + b.w / 2, y: b.y + b.h / 2 };
+    };
+    for (const region of regions) {
+      if (region.id === edge.source || region.id === edge.target) continue;
+      const box = boxes.get(region.id);
+      const [a, b] = [within(centre(edge.source), box), within(centre(edge.target), box)];
+      let crossings = 0;
+      for (let i = 1; i < samples.length; i++) if (within(samples[i], box) !== within(samples[i - 1], box)) crossings++;
+      if (crossings <= (a === b ? 0 : 1)) continue;
+      found.push(
+        a && b
+          ? `Connector ${edge.id} leaves ${region.id} and re-enters it. Keep it inside the region both ends share.`
+          : !a && !b
+            ? `Connector ${edge.id} passes through ${region.id}, which holds neither end.`
+            : `Connector ${edge.id} crosses the outline of ${region.id} more than once.`,
+      );
+    }
+    const length = segments(route).reduce((sum, [p, q]) => sum + Math.hypot(q.x - p.x, q.y - p.y), 0);
+    const [start, end] = [route[0], route.at(-1)];
+    const direct = Math.abs(end.x - start.x) + Math.abs(end.y - start.y);
+    // A two-bend route around the outside is a deliberate channel; extra bends, or a loop between
+    // aligned ends that could join straight, are detours.
+    const aligned = Math.min(Math.abs(end.x - start.x), Math.abs(end.y - start.y)) < 10;
+    if (length > direct + 80 && (route.length > 4 || aligned))
+      found.push(
+        `Connector ${edge.id} detours ${Math.round(length - direct)} units beyond the direct route. Move an element or port instead of bending around it.`,
+      );
+    // A short step between two long parallel runs is a jog: it adds bends that mean nothing.
+    const runs = segments(route).map(([p, q]) => Math.hypot(q.x - p.x, q.y - p.y));
+    for (let i = 1; i < runs.length - 1; i++)
+      if (runs[i] >= 3 && runs[i] < 60 && runs[i - 1] > runs[i] && runs[i + 1] > runs[i]) {
+        const [p, q] = segments(route)[i];
+        const [a, b] = [segments(route)[i - 1], segments(route)[i + 1]];
+        const dir = ([u, v]) => (u.x === v.x ? 'v' : 'h');
+        if (dir(a) === dir(b) && dir([p, q]) !== dir(a)) {
+          found.push(
+            `Connector ${edge.id} has a ${Math.round(runs[i])}-unit jog. Align its ends so that it runs straight.`,
+          );
+          break;
+        }
+      }
+  }
+  found.push(...crossings(edges, boxes));
+  return found;
+}
+
+const sideOf = (x, y) => (Number(x) === 0 ? 'left' : Number(x) === 1 ? 'right' : Number(y) === 0 ? 'top' : 'bottom');
+
+// Connectors that cross or share a segment make the reader guess which line continues where.
+// Two leaving the same side of one element and crossing each other only need their ports swapped.
+function crossings(edges, boxes) {
+  const found = [];
+  const routed = edges.map((edge) => ({ edge, route: edgeRoute(edge, boxes) })).filter((r) => r.route);
+  const vertical = ([p, q]) => p.x === q.x;
+  for (let i = 0; i < routed.length; i++)
+    for (let j = i + 1; j < routed.length; j++) {
+      const [a, b] = [routed[i], routed[j]];
+      let crossed = false;
+      let shared = 0;
+      for (const s of segments(a.route))
+        for (const t of segments(b.route)) {
+          if (vertical(s) !== vertical(t)) {
+            const [v, h] = vertical(s) ? [s, t] : [t, s];
+            const [x, y] = [v[0].x, h[0].y];
+            if (
+              x > Math.min(h[0].x, h[1].x) + 1 &&
+              x < Math.max(h[0].x, h[1].x) - 1 &&
+              y > Math.min(v[0].y, v[1].y) + 1 &&
+              y < Math.max(v[0].y, v[1].y) - 1
+            )
+              crossed = true;
+          } else {
+            const axis = vertical(s) ? 'x' : 'y';
+            const along = vertical(s) ? 'y' : 'x';
+            if (Math.abs(s[0][axis] - t[0][axis]) > 1) continue;
+            const lo = Math.max(Math.min(s[0][along], s[1][along]), Math.min(t[0][along], t[1][along]));
+            const hi = Math.min(Math.max(s[0][along], s[1][along]), Math.max(t[0][along], t[1][along]));
+            shared += Math.max(0, hi - lo);
+          }
+        }
+      const [e, f] = [a.edge, b.edge];
+      const sameSide =
+        (e.source === f.source && sideOf(e.style.exitX, e.style.exitY) === sideOf(f.style.exitX, f.style.exitY)) ||
+        (e.target === f.target && sideOf(e.style.entryX, e.style.entryY) === sideOf(f.style.entryX, f.style.entryY));
+      if (crossed && sameSide && e.style.exitX !== undefined && f.style.exitX !== undefined)
+        found.push(`Connectors ${e.id} and ${f.id} share a side of one element and cross. Swap their ports.`);
+      else if (crossed)
+        found.push(
+          `Connectors ${e.id} and ${f.id} cross. Reorder ports, move an element, or route one around the outside.`,
+        );
+      if (shared > 10) found.push(`Connectors ${e.id} and ${f.id} share a ${Math.round(shared)}-unit segment.`);
+    }
+  return found;
+}
+
+// Estimated text boxes: captions, frame titles and connector labels must not cover each other or a line.
+function labelCollisions(cells, byId, boxes, vertices, edges) {
+  const found = [];
+  const parents = new Set(cells.map((c) => c.parent));
+  const texts = [];
+  for (const cell of vertices) {
+    const box = boxes.get(cell.id);
+    const caption = captionBox(cell, box);
+    if (caption) texts.push({ kind: 'caption', owner: cell.id, box: caption });
+    const title = titleBox(cell, box, parents.has(cell.id));
+    if (title) texts.push({ kind: 'title', owner: cell.id, box: title });
+    const free = freeTextBox(cell, box);
+    if (free) texts.push({ kind: 'text', owner: cell.id, box: free });
+  }
+  const routes = new Map(edges.map((edge) => [edge.id, edgeRoute(edge, boxes)]));
+  for (const edge of edges) {
+    const label = edgeLabelBox(edge, routes.get(edge.id));
+    if (label) texts.push({ kind: 'label', owner: edge.id, box: label });
+  }
+  const describe = (t) =>
+    ({ label: `connector label ${t.owner}`, title: `title of ${t.owner}`, text: `text ${t.owner}` })[t.kind] ??
+    `caption of ${t.owner}`;
+
+  for (let i = 0; i < texts.length; i++)
+    for (let j = i + 1; j < texts.length; j++) {
+      const [a, b] = [texts[i], texts[j]];
+      if (a.owner !== b.owner && overlaps(a.box, b.box))
+        found.push(`The ${describe(a)} and the ${describe(b)} overlap or nearly touch.`);
+    }
+  // A caption or title must not sit on another icon, and text must not straddle an outline:
+  // that reads as belonging to both sides. Text wholly inside a region or frame sits on its background.
+  for (const t of texts)
+    for (const cell of vertices) {
+      const box = boxes.get(cell.id);
+      if (cell.id === t.owner || isText(cell) || !box.w || !box.h || !overlaps(t.box, box)) continue;
+      const region =
+        parents.has(cell.id) || cell.style.container === '1' || (box.w > 2 * ICON_SPAN && box.h > ICON_SPAN);
+      if (region) {
+        if (!inside(t.box, box)) found.push(`The ${describe(t)} crosses the outline of ${cell.id}.`);
+      } else if (t.kind === 'label' || !ancestorIds(byId.get(t.owner), byId).has(cell.id))
+        found.push(`The ${describe(t)} covers ${cell.id}.`);
+    }
+  // A connector label belongs on its own line; set apart, it could label any line. At a bend it
+  // reads as hanging from the corner rather than naming the segment.
+  for (const t of texts.filter((x) => x.kind === 'label')) {
+    const route = routes.get(t.owner);
+    if (!route) continue;
+    const near = { x: t.box.x - 20, y: t.box.y - 20, w: t.box.w + 40, h: t.box.h + 40 };
+    if (!segments(route).some((s) => crosses(s, near))) found.push(`The ${describe(t)} sits away from its connector.`);
+    else if (route.slice(1, -1).some((p) => overlaps({ x: p.x - 3, y: p.y - 3, w: 6, h: 6 }, t.box)))
+      found.push(`The ${describe(t)} sits on a bend. Put it on a straight segment.`);
+  }
+  // A connector must not run through any caption or title, including those of its own ends.
+  for (const edge of edges) {
+    const route = routes.get(edge.id);
+    if (!route) continue;
+    for (const t of texts) {
+      if (t.owner === edge.id) continue;
+      if (segments(route).some((s) => crosses(s, t.box)))
+        found.push(`Connector ${edge.id} runs through the ${describe(t)}.`);
+    }
+  }
+  return found;
 }
 
 if (
