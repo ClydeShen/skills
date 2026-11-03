@@ -35,6 +35,8 @@ Use one `mxfile` / `diagram` / `mxGraphModel` page with root cells `0` and `1`. 
 
 For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`, `vendor` and `iconKey`. Its child `mxCell` has `vertex="1"`, the real parent ID, the selected style and an `mxGeometry`. Labels use escaped XML attributes and HTML line breaks when `html=1`. Keep inspection metadata separate from the short visible caption; print a type or technology only when it clarifies the element.
 
+Draw a house as a container (`container=1`) whose members are its children. Use the catalog's group style when it has one for that boundary. Otherwise use a generic group: a rounded rectangle with a light fill, its label at the top left after `spacingLeft=36`, and the service icon as a 24-unit child at offset (6, 6), so the icon marks the house without becoming a member.
+
 Use `source` and `target` IDs on connectors, with explicit ports when routing needs them. Root-parented edge waypoints use page coordinates; do not mix those with child-local coordinates. Every connector is orthogonal: set `edgeStyle=orthogonalEdgeStyle`, never `none` or a curved style. Useful native connector settings are:
 
 ```text

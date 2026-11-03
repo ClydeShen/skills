@@ -296,3 +296,37 @@ test('round 3 semantic routing trials report the tangle and avoidable bends visi
     trial('round3-b').includes('Connectors answer and store share a side of one element and cross. Swap their ports.'),
   );
 });
+
+test('a member named like its house repeats it; a corner marker does not; deep outlines are reported', () => {
+  const house = (id, x, y, w, h, value, parent = '1', extra = '') =>
+    `<mxCell id="${id}" value="${value}" style="rounded=1;container=1;${extra}" vertex="1" parent="${parent}"><mxGeometry x="${x}" y="${y}" width="${w}" height="${h}" as="geometry"/></mxCell>`;
+  const small = (id, x, y, value, parent) =>
+    `<mxCell id="${id}" value="${value}" style="shape=image;" vertex="1" parent="${parent}"><mxGeometry x="${x}" y="${y}" width="24" height="24" as="geometry"/></mxCell>`;
+  const repeats = (xml) => checkLayout(xml).warnings.filter((w) => /repeats the house|nest \d+ deep/.test(w));
+  const duplicate = page(
+    house('cluster', 0, 0, 600, 400, 'Amazon EKS cluster'),
+    icon('eks', 40, 260, 'EKS', 'cluster'),
+    icon('agent', 300, 100, 'Assistant', 'cluster'),
+  );
+  assert.deepEqual(repeats(duplicate), [
+    'eks repeats the house cluster it sits in. Mark the house with its icon at the top left and attach its connectors to the house instead.',
+  ]);
+  const marked = page(
+    house('cluster', 0, 0, 600, 400, 'Amazon EKS cluster', '1', 'spacingLeft=36;'),
+    small('eks', 6, 6, 'EKS', 'cluster'),
+    icon('agent', 300, 100, 'Assistant', 'cluster'),
+  );
+  assert.deepEqual(repeats(marked), []);
+  const nest = (fill) =>
+    page(
+      house('cloud', 0, 0, 1000, 800, 'Cloud'),
+      house('vpc', 20, 40, 900, 700, 'VPC', 'cloud'),
+      house('subnet', 20, 40, 800, 600, 'Subnet', 'vpc', fill),
+      house('group', 20, 40, 700, 500, 'Group', 'subnet'),
+      icon('vm', 40, 60, 'VM', 'group'),
+    );
+  assert.deepEqual(repeats(nest('')), [
+    'Boundaries nest 4 deep at group. Keep three outlines in one view; fold a level or split the detail into its own view.',
+  ]);
+  assert.deepEqual(repeats(nest('strokeColor=none;fillColor=#F2F2F2;')), []);
+});

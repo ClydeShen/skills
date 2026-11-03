@@ -22,6 +22,25 @@ Within each house, continue the main reading direction where it helps. Keep rela
 
 Give color and line style stable roles, keeping main paths legible and surrounding frames secondary. Muted region fills can separate tiers while service symbols carry stronger color. Choose an exact service, resource or instance symbol for the described entity, not a more generic logo by habit. Captions may sit below or beside symbols according to available space and association. Logical groups such as shared scaling membership must remain distinguishable from network boundaries. Symmetry should expose true equivalence; preserve asymmetric roles. Do not recolor vendor symbols or add security-looking badges merely to resemble a reference.
 
+## Decide which houses to draw
+
+No vendor publishes a cross-cloud boundary standard. AWS defines a group as an icon and a label, lets some groups span others (Auto Scaling) and nest others (VPC and subnets), and asks for a generic group, or a custom group that carries the service icon, when no preset fits. Azure asks only for accuracy, such as not drawing a PaaS service inside a subnet it reaches through a private endpoint. Google Cloud gives no grouping guidance. C4 treats a boundary as a nestable deployment node, scoped to one environment, with load balancers, DNS and firewalls as infrastructure nodes. The rules below synthesize these sources for any cloud; the synthesis is project inference, recorded in the [vendor conventions research](../../research/diagrams/architecture-diagram/vendor-diagram-conventions-2026-10-28.md).
+
+A house answers one of four questions:
+
+| Kind              | Question it answers          | Examples                                            |
+| ----------------- | ---------------------------- | --------------------------------------------------- |
+| Ownership, place  | Who owns it, where it runs   | Cloud, account, subscription, project, region       |
+| Network isolation | What can reach what          | VPC, VNet, subnet                                   |
+| Runtime host      | What the members run on      | Kubernetes cluster, scaling group, workflow, server |
+| Logical group     | What shares a responsibility | A light-filled group of services with one job       |
+
+- Draw a level only when it separates elements the reader must tell apart, such as a trust, failure or exposure boundary, or when it holds at least two drawn members. Otherwise fold it: name a single region in its parent's title, omit subnets whose public or private role decides nothing, and draw a host with no drawn members as one icon.
+- A house that represents a service is that service. Mark it with the service icon at the top left and the name beside it, using the vendor preset where one exists and a generic group with the service icon otherwise. Do not draw the same service again as a node inside it.
+- Draw availability zones only when zonal redundancy is the point of the view, and follow the cloud's hierarchy: an AWS zone contains its subnets, while Azure and Google Cloud subnets span zones, so their zones are lanes across subnets rather than another nesting level.
+- Security groups and network security groups are policy, not location. Outside a security view, state the access rule on the connector or in the companion record instead of drawing a house per group.
+- Keep to three nested outlines in one view; a light fill without an outline separates without adding one. Deeper nesting means the view answers too many questions; split it into an overview and a network or runtime view.
+
 ## Route for traceability
 
 Start with facing ports on a common row or column. Prefer a straight connector, then a simple orthogonal route. Keep a bend when it avoids a real obstacle, separates parallel calls or preserves domain transitions. If a route doubles back, check whether moving a node, choosing another port or making room removes the cause.
@@ -54,3 +73,4 @@ The [research record](../../research/diagrams/architecture-diagram/layout-and-fi
 - 2026-10-29: The owner rejected Note-heavy artifacts and explicitly made every Note a negative visual-design signal. Prefer structural expression; review communication quality independently from information survival. This is an owner-directed quality standard, not a new empirical claim about universal note-count thresholds.
 - 2026-10-29: The owner requested first-principles simplicity: standard, accurate and information-rich diagrams, not a new layout platform. Repair concrete visual omissions and ambiguities before adding mechanisms.
 - 2026-10-29: The [three-tier reference case](../../incubator/architecture-diagram/evals/three-tier-2026-10-29/README.md) exposed redundant frames, type tags and edge text despite broadly correct topology. The owner rated the first output 60/100 and preferred aligned tiers/AZs, restrained fills, repeated instance symbols and selective labels. These are adopted design directions; improved generation quality remains unverified.
+- 2026-11-03: A clean session drew an EKS icon inside an "Amazon EKS cluster" house and a GitHub Actions node inside its own workflow house. The owner asked for one cross-provider standard for networking, zones, clusters and security that avoids dense nesting. The section on deciding houses synthesizes the existing vendor research; no vendor page could be re-read on that date because the session's network did not allow it.
