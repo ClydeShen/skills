@@ -214,3 +214,85 @@ test("files must use draw.io's own layout, which importers such as Lucidchart re
     '<mxfile>\n  <diagram id="z">eJxLTEoGAAJNASs=</diagram>\n</mxfile>\n',
   );
 });
+
+const waypoints = (...p) => `<Array as="points">${p.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('')}</Array>`;
+const simpler = (xml) => checkLayout(xml).warnings.filter((w) => /route is clear|to avoid the/.test(w));
+
+test('a clear one-bend route reports the extra bend of a Z', () => {
+  const xml = page(
+    icon('a', 0, 0, 'App'),
+    icon('b', 400, 300, 'Store'),
+    edge('z', 'a', 'b', 'exitX=1;exitY=0.5;entryX=0;entryY=0.5;', '', waypoints([236, 36], [236, 336])),
+  );
+  assert.deepEqual(simpler(xml), [
+    'Connector z bends 2 times, but a one-bend route is clear: leave the right of a and enter the top of b.',
+  ]);
+});
+
+test('a detour around a movable connector label is reported; one around a caption or element is not', () => {
+  // A tall label of another connector sits on the straight line between a and b.
+  const label = 'one&lt;br&gt;two&lt;br&gt;three&lt;br&gt;four';
+  const aroundLabel = page(
+    icon('a', 0, 0, 'App'),
+    icon('b', 600, 0, 'Store'),
+    icon('e', 250, -260, 'E'),
+    icon('f', 450, -260, 'F'),
+    edge('other', 'e', 'f', side, label, '<mxPoint x="-86" y="260" as="offset"/>'),
+    edge('z', 'a', 'b', 'exitX=0.5;exitY=0;entryX=0.5;entryY=0;', '', waypoints([36, -60], [636, -60])),
+  );
+  assert.deepEqual(simpler(aroundLabel), [
+    'Connector z bends 2 times to avoid the connector label other. A bend around text reads as part of the route; move an element or the text so that a straight route is clear.',
+  ]);
+  // The same detour around another element's caption is reasonable: the caption belongs to its icon.
+  const aroundCaption = page(
+    icon('a', 0, 0, 'App'),
+    icon('b', 600, 0, 'Store'),
+    icon('c', 300, -80, label),
+    edge('z', 'a', 'b', 'exitX=0.5;exitY=0;entryX=0.5;entryY=0;', '', waypoints([36, -200], [636, -200])),
+  );
+  assert.deepEqual(simpler(aroundCaption), []);
+});
+
+test('numbered steps that tangle are told to swap ports; numbers out of spatial order are not reported', () => {
+  const fan = (...lines) =>
+    page(
+      icon('agent', 0, 200, 'Agent'),
+      icon('t1', 400, 0, 'One'),
+      icon('t2', 400, 200, 'Two'),
+      icon('t3', 400, 400, 'Three'),
+      edge('s1', 'agent', 't1', 'exitX=1;exitY=0.25;entryX=0;entryY=0.5;', '1. Step', waypoints([236, 218], [236, 36])),
+      ...lines,
+    );
+  const steps = (xml) => checkLayout(xml).warnings.filter((w) => /Swap their ports|[Ss]teps? /.test(w));
+  // A reader finds the numbers on the page; 1, 3, 2 from top to bottom is fine when nothing crosses.
+  const untangled = fan(
+    edge('s3', 'agent', 't2', 'exitX=1;exitY=0.5;entryX=0;entryY=0.5;', '3. Step'),
+    edge('s2', 'agent', 't3', 'exitX=1;exitY=0.75;entryX=0;entryY=0.5;', '2. Step', waypoints([236, 254], [236, 436])),
+  );
+  assert.deepEqual(steps(untangled), []);
+  const tangled = fan(
+    edge('s2', 'agent', 't3', 'exitX=1;exitY=0.5;entryX=0;entryY=0.5;', '2. Step', waypoints([200, 236], [200, 436])),
+    edge('s3', 'agent', 't2', 'exitX=1;exitY=0.75;entryX=0;entryY=0.5;', '3. Step', waypoints([250, 254], [250, 236])),
+  );
+  assert.deepEqual(steps(tangled), ['Connectors s2 and s3 share a side of one element and cross. Swap their ports.']);
+});
+
+test('round 3 semantic routing trials report the tangle and avoidable bends visible in their images', () => {
+  const trial = (name) =>
+    checkLayout(readFileSync(new URL(`./semantic-routing-2026-11-02/${name}/diagram.drawio`, import.meta.url), 'utf8'))
+      .warnings;
+  const a = trial('round3-a');
+  assert.ok(
+    a.includes(
+      'Connector runTf bends 2 times, but a one-bend route is clear: leave the right of actions and enter the top of tf.',
+    ),
+  );
+  // Steps reading 1, 3, 2 do not cross there, so they are not reported.
+  assert.ok(!a.some((w) => /Swap their ports|[Ss]teps? /.test(w)));
+  // Write embeddings goes around the Embeddings API icon; that channel is reasonable.
+  assert.ok(!a.some((w) => w.startsWith('Connector index ') && /route is clear|to avoid/.test(w)));
+  // Steps 2 and 3 cross; swapping their ports untangles them.
+  assert.ok(
+    trial('round3-b').includes('Connectors answer and store share a side of one element and cross. Swap their ports.'),
+  );
+});
