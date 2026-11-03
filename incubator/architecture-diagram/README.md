@@ -4,7 +4,7 @@ Turn architecture requirements into an editable draw.io diagram that makes compo
 
 The skill is designed to preserve architectural meaning through layout: boundaries show real domains, arrows show directed relationships, and labels sit with the elements they explain. Consequential gaps and contradictions are raised before drawing.
 
-Stage: **public**. Updated: 2026-10-29. Basis: verified candidate installation and the trial guide below, under the owner's lifecycle definitions. This is an experimental candidate; installed-client effectiveness remains unverified.
+Stage: **public**. Updated: 2026-10-29. Basis: verified candidate installation and the trial guide below, under the owner's lifecycle definitions. This is an experimental candidate; installed-client effectiveness remains unverified. The owner set the package at `c14828a` as the evaluation baseline on 2026-11-03; see the [handoff](./HANDOFF.md#baseline).
 
 ## What you get
 

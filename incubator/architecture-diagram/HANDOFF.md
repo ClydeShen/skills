@@ -7,6 +7,10 @@ Updated: 2026-11-03. The last change, [PR #25](https://github.com/ClydeShen/skil
 - Active package: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md), a public-stage candidate, not a release. The [initiative README](./README.md) owns installation and lifecycle status.
 - Latest evidence: [boundary-membership check](./evals/boundary-check-2026-11-03/README.md), [clean-session trials](./evals/clean-session-2026-11-02/README.md), then [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
 
+## Baseline
+
+The owner accepted the package as of commit `c14828a` as the baseline on 2026-11-03. Its evidence is the [clean-session trials](./evals/clean-session-2026-11-02/README.md) (A 7/10; final B 7/10) and the [boundary-membership check](./evals/boundary-check-2026-11-03/README.md) (scenarios 01, 03 and 04 at 7, 6 and 7/10), each one clean Claude Code run with a context-free review. Compare later changes against these runs with the same setup and prompt; small differences between scenarios are expected and tolerated.
+
 ## Owner direction
 
 - Improve the skill, not one diagram. A good result must come from a fresh session that has only the package and a scenario, not from an agent repairing output with this conversation's context.
