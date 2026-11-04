@@ -418,8 +418,10 @@ test('mixed connector styles need a key for every style; dotted lines and a thir
   const loose = page(
     icon('a', 0, 0, 'App'),
     icon('b', 400, 0, 'Store'),
+    icon('c', 400, 300, 'Vault'),
     edge('e', 'a', 'b', `${side}dashed=1;`, 'Read'),
-    '<mxCell id="t" value="Dashed: read" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="300" width="160" height="20" as="geometry"/></mxCell>',
+    edge('f', 'a', 'c', 'exitX=0.5;exitY=1;entryX=0;entryY=0.5;', 'Write'),
+    '<mxCell id="t" value="Dashed: read. Solid: write" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="500" width="200" height="20" as="geometry"/></mxCell>',
   );
   assert.ok(keyErrors(loose).some((m) => /no key table/.test(m)));
 });
