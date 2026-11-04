@@ -330,3 +330,45 @@ test('a member named like its house repeats it; a corner marker does not; deep o
   ]);
   assert.deepEqual(repeats(nest('strokeColor=none;fillColor=#F2F2F2;')), []);
 });
+
+test('a run shared by connectors of different meaning is an error; identical connectors only get a check', () => {
+  const trunk = (labels, style = '') =>
+    page(
+      icon('app', 0, 200, 'App'),
+      icon('t1', 400, 0, 'One'),
+      icon('t2', 400, 400, 'Two'),
+      edge(
+        'a',
+        'app',
+        't1',
+        `exitX=1;exitY=0.5;entryX=0;entryY=0.5;${style}`,
+        labels[0],
+        waypoints([200, 236], [200, 36]),
+      ),
+      edge(
+        'b',
+        'app',
+        't2',
+        `exitX=1;exitY=0.5;entryX=0;entryY=0.5;${style}`,
+        labels[1],
+        waypoints([200, 236], [200, 436]),
+      ),
+    );
+  const shared = (xml) => {
+    const { errors, warnings } = checkLayout(xml);
+    return [...errors, ...warnings].filter((m) => /segment/.test(m));
+  };
+  assert.deepEqual(shared(trunk(['1 Search', '2 Answer'])), [
+    'Connectors a and b have different meanings but share a 128-unit segment, so they read as one connection. Give each its own port and route.',
+  ]);
+  assert.deepEqual(shared(trunk(['', ''], 'dashed=1;')), [
+    'Connectors a and b have different meanings but share a 128-unit segment, so they read as one connection. Give each its own port and route.',
+  ]);
+  assert.deepEqual(shared(trunk(['Deploy', 'Deploy'], 'dashed=1;')), [
+    'Connectors a and b share a 128-unit segment. That reads as one relationship; keep it only if they are one.',
+  ]);
+  const b = checkLayout(readFileSync(new URL('./region-intent-2026-11-04/b/diagram.drawio', import.meta.url), 'utf8'));
+  assert.ok(b.errors.some((m) => m.startsWith('Connectors e3 and e4 have different meanings')));
+  const a = checkLayout(readFileSync(new URL('./region-intent-2026-11-04/a/diagram.drawio', import.meta.url), 'utf8'));
+  assert.ok(!a.errors.some((m) => /segment/.test(m)));
+});
