@@ -380,7 +380,7 @@ test('dashed, dotted and weighted connectors need key text; a keyed view passes'
       icon('b', 400, 0, 'Store'),
       icon('c', 400, 300, 'Vault'),
       edge('main', 'a', 'b', side + styleA, 'Read'),
-      edge('aux', 'a', 'c', 'exitX=0.5;exitY=1;entryX=0;entryY=0.5;' + styleB, 'Secrets'),
+      edge('aux', 'a', 'c', `exitX=0.5;exitY=1;entryX=0;entryY=0.5;${styleB}`, 'Secrets'),
       key
         ? `<mxCell id="key" value="${key}" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="500" width="300" height="40" as="geometry"/></mxCell>`
         : '',
