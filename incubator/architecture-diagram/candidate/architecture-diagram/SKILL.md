@@ -18,7 +18,7 @@ If the input contains several scenarios, ask which one to draw. Exclude struck-o
 
 Distinguish source-stated facts, inferred relationships, unspecified details and recommendations. A connection present in a source is not proof of a vendor capability or deployed operation. Check consequential vendor capabilities against official documentation when uncertain. Never promote recommended infrastructure or inferred paths into established facts.
 
-For a high-level view, draw the supported architecture and keep unresolved or technically suspect relationships in a short companion assumptions record, identifying what the source said and why it is not drawn as an operational path. Do not silently discard source information. If the requested implementation or a central path depends on a consequential unresolved choice, explain it and wait for the user's decision. Do not invent exposure, subnet attachments, protocols or capabilities. Choose layout details yourself.
+For a high-level view, draw the supported architecture and keep unresolved or technically suspect relationships in a short companion assumptions record, identifying what the source said and why it is not drawn as an operational path. Do not silently discard source information. If the requested implementation or a central path depends on a consequential unresolved choice, explain it and wait for the user's decision. Follow the user's instructions and intent first and vendor practice where they are silent; when the two clearly conflict, name the conflicting statement and practice before drawing and recommend a resolution. Do not invent exposure, subnet attachments, protocols or capabilities. Choose layout details yourself.
 
 ## Draw the meaning
 

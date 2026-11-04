@@ -5,7 +5,7 @@ Updated: 2026-11-03. The last change, [PR #25](https://github.com/ClydeShen/skil
 ## Start here
 
 - Active package: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md), a public-stage candidate, not a release. The [initiative README](./README.md) owns installation and lifecycle status.
-- Latest evidence: [house conventions trial](./evals/houses-2026-11-03/README.md), [boundary-membership check](./evals/boundary-check-2026-11-03/README.md), [clean-session trials](./evals/clean-session-2026-11-02/README.md), then [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
+- Latest evidence: [region placement by intent](./evals/region-intent-2026-11-04/README.md), [house conventions trial](./evals/houses-2026-11-03/README.md), [boundary-membership check](./evals/boundary-check-2026-11-03/README.md), [clean-session trials](./evals/clean-session-2026-11-02/README.md), then [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
 
 ## Baseline
 
@@ -15,6 +15,7 @@ The owner accepted the package as of commit `c14828a` as the baseline on 2026-11
 
 - Improve the skill, not one diagram. A good result must come from a fresh session that has only the package and a scenario, not from an agent repairing output with this conversation's context.
 - Layout must express meaning, not mathematical tidiness. Runtime path in the middle; build, ingestion, management and telemetry in their own lanes; true boundary nesting. Treat a source's numbered steps as an unordered list while laying out; once the layout is settled, number the steps by the execution order the drawn architecture implies. Readers find the sequence by its numbers, so 1, 3, 2 in space is fine, while tangled lines are not (owner, 2026-11-03, replacing the earlier "numbered steps in reading order"). Avoid detours: a line that leaves and re-enters a region reads as data leaving it. Never delete, merge or move an element out of its region to clear a check.
+- Placement follows the user's instructions and intent first, then the vendor's standard practice and platform constraints where the source is silent, named as inference. An obvious conflict between the two is reported before drawing with a recommendation (owner, 2026-11-04). This replaced the rule that kept every service of unstated region outside a stated region, which left an EKS cluster outside its load balancer's region.
 - Icons must be real upstream artwork that travels with the package, shown at one standard size. Never draw or recolor an icon; use the plain-box fallback when none exists.
 - Output must import into Lucidchart as well as open in draw.io.
 - Talk to the owner in Chinese; write repository content in English.
