@@ -5,7 +5,7 @@ Read All clouds and Houses, then only the section for each cloud in the view. Dr
 ## All clouds
 
 - Use official service names and current icons. Do not crop, rotate, stretch or recolor them. Keep the name near the icon without overlapping it.
-- Global services sit outside regions. A regional service sits in the region the source names for it and outside zones; when the source names no region for a service, do not place it in another element's region. A zonal resource sits in its zone.
+- Global services sit outside regions. A regional service sits in its region and outside zones; decide that region from the source first, then from platform constraints and standard practice, as [composition](./composition.md) describes. A zonal resource sits in its zone.
 - Draw a PaaS service outside a subnet unless it is really injected there. Show private access with an endpoint symbol on the boundary, not by moving the service inside.
 - Draw one arrow from initiator to dependency. For traffic truly initiated from both sides, draw two connectors. Do not use a double-headed arrow.
 - Layer rather than overload: an overview does not need subnets; a network view does not need every API call.
