@@ -297,19 +297,19 @@ test('round 3 semantic routing trials report the tangle and avoidable bends visi
   );
 });
 
-test('a member named like its house repeats it; a corner marker does not; deep outlines are reported', () => {
+test('a member named like its boundary repeats it; a corner marker does not; deep outlines are reported', () => {
   const house = (id, x, y, w, h, value, parent = '1', extra = '') =>
     `<mxCell id="${id}" value="${value}" style="rounded=1;container=1;${extra}" vertex="1" parent="${parent}"><mxGeometry x="${x}" y="${y}" width="${w}" height="${h}" as="geometry"/></mxCell>`;
   const small = (id, x, y, value, parent) =>
     `<mxCell id="${id}" value="${value}" style="shape=image;" vertex="1" parent="${parent}"><mxGeometry x="${x}" y="${y}" width="24" height="24" as="geometry"/></mxCell>`;
-  const repeats = (xml) => checkLayout(xml).warnings.filter((w) => /repeats the house|nest \d+ deep/.test(w));
+  const repeats = (xml) => checkLayout(xml).warnings.filter((w) => /repeats the boundary|nest \d+ deep/.test(w));
   const duplicate = page(
     house('cluster', 0, 0, 600, 400, 'Amazon EKS cluster'),
     icon('eks', 40, 260, 'EKS', 'cluster'),
     icon('agent', 300, 100, 'Assistant', 'cluster'),
   );
   assert.deepEqual(repeats(duplicate), [
-    'eks repeats the house cluster it sits in. Mark the house with its icon at the top left and attach its connectors to the house instead.',
+    'eks repeats the boundary cluster it sits in. Mark the boundary with its icon at the top left and attach its connectors to the boundary instead.',
   ]);
   const marked = page(
     house('cluster', 0, 0, 600, 400, 'Amazon EKS cluster', '1', 'spacingLeft=36;'),
@@ -424,7 +424,7 @@ test('mixed connector styles need a key for every style; dotted lines and a seco
   assert.ok(keyErrors(loose).some((m) => /no key table/.test(m)));
 });
 
-test('ends other than one filled arrowhead, and dashed, coloured or uneven custom houses, are reported', () => {
+test('ends other than one filled arrowhead, and dashed, coloured or uneven custom boundaries, are reported', () => {
   const pair = (style, extra = '') =>
     page(icon('a', 0, 0, 'App'), icon('b', 400, 0, 'Store'), edge('e', 'a', 'b', side + style, 'Read'), extra);
   const ends = (xml) => checkLayout(xml).errors.filter((m) => /filled arrowhead/.test(m));
@@ -436,7 +436,7 @@ test('ends other than one filled arrowhead, and dashed, coloured or uneven custo
   const frame = (id, x, style) =>
     `<mxCell id="${id}" value="${id}" style="rounded=0;container=1;${style}" vertex="1" parent="1"><mxGeometry x="${x}" y="200" width="300" height="200" as="geometry"/></mxCell>`;
   const houses = (a, b) =>
-    checkLayout(page(frame('h1', 0, a), frame('h2', 400, b))).errors.filter((m) => /^Houses/.test(m));
+    checkLayout(page(frame('h1', 0, a), frame('h2', 400, b))).errors.filter((m) => /^Boundaries/.test(m));
   assert.deepEqual(houses('', ''), []);
   assert.equal(houses('dashed=1;', '').length, 1);
   assert.equal(houses('strokeColor=#0078D4;', 'strokeColor=#E7157B;').length, 1);
@@ -445,7 +445,7 @@ test('ends other than one filled arrowhead, and dashed, coloured or uneven custo
   const aws =
     '<mxCell id="region" value="Region" style="shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;dashed=1;container=1;" vertex="1" parent="1"><mxGeometry x="0" y="200" width="300" height="200" as="geometry"/></mxCell>';
   assert.deepEqual(
-    checkLayout(page(aws)).errors.filter((m) => /^Houses/.test(m)),
+    checkLayout(page(aws)).errors.filter((m) => /^Boundaries/.test(m)),
     [],
   );
 });

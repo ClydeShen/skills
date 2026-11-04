@@ -1,32 +1,32 @@
 # Architecture layout
 
-Use spatial structure to make the intended architecture easier to read. Domain membership and interaction meaning are constraints; direction, alignment and whitespace are design choices within them. Apply this guidance to architecture views with nested deployment or system boundaries, adapting it to the audience's question.
+Use spatial structure to make the intended architecture easier to read. Boundary membership and interaction meaning are constraints; direction, alignment and whitespace are design choices within them. Apply this guidance to architecture views with nested deployment or system boundaries, adapting it to the audience's question.
 
 Start with what exists and where, how it interacts, and what constrains those interactions. Choose an emphasis supported by the evidence: a high-level logical view need not pretend to specify a deployment. Distinguish source-stated relationships from technically established operations, inferred paths and recommendations. Preserve unresolved source claims in a concise companion record instead of promoting them to runtime arrows. A faithful transcription can still reproduce a source error. Use standard visual vocabulary without introducing a mandatory modeling framework, optimization formula or fixed set of views.
 
 ## Choose one primary reading direction
 
-| View's main question                  | Useful default                                                       | When to adapt                                                                       |
-| ------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| How does a request or event progress? | Left-to-right stages; parallel branches on aligned rows              | A tall page or established convention may favor top-to-bottom.                      |
-| What does this client depend on?      | Clients above entry, application and deeper dependencies             | Do not rank peer environments or identity providers as deeper just to fit the grid. |
-| How do domains connect?               | Peer domains side by side; ingress/egress face the relevant neighbor | Physical geography or multiple entry points may need another arrangement.           |
+| View's main question                  | Useful default                                                          | When to adapt                                                                       |
+| ------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| How does a request or event progress? | Left-to-right stages; parallel branches on aligned rows                 | A tall page or established convention may favor top-to-bottom.                      |
+| What does this client depend on?      | Clients above entry, application and deeper dependencies                | Do not rank peer environments or identity providers as deeper just to fit the grid. |
+| How do boundaries connect?            | Peer boundaries side by side; ingress/egress face the relevant neighbor | Physical geography or multiple entry points may need another arrangement.           |
 
 These are English-diagram defaults, not universal perceptual laws. Use a secondary axis for a genuine distinction such as environment or parallel branch. Avoid making both axes imply different execution sequences. Arrows and labels remain authoritative; position reinforces them.
 
-## Arrange the houses before routing
+## Arrange the boundaries before routing
 
 Establish what each boundary means and which nodes belong to it. Research platform constraints where they decide placement. Ask only for consequential project choices that available evidence cannot resolve. Never infer an account or trust-domain owner from adjacency alone.
 
-Within each house, continue the main reading direction where it helps. Keep related nodes close and align peers that benefit from comparison. Size regions for their contents and paths; equal columns are useful for comparable deployments, not obligatory for a sparse standby zone. Place supporting services where their relationships are easy to trace, without prescribing one side. Reserve space for headings, captions and paths before drawing edges. Prefer whitespace over an invented nested boundary and a light-filled region over another competing outline when membership remains clear. Retain meaningful ownership, trust and deployment boundaries.
+Within each boundary, continue the main reading direction where it helps. Keep related nodes close and align peers that benefit from comparison. Size boundaries for their contents and paths; equal columns are useful for comparable deployments, not obligatory for a sparse standby zone. Place supporting services where their relationships are easy to trace, without prescribing one side. Reserve space for headings, captions and paths before drawing edges. Prefer whitespace over an invented nested boundary and a light-filled region over another competing outline when membership remains clear. Retain meaningful ownership, trust and deployment boundaries.
 
-Give color and line style stable roles, keeping main paths legible and surrounding frames secondary. Muted region fills can separate tiers while service symbols carry stronger color. Choose an exact service, resource or instance symbol for the described entity, not a more generic logo by habit. Captions may sit below or beside symbols according to available space and association. Logical groups such as shared scaling membership must remain distinguishable from network boundaries. Symmetry should expose true equivalence; preserve asymmetric roles. Do not recolor vendor symbols or add security-looking badges merely to resemble a reference.
+Give color and line style stable roles, keeping main paths legible and surrounding boundaries secondary. Muted boundary fills can separate tiers while service symbols carry stronger color. Choose an exact service, resource or instance symbol for the described entity, not a more generic logo by habit. Captions may sit below or beside symbols according to available space and association. Logical groups such as shared scaling membership must remain distinguishable from network boundaries. Symmetry should expose true equivalence; preserve asymmetric roles. Do not recolor vendor symbols or add security-looking badges merely to resemble a reference.
 
-## Decide which houses to draw
+## Decide which boundaries to draw
 
 No vendor publishes a cross-cloud boundary standard. AWS defines a group as an icon and a label, lets some groups span others (Auto Scaling) and nest others (VPC and subnets), and asks for a generic group, or a custom group that carries the service icon, when no preset fits. Azure asks only for accuracy, such as not drawing a PaaS service inside a subnet it reaches through a private endpoint. Google Cloud gives no grouping guidance. C4 treats a boundary as a nestable deployment node, scoped to one environment, with load balancers, DNS and firewalls as infrastructure nodes. The rules below synthesize these sources for any cloud; the synthesis is project inference, recorded in the [vendor conventions research](../../research/diagrams/architecture-diagram/vendor-diagram-conventions-2026-10-28.md).
 
-A house answers one of four questions:
+A boundary answers one of four questions:
 
 | Kind              | Question it answers          | Examples                                            |
 | ----------------- | ---------------------------- | --------------------------------------------------- |
@@ -36,9 +36,9 @@ A house answers one of four questions:
 | Logical group     | What shares a responsibility | A light-filled group of services with one job       |
 
 - Draw a level only when it separates elements the reader must tell apart, such as a trust, failure or exposure boundary, or when it holds at least two drawn members. Otherwise fold it: name a single region in its parent's title, omit subnets whose public or private role decides nothing, and draw a host with no drawn members as one icon.
-- A house that represents a service is that service. Mark it with the service icon at the top left and the name beside it, using the vendor preset where one exists and a generic group with the service icon otherwise. Do not draw the same service again as a node inside it.
+- A boundary that represents a service is that service. Mark it with the service icon at the top left and the name beside it, using the vendor preset where one exists and a generic group with the service icon otherwise. Do not draw the same service again as a node inside it.
 - Draw availability zones only when zonal redundancy is the point of the view, and follow the cloud's hierarchy: an AWS zone contains its subnets, while Azure and Google Cloud subnets span zones, so their zones are lanes across subnets rather than another nesting level.
-- Security groups and network security groups are policy, not location. Outside a security view, state the access rule on the connector or in the companion record instead of drawing a house per group.
+- Security groups and network security groups are policy, not location. Outside a security view, state the access rule on the connector or in the companion record instead of drawing a boundary per group.
 - Keep to three nested outlines in one view; a light fill without an outline separates without adding one. Deeper nesting means the view answers too many questions; split it into an overview and a network or runtime view.
 
 ## Split a view that answers two questions
@@ -47,9 +47,9 @@ One view answers one question for one reader. Symptoms of a second question are 
 
 ## Route for traceability
 
-Start with facing ports on a common row or column. Prefer a straight connector, then a simple orthogonal route. Keep a bend when it avoids a real obstacle, separates parallel calls or preserves domain transitions. If a route doubles back, check whether moving a node, choosing another port or making room removes the cause.
+Start with facing ports on a common row or column. Prefer a straight connector, then a simple orthogonal route. Keep a bend when it avoids a real obstacle, separates parallel calls or preserves boundary crossings. If a route doubles back, check whether moving a node, choosing another port or making room removes the cause.
 
-A connector's own inline label may interrupt its stroke. It should not force a detour. Other captions, notes, boundaries and unrelated elements remain obstacles. Cross only the domains required by the relationship. Crossing a firewall icon is not a substitute for an explicitly connected forwarding hop.
+A connector's own inline label may interrupt its stroke. It should not force a detour. Other captions, notes, boundaries and unrelated elements remain obstacles. Cross only the boundaries required by the relationship. Crossing a firewall icon is not a substitute for an explicitly connected forwarding hop.
 
 Reduce crossings and ambiguous shared segments before chasing the smallest bend count or page area. Retain readable captions and sufficient separation between parallel arrows. Do not straighten a path through another domain, merge distinct calls, duplicate a resource or reverse its direction merely to improve a geometric metric.
 

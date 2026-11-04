@@ -133,7 +133,7 @@ function freeTextBox(cell, box) {
   return { x, y, w: size.w, h: size.h };
 }
 
-// The title of a frame drawn inside its top edge.
+// The title of a boundary drawn inside its top edge.
 function titleBox(cell, box, holdsChildren) {
   const text = plain(cell.value);
   if (!text || !holdsChildren || cell.style.verticalAlign !== 'top') return null;
@@ -432,7 +432,7 @@ export function iconsAcrossPages(xml) {
   return found;
 }
 
-// Regions are frames and large background areas; membership is geometric, as a reader sees it.
+// Boundaries are containers and large background areas; membership is geometric, as a reader sees it.
 function regionsOf(cells, boxes, vertices) {
   const parents = new Set(cells.map((c) => c.parent));
   return vertices.filter((c) => {
@@ -444,7 +444,7 @@ function regionsOf(cells, boxes, vertices) {
 const within = (p, b) => p.x > b.x && p.x < b.x + b.w && p.y > b.y && p.y < b.y + b.h;
 const centreOf = (b) => ({ x: b.x + b.w / 2, y: b.y + b.h / 2 });
 
-// Regions whose outline a route crosses more often than its ends require: once if one end is inside, never otherwise.
+// Boundaries whose outline a route crosses more often than its ends require: once if one end is inside, never otherwise.
 function extraOutlineCrossings(route, edge, regions, boxes) {
   const samples = [];
   for (const [p, q] of segments(route)) {
@@ -465,7 +465,7 @@ function extraOutlineCrossings(route, edge, regions, boxes) {
   return found;
 }
 
-// A route may cross a region's outline only where its ends require.
+// A route may cross a boundary's outline only where its ends require.
 // Extra crossings and long detours are reported, because a reader takes every bend and crossing as meaning.
 function routeIntegrity(cells, boxes, vertices, edges) {
   const found = [];
@@ -476,7 +476,7 @@ function routeIntegrity(cells, boxes, vertices, edges) {
     for (const { region, inSource: a, inTarget: b } of extraOutlineCrossings(route, edge, regions, boxes)) {
       found.push(
         a && b
-          ? `Connector ${edge.id} leaves ${region.id} and re-enters it. Keep it inside the region both ends share.`
+          ? `Connector ${edge.id} leaves ${region.id} and re-enters it. Keep it inside the boundary both ends share.`
           : !a && !b
             ? `Connector ${edge.id} passes through ${region.id}, which holds neither end.`
             : `Connector ${edge.id} crosses the outline of ${region.id} more than once.`,
@@ -577,8 +577,8 @@ function sharedSegments(edges, boxes) {
 // Only three connector encodings carry a meaning readers share: a line relates, a solid line is the
 // direct relation, and one arrowhead gives direction. Everything else is a convention a key must name.
 // One kind of each: solid and dashed lines, two weights, one filled arrowhead. See the connector
-// encoding research. Vendor group styles are the vendor's notation; any other house is a thin solid
-// outline whose title names its kind, so a dashed, coloured or heavier custom house needs a key too.
+// encoding research. Vendor boundary styles are the vendor's notation; any other boundary is a thin solid
+// outline whose title names its kind, so a dashed, coloured or heavier custom boundary needs a key too.
 const ARROWS = new Set(['block', 'classic', 'blockThin', 'classicThin']);
 const COLOUR_WORDS = /colou?r|red|blue|green|orange|purple|grey|gray|black|yellow|pink|teal/;
 function legend(cells, vertices, edges, boxes, warnings) {
@@ -663,17 +663,17 @@ function legend(cells, vertices, edges, boxes, warnings) {
   const dashedHouses = custom.filter((c) => c.style.dashed === '1');
   if (dashedHouses.length && !/dash/.test(text))
     found.push(
-      `Houses ${ids(dashedHouses)} have dashed outlines, which no vendor style defines here. Draw them as thin solid outlines named by their titles, or explain the dashes in the key.`,
+      `Boundaries ${ids(dashedHouses)} have dashed outlines, which no vendor style defines here. Draw them as thin solid outlines named by their titles, or explain the dashes in the key.`,
     );
   const houseColours = [...new Set(custom.map((c) => (c.style.strokeColor ?? '').toLowerCase()).filter(Boolean))];
   if (houseColours.length > 1 && !COLOUR_WORDS.test(text))
     found.push(
-      `Houses use ${houseColours.length} outline colours (${houseColours.join(', ')}). Use one neutral outline and let titles name the kind, or explain the colours in the key.`,
+      `Boundaries use ${houseColours.length} outline colours (${houseColours.join(', ')}). Use one neutral outline and let titles name the kind, or explain the colours in the key.`,
     );
   const houseWidths = [...new Set(custom.map((c) => Number(c.style.strokeWidth) || 1))];
   if (houseWidths.length > 1)
     found.push(
-      `Houses use ${houseWidths.length} outline weights (${houseWidths.sort((a, b) => a - b).join(', ')}). Give every house outline one weight; nesting and titles show the hierarchy.`,
+      `Boundaries use ${houseWidths.length} outline weights (${houseWidths.sort((a, b) => a - b).join(', ')}). Give every boundary outline one weight; nesting and titles show the hierarchy.`,
     );
   return found;
 }
@@ -732,8 +732,8 @@ function crossings(edges, boxes) {
   return found;
 }
 
-// A house that represents a service is that service: a member named like the house repeats it.
-// The small icon in a house's top-left corner marks the house and is not a member.
+// A boundary that represents a service is that service: a member named like the boundary repeats it.
+// The small icon in a boundary's top-left corner marks the boundary and is not a member.
 // Each nested outline is one more question for the reader; past three, the view should split.
 const VENDOR_WORDS = new Set(['amazon', 'aws', 'azure', 'microsoft', 'google', 'cloud', 'gcp']);
 const nameWords = (value) =>
@@ -752,10 +752,10 @@ function houses(cells, byId, boxes, vertices) {
     const [mine, theirs] = [nameWords(cell.value), new Set(nameWords(house.value))];
     if (!marker && mine.length && mine.every((w) => theirs.has(w)))
       found.push(
-        `${cell.id} repeats the house ${house.id} it sits in. Mark the house with its icon at the top left and attach its connectors to the house instead.`,
+        `${cell.id} repeats the boundary ${house.id} it sits in. Mark the boundary with its icon at the top left and attach its connectors to the boundary instead.`,
       );
   }
-  // Light fills without a stroke separate without adding an outline, so only outlined houses count.
+  // Light fills without a stroke separate without adding an outline, so only outlined boundaries count.
   const outlined = (c) => regions.has(c.id) && c.style.strokeColor !== 'none';
   let deepest = null;
   for (const cell of vertices) {
@@ -773,7 +773,7 @@ function houses(cells, byId, boxes, vertices) {
 // Bends the reader takes as meaning should come from the layout, not from avoiding text.
 // When ends could be joined straight, or with one bend, the extra bends of the actual route are
 // reported if that simpler route is clear, or blocked only by movable text. A simpler route through
-// another element or its caption, an extra region outline or a new crossing is blocked, so going around
+// another element or its caption, an extra boundary outline or a new crossing is blocked, so going around
 // is reasonable.
 const PORTS = [0.25, 0.5, 0.75];
 function directRoutes(s, t) {
@@ -882,7 +882,7 @@ function simplerRoutes(cells, byId, boxes, vertices, edges) {
           const then = routeContact(candidate, routes.get(other.id));
           return (then.crossed && !now.crossed) || (then.shared > 10 && now.shared <= 10);
         });
-      // A caption or frame title belongs to its element; a route through it is blocked. Connector labels
+      // A caption or boundary title belongs to its element; a route through it is blocked. Connector labels
       // and free text can move, so a detour around them is the problem to report.
       const text = texts.filter((x) => x.owner !== edge.id && hits(x.box));
       if (blocked || text.some((x) => x.kind === 'caption' || x.kind === 'title')) return null;
@@ -904,7 +904,7 @@ function simplerRoutes(cells, byId, boxes, vertices, edges) {
   return found;
 }
 
-// Estimated text boxes of captions, frame titles, free text and connector labels.
+// Estimated text boxes of captions, boundary titles, free text and connector labels.
 function textBoxes(cells, boxes, vertices, edges, routes) {
   const parents = new Set(cells.map((c) => c.parent));
   const texts = [];
@@ -927,7 +927,7 @@ const describe = (t) =>
   ({ label: `connector label ${t.owner}`, title: `title of ${t.owner}`, text: `text ${t.owner}` })[t.kind] ??
   `caption of ${t.owner}`;
 
-// Captions, frame titles and connector labels must not cover each other or a line.
+// Captions, boundary titles and connector labels must not cover each other or a line.
 function labelCollisions(cells, byId, boxes, vertices, edges) {
   const found = [];
   const parents = new Set(cells.map((c) => c.parent));
@@ -941,7 +941,7 @@ function labelCollisions(cells, byId, boxes, vertices, edges) {
         found.push(`The ${describe(a)} and the ${describe(b)} overlap or nearly touch.`);
     }
   // A caption or title must not sit on another icon, and text must not straddle an outline:
-  // that reads as belonging to both sides. Text wholly inside a region or frame sits on its background.
+  // that reads as belonging to both sides. Text wholly inside a boundary sits on its background.
   for (const t of texts)
     for (const cell of vertices) {
       const box = boxes.get(cell.id);
