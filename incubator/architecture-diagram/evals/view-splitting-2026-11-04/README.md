@@ -17,3 +17,21 @@ Setup: the clean Claude Code setup and prompt of the [clean-session trials](../c
 - No page says how the pages relate. With a flow split there is no overview; the step numbers 1 to 3 and 4 to 5 imply the order.
 - Not caused by the split, and named in the agent report: page 2 draws inspection to egress as a direct line, bypassing the Transit Gateway; page 1 does not send DNS through AWS Network Firewall, while the firewall rules include port 53 there.
 - One run, Claude Code only. The zoom axis and page links were not exercised.
+
+## Scenario C: the zoom axis
+
+Scenario 02 split by flow, so the zoom axis and page links were not exercised. [Scenario C](./scenario-c.md), an online store on AWS with a warm-standby region, one VPC per region across three zones, six services on EKS, three data stores, a five-step checkout, and build, secrets and telemetry, was written for this trial. It describes the architecture only and says nothing about views or pages. Same clean setup and prompt, package at `370bd4c`.
+
+| Case | Files | Session | Checks | Pages | Score |
+| --- | --- | --- | --- | --- | --- |
+| C | [page 1](./c/diagram-1.png), [page 2](./c/diagram-2.png), [page 3](./c/diagram-3.png), [page 4](./c/diagram-4.png), [file](./c/diagram.drawio) | 19 turns, 738 s; stopped by the account usage limit before writing its companion account | layout 0 errors, 0 items; steps 0; text clean | Overview (6/10); eu-west-1 browse and search (8/10); eu-west-1 checkout, steps 1 to 5 (7.5/10); build, deployment, secrets and telemetry (6.5/10) | 7/10 |
+
+Findings:
+
+- The session split on all three axes and recursively: zoom (an overview, then the primary region in detail), flow (the region's detail split into browse and checkout), and concern (an operations page). The reviewer judged the split right; one page would hold about 30 elements and three concerns. Each detail page draws the zoomed part as its outer boundary with outside elements, such as CloudFront and Stripe, at the edge. The five checkout steps stay on one page.
+- Navigation: the overview's `eu-west-1` region links to the browse page only. One box with two detail pages can carry one link, and the operations page belongs to no box, so two pages cannot be reached from the overview. Nothing on the overview marks the link or names the other pages, and links do not work in a PNG.
+- Names drift across pages: "eu-west-1 (primary)" and "Region eu-west-1", "us-east-1 (warm standby, same stack)" and "(warm standby)", and an inconsistent "Amazon" prefix. Scenario 02 drifted the same way. The symbol check compares captions and cannot see a renamed element.
+- On the operations page, build steps ("push image", "update") are solid while the key calls solid "runtime call or data flow", and telemetry is dashed. The rules list deployment as auxiliary but do not say that build and deployment stay dashed on an operations page, where nothing is runtime. Scenario A in the [legend trial](../legend-2026-11-04/README.md) drew CI flows solid too.
+- The operations key adds "Dashed, no label: source link left unexplained" for unlabelled lines to Secrets Manager, a sample identical to the labelled dashed one.
+- Not caused by the split: the overview leaves Route 53 off the normal request path and ends its failover line on the standby region's border.
+- One run, Claude Code only; no companion account, because the session hit the usage limit.
