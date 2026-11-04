@@ -28,3 +28,19 @@ Commit `3284b94` applies the [connector encoding research](../../../../research/
 | B | [image](./b-encodings/diagram.png), [file](./b-encodings/diagram.drawio), [report](./b-encodings/agent-report.md) | 18 turns, 314 s | 0 errors, 2 items | Three rows with sample lines, no frame |
 
 Both keys now list the solid line and show sample lines. B's region is a thin solid outline with a light fill, and every dashed line carries its own label. The owner then asked for the key as a table; that change follows.
+
+## A and B with the key as a table
+
+Commits `9927ad7` to `1d21bf4` draw the key as a native draw.io table titled "Key". Each row holds a sample line and its meaning. A key is needed only when a view has two or more kinds of line. One rerun each with the same setup, reviewed by a context-free reviewer, who also listed every line and box style and whether the key explained it.
+
+| Case | Files | Session | Checks | Key table | Score |
+| --- | --- | --- | --- | --- | --- |
+| A | [image](./a-table/diagram.png), [file](./a-table/diagram.drawio), [report](./a-table/agent-report.md) | 18 turns, 289 s | layout 0, steps 0 | Heavy: main path / Solid: call or flow / Dashed: telemetry | 8/10 |
+| B | [image](./b-table/diagram.png), [file](./b-table/diagram.drawio), [report](./b-table/agent-report.md) | 14 turns, 325 s | layout 0, steps 0 | Heavy: question flow / Solid: other runtime / Dashed: secrets, telemetry, deploy | 7/10 |
+
+Both reviewers found every line style explained by the key, and neither had to guess a line style. The B score is up from 6/10, and A matches its best. Findings that hold:
+
+- A draws step 2 heavy and steps 1 and 3 thin, although they belong to one flow. This breaks the rule to keep one weight within a flow, and no check tests it.
+- In A, the AWS region's vendor dashed outline resembles the dashed telemetry lines; only colour separates them.
+- In B, one dashed style carries three meanings, told apart by line labels, and three dashed lines run in parallel into the web app and the Function.
+- The reviewers did not need the key to read the boxes. Vendor group styles and thin solid outlines were read from their titles.
