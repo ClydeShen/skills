@@ -71,3 +71,14 @@ Every connector is orthogonal, none shares a segment, only the source's three st
 - The `westeurope` frame still encloses every service except people, Entra ID and DevOps; the agent report states this without a reason, despite the revised conventions.
 
 Under the owner's tolerance for small imprecision across scenarios, the remaining misleading issue is region membership; spacing and attachment points are minor.
+
+## A at the baseline package
+
+Scenario A rerun on 2026-11-03 with the package from `main` at `f65337b`, identical to the baseline `c14828a`, with the same setup and prompt: [image](./a-final/diagram.png), [file](./a-final/diagram.drawio), [report](./a-final/agent-report.md); 18 turns, 289 s; layout check 0 errors, 1 item (a crossing).
+
+The independent reviewer scored 7/10, as for the earlier A run at `cc7d529`. Nothing is missing or invented; the nesting of AWS Cloud, `us-east-1` and the EKS cluster is correct; every connector is orthogonal; and `1 retrieve`, `2 generate` and `3 look up` are numbered by logic. Findings that hold:
+
+- `1 retrieve` runs up out of both frames and crosses the MCP server's `read` line to Salesforce, then arrives at Pinecone just below the ingestion `write` line. The layout check reported the crossing.
+- `articles` ends on the workflow group beside Terraform instead of on GitHub Actions.
+- An unconnected EKS icon repeats the EKS cluster frame, and a GitHub Actions node repeats its group.
+- Bedrock sits in AWS Cloud but outside `us-east-1`, which follows the rule to leave services of unstated region out of a stated region; the reviewer read it as another region or a global service. It does not mislead about the architecture, so under the owner's tolerance it is left.

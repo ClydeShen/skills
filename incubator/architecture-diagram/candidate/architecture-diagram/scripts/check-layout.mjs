@@ -351,6 +351,7 @@ export function checkLayout(xml) {
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
+  warnings.push(...houses(cells, byId, boxes, vertices));
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
 }
 
@@ -488,6 +489,44 @@ function crossings(edges, boxes) {
           `Connectors ${e.id} and ${f.id} share a ${Math.round(shared)}-unit segment, so they read as one connection. Give each its own port and route.`,
         );
     }
+  return found;
+}
+
+// A house that represents a service is that service: a member named like the house repeats it.
+// The small icon in a house's top-left corner marks the house and is not a member.
+// Each nested outline is one more question for the reader; past three, the view should split.
+const VENDOR_WORDS = new Set(['amazon', 'aws', 'azure', 'microsoft', 'google', 'cloud', 'gcp']);
+const nameWords = (value) =>
+  plain(value)
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((w) => w && !VENDOR_WORDS.has(w));
+function houses(cells, byId, boxes, vertices) {
+  const found = [];
+  const regions = new Set(regionsOf(cells, boxes, vertices).map((c) => c.id));
+  for (const cell of vertices) {
+    const house = byId.get(cell.parent);
+    if (!house || !regions.has(house.id) || regions.has(cell.id) || isText(cell)) continue;
+    const [box, outer] = [boxes.get(cell.id), boxes.get(house.id)];
+    const marker = box.w <= 40 && box.h <= 40 && box.x - outer.x <= 12 && box.y - outer.y <= 12;
+    const [mine, theirs] = [nameWords(cell.value), new Set(nameWords(house.value))];
+    if (!marker && mine.length && mine.every((w) => theirs.has(w)))
+      found.push(
+        `${cell.id} repeats the house ${house.id} it sits in. Mark the house with its icon at the top left and attach its connectors to the house instead.`,
+      );
+  }
+  // Light fills without a stroke separate without adding an outline, so only outlined houses count.
+  const outlined = (c) => regions.has(c.id) && c.style.strokeColor !== 'none';
+  let deepest = null;
+  for (const cell of vertices) {
+    let depth = outlined(cell) ? 1 : 0;
+    for (let c = byId.get(cell.parent); c; c = byId.get(c.parent)) if (outlined(c)) depth++;
+    if (depth > 3 && (!deepest || depth > deepest.depth)) deepest = { id: cell.id, depth };
+  }
+  if (deepest)
+    found.push(
+      `Boundaries nest ${deepest.depth} deep at ${deepest.id}. Keep three outlines in one view; fold a level or split the detail into its own view.`,
+    );
   return found;
 }
 
