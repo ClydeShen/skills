@@ -531,7 +531,13 @@ function legend(cells, vertices, edges, boxes) {
       `Connectors use ${widths.length} line weights (${widths.join(', ')}). Use two: the main path heavy, every other connector one weight; mark auxiliary lines by dashes and labels.`,
     );
   const colours = [...new Set(edges.map((e) => (e.style.strokeColor ?? '').toLowerCase()).filter(Boolean))];
-  const styled = edges.some(dashed) || widths.length > 1 || colours.length > 1;
+  // A key is needed only when connectors come in two or more kinds; one kind of line explains itself.
+  const kinds = new Set(
+    edges.map((e) =>
+      [dashed(e), Number(e.style.strokeWidth) || 1, (e.style.strokeColor ?? '').toLowerCase()].join('|'),
+    ),
+  );
+  const styled = kinds.size > 1;
   if (styled && !tables.length)
     found.push(
       'Connectors mix styles but the view has no key table. Add a native draw.io table titled "Key" with one row per style: a sample line and its meaning.',

@@ -412,6 +412,8 @@ test('mixed connector styles need a key for every style; dotted lines and a thir
   assert.deepEqual(keyErrors(keyed), []);
   // One plain style needs no key at all.
   assert.deepEqual(keyErrors(two('', '')), []);
+  // One kind of line, even dashed, needs no key.
+  assert.deepEqual(keyErrors(two('dashed=1;', 'dashed=1;')), []);
   // Key text outside a table does not count.
   const loose = page(
     icon('a', 0, 0, 'App'),
