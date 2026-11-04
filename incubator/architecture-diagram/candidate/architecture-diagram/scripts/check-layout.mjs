@@ -373,6 +373,7 @@ function checkPage(xml) {
     }
   }
 
+  warnings.push(...shortDashes(edges, boxes));
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   errors.push(...sharedSegments(edges, boxes));
@@ -380,6 +381,25 @@ function checkPage(xml) {
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
   warnings.push(...houses(cells, byId, boxes, vertices));
   return { errors, warnings };
+}
+
+// A dashed line too short for three dashes reads as solid, so its kind and key row are lost.
+// draw.io scales the dash pattern by the stroke width unless fixDash is set.
+function shortDashes(edges, boxes) {
+  const found = [];
+  for (const edge of edges) {
+    if (edge.style.dashed !== '1') continue;
+    const route = edgeRoute(edge, boxes);
+    if (!route) continue;
+    const length = route.slice(1).reduce((sum, q, i) => sum + Math.hypot(q.x - route[i].x, q.y - route[i].y), 0);
+    const scale = edge.style.fixDash === '1' ? 1 : Number(edge.style.strokeWidth) || 1;
+    const period = (edge.style.dashPattern || '3 3').split(' ').reduce((sum, n) => sum + (Number(n) || 0), 0) * scale;
+    if (length < 3 * period + 10)
+      found.push(
+        `Dashed connector ${edge.id} is about ${Math.round(length)} long, too short to show its dashes, so it reads as solid. Move its ends at least ${Math.ceil(3 * period + 10)} apart.`,
+      );
+  }
+  return found;
 }
 
 // An overview box links to its detail page with draw.io's page link; a link to a missing page is dead.

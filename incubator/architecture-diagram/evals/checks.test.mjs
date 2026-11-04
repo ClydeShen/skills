@@ -483,6 +483,14 @@ test('layout warnings point at proportions, overlaps, detours and missing emphas
   assert.doesNotMatch(messages(route + same), /weight/);
 });
 
+test('a dashed connector too short to show its dashes is reported', () => {
+  const dashed = 'dashed=1;dashPattern=8 6;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;';
+  const near = checkLayout(page(box('a', 0, 0, 72, 72) + box('b', 100, 0, 72, 72) + line('e', 'a', 'b', dashed)));
+  assert.match(near.warnings.join('\n'), /Dashed connector e is about 28 long/);
+  const far = checkLayout(page(box('a', 0, 0, 72, 72) + box('b', 300, 0, 72, 72) + line('e', 'a', 'b', dashed)));
+  assert.doesNotMatch(far.warnings.join('\n'), /Dashed connector/);
+});
+
 test('split views are checked page by page and stay consistent across pages', () => {
   const icon = (id, image) =>
     `<mxCell id="${id}" value="Orders API" vertex="1" parent="1" style="shape=image;image=${image};"><mxGeometry x="40" y="40" width="72" height="72" as="geometry"/></mxCell>`;
