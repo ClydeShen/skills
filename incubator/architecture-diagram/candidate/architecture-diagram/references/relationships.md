@@ -66,5 +66,5 @@ Boundaries come in two families: a network or deployment boundary has a solid or
 
 ## Uncertain relationships
 
-- When the source states a relationship but does not explain it, draw a dashed connector labelled `unconfirmed`, and explain it in the companion account.
+- When the source states a relationship that it does not explain, or that is technically doubtful, do not draw it as a connector. Describe it in the companion account: what the source says, and why the drawing does not show it as an operational path.
 - When the source names a service but not its caller, attach the connector to the edge of the smallest boundary that contains all possible callers, without a port marker.
