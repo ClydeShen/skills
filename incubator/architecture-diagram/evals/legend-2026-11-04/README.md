@@ -17,3 +17,14 @@ Setup: the same clean Claude Code setup and prompt as the [clean-session trials]
 - B uses one dotted style for three meanings (secrets, telemetry, deployment) without labels, so readers separate them only by their endpoints. `3 store` is thinner than steps 1 and 2 of the same flow.
 - The [connector encoding research](../../../../research/diagrams/architecture-diagram/connector-encoding-conventions-2026-11-04.md) reaches the same conclusion for keys: list every encoding the view uses, including solid lines and the arrowhead.
 - One run per scenario, Claude Code only.
+
+## A and B after adopting the research encodings
+
+Commit `3284b94` applies the [connector encoding research](../../../../research/diagrams/architecture-diagram/connector-encoding-conventions-2026-11-04.md). Connectors use one filled arrowhead, solid and dashed lines only, and two weights. Notation-specific ends are not used unless the key declares the notation. A view that mixes styles keys every style. Custom houses are thin solid outlines named by their titles. One rerun each, same setup; not reviewed independently.
+
+| Case | Files | Session | Layout check | Key |
+| --- | --- | --- | --- | --- |
+| A | [image](./a-encodings/diagram.png), [file](./a-encodings/diagram.drawio), [report](./a-encodings/agent-report.md) | 16 turns, 252 s | 0 items | Boxed, three rows with sample lines: heavy, solid, dashed |
+| B | [image](./b-encodings/diagram.png), [file](./b-encodings/diagram.drawio), [report](./b-encodings/agent-report.md) | 18 turns, 314 s | 0 errors, 2 items | Three rows with sample lines, no frame |
+
+Both keys now list the solid line and show sample lines. B's region is a thin solid outline with a light fill, and every dashed line carries its own label. The owner then asked for the key as a table; that change follows.
