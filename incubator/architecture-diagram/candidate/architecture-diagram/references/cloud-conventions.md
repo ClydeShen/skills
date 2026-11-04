@@ -18,6 +18,7 @@ A boundary answers one question: who owns it and where it runs (cloud, account, 
 - A house that represents a service is that service. Put its service icon at the top left with the name beside it, using the catalog's group style where one exists and a generic group with the service icon otherwise. Never draw that service again as a node inside it.
 - Draw zones only when zonal redundancy is the point, in the cloud's own hierarchy below.
 - Security groups and network security groups are policy, not location: outside a security view, state the access rule on the connector or in the companion account instead of drawing a house per group.
+- Use the vendor's group style where the catalog has one; its dashes and colours are that vendor's notation. Draw every other house with one thin solid neutral outline, or a light fill, and name its kind in the title, not by dashes, colour or weight. A house style beyond that needs a key entry.
 - Nest at most three outlines in one view; a light fill without an outline does not count. Split deeper detail into its own view.
 
 ## AWS
@@ -34,7 +35,7 @@ Hierarchy: AWS Cloud, then Region, then VPC, then Availability Zone, then subnet
 
 Hierarchy: Subscription, then Resource group, then Region, then Virtual network, then subnet. A virtual network and its subnets span the zones of a region, so a zone does not contain a subnet.
 
-- Azure defines no official border styles. Use thin dashed outlines for region and virtual network, a light fill for subnets, and name each one.
+- Azure defines no official border styles. Use thin solid outlines for region and virtual network, a light fill for subnets, and name each one in its title.
 - Show zones as a lane across subnets, or mark resources `Zone 1`. Draw a zonal resource in its zone, and a zone-redundant resource once, spanning the zones.
 - A resource group is a management scope, not a network boundary. Draw it only if the source makes it matter; do not imply that it isolates traffic.
 - App Service, Cosmos DB, Storage and Key Vault are PaaS, outside subnets. Show VNet integration or a private endpoint as its own connection.

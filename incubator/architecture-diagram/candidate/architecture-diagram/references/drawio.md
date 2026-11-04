@@ -37,6 +37,8 @@ For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`,
 
 Draw a house as a container (`container=1`) whose members are its children. Use the catalog's group style when it has one for that boundary. Otherwise use a generic group: a rounded rectangle with a light fill, its label at the top left after `spacingLeft=36`, and the service icon as a 24-unit child at offset (6, 6), so the icon marks the house without becoming a member.
 
+Build the key as a table: a `shape=table;childLayout=tableLayout;container=1;startSize=24;collapsible=0;fontSize=12;align=left;` cell titled "Key", with one `shape=tableRow` per style and two `shape=partialRectangle;connectable=0;fontSize=12;` cells per row, the left empty and the right holding the meaning. Draw each sample as a free connector on the page (`sourcePoint` and `targetPoint`, no `source` or `target`) across its left cell, with exactly the style of the connectors it explains, including `edgeStyle=orthogonalEdgeStyle`.
+
 Use `source` and `target` IDs on connectors, with explicit ports when routing needs them. Root-parented edge waypoints use page coordinates; do not mix those with child-local coordinates. Every connector is orthogonal: set `edgeStyle=orthogonalEdgeStyle`, never `none` or a curved style. Useful native connector settings are:
 
 ```text

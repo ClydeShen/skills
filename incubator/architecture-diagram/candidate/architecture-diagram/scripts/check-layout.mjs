@@ -351,6 +351,8 @@ export function checkLayout(xml) {
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   errors.push(...sharedSegments(edges, boxes));
+  errors.push(...legend(cells, vertices, edges, boxes, warnings));
+  errors.push(...keyAcrossPages(xml));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
   warnings.push(...houses(cells, byId, boxes, vertices));
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
@@ -495,6 +497,139 @@ function sharedSegments(edges, boxes) {
           `Connectors ${a.edge.id} and ${b.edge.id} have different meanings but share a ${Math.round(shared)}-unit segment, so they read as one connection. Give each its own port and route.`,
         );
     }
+  return found;
+}
+
+// Only three connector encodings carry a meaning readers share: a line relates, a solid line is the
+// direct relation, and one arrowhead gives direction. Everything else is a convention a key must name.
+// One kind of each: solid and dashed lines, two weights, one filled arrowhead. See the connector
+// encoding research. Vendor group styles are the vendor's notation; any other house is a thin solid
+// outline whose title names its kind, so a dashed, coloured or heavier custom house needs a key too.
+const ARROWS = new Set(['block', 'classic', 'blockThin', 'classicThin']);
+const COLOUR_WORDS = /colou?r|red|blue|green|orange|purple|grey|gray|black|yellow|pink|teal/;
+function legend(cells, vertices, edges, boxes, warnings) {
+  const found = [];
+  // The key is a native table; its own text and its rows' and cells' text count.
+  const byParent = Map.groupBy(vertices, (c) => c.parent);
+  const within = (c) => [c, ...(byParent.get(c.id) ?? []).flatMap(within)];
+  const tables = vertices.filter((c) => c.style.shape === 'table');
+  const text = tables
+    .flatMap(within)
+    .map((c) => plain(c.value).toLowerCase())
+    .join('\n');
+  const declared = /\b(uml|archimate|bpmn|sysml)\b|notation/.test(text);
+  const ids = (list) => list.map((c) => c.id).join(', ');
+  const dashed = (e) => e.style.dashed === '1';
+  const dotted = (e) => dashed(e) && /^\s*[0-2](\.\d+)?\s/.test(e.style.dashPattern ?? '');
+  const dots = edges.filter(dotted);
+  if (dots.length)
+    found.push(
+      `Dotted connectors (${ids(dots)}): dotted has no shared meaning and readers confuse it with dashed. Use dashed for auxiliary relationships.`,
+    );
+  const widths = [...new Set(edges.map((e) => Number(e.style.strokeWidth) || 1))].sort((a, b) => a - b);
+  if (widths.length > 1)
+    found.push(
+      `Connectors use ${widths.length} line weights (${widths.join(', ')}). Readers barely tell weights apart: give every connector one weight, and show the main path by its place and step numbers.`,
+    );
+  const colours = [...new Set(edges.map((e) => (e.style.strokeColor ?? '').toLowerCase()).filter(Boolean))];
+  // A key is needed only when connectors come in two or more kinds; one kind of line explains itself.
+  const kinds = new Set(
+    edges.map((e) =>
+      [dashed(e), Number(e.style.strokeWidth) || 1, (e.style.strokeColor ?? '').toLowerCase()].join('|'),
+    ),
+  );
+  const styled = kinds.size > 1;
+  if (kinds.size > 2)
+    warnings.push(
+      `Connectors come in ${kinds.size} kinds. Two, solid for runtime and dashed for auxiliary, carry most views: first try splitting the view; keep any extra kind in the key with the same meaning across the split views.`,
+    );
+  if (styled && !tables.length)
+    found.push(
+      'Connectors mix styles but the view has no key table. Add a native draw.io table titled "Key" with one row per style: a sample line and its meaning.',
+    );
+  if (styled) {
+    const needs = [
+      { what: 'solid', key: /solid/, used: edges.some((e) => !dashed(e)), example: 'Solid: runtime call' },
+      { what: 'dashed', key: /dash/, used: edges.some(dashed), example: 'Dashed: <meaning>' },
+      { what: 'colour', key: COLOUR_WORDS, used: colours.length > 1, example: 'Red: <meaning>' },
+    ];
+    for (const { what, key, used, example } of needs)
+      if (used && !key.test(text))
+        found.push(
+          `Connectors mix styles, but no key text says what ${what} means. List every style the view uses in the key, such as "${example}", with a short sample line beside each.`,
+        );
+  }
+  if (!declared) {
+    // Any end beyond the one filled arrowhead is an added kind: the key must name it.
+    const endKind = (e) => {
+      const start = e.style.startArrow;
+      const end = e.style.endArrow ?? 'classic';
+      if (start && start !== 'none')
+        return { name: 'two-headed or start-marked line', key: /both|two.?way|double|start/ };
+      if (end === 'none') return { name: 'line without arrowhead', key: /no arrow|undirected|without arrow/ };
+      if (['oval', 'circle', 'circlePlus'].includes(end)) return { name: 'circle end', key: /circle|\bdot\b/ };
+      if (/diamond/i.test(end)) return { name: 'diamond end', key: /diamond/ };
+      if (!ARROWS.has(end) || e.style.endFill === '0') return { name: `${end} end`, key: /open|hollow|empty/ };
+      return null;
+    };
+    const unexplained = edges.map((e) => ({ e, kind: endKind(e) })).filter(({ kind }) => kind && !kind.key.test(text));
+    const marks = vertices.filter((c) => {
+      const b = boxes.get(c.id);
+      return c.style.shape === 'ellipse' && !plain(c.value) && b && b.w <= 24 && b.h <= 24;
+    });
+    if (unexplained.length || (marks.length && !/circle|\bdot\b/.test(text)))
+      found.push(
+        `${ids([...unexplained.map(({ e }) => e), ...(/circle|\bdot\b/.test(text) ? [] : marks)])} use an end, marker or undirected line other than one filled arrowhead from initiator to callee, and the key does not explain it. Use the filled arrowhead; if an extra kind is needed, first try splitting the view, then add a key row for it.`,
+      );
+  }
+  const vendor = (c) => String(c.style.shape ?? '').startsWith('mxgraph.aws4.group') || 'grIcon' in c.style;
+  const custom = regionsOf(cells, boxes, vertices).filter(
+    (c) => !vendor(c) && c.style.strokeColor !== 'none' && !isText(c),
+  );
+  const dashedHouses = custom.filter((c) => c.style.dashed === '1');
+  if (dashedHouses.length && !/dash/.test(text))
+    found.push(
+      `Houses ${ids(dashedHouses)} have dashed outlines, which no vendor style defines here. Draw them as thin solid outlines named by their titles, or explain the dashes in the key.`,
+    );
+  const houseColours = [...new Set(custom.map((c) => (c.style.strokeColor ?? '').toLowerCase()).filter(Boolean))];
+  if (houseColours.length > 1 && !COLOUR_WORDS.test(text))
+    found.push(
+      `Houses use ${houseColours.length} outline colours (${houseColours.join(', ')}). Use one neutral outline and let titles name the kind, or explain the colours in the key.`,
+    );
+  const houseWidths = [...new Set(custom.map((c) => Number(c.style.strokeWidth) || 1))];
+  if (houseWidths.length > 1)
+    found.push(
+      `Houses use ${houseWidths.length} outline weights (${houseWidths.sort((a, b) => a - b).join(', ')}). Give every house outline one weight; nesting and titles show the hierarchy.`,
+    );
+  return found;
+}
+
+// Views split from one diagram share one notation: a key entry means the same on every page.
+export function keyAcrossPages(xml) {
+  const pages = [...xml.matchAll(/<diagram\b[^>]*>([\s\S]*?)<\/diagram>/g)].map((m) => m[1]);
+  if (pages.length < 2) return [];
+  const seen = new Map();
+  const found = [];
+  for (const [index, page] of pages.entries()) {
+    const cells = readDiagram(page);
+    const byParent = Map.groupBy(cells, (c) => c.parent);
+    const within = (c) => [c, ...(byParent.get(c.id) ?? []).flatMap(within)];
+    const rows = cells
+      .filter((c) => c.style.shape === 'table')
+      .flatMap(within)
+      .flatMap((c) => plain(c.value).split('\n'))
+      .map((line) => line.match(/^\s*([^:]{1,40}):\s*(.+)$/))
+      .filter(Boolean);
+    for (const [, entry, meaning] of rows) {
+      const k = entry.trim().toLowerCase();
+      const m = meaning.trim().toLowerCase();
+      if (seen.has(k) && seen.get(k).meaning !== m)
+        found.push(
+          `Key entry "${entry.trim()}" means "${seen.get(k).meaning}" on page ${seen.get(k).page} but "${m}" on page ${index + 1}. Split views share one notation; give each style one meaning across pages.`,
+        );
+      else if (!seen.has(k)) seen.set(k, { meaning: m, page: index + 1 });
+    }
+  }
   return found;
 }
 
