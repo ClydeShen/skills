@@ -373,7 +373,7 @@ test('a run shared by connectors of different meaning is an error; identical con
   assert.ok(!a.errors.some((m) => /segment/.test(m)));
 });
 
-test('dashed, dotted and weighted connectors need key text; a keyed view passes', () => {
+test('mixed connector styles need a key for every style; dotted lines and a third weight are errors', () => {
   const two = (styleA, styleB, key = '') =>
     page(
       icon('a', 0, 0, 'App'),
@@ -385,16 +385,50 @@ test('dashed, dotted and weighted connectors need key text; a keyed view passes'
         ? `<mxCell id="key" value="${key}" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="500" width="300" height="40" as="geometry"/></mxCell>`
         : '',
     );
-  const keyErrors = (xml) => checkLayout(xml).errors.filter((m) => /no key text/.test(m));
-  assert.deepEqual(keyErrors(two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1;')), [
-    '1 dashed connector (aux) but no key text says what dashed means. Add a key entry such as "Dashed: <meaning>".',
-    'Connectors use 2 line weights (1, 2.5) but no key text says what weight means. Add a key entry such as "Heavy: main path".',
+  const keyErrors = (xml) => checkLayout(xml).errors.filter((m) => /key text|Dotted|line weights/.test(m));
+  assert.deepEqual(keyErrors(two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1.5;')), [
+    'Connectors mix styles, but no key text says what solid means. List every style the view uses in the key, such as "Solid: runtime call", with a short sample line beside each.',
+    'Connectors mix styles, but no key text says what dashed means. List every style the view uses in the key, such as "Dashed: <meaning>", with a short sample line beside each.',
+    'Connectors mix styles, but no key text says what line weight means. List every style the view uses in the key, such as "Heavy: main path", with a short sample line beside each.',
   ]);
-  assert.deepEqual(keyErrors(two('', 'dashed=1;dashPattern=1 4;')), [
-    '1 dotted connector (aux) but no key text says what dotted means. Add a key entry such as "Dotted: <meaning>".',
-  ]);
+  assert.ok(
+    keyErrors(two('', 'dashed=1;dashPattern=1 4;', 'Solid: call&lt;br&gt;Dotted: secrets')).some((m) =>
+      m.startsWith('Dotted connectors (aux)'),
+    ),
+  );
+  const keyed = two(
+    'strokeWidth=2.5;',
+    'dashed=1;strokeWidth=1.5;',
+    'Heavy solid: main path&lt;br&gt;Solid: call&lt;br&gt;Dashed: secrets',
+  );
+  assert.deepEqual(keyErrors(keyed), []);
+  // One plain style needs no key at all.
+  assert.deepEqual(keyErrors(two('', '')), []);
+});
+
+test('ends other than one filled arrowhead, and dashed, coloured or uneven custom houses, are reported', () => {
+  const pair = (style, extra = '') =>
+    page(icon('a', 0, 0, 'App'), icon('b', 400, 0, 'Store'), edge('e', 'a', 'b', side + style, 'Read'), extra);
+  const ends = (xml) => checkLayout(xml).errors.filter((m) => /filled arrowhead/.test(m));
+  for (const style of ['endArrow=open;', 'endArrow=diamond;', 'endArrow=none;', 'endArrow=block;endFill=0;'])
+    assert.equal(ends(pair(style)).length, 1, style);
+  assert.deepEqual(ends(pair('endArrow=block;endFill=1;')), []);
+  const declared =
+    '<mxCell id="key" value="Notation: UML" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="300" width="160" height="20" as="geometry"/></mxCell>';
+  assert.deepEqual(ends(pair('endArrow=diamond;', declared)), []);
+  const frame = (id, x, style) =>
+    `<mxCell id="${id}" value="${id}" style="rounded=0;container=1;${style}" vertex="1" parent="1"><mxGeometry x="${x}" y="200" width="300" height="200" as="geometry"/></mxCell>`;
+  const houses = (a, b) =>
+    checkLayout(page(frame('h1', 0, a), frame('h2', 400, b))).errors.filter((m) => /^Houses/.test(m));
+  assert.deepEqual(houses('', ''), []);
+  assert.equal(houses('dashed=1;', '').length, 1);
+  assert.equal(houses('strokeColor=#0078D4;', 'strokeColor=#E7157B;').length, 1);
+  assert.equal(houses('strokeWidth=1;', 'strokeWidth=3;').length, 1);
+  // A vendor group style is the vendor's notation.
+  const aws =
+    '<mxCell id="region" value="Region" style="shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;dashed=1;container=1;" vertex="1" parent="1"><mxGeometry x="0" y="200" width="300" height="200" as="geometry"/></mxCell>';
   assert.deepEqual(
-    keyErrors(two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1;', 'Heavy: main path&lt;br&gt;Dashed: secrets')),
+    checkLayout(page(aws)).errors.filter((m) => /^Houses/.test(m)),
     [],
   );
 });

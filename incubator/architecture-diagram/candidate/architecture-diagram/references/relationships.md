@@ -24,7 +24,7 @@ Prefer position and nesting, then connectors, then shape and line style. The ima
 | Relationship                        | Draw                                                  | Add only                        |
 | ----------------------------------- | ----------------------------------------------------- | ------------------------------- |
 | Asynchronous call                   | A queue or topic node between the parties             | Its name                        |
-| Connected, no direction             | Line with `endArrow=none`                             | Protocol if it matters          |
+| Connected, no direction             | Avoid for flows; give each direction its own arrow    | Protocol if it matters          |
 | Auxiliary such as DNS or monitoring | Thin dashed line, away from the main path             | One word                        |
 | Standby, replica                    | Same symbol in its own domain                         | The role                        |
 | Logical ownership                   | Light fill region, distinct from a deployment outline | The region name                 |

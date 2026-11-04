@@ -351,7 +351,7 @@ export function checkLayout(xml) {
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   errors.push(...sharedSegments(edges, boxes));
-  errors.push(...legend(vertices, edges, boxes));
+  errors.push(...legend(cells, vertices, edges, boxes));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
   warnings.push(...houses(cells, byId, boxes, vertices));
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
@@ -499,41 +499,86 @@ function sharedSegments(edges, boxes) {
   return found;
 }
 
-// Dashed and dotted lines, line weights and end markers are this package's conventions, not a
-// standard a reader knows, so each one a view uses needs a key entry. The key is any visible text.
-function legend(vertices, edges, boxes) {
+// Only three connector encodings carry a meaning readers share: a line relates, a solid line is the
+// direct relation, and one arrowhead gives direction. Everything else is a convention a key must name.
+// One kind of each: solid and dashed lines, two weights, one filled arrowhead. See the connector
+// encoding research. Vendor group styles are the vendor's notation; any other house is a thin solid
+// outline whose title names its kind, so a dashed, coloured or heavier custom house needs a key too.
+const ARROWS = new Set(['block', 'classic', 'blockThin', 'classicThin']);
+const COLOUR_WORDS = /colou?r|red|blue|green|orange|purple|grey|gray|black|yellow|pink|teal/;
+function legend(cells, vertices, edges, boxes) {
   const found = [];
   const text = vertices
     .filter((c) => !c.edge)
     .map((c) => plain(c.value).toLowerCase())
     .join('\n');
-  const dotted = (e) => e.style.dashed === '1' && /^\s*1\s/.test(e.style.dashPattern ?? '');
-  const used = [
-    { name: 'dashed', key: /dash/, test: (e) => e.style.dashed === '1' && !dotted(e) },
-    { name: 'dotted', key: /dot(ted)?\b/, test: dotted },
-  ];
-  for (const { name, key, test } of used) {
-    const lines = edges.filter(test);
-    if (lines.length && !key.test(text))
+  const declared = /\b(uml|archimate|bpmn|sysml)\b|notation/.test(text);
+  const ids = (list) => list.map((c) => c.id).join(', ');
+  const dashed = (e) => e.style.dashed === '1';
+  const dotted = (e) => dashed(e) && /^\s*[0-2](\.\d+)?\s/.test(e.style.dashPattern ?? '');
+  const dots = edges.filter(dotted);
+  if (dots.length)
+    found.push(
+      `Dotted connectors (${ids(dots)}): dotted has no shared meaning and readers confuse it with dashed. Use dashed for auxiliary relationships.`,
+    );
+  const widths = [...new Set(edges.map((e) => Number(e.style.strokeWidth) || 1))].sort((a, b) => a - b);
+  if (widths.length > 2)
+    found.push(
+      `Connectors use ${widths.length} line weights (${widths.join(', ')}). Use two: the main path heavy, every other connector one weight; mark auxiliary lines by dashes and labels.`,
+    );
+  const colours = [...new Set(edges.map((e) => (e.style.strokeColor ?? '').toLowerCase()).filter(Boolean))];
+  const styled = edges.some(dashed) || widths.length > 1 || colours.length > 1;
+  if (styled) {
+    const needs = [
+      { what: 'solid', key: /solid/, used: edges.some((e) => !dashed(e)), example: 'Solid: runtime call' },
+      { what: 'dashed', key: /dash/, used: edges.some(dashed), example: 'Dashed: <meaning>' },
+      {
+        what: 'line weight',
+        key: /heav|thick|bold|weight|main path/,
+        used: widths.length > 1,
+        example: 'Heavy: main path',
+      },
+      { what: 'colour', key: COLOUR_WORDS, used: colours.length > 1, example: 'Red: <meaning>' },
+    ];
+    for (const { what, key, used, example } of needs)
+      if (used && !key.test(text))
+        found.push(
+          `Connectors mix styles, but no key text says what ${what} means. List every style the view uses in the key, such as "${example}", with a short sample line beside each.`,
+        );
+  }
+  if (!declared) {
+    const odd = edges.filter((e) => {
+      const start = e.style.startArrow;
+      const end = e.style.endArrow ?? 'classic';
+      return (start && start !== 'none') || end === 'none' || !ARROWS.has(end) || e.style.endFill === '0';
+    });
+    const marks = vertices.filter((c) => {
+      const b = boxes.get(c.id);
+      return c.style.shape === 'ellipse' && !plain(c.value) && b && b.w <= 24 && b.h <= 24;
+    });
+    if (odd.length || marks.length)
       found.push(
-        `${lines.length} ${name} connector${lines.length > 1 ? 's' : ''} (${lines.map((e) => e.id).join(', ')}) but no key text says what ${name} means. Add a key entry such as "${name[0].toUpperCase()}${name.slice(1)}: <meaning>".`,
+        `${ids([...odd, ...marks])} use an end, marker or undirected line other than one filled arrowhead from initiator to callee. Circles, diamonds, triangles, bars, open, double or missing heads mean different things in each notation. Use the filled arrowhead, or declare the notation in the key.`,
       );
   }
-  const widths = [...new Set(edges.map((e) => Number(e.style.strokeWidth) || 1))];
-  if (widths.length > 1 && !/heav|thick|bold|thin|weight|main path/.test(text))
-    found.push(
-      `Connectors use ${widths.length} line weights (${widths.sort((a, b) => a - b).join(', ')}) but no key text says what weight means. Add a key entry such as "Heavy: main path".`,
-    );
-  const markers = edges.filter((e) =>
-    [e.style.startArrow, e.style.endArrow].some((m) => ['oval', 'circle', 'circlePlus'].includes(m)),
+  const vendor = (c) => String(c.style.shape ?? '').startsWith('mxgraph.aws4.group') || 'grIcon' in c.style;
+  const custom = regionsOf(cells, boxes, vertices).filter(
+    (c) => !vendor(c) && c.style.strokeColor !== 'none' && !isText(c),
   );
-  const dots = vertices.filter((c) => {
-    const b = boxes.get(c.id);
-    return c.style.shape === 'ellipse' && !plain(c.value) && b && b.w <= 24 && b.h <= 24;
-  });
-  if ((markers.length || dots.length) && !/circle|\bdot\b|\bport\b/.test(text))
+  const dashedHouses = custom.filter((c) => c.style.dashed === '1');
+  if (dashedHouses.length && !/dash/.test(text))
     found.push(
-      `${[...markers, ...dots].map((c) => c.id).join(', ')} use${markers.length + dots.length > 1 ? '' : 's'} a dot or circle marker that no common notation defines. Draw the acting element or the vendor's symbol instead, or explain the marker in the key.`,
+      `Houses ${ids(dashedHouses)} have dashed outlines, which no vendor style defines here. Draw them as thin solid outlines named by their titles, or explain the dashes in the key.`,
+    );
+  const houseColours = [...new Set(custom.map((c) => (c.style.strokeColor ?? '').toLowerCase()).filter(Boolean))];
+  if (houseColours.length > 1 && !COLOUR_WORDS.test(text))
+    found.push(
+      `Houses use ${houseColours.length} outline colours (${houseColours.join(', ')}). Use one neutral outline and let titles name the kind, or explain the colours in the key.`,
+    );
+  const houseWidths = [...new Set(custom.map((c) => Number(c.style.strokeWidth) || 1))];
+  if (houseWidths.length > 1)
+    found.push(
+      `Houses use ${houseWidths.length} outline weights (${houseWidths.sort((a, b) => a - b).join(', ')}). Give every house outline one weight; nesting and titles show the hierarchy.`,
     );
   return found;
 }
