@@ -44,3 +44,18 @@ Both reviewers found every line style explained by the key, and neither had to g
 - In A, the AWS region's vendor dashed outline resembles the dashed telemetry lines; only colour separates them.
 - In B, one dashed style carries three meanings, told apart by line labels, and three dashed lines run in parallel into the web app and the Function.
 - The reviewers did not need the key to read the boxes. Vendor group styles and thin solid outlines were read from their titles.
+
+## A and B with two kinds of line and one weight
+
+Commit `394e545` gives every connector one weight and builds views on two kinds of line: solid for runtime and dashed, labelled, for auxiliary relationships. A third kind of line or end comes only after splitting the view fails, with a key row, and split pages share one notation. One rerun each with the same setup, each reviewed by a context-free reviewer.
+
+| Case | Files | Session | Checks | Key table | Score |
+| --- | --- | --- | --- | --- | --- |
+| A | [image](./a-two-kinds/diagram.png), [file](./a-two-kinds/diagram.drawio), [report](./a-two-kinds/agent-report.md) | 17 turns, 295 s | layout 0 errors, steps 0 | Solid: runtime call, data / Dashed: telemetry, management | 8/10 |
+| B | [image](./b-two-kinds/diagram.png), [file](./b-two-kinds/diagram.drawio), [report](./b-two-kinds/agent-report.md) | 17 turns, 218 s | layout 0 errors, steps 0 | Solid: runtime call, data / Dashed: secrets, telemetry, deploy | 7/10 |
+
+Both views use one weight and two kinds of line, and both reviewers found every line style explained. The main path reads from its straight central run and step numbers without a heavier line. Findings that hold:
+
+- Each key row carries several meanings. In A, CI-time data flows share the solid style with runtime calls. In B, one dashed style carries secrets, telemetry and deployment, told apart only by labels. These are the cases the split rule addresses, for example a separate build or operations view.
+- In B, `1 search` and `3 store chat` share one vertical line in opposite directions, and `index` and `embeddings` do the same, so each pair reads as one bus. No check covers collinear lines that do not overlap.
+- B's key table shows collapse glyphs and an extra rule, from an incomplete table style.
