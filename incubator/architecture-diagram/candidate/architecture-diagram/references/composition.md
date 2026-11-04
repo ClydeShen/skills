@@ -69,4 +69,5 @@ The PNG usually appears about 900 pixels wide in a wiki.
 
 - Keep the page near 16:9 to 3:2 and at most about 1400 units wide, with 16-point text. Over 1600 wide, split the view instead of shrinking the text.
 - Add at most a title. Remove subtitles describing scope; those belong in the companion record.
-- Add a compact key only for line styles a reader would not recognize, in the lower right corner.
+- Prefer notation readers already know: vendor icons and group styles, and a solid single-headed arrow from initiator to callee. Do not invent markers, such as dots or circles at a line's end or on a boundary, or colour codes; draw the acting element or the vendor's own symbol instead.
+- Dashed and dotted lines, line weights and any other style whose meaning no common standard fixes are this package's conventions, not a reader's. Add a compact key in the lower right corner that names each one this view uses and its meaning, for example "Dashed: secrets, telemetry". Leave out what the view does not use.

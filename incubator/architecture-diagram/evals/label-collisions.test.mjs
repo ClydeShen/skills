@@ -372,3 +372,29 @@ test('a run shared by connectors of different meaning is an error; identical con
   const a = checkLayout(readFileSync(new URL('./region-intent-2026-11-04/a/diagram.drawio', import.meta.url), 'utf8'));
   assert.ok(!a.errors.some((m) => /segment/.test(m)));
 });
+
+test('dashed, dotted and weighted connectors need key text; a keyed view passes', () => {
+  const two = (styleA, styleB, key = '') =>
+    page(
+      icon('a', 0, 0, 'App'),
+      icon('b', 400, 0, 'Store'),
+      icon('c', 400, 300, 'Vault'),
+      edge('main', 'a', 'b', side + styleA, 'Read'),
+      edge('aux', 'a', 'c', 'exitX=0.5;exitY=1;entryX=0;entryY=0.5;' + styleB, 'Secrets'),
+      key
+        ? `<mxCell id="key" value="${key}" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="500" width="300" height="40" as="geometry"/></mxCell>`
+        : '',
+    );
+  const keyErrors = (xml) => checkLayout(xml).errors.filter((m) => /no key text/.test(m));
+  assert.deepEqual(keyErrors(two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1;')), [
+    '1 dashed connector (aux) but no key text says what dashed means. Add a key entry such as "Dashed: <meaning>".',
+    'Connectors use 2 line weights (1, 2.5) but no key text says what weight means. Add a key entry such as "Heavy: main path".',
+  ]);
+  assert.deepEqual(keyErrors(two('', 'dashed=1;dashPattern=1 4;')), [
+    '1 dotted connector (aux) but no key text says what dotted means. Add a key entry such as "Dotted: <meaning>".',
+  ]);
+  assert.deepEqual(
+    keyErrors(two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1;', 'Heavy: main path&lt;br&gt;Dashed: secrets')),
+    [],
+  );
+});

@@ -435,7 +435,15 @@ test('layout errors catch a broken parent edge, small text and double-headed arr
   const port = page(
     box('a', 0, 0, 72, 72) + box('b', 200, 0, 72, 72) + line('e', 'a', 'b', 'startArrow=oval;endArrow=block;'),
   );
-  assert.deepEqual(checkLayout(port).errors, []);
+  // A dot at a line's end is no common notation: it needs a key entry, and then it is no error.
+  assert.match(checkLayout(port).errors.join(' '), /dot or circle marker/);
+  const keyed = page(
+    box('a', 0, 0, 72, 72) +
+      box('b', 200, 0, 72, 72) +
+      line('e', 'a', 'b', 'startArrow=oval;endArrow=block;') +
+      '<mxCell id="key" value="Dot: caller not named" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="200" width="160" height="20" as="geometry"/></mxCell>',
+  );
+  assert.deepEqual(checkLayout(keyed).errors, []);
   const straight = page(box('a', 0, 0, 72, 72) + box('b', 200, 200, 72, 72)).replace(
     '</root>',
     '<mxCell id="d" edge="1" parent="1" source="a" target="b" style="edgeStyle=none;endArrow=block;"><mxGeometry relative="1" as="geometry"/></mxCell></root>',

@@ -74,6 +74,6 @@ Visible text is a name, role, verb, protocol, or a condition or value. Keep a co
 
 ## Uncertain relationships
 
-Keep a relationship the source states but does not explain as an unlabeled dashed connector, and explain it in the companion record. When the source names a service but not its caller, attach the connector to a visible port on the smallest boundary containing all possible callers.
+Keep a relationship the source states but does not explain as an unlabeled dashed connector, and explain it in the companion record. When the source names a service but not its caller, attach the connector to the edge of the smallest boundary containing all possible callers, without a port marker.
 
-Add a small key only for an encoding a reader would not recognize, listing only what this view uses.
+List in the key every encoding this view uses whose meaning no common standard fixes; see [composition](./composition.md).

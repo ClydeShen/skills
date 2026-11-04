@@ -351,6 +351,7 @@ export function checkLayout(xml) {
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   errors.push(...sharedSegments(edges, boxes));
+  errors.push(...legend(vertices, edges, boxes));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
   warnings.push(...houses(cells, byId, boxes, vertices));
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
@@ -495,6 +496,45 @@ function sharedSegments(edges, boxes) {
           `Connectors ${a.edge.id} and ${b.edge.id} have different meanings but share a ${Math.round(shared)}-unit segment, so they read as one connection. Give each its own port and route.`,
         );
     }
+  return found;
+}
+
+// Dashed and dotted lines, line weights and end markers are this package's conventions, not a
+// standard a reader knows, so each one a view uses needs a key entry. The key is any visible text.
+function legend(vertices, edges, boxes) {
+  const found = [];
+  const text = vertices
+    .filter((c) => !c.edge)
+    .map((c) => plain(c.value).toLowerCase())
+    .join('\n');
+  const dotted = (e) => e.style.dashed === '1' && /^\s*1\s/.test(e.style.dashPattern ?? '');
+  const used = [
+    { name: 'dashed', key: /dash/, test: (e) => e.style.dashed === '1' && !dotted(e) },
+    { name: 'dotted', key: /dot(ted)?\b/, test: dotted },
+  ];
+  for (const { name, key, test } of used) {
+    const lines = edges.filter(test);
+    if (lines.length && !key.test(text))
+      found.push(
+        `${lines.length} ${name} connector${lines.length > 1 ? 's' : ''} (${lines.map((e) => e.id).join(', ')}) but no key text says what ${name} means. Add a key entry such as "${name[0].toUpperCase()}${name.slice(1)}: <meaning>".`,
+      );
+  }
+  const widths = [...new Set(edges.map((e) => Number(e.style.strokeWidth) || 1))];
+  if (widths.length > 1 && !/heav|thick|bold|thin|weight|main path/.test(text))
+    found.push(
+      `Connectors use ${widths.length} line weights (${widths.sort((a, b) => a - b).join(', ')}) but no key text says what weight means. Add a key entry such as "Heavy: main path".`,
+    );
+  const markers = edges.filter((e) =>
+    [e.style.startArrow, e.style.endArrow].some((m) => ['oval', 'circle', 'circlePlus'].includes(m)),
+  );
+  const dots = vertices.filter((c) => {
+    const b = boxes.get(c.id);
+    return c.style.shape === 'ellipse' && !plain(c.value) && b && b.w <= 24 && b.h <= 24;
+  });
+  if ((markers.length || dots.length) && !/circle|\bdot\b|\bport\b/.test(text))
+    found.push(
+      `${[...markers, ...dots].map((c) => c.id).join(', ')} use${markers.length + dots.length > 1 ? '' : 's'} a dot or circle marker that no common notation defines. Draw the acting element or the vendor's symbol instead, or explain the marker in the key.`,
+    );
   return found;
 }
 
