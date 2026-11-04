@@ -5,7 +5,7 @@ Updated: 2026-11-03. The last change, [PR #25](https://github.com/ClydeShen/skil
 ## Start here
 
 - Active package: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md), a public-stage candidate, not a release. The [initiative README](./README.md) owns installation and lifecycle status.
-- Latest evidence: [house conventions trial](./evals/houses-2026-11-03/README.md), [boundary-membership check](./evals/boundary-check-2026-11-03/README.md), [clean-session trials](./evals/clean-session-2026-11-02/README.md), then [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
+- Latest evidence: [region placement by intent](./evals/region-intent-2026-11-04/README.md), [house conventions trial](./evals/houses-2026-11-03/README.md), [boundary-membership check](./evals/boundary-check-2026-11-03/README.md), [clean-session trials](./evals/clean-session-2026-11-02/README.md), then [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
 
 ## Baseline
 
