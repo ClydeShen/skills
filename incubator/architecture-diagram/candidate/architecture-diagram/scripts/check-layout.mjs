@@ -350,6 +350,7 @@ export function checkLayout(xml) {
     warnings.push('All connectors have the same weight. Make the main path the heaviest.');
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
+  errors.push(...sharedSegments(edges, boxes));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
   warnings.push(...houses(cells, byId, boxes, vertices));
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
@@ -467,6 +468,36 @@ function routeContact(first, second) {
   return { crossed, shared };
 }
 
+// Connectors carry the same meaning when their labels, ignoring step numbers, and their line styles match.
+// An unlabelled connector states no meaning, so it never shares one.
+const meaningOf = (edge) => ({
+  label: plain(edge.value)
+    .replace(/^[A-Za-z]?\d+[.):]?\s*/, '')
+    .toLowerCase(),
+  dashed: edge.style.dashed === '1',
+  width: Number(edge.style.strokeWidth) || 1,
+});
+function sameMeaning(e, f) {
+  const [a, b] = [meaningOf(e), meaningOf(f)];
+  return a.label !== '' && a.label === b.label && a.dashed === b.dashed && a.width === b.width;
+}
+
+// A run shared by connectors of different meaning merges them into one line for the reader: an error.
+function sharedSegments(edges, boxes) {
+  const found = [];
+  const routed = edges.map((edge) => ({ edge, route: edgeRoute(edge, boxes) })).filter((r) => r.route);
+  for (let i = 0; i < routed.length; i++)
+    for (let j = i + 1; j < routed.length; j++) {
+      const [a, b] = [routed[i], routed[j]];
+      const { shared } = routeContact(a.route, b.route);
+      if (shared > 10 && !sameMeaning(a.edge, b.edge))
+        found.push(
+          `Connectors ${a.edge.id} and ${b.edge.id} have different meanings but share a ${Math.round(shared)}-unit segment, so they read as one connection. Give each its own port and route.`,
+        );
+    }
+  return found;
+}
+
 function crossings(edges, boxes) {
   const found = [];
   const routed = edges.map((edge) => ({ edge, route: edgeRoute(edge, boxes) })).filter((r) => r.route);
@@ -484,9 +515,9 @@ function crossings(edges, boxes) {
         found.push(
           `Connectors ${e.id} and ${f.id} cross. Reorder ports, move an element, or route one around the outside.`,
         );
-      if (shared > 10)
+      if (shared > 10 && sameMeaning(e, f))
         found.push(
-          `Connectors ${e.id} and ${f.id} share a ${Math.round(shared)}-unit segment, so they read as one connection. Give each its own port and route.`,
+          `Connectors ${e.id} and ${f.id} share a ${Math.round(shared)}-unit segment. That reads as one relationship; keep it only if they are one.`,
         );
     }
   return found;
