@@ -1,24 +1,23 @@
 # Cloud conventions
 
-Read All clouds and Boundaries, then only the section for each cloud in the view. Draw the hierarchy that cloud really has: a wrong nesting is a technical error, not a style choice. Show only levels the source supports, and collapse levels that change no decision.
+Read "All clouds" and "Boundaries", then only the section for each cloud in the view. Draw the hierarchy that the cloud really has: a wrong nesting is a technical error, not a style choice. Show only the levels that the source supports, and fold the levels that change no decision.
 
 ## All clouds
 
-- Use official service names and current icons. Do not crop, rotate, stretch or recolor them. Keep the name near the icon without overlapping it.
+- Use official service names. [Notation](./notation.md#elements-and-icons) sets how to use icons.
 - Global services sit outside regions. A regional service sits in its region and outside zones; decide that region from the source first, then from platform constraints and standard practice, as [composition](./composition.md) describes. A zonal resource sits in its zone.
-- Draw a PaaS service outside a subnet unless it is really injected there. Show private access with an endpoint symbol on the boundary, not by moving the service inside.
-- Draw one arrow from initiator to dependency. For traffic truly initiated from both sides, draw two connectors. Do not use a double-headed arrow.
-- Layer rather than overload: an overview does not need subnets; a network view does not need every API call.
+- Draw a PaaS service outside a subnet unless it is really injected there. Show private access with an endpoint icon on the boundary; do not move the service inside.
+- Do not put every level in one view: an overview does not need subnets, and a network view does not need every API call.
 
 ## Boundaries
 
-A boundary answers one question: who owns it and where it runs (cloud, account, subscription, project, region), what can reach what (VPC, VNet, subnet), what members run on (cluster, scaling group, workflow), or which services share one job (a light-filled logical boundary).
+A boundary answers one of four questions: who owns its members and where they run (cloud, account, subscription, project, region), what can reach what (VPC, VNet, subnet), what the members run on (cluster, scaling group, workflow), or which services share one job (a light-filled logical boundary).
 
-- Draw a level only when it separates elements the reader must tell apart, such as a trust, failure or exposure boundary, or when it holds at least two drawn members. Otherwise fold it: put a single region in its parent's title, omit subnets whose role decides nothing, and draw a host with no drawn members as one icon.
-- A boundary that represents a service is that service. Put its service icon at the top left with the name beside it, using the vendor boundary style where the catalog has one and a generic boundary with the service icon otherwise. Never draw that service again as a node inside it.
+- Draw a level only when it separates elements that the reader must tell apart, such as a trust, failure or exposure boundary, or when it holds at least two drawn members. Otherwise, fold it: put a single region in its parent's title, omit subnets whose role decides nothing, and draw a host with no drawn members as one icon.
+- A boundary that represents a service is that service. Put its service icon at the top left with the name beside it, using the vendor boundary style where the catalog has one and a generic boundary with the service icon otherwise. Never draw that service again as an element inside it.
 - Draw zones only when zonal redundancy is the point, in the cloud's own hierarchy below.
-- Security groups and network security groups are policy, not location: outside a security view, state the access rule on the connector or in the companion account instead of drawing a boundary per group.
-- Use the vendor boundary style where the catalog has one; its dashes and colours are that vendor's notation. Draw every other boundary with one thin solid neutral outline, or a light fill, and name its kind in the title, not by dashes, colour or weight. A boundary style beyond that needs a key entry.
+- Security groups and network security groups are policy, not location. Outside a security view, state the access rule on the connector or in the companion account; do not draw a boundary per group.
+- Use the vendor boundary style where the catalog has one; its dashes and colours are that vendor's notation. Draw every other boundary with one thin solid neutral outline, or a light fill. Name its kind in the title, not by dashes, colour or weight. Any other boundary style needs a key row.
 - Nest at most three outlines in one view; a light fill without an outline does not count. Split deeper detail into its own view.
 
 ## AWS
@@ -26,7 +25,7 @@ A boundary answers one question: who owns it and where it runs (cloud, account, 
 Hierarchy: AWS Cloud, then Region, then VPC, then Availability Zone, then subnet. A VPC spans its Region's zones. A subnet belongs to exactly one zone, so a zone contains subnets and never the reverse.
 
 - Use the catalog's `aws4Groups` styles: Region and Availability Zone are dashed, VPC is purple, a public subnet is green and a private subnet is teal. Choose public or private only when the source says so.
-- An Auto Scaling group spans zones: draw one dashed group across them, not one per zone.
+- An Auto Scaling group spans zones: draw one boundary across them in its vendor style, not one per zone.
 - A load balancer serves several zones: place it in the VPC above or between the zones, connecting to each target group.
 - Route 53, CloudFront and IAM are global, so they sit outside the Region. S3 and DynamoDB are regional, so they sit in the Region and outside the VPC unless a gateway endpoint matters.
 - When a VPC is drawn and the source names them, put the internet gateway on the VPC boundary and NAT gateways in public subnets.
@@ -36,7 +35,7 @@ Hierarchy: AWS Cloud, then Region, then VPC, then Availability Zone, then subnet
 Hierarchy: Subscription, then Resource group, then Region, then Virtual network, then subnet. A virtual network and its subnets span the zones of a region, so a zone does not contain a subnet.
 
 - Azure defines no official border styles. Use thin solid outlines for region and virtual network, a light fill for subnets, and name each one in its title.
-- Show zones as a lane across subnets, or mark resources `Zone 1`. Draw a zonal resource in its zone, and a zone-redundant resource once, spanning the zones.
+- Show zones as a lane across the subnets, or mark resources `Zone 1`. Draw a zonal resource in its zone, and a zone-redundant resource once, spanning the zones.
 - A resource group is a management scope, not a network boundary. Draw it only if the source makes it matter; do not imply that it isolates traffic.
 - App Service, Cosmos DB, Storage and Key Vault are PaaS, outside subnets. Show VNet integration or a private endpoint as its own connection.
 - Application Gateway and Azure Firewall have dedicated subnets. Front Door and Traffic Manager are global.
@@ -47,16 +46,16 @@ Hierarchy: Organization, then Project, then VPC network, then Region, then subne
 
 - Google defines no official border styles. Use one thin outline for project and VPC, and a light fill for subnets, and name each one.
 - Use a core product icon where the catalog has one, otherwise the category icon with the exact service name, such as `Networking` for Cloud Load Balancing. Do not use legacy icons.
-- An external Application Load Balancer is global and sits outside regions. A regional managed instance group can span zones, so draw one group across them.
+- An external Application Load Balancer is global and sits outside regions. A regional managed instance group can span zones, so draw one boundary across them.
 - Cloud Storage, BigQuery and Spanner sit outside subnets at their real scope.
 
 ## Engineering review
 
-Ask these before composing and again on the finished image:
+Ask these questions before you compose the view, and again on the finished image:
 
 1. Where does traffic enter, and is the entry visible from its origin?
 2. What are the failure domains? Would an outage of one zone or region stop the path?
 3. Where are the single points of failure? Let the layout show them: an empty cell in the second zone is information.
 4. Which boundary does each connector cross, and does the drawing show why?
 
-Report a design risk in the companion record. Do not correct the architecture on the canvas, and do not write the risk on it.
+Report a design risk in the companion account. Do not correct the architecture on the canvas, and do not write the risk on it.
