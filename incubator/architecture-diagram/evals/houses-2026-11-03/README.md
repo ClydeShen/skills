@@ -16,3 +16,9 @@ Setup: the same clean Claude Code setup and prompt as the [clean-session trials]
 - The A reviewer again read Bedrock, which sits inside AWS Cloud and outside the region, as outside AWS; the frame edges in the image show otherwise.
 - 02 findings outside houses: Network Firewall connects straight down to the egress VPC instead of through the Transit Gateway, the Route 53 outbound endpoint has no connection, and only one of three parallel API lines is labelled.
 - One run per scenario, Claude Code only.
+
+## A with the step check
+
+Commit `06ddcc0` adds `check-steps.mjs`, which reports source-ordered steps that no connector label numbers. One rerun of A with the same setup: [image](./a-steps/diagram.png), [file](./a-steps/diagram.drawio), [report](./a-steps/agent-report.md); 19 turns, 263 s; layout check 1 item, step check 0 items.
+
+The session ran the step check and numbered `1 retrieve`, `2 write answer` and `3 lookup`; the reviewer followed the sequence and scored 7/10. The EKS cluster is again a house marked by its icon. The reviewer's main finding holds: the `us-east-1` frame holds only the load balancer, with the EKS cluster outside it. The source names the region only for the load balancer, and the rule to keep services of unstated region out of a stated region left the cluster out, although a load balancer's targets must share its region. The earlier run at the baseline package drew the cluster inside and named that inference.
