@@ -1,6 +1,34 @@
 # Composition
 
-Plan the view on an invisible three-by-three grid before placing anything. The grid guides roles; real boundary membership wins whenever they conflict. Empty cells are fine.
+Decide the views first, then plan each view on an invisible three-by-three grid before placing anything. The grid guides roles; real boundary membership wins whenever they conflict. Empty cells are fine.
+
+## Split the view
+
+A view answers one question for one reader. Split it when it must answer more than one, which shows as soon as a single view would need any of these:
+
+- a third kind of line or end;
+- a second main direction;
+- more than three nested outlines, or boundary detail deeper than two levels;
+- more than about six elements in the center;
+- a page wider than about 1600 units at 16-point text.
+
+Split along the first axis that removes the cause:
+
+| Axis    | Pages                                                                                                    | Removes                                          |
+| ------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Concern | Runtime calls and data; then operations: build, deployment, management, telemetry and secrets            | A third kind of line; auxiliary lines in the way |
+| Zoom    | An overview that draws each part as one box; then a detail page for each part the reader must see inside | Deep nesting, a crowded center, a wide page      |
+| Flow    | One page per path or scenario, such as DNS resolution and the API call                                   | Two main directions, tangled paths               |
+
+Apply the same test to each new page and split again while a page still answers two questions. Stop when every page fits two kinds of line, three outlines and the page width, or when a further split would leave a page with a single relationship. Never leave a path whole on no page: a detail page may show part of a path only when the overview shows all of it.
+
+Split views are one system seen several ways, so they must read as one:
+
+- Deliver them as pages of one `.drawio` file, the overview or runtime page first, each named by its question, such as "Overview", "Runtime" or "Operations". Every page carries its own title and reads alone, because each becomes its own PNG.
+- An element keeps its name and symbol on every page, and a line style or end keeps its meaning. A page whose connectors are all one kind needs no key; a page that needs one uses the same entries as the other pages.
+- An overview box that has a detail page links to it, and its name is that page's title. The detail page draws that part as its outer boundary and shows the outside elements it talks to at the edge, with their overview names.
+- Keep the numbered steps of one flow on one page.
+- When the user asks for one diagram, draw one, and recommend in the companion account the split that would answer what it cannot show clearly. List the pages and why each exists in the companion account.
 
 ## Choose one direction
 
@@ -11,7 +39,7 @@ Plan the view on an invisible three-by-three grid before placing anything. The g
 | What is built on what, or how does data rise from devices? | Bottom to top           |
 | It must mirror an adjacent view or real geography          | Right to left           |
 
-Needing a second main direction means the view should be two diagrams.
+Needing a second main direction means the view should be split by flow.
 
 ## Assign roles (left to right)
 
@@ -34,7 +62,7 @@ Decide what a deployment boundary, such as a region or network, contains in this
 - The main path is the most visible thing on the page. If you squint, it still reads.
 - Middle row before outer rows; corners carry the least.
 - Give every connector one weight (`strokeWidth` 1.5). Readers barely tell weights apart and do not know whether thicker means more important or more traffic. Show the main path by its place, a straight run along the middle row in reading order, and by step numbers.
-- Use about two to six elements in the center, and one or two in a corner. Over that, group them or split the view.
+- Use about two to six elements in the center, and one or two in a corner. Over that, group them or split the view by zoom.
 
 ## Route
 
@@ -71,5 +99,5 @@ The PNG usually appears about 900 pixels wide in a wiki.
 - Add at most a title. Remove subtitles describing scope; those belong in the companion record.
 - Readers share only three connector meanings: a line relates two things, a solid line is the direct relation, and an arrowhead gives direction. Use one filled arrowhead, from initiator to callee, on every connector. Do not use open, double or missing heads, or circles, diamonds, triangles or bars at a line's end or on a boundary: each means something different in UML, ArchiMate and BPMN. Such an end is an added kind; use one only as the next rule allows, with a key row, or when the key declares that notation.
 - Build views on two kinds of line: solid for runtime calls and data, and dashed for auxiliary relationships such as deployment, management, telemetry or secrets, each dashed line carrying a one-word label. Do not use dotted lines: readers and tools do not tell them from dashed. Never let colour carry meaning alone.
-- When a view seems to need a third kind of line or end, first split it, for example into a runtime view and an operations view, each within the two kinds. Add a kind only when splitting cannot answer the reader's question, and then give it a key row. Views split from one diagram are pages of one `.drawio` file and share one notation: the same line or end means the same on every page.
+- When a view seems to need a third kind of line or end, first split it by concern, as [Split the view](#split-the-view) describes. Add a kind only when splitting cannot answer the reader's question, and then give it a key row with the same meaning on every page.
 - When a view mixes styles, add a key in the lower right corner as a native draw.io table titled "Key": one row per style the view uses, including the plain solid line, with a short sample line in the left column and its meaning in the right, for example "Heavy: main path", "Solid: runtime call", "Dashed: secrets, telemetry". Add a row for a house style only when the house is not a vendor group style or a thin solid outline. A view whose connectors are all one kind of line, the same pattern, weight and colour, needs no key; two or more kinds need one. [draw.io authoring](./drawio.md) shows how to build the table.

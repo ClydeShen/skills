@@ -2,7 +2,7 @@
 
 Use spatial structure to make the intended architecture easier to read. Domain membership and interaction meaning are constraints; direction, alignment and whitespace are design choices within them. Apply this guidance to architecture views with nested deployment or system boundaries, adapting it to the audience's question.
 
-Start with what exists and where, how it interacts, and what constrains those interactions. Choose an emphasis supported by the evidence: a high-level logical view need not pretend to specify a deployment. Distinguish source-stated relationships from technically established operations, inferred paths and recommendations. Preserve unresolved source claims in a concise companion record instead of promoting them to runtime arrows. A faithful transcription can still reproduce a source error. Use standard visual vocabulary without introducing a mandatory modeling framework, optimization formula or multi-view system.
+Start with what exists and where, how it interacts, and what constrains those interactions. Choose an emphasis supported by the evidence: a high-level logical view need not pretend to specify a deployment. Distinguish source-stated relationships from technically established operations, inferred paths and recommendations. Preserve unresolved source claims in a concise companion record instead of promoting them to runtime arrows. A faithful transcription can still reproduce a source error. Use standard visual vocabulary without introducing a mandatory modeling framework, optimization formula or fixed set of views.
 
 ## Choose one primary reading direction
 
@@ -40,6 +40,10 @@ A house answers one of four questions:
 - Draw availability zones only when zonal redundancy is the point of the view, and follow the cloud's hierarchy: an AWS zone contains its subnets, while Azure and Google Cloud subnets span zones, so their zones are lanes across subnets rather than another nesting level.
 - Security groups and network security groups are policy, not location. Outside a security view, state the access rule on the connector or in the companion record instead of drawing a house per group.
 - Keep to three nested outlines in one view; a light fill without an outline separates without adding one. Deeper nesting means the view answers too many questions; split it into an overview and a network or runtime view.
+
+## Split a view that answers two questions
+
+One view answers one question for one reader. Symptoms of a second question are a third kind of line, a second main direction, deep nesting, a crowded center or an oversized page. Split along the axis that removes the symptom: by concern (runtime against operations), by zoom (an overview with detail pages, as in C4's levels) or by flow (one path or scenario per view). Apply the same test to each new view. Views split from one diagram are one system seen several ways: keep names, symbols and line meanings identical across them, and link each overview element to its detail.
 
 ## Route for traceability
 

@@ -11,8 +11,13 @@ import { annotationMetadata, editorLink, pageSize, referencedAssets } from './re
 
 const [input, screenshot = input?.replace(/(\.drawio)?$/, '.png')] = process.argv.slice(2);
 if (!input) throw new Error('Usage: node scripts/render.mjs <diagram.drawio> [output.png]');
-const svgOutput = screenshot.replace(/\.png$/, '.svg');
 const source = readFileSync(input, 'utf8');
+// Split views are pages of one file; each page becomes its own image.
+const pages = [...source.matchAll(/<diagram\b[^>]*>[\s\S]*?<\/diagram>/g)].map((m) => m[0]);
+if (!pages.length) pages.push(source);
+const outputs = pages.map((_, i) =>
+  pages.length === 1 ? screenshot : screenshot.replace(/(\.png)?$/, `-${i + 1}.png`),
+);
 if (!isFormatted(source))
   throw new Error(`Run node scripts/finalize.mjs ${input} first: it embeds icons and writes draw.io's file layout.`);
 const catalog = JSON.parse(readFileSync(new URL('../assets/catalog.json', import.meta.url), 'utf8'));
@@ -62,7 +67,7 @@ function findBrowser() {
 }
 
 // draw.io Desktop is the real target, and its PNG keeps an editable copy of the diagram.
-function exportWithDesktop() {
+function exportWithDesktop(index, output) {
   const candidates = [
     process.env.DRAWIO_CLI,
     'drawio',
@@ -79,20 +84,22 @@ function exportWithDesktop() {
     '20',
     '--scale',
     '2',
+    '--page-index',
+    String(index),
     '--output',
-    screenshot,
+    output,
     input,
   ];
   // Never run these through a shell: the paths come from the caller.
   for (const cli of candidates.filter(Boolean)) {
-    if (spawnSync(cli, args, { stdio: 'ignore', timeout: 60_000 }).status === 0 && existsSync(screenshot)) return cli;
+    if (spawnSync(cli, args, { stdio: 'ignore', timeout: 60_000 }).status === 0 && existsSync(output)) return cli;
   }
   return null;
 }
 
 // Inside the Codex sandbox draw.io cannot reach the window server, and macOS reports a crash to the user.
-if (!process.env.CODEX_SANDBOX && exportWithDesktop()) {
-  console.log(`Rendered ${screenshot} with draw.io Desktop; it embeds an editable copy. Inspect the PNG.`);
+if (!process.env.CODEX_SANDBOX && pages.every((_, i) => exportWithDesktop(i, outputs[i]))) {
+  console.log(`Rendered ${outputs.join(', ')} with draw.io Desktop; each embeds an editable copy. Inspect every PNG.`);
   process.exit(0);
 }
 
@@ -112,7 +119,6 @@ try {
   giveUp(error);
   process.exit();
 }
-const page = pageSize(source);
 const assetUris = Object.fromEntries(
   assets.map((ref) => [
     ref,
@@ -139,13 +145,16 @@ execFileSync(
   { stdio: 'pipe' },
 );
 const temporary = mkdtempSync(path.join(tmpdir(), 'drawio-render-'));
-const html = `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:white}#graph{position:relative;width:${page.width}px;height:${page.height}px}</style>
+const htmlFor = (
+  xmlPage,
+  page,
+) => `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:white}#graph{position:relative;width:${page.width}px;height:${page.height}px}</style>
 <script>STENCIL_PATH='/stencils';SHAPES_PATH='/shapes';GRAPH_IMAGE_PATH='/img';mxBasePath='/mxgraph';mxLoadResources=false;mxLoadStylesheets=false;</script>
 <script src="/viewer.js"></script><script src="/stencils.js"></script><script src="/aws.js"></script><script src="/kubernetes.js"></script>
 <div id="graph"></div><pre id="result" style="display:none"></pre>
 <script>
 (async function() { try {
-  var xml = ${JSON.stringify(source).replaceAll('<', '\\u003c')};
+  var xml = ${JSON.stringify(xmlPage).replaceAll('<', '\\u003c')};
   var doc = mxUtils.parseXml(xml);
   var graph = new Graph(document.getElementById('graph'));
   graph.setEnabled(false);
@@ -171,9 +180,10 @@ const html = `<!doctype html><meta charset="utf-8"><style>body{margin:0;backgrou
 } catch (e) { document.getElementById('result').textContent = 'ERROR:' + e.stack; } })();
 </script>`;
 const server = createServer((req, res) => {
-  if (req.url === '/') {
+  const index = Number(req.url.match(/^\/page\/(\d+)$/)?.[1] ?? -1);
+  if (pages[index]) {
     res.setHeader('Content-Type', 'text/html');
-    res.end(html);
+    res.end(htmlFor(pages[index], pageSize(pages[index])));
   } else if (files.has(req.url)) {
     res.setHeader('Content-Type', 'application/javascript');
     res.end(readFileSync(path.join(checkout, 'src/main/webapp', files.get(req.url))));
@@ -248,47 +258,51 @@ try {
     const target = await call('Target.createTarget', { url: 'about:blank' }, false);
     sessionId = (await call('Target.attachToTarget', { targetId: target.targetId, flatten: true }, false)).sessionId;
     await call('Page.enable');
-    await call('Emulation.setDeviceMetricsOverride', {
-      width: page.width,
-      height: page.height,
-      deviceScaleFactor: 1,
-      mobile: false,
-    });
-    await call('Page.navigate', { url: `http://127.0.0.1:${server.address().port}/` });
-    const evaluation = await call('Runtime.evaluate', {
-      expression:
-        "(async () => { for (let i=0;i<150;i++) { const s=document.getElementById('result')?.textContent; if(s) return s; await new Promise(r=>setTimeout(r,100)); } return 'ERROR: diagram script did not finish'; })()",
-      awaitPromise: true,
-      returnByValue: true,
-    });
-    const result = evaluation.result?.value || evaluation.exceptionDetails?.text || 'ERROR: No result';
-    if (!result.startsWith('JSON:')) throw new Error(result);
-    const rendered = JSON.parse(Buffer.from(result.slice(5), 'base64').toString('utf8'));
-    writeFileSync(svgOutput, `${rendered.svg}\n`);
-    const browser = await call('Browser.getVersion', {}, false);
-    writeFileSync(
-      svgOutput.replace(/\.svg$/, '.render.json'),
-      `${JSON.stringify(
-        {
-          renderer: 'Chromium with pinned local draw.io viewer',
-          drawio_version: upstreamVersion,
-          upstream_commit: upstreamCommit,
-          browser: browser.product,
-          metrics: rendered.metrics,
-        },
-        null,
-        2,
-      )}\n`,
-    );
-    const capture = await call('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
-    writeFileSync(screenshot, Buffer.from(capture.data, 'base64'));
+    for (const [index, xmlPage] of pages.entries()) {
+      const page = pageSize(xmlPage);
+      const svgOutput = outputs[index].replace(/\.png$/, '.svg');
+      await call('Emulation.setDeviceMetricsOverride', {
+        width: page.width,
+        height: page.height,
+        deviceScaleFactor: 1,
+        mobile: false,
+      });
+      await call('Page.navigate', { url: `http://127.0.0.1:${server.address().port}/page/${index}` });
+      const evaluation = await call('Runtime.evaluate', {
+        expression:
+          "(async () => { for (let i=0;i<150;i++) { const s=document.getElementById('result')?.textContent; if(s) return s; await new Promise(r=>setTimeout(r,100)); } return 'ERROR: diagram script did not finish'; })()",
+        awaitPromise: true,
+        returnByValue: true,
+      });
+      const result = evaluation.result?.value || evaluation.exceptionDetails?.text || 'ERROR: No result';
+      if (!result.startsWith('JSON:')) throw new Error(result);
+      const rendered = JSON.parse(Buffer.from(result.slice(5), 'base64').toString('utf8'));
+      writeFileSync(svgOutput, `${rendered.svg}\n`);
+      const browser = await call('Browser.getVersion', {}, false);
+      writeFileSync(
+        svgOutput.replace(/\.svg$/, '.render.json'),
+        `${JSON.stringify(
+          {
+            renderer: 'Chromium with pinned local draw.io viewer',
+            drawio_version: upstreamVersion,
+            upstream_commit: upstreamCommit,
+            browser: browser.product,
+            metrics: rendered.metrics,
+          },
+          null,
+          2,
+        )}\n`,
+      );
+      const capture = await call('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
+      writeFileSync(outputs[index], Buffer.from(capture.data, 'base64'));
+    }
   } finally {
     clearTimeout(timeout);
     socket?.close();
     child.kill('SIGTERM');
     await exited;
   }
-  console.log(`Rendered ${screenshot} and ${svgOutput} with the pinned draw.io viewer. Inspect the PNG.`);
+  console.log(`Rendered ${outputs.join(', ')} with the pinned draw.io viewer, each with an SVG. Inspect every PNG.`);
 } catch (error) {
   giveUp(error);
 } finally {
