@@ -20,3 +20,9 @@ Setup: the same clean Claude Code setup and prompt as the [clean-session trials]
   - The layout check reported shared segments among its 12 items, and the session kept them.
 - The B reviewer again read the arrows into Key Vault as writes. The package draws arrows from initiator to callee.
 - One run per scenario, Claude Code only.
+
+## B with shared segments as errors
+
+Commit `fd1e879` turns a segment shared by connectors of different meaning into a layout error. Meaning is compared by label, ignoring step numbers, and by line style; an unlabelled connector never matches. On all recorded diagrams the new errors appear only in the three B runs whose reviewers deducted for merged trunks. One rerun of B with the same setup: [image](./b-shared-error/diagram.png), [file](./b-shared-error/diagram.drawio), [report](./b-shared-error/agent-report.md); 16 turns, 266 s; layout check 0 errors, 14 items; step check 0 items.
+
+The session gave every connector its own port. `1 Search`, `2 Answer` and `3 Store` leave the web app separately, and the secrets and telemetry lines are labelled. The reviewer scored 7/10, up from 6/10, and followed the sequence. A new pattern remains that no check covers yet: different connectors that line up on both sides of an element read as one line through it. `2 Answer` and `Embed` line up across Azure OpenAI, and the left Deploy line and the web app's Telemetry line line up across the web app. The reviewer again read the region frame as invented; under commit `2c706a5` it is a named practice inference.
