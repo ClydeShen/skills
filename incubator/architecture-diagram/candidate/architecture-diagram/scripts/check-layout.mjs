@@ -231,6 +231,14 @@ const crosses = ([p, q], b) =>
   );
 
 // Errors are faults whatever the design; warnings ask a person or agent to look.
+// Each <diagram> element is one page; split views are pages of one file.
+export function pagesOf(xml) {
+  return [...xml.matchAll(/<diagram\b([^>]*)>([\s\S]*?)<\/diagram>/g)].map((m, index) => {
+    const a = attributes(`<diagram ${m[1]}>`);
+    return { id: a.id, name: a.name || String(index + 1), xml: m[2] };
+  });
+}
+
 export function checkLayout(xml) {
   const errors = [];
   const warnings = [];
@@ -238,6 +246,27 @@ export function checkLayout(xml) {
     errors.push(
       "The file is not in draw.io's own layout, which importers such as Lucidchart require. Run finalize.mjs.",
     );
+  const pages = pagesOf(xml);
+  if (pages.length > 1)
+    for (const page of pages) {
+      const found = checkPage(page.xml);
+      errors.push(...found.errors.map((e) => `Page "${page.name}": ${e}`));
+      warnings.push(...found.warnings.map((w) => `Page "${page.name}": ${w}`));
+    }
+  else {
+    const found = checkPage(xml);
+    errors.push(...found.errors);
+    warnings.push(...found.warnings);
+  }
+  errors.push(...keyAcrossPages(xml));
+  errors.push(...pageLinks(xml));
+  warnings.push(...iconsAcrossPages(xml));
+  return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
+}
+
+function checkPage(xml) {
+  const errors = [];
+  const warnings = [];
   const cells = readDiagram(xml);
   const { byId, boxes } = absolute(cells);
   const name = (cell) => cell.id;
@@ -344,18 +373,63 @@ export function checkLayout(xml) {
     }
   }
 
-  const widths = edges.map((edge) => Number(edge.style.strokeWidth) || 1);
-  const heaviest = Math.max(1, ...widths);
-  if (edges.length > 3 && heaviest === Math.min(...widths))
-    warnings.push('All connectors have the same weight. Make the main path the heaviest.');
+  warnings.push(...shortDashes(edges, boxes));
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   errors.push(...sharedSegments(edges, boxes));
   errors.push(...legend(cells, vertices, edges, boxes, warnings));
-  errors.push(...keyAcrossPages(xml));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
   warnings.push(...houses(cells, byId, boxes, vertices));
-  return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
+  return { errors, warnings };
+}
+
+// A dashed line too short for three dashes reads as solid, so its kind and key row are lost.
+// draw.io scales the dash pattern by the stroke width unless fixDash is set.
+function shortDashes(edges, boxes) {
+  const found = [];
+  for (const edge of edges) {
+    if (edge.style.dashed !== '1') continue;
+    const route = edgeRoute(edge, boxes);
+    if (!route) continue;
+    const length = route.slice(1).reduce((sum, q, i) => sum + Math.hypot(q.x - route[i].x, q.y - route[i].y), 0);
+    const scale = edge.style.fixDash === '1' ? 1 : Number(edge.style.strokeWidth) || 1;
+    const period = (edge.style.dashPattern || '3 3').split(' ').reduce((sum, n) => sum + (Number(n) || 0), 0) * scale;
+    if (length < 3 * period + 10)
+      found.push(
+        `Dashed connector ${edge.id} is about ${Math.round(length)} long, too short to show its dashes, so it reads as solid. Move its ends at least ${Math.ceil(3 * period + 10)} apart.`,
+      );
+  }
+  return found;
+}
+
+// An overview box links to its detail page with draw.io's page link; a link to a missing page is dead.
+export function pageLinks(xml) {
+  const pages = pagesOf(xml);
+  const ids = new Set(pages.map((p) => p.id));
+  return [...xml.matchAll(/\blink="data:page\/id,([^"]*)"/g)]
+    .filter((m) => !ids.has(m[1]))
+    .map((m) => `A page link points to page id "${m[1]}", which the file does not contain.`);
+}
+
+// The same element keeps its symbol on every page, so a reader recognises it across views.
+export function iconsAcrossPages(xml) {
+  const pages = pagesOf(xml);
+  if (pages.length < 2) return [];
+  const seen = new Map();
+  const found = [];
+  for (const page of pages)
+    for (const cell of readDiagram(page.xml)) {
+      const symbol = cell.style.image || cell.style.resIcon || cell.style.prIcon;
+      const caption = plain(cell.value).replace(/\s+/g, ' ').trim().toLowerCase();
+      if (cell.vertex !== '1' || !symbol || !caption) continue;
+      const first = seen.get(caption);
+      if (!first) seen.set(caption, { symbol, page: page.name });
+      else if (first.symbol !== symbol)
+        found.push(
+          `"${caption}" has one symbol on page "${first.page}" and another on page "${page.name}". Draw an element with the same symbol on every page.`,
+        );
+    }
+  return found;
 }
 
 // Regions are frames and large background areas; membership is geometric, as a reader sees it.

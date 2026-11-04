@@ -31,7 +31,7 @@ This uses Node.js 24 and Git. Regeneration reads and executes pinned upstream pa
 
 ## XML essentials
 
-Use one `mxfile` / `diagram` / `mxGraphModel` page with root cells `0` and `1`. Use unique IDs. Set the file version to `32.6.1`. Parent child nodes to their actual boundary cells; coordinates of child vertices are relative to that parent. Write the XML in any layout; `finalize.mjs` rewrites it in draw.io's own layout, one element per line, because importers such as Lucidchart reject other layouts of the same valid XML.
+Use one `mxfile` with one `diagram` / `mxGraphModel` page per view, each with root cells `0` and `1`, a unique page `id` and a `name` that states the page's question. Use unique IDs within a page. To link an overview box to its detail page, wrap the box in a `UserObject` with `link="data:page/id,<page id>"`. Set the file version to `32.6.1`. Parent child nodes to their actual boundary cells; coordinates of child vertices are relative to that parent. Write the XML in any layout; `finalize.mjs` rewrites it in draw.io's own layout, one element per line, because importers such as Lucidchart reject other layouts of the same valid XML.
 
 For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`, `vendor` and `iconKey`. Its child `mxCell` has `vertex="1"`, the real parent ID, the selected style and an `mxGeometry`. Labels use escaped XML attributes and HTML line breaks when `html=1`. Keep inspection metadata separate from the short visible caption; print a type or technology only when it clarifies the element.
 

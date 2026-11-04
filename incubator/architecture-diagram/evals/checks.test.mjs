@@ -480,7 +480,39 @@ test('layout warnings point at proportions, overlaps, detours and missing emphas
     /4 bends/,
   );
   const same = ['e1', 'e2', 'e3', 'e4'].map((id) => line(id, 'a', 'b')).join('');
-  assert.match(messages(route + same), /same weight/);
+  assert.doesNotMatch(messages(route + same), /weight/);
+});
+
+test('a dashed connector too short to show its dashes is reported', () => {
+  const dashed = 'dashed=1;dashPattern=8 6;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;';
+  const near = checkLayout(page(box('a', 0, 0, 72, 72) + box('b', 100, 0, 72, 72) + line('e', 'a', 'b', dashed)));
+  assert.match(near.warnings.join('\n'), /Dashed connector e is about 28 long/);
+  const far = checkLayout(page(box('a', 0, 0, 72, 72) + box('b', 300, 0, 72, 72) + line('e', 'a', 'b', dashed)));
+  assert.doesNotMatch(far.warnings.join('\n'), /Dashed connector/);
+});
+
+test('split views are checked page by page and stay consistent across pages', () => {
+  const icon = (id, image) =>
+    `<mxCell id="${id}" value="Orders API" vertex="1" parent="1" style="shape=image;image=${image};"><mxGeometry x="40" y="40" width="72" height="72" as="geometry"/></mxCell>`;
+  const file = (first, second, link = 'p2') =>
+    formatDrawio(
+      `<mxfile><diagram id="p1" name="Overview"><mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>${first}<UserObject id="go" label="Detail" link="data:page/id,${link}"><mxCell vertex="1" parent="1" style=""><mxGeometry x="300" y="40" width="120" height="200" as="geometry"/></mxCell></UserObject></root></mxGraphModel></diagram><diagram id="p2" name="Detail"><mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>${second}</root></mxGraphModel></diagram></mxfile>`,
+    );
+  const same = checkLayout(file(icon('a', 'img/lib/a.svg'), icon('a', 'img/lib/a.svg')));
+  assert.deepEqual(same.errors, []);
+  assert.deepEqual(same.warnings, []);
+  const tiny = checkLayout(
+    file(
+      icon('a', 'img/lib/a.svg'),
+      `<mxCell id="t" value="x" vertex="1" parent="1" style="fontSize=9;"><mxGeometry x="0" y="0" width="40" height="20" as="geometry"/></mxCell>`,
+    ),
+  );
+  assert.deepEqual(tiny.errors, ['Page "Detail": Text smaller than 12 in t: 9.']);
+  assert.match(
+    checkLayout(file(icon('a', 'img/lib/a.svg'), icon('a', 'img/lib/b.svg'))).warnings.join('\n'),
+    /"orders api" has one symbol on page "Overview" and another on page "Detail"/,
+  );
+  assert.match(checkLayout(file('', '', 'gone')).errors.join('\n'), /page id "gone"/);
 });
 
 test('object-wrapped cells and nested parents use absolute positions', () => {
