@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { checkLayout, textSize } from '../candidate/architecture-diagram/scripts/check-layout.mjs';
+import { checkLayout, keyAcrossPages, textSize } from '../candidate/architecture-diagram/scripts/check-layout.mjs';
 import { formatDrawio, isFormatted } from '../candidate/architecture-diagram/scripts/drawio-format.mjs';
 
 const icon = (id, x, y, value, parent = '1') =>
@@ -382,7 +382,7 @@ const keyTable = (...rows) =>
     )
     .join('')}`;
 
-test('mixed connector styles need a key for every style; dotted lines and a third weight are errors', () => {
+test('mixed connector styles need a key for every style; dotted lines and a second weight are errors', () => {
   const two = (styleA, styleB, key = []) =>
     page(
       icon('a', 0, 0, 'App'),
@@ -393,24 +393,22 @@ test('mixed connector styles need a key for every style; dotted lines and a thir
       key.length ? keyTable(...key) : '',
     );
   const keyErrors = (xml) => checkLayout(xml).errors.filter((m) => /key t|Dotted|line weights/.test(m));
-  assert.deepEqual(keyErrors(two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1.5;')), [
+  assert.deepEqual(keyErrors(two('', 'dashed=1;')), [
     'Connectors mix styles but the view has no key table. Add a native draw.io table titled "Key" with one row per style: a sample line and its meaning.',
     'Connectors mix styles, but no key text says what solid means. List every style the view uses in the key, such as "Solid: runtime call", with a short sample line beside each.',
     'Connectors mix styles, but no key text says what dashed means. List every style the view uses in the key, such as "Dashed: <meaning>", with a short sample line beside each.',
-    'Connectors mix styles, but no key text says what line weight means. List every style the view uses in the key, such as "Heavy: main path", with a short sample line beside each.',
   ]);
+  assert.ok(
+    keyErrors(two('strokeWidth=2.5;', 'strokeWidth=1.5;', ['Heavy: main path', 'Solid: call'])).some((m) =>
+      m.startsWith('Connectors use 2 line weights (1.5, 2.5)'),
+    ),
+  );
   assert.ok(
     keyErrors(two('', 'dashed=1;dashPattern=1 4;', ['Solid: call', 'Dotted: secrets'])).some((m) =>
       m.startsWith('Dotted connectors (aux)'),
     ),
   );
-  const keyed = two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1.5;', [
-    'Heavy: main path',
-    'Solid: call',
-    'Dashed: secrets',
-  ]);
-  assert.deepEqual(keyErrors(keyed), []);
-  // One plain style needs no key at all.
+  assert.deepEqual(keyErrors(two('', 'dashed=1;', ['Solid: call', 'Dashed: secrets'])), []);
   assert.deepEqual(keyErrors(two('', '')), []);
   // One kind of line, even dashed, needs no key.
   assert.deepEqual(keyErrors(two('dashed=1;', 'dashed=1;')), []);
@@ -450,4 +448,21 @@ test('ends other than one filled arrowhead, and dashed, coloured or uneven custo
     checkLayout(page(aws)).errors.filter((m) => /^Houses/.test(m)),
     [],
   );
+});
+
+test('an extra end kind passes once the key names it, and split pages must share key meanings', () => {
+  const pair = (style, extra = '') =>
+    page(icon('a', 0, 0, 'App'), icon('b', 400, 0, 'Store'), edge('e', 'a', 'b', side + style, 'Read'), extra);
+  const ends = (xml) => checkLayout(xml).errors.filter((m) => /filled arrowhead/.test(m));
+  assert.equal(ends(pair('endArrow=open;')).length, 1);
+  assert.deepEqual(ends(pair('endArrow=open;', keyTable('Open arrow: asynchronous message'))), []);
+  const two = (a, b) =>
+    `<mxfile><diagram id="p1" name="Runtime"><mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>${keyTable(...a)}</root></mxGraphModel></diagram><diagram id="p2" name="Operations"><mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/>${keyTable(...b)}</root></mxGraphModel></diagram></mxfile>`;
+  assert.deepEqual(
+    keyAcrossPages(two(['Solid: runtime call', 'Dashed: telemetry'], ['Solid: runtime call', 'Dashed: telemetry'])),
+    [],
+  );
+  assert.deepEqual(keyAcrossPages(two(['Dashed: telemetry'], ['Dashed: deployment'])), [
+    'Key entry "Dashed" means "telemetry" on page 1 but "deployment" on page 2. Split views share one notation; give each style one meaning across pages.',
+  ]);
 });

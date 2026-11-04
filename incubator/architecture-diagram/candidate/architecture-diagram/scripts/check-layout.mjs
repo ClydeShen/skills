@@ -351,7 +351,8 @@ export function checkLayout(xml) {
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
   errors.push(...sharedSegments(edges, boxes));
-  errors.push(...legend(cells, vertices, edges, boxes));
+  errors.push(...legend(cells, vertices, edges, boxes, warnings));
+  errors.push(...keyAcrossPages(xml));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
   warnings.push(...houses(cells, byId, boxes, vertices));
   return { errors: [...new Set(errors)], warnings: [...new Set(warnings)] };
@@ -506,7 +507,7 @@ function sharedSegments(edges, boxes) {
 // outline whose title names its kind, so a dashed, coloured or heavier custom house needs a key too.
 const ARROWS = new Set(['block', 'classic', 'blockThin', 'classicThin']);
 const COLOUR_WORDS = /colou?r|red|blue|green|orange|purple|grey|gray|black|yellow|pink|teal/;
-function legend(cells, vertices, edges, boxes) {
+function legend(cells, vertices, edges, boxes, warnings) {
   const found = [];
   // The key is a native table; its own text and its rows' and cells' text count.
   const byParent = Map.groupBy(vertices, (c) => c.parent);
@@ -526,9 +527,9 @@ function legend(cells, vertices, edges, boxes) {
       `Dotted connectors (${ids(dots)}): dotted has no shared meaning and readers confuse it with dashed. Use dashed for auxiliary relationships.`,
     );
   const widths = [...new Set(edges.map((e) => Number(e.style.strokeWidth) || 1))].sort((a, b) => a - b);
-  if (widths.length > 2)
+  if (widths.length > 1)
     found.push(
-      `Connectors use ${widths.length} line weights (${widths.join(', ')}). Use two: the main path heavy, every other connector one weight; mark auxiliary lines by dashes and labels.`,
+      `Connectors use ${widths.length} line weights (${widths.join(', ')}). Readers barely tell weights apart: give every connector one weight, and show the main path by its place and step numbers.`,
     );
   const colours = [...new Set(edges.map((e) => (e.style.strokeColor ?? '').toLowerCase()).filter(Boolean))];
   // A key is needed only when connectors come in two or more kinds; one kind of line explains itself.
@@ -538,6 +539,10 @@ function legend(cells, vertices, edges, boxes) {
     ),
   );
   const styled = kinds.size > 1;
+  if (kinds.size > 2)
+    warnings.push(
+      `Connectors come in ${kinds.size} kinds. Two, solid for runtime and dashed for auxiliary, carry most views: first try splitting the view; keep any extra kind in the key with the same meaning across the split views.`,
+    );
   if (styled && !tables.length)
     found.push(
       'Connectors mix styles but the view has no key table. Add a native draw.io table titled "Key" with one row per style: a sample line and its meaning.',
@@ -546,12 +551,6 @@ function legend(cells, vertices, edges, boxes) {
     const needs = [
       { what: 'solid', key: /solid/, used: edges.some((e) => !dashed(e)), example: 'Solid: runtime call' },
       { what: 'dashed', key: /dash/, used: edges.some(dashed), example: 'Dashed: <meaning>' },
-      {
-        what: 'line weight',
-        key: /heav|thick|bold|weight|main path/,
-        used: widths.length > 1,
-        example: 'Heavy: main path',
-      },
       { what: 'colour', key: COLOUR_WORDS, used: colours.length > 1, example: 'Red: <meaning>' },
     ];
     for (const { what, key, used, example } of needs)
@@ -561,18 +560,26 @@ function legend(cells, vertices, edges, boxes) {
         );
   }
   if (!declared) {
-    const odd = edges.filter((e) => {
+    // Any end beyond the one filled arrowhead is an added kind: the key must name it.
+    const endKind = (e) => {
       const start = e.style.startArrow;
       const end = e.style.endArrow ?? 'classic';
-      return (start && start !== 'none') || end === 'none' || !ARROWS.has(end) || e.style.endFill === '0';
-    });
+      if (start && start !== 'none')
+        return { name: 'two-headed or start-marked line', key: /both|two.?way|double|start/ };
+      if (end === 'none') return { name: 'line without arrowhead', key: /no arrow|undirected|without arrow/ };
+      if (['oval', 'circle', 'circlePlus'].includes(end)) return { name: 'circle end', key: /circle|\bdot\b/ };
+      if (/diamond/i.test(end)) return { name: 'diamond end', key: /diamond/ };
+      if (!ARROWS.has(end) || e.style.endFill === '0') return { name: `${end} end`, key: /open|hollow|empty/ };
+      return null;
+    };
+    const unexplained = edges.map((e) => ({ e, kind: endKind(e) })).filter(({ kind }) => kind && !kind.key.test(text));
     const marks = vertices.filter((c) => {
       const b = boxes.get(c.id);
       return c.style.shape === 'ellipse' && !plain(c.value) && b && b.w <= 24 && b.h <= 24;
     });
-    if (odd.length || marks.length)
+    if (unexplained.length || (marks.length && !/circle|\bdot\b/.test(text)))
       found.push(
-        `${ids([...odd, ...marks])} use an end, marker or undirected line other than one filled arrowhead from initiator to callee. Circles, diamonds, triangles, bars, open, double or missing heads mean different things in each notation. Use the filled arrowhead, or declare the notation in the key.`,
+        `${ids([...unexplained.map(({ e }) => e), ...(/circle|\bdot\b/.test(text) ? [] : marks)])} use an end, marker or undirected line other than one filled arrowhead from initiator to callee, and the key does not explain it. Use the filled arrowhead; if an extra kind is needed, first try splitting the view, then add a key row for it.`,
       );
   }
   const vendor = (c) => String(c.style.shape ?? '').startsWith('mxgraph.aws4.group') || 'grIcon' in c.style;
@@ -594,6 +601,35 @@ function legend(cells, vertices, edges, boxes) {
     found.push(
       `Houses use ${houseWidths.length} outline weights (${houseWidths.sort((a, b) => a - b).join(', ')}). Give every house outline one weight; nesting and titles show the hierarchy.`,
     );
+  return found;
+}
+
+// Views split from one diagram share one notation: a key entry means the same on every page.
+export function keyAcrossPages(xml) {
+  const pages = [...xml.matchAll(/<diagram\b[^>]*>([\s\S]*?)<\/diagram>/g)].map((m) => m[1]);
+  if (pages.length < 2) return [];
+  const seen = new Map();
+  const found = [];
+  for (const [index, page] of pages.entries()) {
+    const cells = readDiagram(page);
+    const byParent = Map.groupBy(cells, (c) => c.parent);
+    const within = (c) => [c, ...(byParent.get(c.id) ?? []).flatMap(within)];
+    const rows = cells
+      .filter((c) => c.style.shape === 'table')
+      .flatMap(within)
+      .flatMap((c) => plain(c.value).split('\n'))
+      .map((line) => line.match(/^\s*([^:]{1,40}):\s*(.+)$/))
+      .filter(Boolean);
+    for (const [, entry, meaning] of rows) {
+      const k = entry.trim().toLowerCase();
+      const m = meaning.trim().toLowerCase();
+      if (seen.has(k) && seen.get(k).meaning !== m)
+        found.push(
+          `Key entry "${entry.trim()}" means "${seen.get(k).meaning}" on page ${seen.get(k).page} but "${m}" on page ${index + 1}. Split views share one notation; give each style one meaning across pages.`,
+        );
+      else if (!seen.has(k)) seen.set(k, { meaning: m, page: index + 1 });
+    }
+  }
   return found;
 }
 

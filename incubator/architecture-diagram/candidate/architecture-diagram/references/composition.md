@@ -33,7 +33,7 @@ Decide what a deployment boundary, such as a region or network, contains in this
 
 - The main path is the most visible thing on the page. If you squint, it still reads.
 - Middle row before outer rows; corners carry the least.
-- Use two line weights: the main path heaviest (`strokeWidth` 2.5) and every other connector 1.5. Keep one weight within a flow. Mark auxiliary relationships by a dashed line and a one-word label, not by a thinner line.
+- Give every connector one weight (`strokeWidth` 1.5). Readers barely tell weights apart and do not know whether thicker means more important or more traffic. Show the main path by its place, a straight run along the middle row in reading order, and by step numbers.
 - Use about two to six elements in the center, and one or two in a corner. Over that, group them or split the view.
 
 ## Route
@@ -69,6 +69,7 @@ The PNG usually appears about 900 pixels wide in a wiki.
 
 - Keep the page near 16:9 to 3:2 and at most about 1400 units wide, with 16-point text. Over 1600 wide, split the view instead of shrinking the text.
 - Add at most a title. Remove subtitles describing scope; those belong in the companion record.
-- Readers share only three connector meanings: a line relates two things, a solid line is the direct relation, and an arrowhead gives direction. Use one filled arrowhead, from initiator to callee, on every connector. Do not use open, double or missing heads, or circles, diamonds, triangles or bars at a line's end or on a boundary: each means something different in UML, ArchiMate and BPMN. Use them only when the key declares that notation.
-- Use one non-solid pattern, dashed, with one meaning in a view. Do not use dotted lines: readers and tools do not tell them from dashed. Never let colour carry meaning alone; pair it with a label or pattern.
+- Readers share only three connector meanings: a line relates two things, a solid line is the direct relation, and an arrowhead gives direction. Use one filled arrowhead, from initiator to callee, on every connector. Do not use open, double or missing heads, or circles, diamonds, triangles or bars at a line's end or on a boundary: each means something different in UML, ArchiMate and BPMN. Such an end is an added kind; use one only as the next rule allows, with a key row, or when the key declares that notation.
+- Build views on two kinds of line: solid for runtime calls and data, and dashed for auxiliary relationships such as deployment, management, telemetry or secrets, each dashed line carrying a one-word label. Do not use dotted lines: readers and tools do not tell them from dashed. Never let colour carry meaning alone.
+- When a view seems to need a third kind of line or end, first split it, for example into a runtime view and an operations view, each within the two kinds. Add a kind only when splitting cannot answer the reader's question, and then give it a key row. Views split from one diagram are pages of one `.drawio` file and share one notation: the same line or end means the same on every page.
 - When a view mixes styles, add a key in the lower right corner as a native draw.io table titled "Key": one row per style the view uses, including the plain solid line, with a short sample line in the left column and its meaning in the right, for example "Heavy: main path", "Solid: runtime call", "Dashed: secrets, telemetry". Add a row for a house style only when the house is not a vendor group style or a thin solid outline. A view whose connectors are all one kind of line, the same pattern, weight and colour, needs no key; two or more kinds need one. [draw.io authoring](./drawio.md) shows how to build the table.
