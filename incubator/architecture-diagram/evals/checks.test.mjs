@@ -441,7 +441,7 @@ test('layout errors catch a broken parent edge, small text and double-headed arr
     box('a', 0, 0, 72, 72) +
       box('b', 200, 0, 72, 72) +
       line('e', 'a', 'b', 'startArrow=oval;endArrow=block;') +
-      '<mxCell id="key" value="Notation: UML ports" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="200" width="160" height="20" as="geometry"/></mxCell>',
+      '<mxCell id="key" value="Key" style="shape=table;container=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="0" y="200" width="200" height="48" as="geometry"/></mxCell><mxCell id="row" value="Notation: UML ports" style="shape=tableRow;fontSize=12;" vertex="1" parent="key"><mxGeometry y="24" width="200" height="24" as="geometry"/></mxCell>',
   );
   assert.deepEqual(checkLayout(keyed).errors, []);
   const straight = page(box('a', 0, 0, 72, 72) + box('b', 200, 200, 72, 72)).replace(

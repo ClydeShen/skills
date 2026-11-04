@@ -508,8 +508,12 @@ const ARROWS = new Set(['block', 'classic', 'blockThin', 'classicThin']);
 const COLOUR_WORDS = /colou?r|red|blue|green|orange|purple|grey|gray|black|yellow|pink|teal/;
 function legend(cells, vertices, edges, boxes) {
   const found = [];
-  const text = vertices
-    .filter((c) => !c.edge)
+  // The key is a native table; its own text and its rows' and cells' text count.
+  const byParent = Map.groupBy(vertices, (c) => c.parent);
+  const within = (c) => [c, ...(byParent.get(c.id) ?? []).flatMap(within)];
+  const tables = vertices.filter((c) => c.style.shape === 'table');
+  const text = tables
+    .flatMap(within)
     .map((c) => plain(c.value).toLowerCase())
     .join('\n');
   const declared = /\b(uml|archimate|bpmn|sysml)\b|notation/.test(text);
@@ -528,6 +532,10 @@ function legend(cells, vertices, edges, boxes) {
     );
   const colours = [...new Set(edges.map((e) => (e.style.strokeColor ?? '').toLowerCase()).filter(Boolean))];
   const styled = edges.some(dashed) || widths.length > 1 || colours.length > 1;
+  if (styled && !tables.length)
+    found.push(
+      'Connectors mix styles but the view has no key table. Add a native draw.io table titled "Key" with one row per style: a sample line and its meaning.',
+    );
   if (styled) {
     const needs = [
       { what: 'solid', key: /solid/, used: edges.some((e) => !dashed(e)), example: 'Solid: runtime call' },

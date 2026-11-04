@@ -373,37 +373,53 @@ test('a run shared by connectors of different meaning is an error; identical con
   assert.ok(!a.errors.some((m) => /segment/.test(m)));
 });
 
+// A native draw.io key table: a "Key" title, then one row per entry with an empty sample cell and its meaning.
+const keyTable = (...rows) =>
+  `<mxCell id="key" value="Key" style="shape=table;childLayout=tableLayout;container=1;startSize=24;collapsible=0;fontSize=12;" vertex="1" parent="1"><mxGeometry x="0" y="500" width="300" height="${24 + 24 * rows.length}" as="geometry"/></mxCell>${rows
+    .map(
+      (text, i) =>
+        `<mxCell id="r${i}" value="" style="shape=tableRow;" vertex="1" parent="key"><mxGeometry y="${24 + 24 * i}" width="300" height="24" as="geometry"/></mxCell><mxCell id="s${i}" value="" style="shape=partialRectangle;connectable=0;fontSize=12;" vertex="1" parent="r${i}"><mxGeometry width="80" height="24" as="geometry"/></mxCell><mxCell id="m${i}" value="${text}" style="shape=partialRectangle;connectable=0;fontSize=12;" vertex="1" parent="r${i}"><mxGeometry x="80" width="220" height="24" as="geometry"/></mxCell>`,
+    )
+    .join('')}`;
+
 test('mixed connector styles need a key for every style; dotted lines and a third weight are errors', () => {
-  const two = (styleA, styleB, key = '') =>
+  const two = (styleA, styleB, key = []) =>
     page(
       icon('a', 0, 0, 'App'),
       icon('b', 400, 0, 'Store'),
       icon('c', 400, 300, 'Vault'),
       edge('main', 'a', 'b', side + styleA, 'Read'),
       edge('aux', 'a', 'c', `exitX=0.5;exitY=1;entryX=0;entryY=0.5;${styleB}`, 'Secrets'),
-      key
-        ? `<mxCell id="key" value="${key}" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="500" width="300" height="40" as="geometry"/></mxCell>`
-        : '',
+      key.length ? keyTable(...key) : '',
     );
-  const keyErrors = (xml) => checkLayout(xml).errors.filter((m) => /key text|Dotted|line weights/.test(m));
+  const keyErrors = (xml) => checkLayout(xml).errors.filter((m) => /key t|Dotted|line weights/.test(m));
   assert.deepEqual(keyErrors(two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1.5;')), [
+    'Connectors mix styles but the view has no key table. Add a native draw.io table titled "Key" with one row per style: a sample line and its meaning.',
     'Connectors mix styles, but no key text says what solid means. List every style the view uses in the key, such as "Solid: runtime call", with a short sample line beside each.',
     'Connectors mix styles, but no key text says what dashed means. List every style the view uses in the key, such as "Dashed: <meaning>", with a short sample line beside each.',
     'Connectors mix styles, but no key text says what line weight means. List every style the view uses in the key, such as "Heavy: main path", with a short sample line beside each.',
   ]);
   assert.ok(
-    keyErrors(two('', 'dashed=1;dashPattern=1 4;', 'Solid: call&lt;br&gt;Dotted: secrets')).some((m) =>
+    keyErrors(two('', 'dashed=1;dashPattern=1 4;', ['Solid: call', 'Dotted: secrets'])).some((m) =>
       m.startsWith('Dotted connectors (aux)'),
     ),
   );
-  const keyed = two(
-    'strokeWidth=2.5;',
-    'dashed=1;strokeWidth=1.5;',
-    'Heavy solid: main path&lt;br&gt;Solid: call&lt;br&gt;Dashed: secrets',
-  );
+  const keyed = two('strokeWidth=2.5;', 'dashed=1;strokeWidth=1.5;', [
+    'Heavy: main path',
+    'Solid: call',
+    'Dashed: secrets',
+  ]);
   assert.deepEqual(keyErrors(keyed), []);
   // One plain style needs no key at all.
   assert.deepEqual(keyErrors(two('', '')), []);
+  // Key text outside a table does not count.
+  const loose = page(
+    icon('a', 0, 0, 'App'),
+    icon('b', 400, 0, 'Store'),
+    edge('e', 'a', 'b', `${side}dashed=1;`, 'Read'),
+    '<mxCell id="t" value="Dashed: read" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="300" width="160" height="20" as="geometry"/></mxCell>',
+  );
+  assert.ok(keyErrors(loose).some((m) => /no key table/.test(m)));
 });
 
 test('ends other than one filled arrowhead, and dashed, coloured or uneven custom houses, are reported', () => {
@@ -413,8 +429,7 @@ test('ends other than one filled arrowhead, and dashed, coloured or uneven custo
   for (const style of ['endArrow=open;', 'endArrow=diamond;', 'endArrow=none;', 'endArrow=block;endFill=0;'])
     assert.equal(ends(pair(style)).length, 1, style);
   assert.deepEqual(ends(pair('endArrow=block;endFill=1;')), []);
-  const declared =
-    '<mxCell id="key" value="Notation: UML" style="text;" vertex="1" parent="1"><mxGeometry x="0" y="300" width="160" height="20" as="geometry"/></mxCell>';
+  const declared = keyTable('Notation: UML');
   assert.deepEqual(ends(pair('endArrow=diamond;', declared)), []);
   const frame = (id, x, style) =>
     `<mxCell id="${id}" value="${id}" style="rounded=0;container=1;${style}" vertex="1" parent="1"><mxGeometry x="${x}" y="200" width="300" height="200" as="geometry"/></mxCell>`;
