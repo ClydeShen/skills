@@ -43,7 +43,7 @@ Read these references before you compose a view:
 While you draw:
 
 - Arrange the elements around the main relationships before you route. Use alignment, proximity and whitespace to show the structure. Add a second axis only when it shows a real distinction.
-- Show distinct instances in their actual boundaries, and connect every group that takes part. Show fleets with repeated or stacked icons, and state that counts are representative. Do not replace multiplicity or essential paths with prose.
+- Show distinct instances in their actual boundaries, and connect every group that takes part. Draw an identical repeated structure, such as three environments or a standby region with the same stack, once with its count and names. Show fleets with repeated or stacked icons, and state that counts are representative. Do not replace multiplicity or essential paths with prose.
 - Give each boundary a job: it shows membership or separation that matters. When another outline adds no distinction, use whitespace or a light fill. Keep logical boundaries visibly different from deployment and security boundaries.
 - Label only what the reader cannot reliably infer from the icons and the topology: distinguishing roles, exact-hop contracts, branch conditions and transformations. Do not repeat type names, describe obvious forwarding or write placeholders for unknown values. State material unknowns together, outside the drawing.
 - Keep every route inside the boundaries that its ends share, and cross only the boundaries it must. Move elements or ports before you add a detour.

@@ -11,7 +11,7 @@ Choose an icon at the level the source describes: service, resource or instance.
 - When no exact icon exists, use a white box with a thin grey border and a true name. Do not borrow a similar icon.
 - Give each element a short name. Add a role, technology or type only when it tells two elements apart. Keep other metadata in the file, not in the caption.
 - Put the caption below or beside its icon, where it clearly belongs to it and leaves paths clear.
-- Show each environment instance. Show a fleet as an exact multi-instance icon or a small stack of repeated icons, and state once that counts are representative when the source gives none. Do not show a fleet as one icon with the word "multiple".
+- Draw a structure that repeats identically, such as environments or a warm-standby region with the same stack, once, and label it with the count and names, such as "×3: dev, test, prod" or "Standby: same stack". Draw each copy only where the copies differ in a way the reader needs, and then show only the difference. Show a fleet as an exact multi-instance icon or a small stack of repeated icons, and state once that counts are representative when the source gives none. Do not show a fleet as one icon with the word "multiple".
 - Keep people and external systems outside deployment boundaries.
 - Do not use public or private subnet styles or lock icons to claim security properties that the source does not state.
 

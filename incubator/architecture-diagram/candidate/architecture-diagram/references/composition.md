@@ -6,7 +6,7 @@ Plan the view on an invisible three-by-three grid before you place anything. The
 
 Draw one view. Most architectures fit one page, and one page is easier to read than several: the reader sees every path and needs no cross-reference. Runtime calls and auxiliary relationships, such as telemetry, secrets and deployment, belong in the same view; solid and dashed lines tell them apart, so two concerns are not a reason to split.
 
-Lay the view out on one page first. Split it only when that page still fails one of these limits after you have grouped elements and folded boundary levels:
+Lay the view out on one page first. Split it only when that page still fails one of these limits after you have grouped elements, folded boundary levels and drawn identical repeated structures once with a count:
 
 - It needs a third kind of line or end.
 - It is wider than about 1600 units at 16-point text.
