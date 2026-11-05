@@ -4,7 +4,7 @@ Plan the view on an invisible three-by-three grid before you place anything. The
 
 ## Split the view
 
-Draw one view. Most architectures fit one page, and one page is easier to read than several: the reader sees every path and needs no cross-reference. Runtime calls and auxiliary relationships, such as telemetry, secrets and deployment, belong in the same view; solid and dashed lines tell them apart, so two concerns are not a reason to split.
+Draw one view. Most architectures fit one page, and one page is easier to read than several: the reader sees every path and needs no cross-reference. The main flow and the supporting relationships, such as telemetry, secrets and deployment, belong in the same view; solid and dashed lines tell them apart, so two concerns are not a reason to split.
 
 Lay the view out on one page first. Split it only when that page still fails one of these limits after you have grouped elements, folded boundary levels and drawn identical repeated structures once with a count:
 
@@ -17,7 +17,7 @@ Do not split to avoid a crossing, a crowded corner or a long label; fix those by
 
 | Axis    | Pages                                                                                                    | Removes                      |
 | ------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| Concern | Runtime calls and data; then operations: build, deployment, management, telemetry and secrets            | A third kind of line         |
+| Concern | The main flow; then operations: build, deployment, management, telemetry and secrets                     | A third kind of line         |
 | Zoom    | An overview that draws each part as one box; then a detail page for each part the reader must see inside | Deep nesting, a wide page    |
 | Flow    | One page per path or scenario, such as DNS resolution and the API call                                   | Two crossing main directions |
 
