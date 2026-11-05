@@ -32,13 +32,13 @@ Chat decisions and client auto-memory are inputs, not the durable repository rec
 ## Folder contract
 
 ```text
-research/<category>/<topic>/<subject>-YYYY-MM-DD.md
+research/<category>/<topic>/NNNN-<slug>.md   # notes before 2026-11-05 keep <subject>-YYYY-MM-DD.md
 research/<category>/adr/NNNN-<slug>.md
 knowledge/<topic>/README.md
 knowledge/<topic>/<subject>.md
 incubator/<initiative>/README.md
 incubator/<initiative>/candidate/<skill-name>/SKILL.md
-incubator/<initiative>/evals/{suite.mjs,cases.json,README.md}
+incubator/<initiative>/evals/{README.md,suite.mjs,cases.json,trigger.json}
 incubator/<initiative>/evals/{scenarios,baseline,fixtures}/
 incubator/<initiative>/evaluation.md
 skills/<skill-name>/SKILL.md
@@ -51,7 +51,7 @@ docs/templates/                      # repository document scaffolds
 .claude/skills/                      # client projection
 ```
 
-Use lowercase kebab-case for new directory and subject names. Use uppercase stems for harness framework documents, such as `AGENTS.md`, `CLAUDE.md`, `GLOSSARY.md`, `CONTEXT.md` when needed, and the framework standards listed above. Follow the [filename convention](./DOCUMENT-FORMATS.md#framework-document-filenames). Preserve standard filenames such as `README.md` and `SKILL.md`. Use four-digit ADR numbers within a category. Research filenames use the recording date; explicitly distinguish an attachment's original date from its archival date.
+Use lowercase kebab-case for new directory and subject names. Use uppercase stems for harness framework documents, such as `AGENTS.md`, `CLAUDE.md`, `GLOSSARY.md`, `CONTEXT.md` when needed, and the framework standards listed above. Follow the [filename convention](./DOCUMENT-FORMATS.md#framework-document-filenames). Preserve standard filenames such as `README.md` and `SKILL.md`. Use four-digit ADR numbers within a category. Name a new research note `NNNN-<slug>.md`, numbered within its topic folder, with a slug of three or more words that states the finding or decision, not only the subject, and put the date in the note header. The number gives the order when several notes share a day, and the slug tells two notes of one subject apart. The notes named before 2026-11-05, with a date suffix, keep their names. A decision record keeps its `NNNN-<slug>.md` name in `adr/`. Distinguish dates in a note: explicitly distinguish an attachment's original date from its archival date.
 
 Use flat `skills/<skill-name>/` for releases at the current scale. Add a category only when it has a real organizational need and the discovery check verifies its depth. Do not create `SKILL.md` at the repository root, `skills/`, or a category/container root. Those files can shadow packages below them.
 
