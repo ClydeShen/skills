@@ -1,57 +1,92 @@
 # Diagram notation
 
-Use a consistent visual vocabulary for one scenario. C4's useful distinctions inform the model; they need not appear as repeated type tags on the canvas.
+Use one visual vocabulary for each diagram, and keep it the same on every page. C4's distinctions inform the model; do not repeat C4 type tags on the canvas.
 
-## Structure and elements
+## Elements and icons
 
-Choose a descriptive scenario title. Add the view type only when it helps the audience. [composition.md](composition.md) sets placement and [cloud-conventions.md](cloud-conventions.md) sets boundaries. Size boundaries to their contents and paths.
+Choose an icon at the level the source describes: service, resource or instance. An exact resource icon, such as a table or an email resource, can say more than a generic service logo. Do not add a resource that the source does not specify.
 
-Preserve meaningful deployment membership, ownership and trust distinctions. Show a boundary when crossing or membership matters. A labeled light-filled boundary can define a subnet without a second heavy outline. Omit unspecified or redundant enclosing levels when their omission changes no known membership.
+- Use the exact vendor or catalog match from `find-icon.mjs`, with the style and size it returns: a 72-unit square, or 40 high for a wide mark. Comparable icons then match.
+- Use official icons from one pinned generation per vendor. Keep their colours. Do not crop, rotate, stretch, recolour or imitate them.
+- When no exact icon exists, use a white box with a thin grey border and a true name. Do not borrow a similar icon.
+- Give each element a short name. Add a role, technology or type only when it tells two elements apart. Keep other metadata in the file, not in the caption.
+- Put the caption below or beside its icon, where it clearly belongs to it and leaves paths clear.
+- Draw a structure that repeats identically, such as environments or a warm-standby region with the same stack, once, and label it with the count and names, such as "×3: dev, test, prod" or "Standby: same stack". Draw each copy only where the copies differ in a way the reader needs, and then show only the difference. Show a fleet as an exact multi-instance icon or a small stack of repeated icons, and state once that counts are representative when the source gives none. Do not show a fleet as one icon with the word "multiple".
+- Keep people and external systems outside deployment boundaries.
+- Do not use public or private subnet styles or lock icons to claim security properties that the source does not state.
 
-Choose a recognizable symbol at the level actually described: service, resource or instance. An exact table or email-resource symbol can be more informative than a generic service logo; do not introduce a resource the source did not specify. Use a short name and add a role, technology or type only when it disambiguates the element. Retain useful metadata in the editable file without repeating it in captions or wrapping every icon in a generic card.
-
-Keep distinct environment instances visible. For a fleet, use an exact multi-instance symbol or a small repeated/stacked set, with one clear indication that counts are representative when unspecified. Do not collapse a fleet into one ordinary icon plus “multiple”. Reuse drawing patterns, not entity identity.
-
-Keep people and external systems outside deployment boundaries. Use official vendor symbols from one pinned generation per vendor, preserving their colors and identity. Size every icon by the placement `find-icon.mjs` returns, so comparable icons match: a 72-unit square, or 40 high for wide marks. Place captions below or beside symbols where they remain clearly associated and leave paths readable; comparable elements should feel consistent, not mechanically identical.
-
-Use matching built-in group styles only when their meaning fits. Do not use public/private-subnet or lock symbols to invent security properties. If no exact service icon exists, use a white box with a thin grey border and a truthful name; never borrow a similar vendor icon.
+[Cloud conventions](./cloud-conventions.md) say which boundaries to draw and how to nest them. Size each boundary to its contents and paths.
 
 ## Visual hierarchy
 
-Use muted boundary fills, thin outlines and a restrained palette with stable meanings. Keep boundaries visually secondary to symbols and the main path. Distinguish network boundaries from logical groups through line style and labels as well as color. Whitespace can group peers without creating a new boundary.
+- Use muted boundary fills, thin outlines and a small palette whose colours keep one meaning.
+- Keep boundaries visually below the icons and the main path.
+- Tell a network boundary from a logical boundary by outline and fill: a network boundary has an outline, a logical boundary has a light fill. Name the kind in the title. Colour alone never carries the difference.
+- Whitespace can group peers without a new boundary.
+- Use a small text hierarchy: the title, then boundary titles, then element names, then connector labels, which are the smallest. Do not shrink a label to make it fit; remove detail or add space.
 
-Use a small, consistent text hierarchy for the title, names and secondary details. Do not shrink a difficult label to fit. Remove redundant detail or adjust spacing instead.
+## Connectors
 
-## What each channel says
+Readers share only three connector meanings: a line relates two things, a solid line is the direct relationship, and an arrowhead gives direction. Build every view on these.
 
-Give each fact to the channel that can state it. Do not say it twice, and do not make one channel imitate another.
+- Draw one filled arrowhead on every connector, from the initiator to the callee. A poller's arrow points to the service it queries, not to the recipient of the data.
+- When both sides really initiate traffic, draw two connectors. Do not draw a double-headed arrow.
+- Use two kinds of line. A solid line is a runtime call or data flow. A dashed line is an auxiliary relationship, such as deployment, management, telemetry, secrets, DNS resolution or replication.
+- Give each dashed line a one-word label, and make it long enough to show at least three dashes.
+- Do not use dotted lines. Readers and tools do not tell them from dashed lines.
+- Give every connector one weight (`strokeWidth` 1.5). Readers barely tell weights apart, and they do not know whether a thicker line means more importance or more traffic. Show the main path by its place and its step numbers.
+- Keep every line one dark neutral colour. The vendor icons carry the colour.
+- Do not use open, double or missing arrowheads, or circles, diamonds, triangles or bars at a line end or on a boundary. Each of these means something different in UML, ArchiMate and BPMN.
 
-| Channel                                    | Says                                                                        |
-| ------------------------------------------ | --------------------------------------------------------------------------- |
-| Symbols, boundaries and position           | What exists and where it belongs                                            |
-| Connectors, their direction and line style | Who relates to whom, and in which direction                                 |
-| Text                                       | Names, and what a drawing cannot state: protocol, condition, transformation |
-| Companion record                           | Gaps, assumptions and doubts about the source                               |
-| Special characters                         | Nothing. No `→`, `↔`, `->`, `·` or `•` in any visible text                  |
+When a view seems to need a third kind of line or end, split the view first, as [composition](./composition.md#split-the-view) describes. Add a kind only when a split cannot answer the reader's question. Then give it a key row, with the same meaning on every page. A notation such as UML is an exception only when the key names it.
 
-A label that breaks this is a signal, so do not reword it to pass. If the drawing already says it, remove the label. If the drawing does not, the diagram is wrong or missing logic, so fix the drawing. If the source leaves it open, move it to the companion record.
+## Key
 
-## Relationships
+A view with two or more kinds of line needs a key. A view whose connectors are all one kind (the same pattern, weight and colour) needs none.
 
-For established runtime calls, use one filled arrowhead from initiator to callee. Keep a poller's arrow toward the queried service, not toward the returned data's recipient. Label origin retrieval distinctly from content delivery. Show DNS as resolution, not HTTP forwarding; a separate response arrow is useful only when its answer needs explicit depiction.
+- Draw the key in the lower-right corner as a native draw.io table titled "Key". [draw.io authoring](./drawio.md) shows how to build it.
+- Give each kind of line or end one row, including the plain solid line: a short sample line on the left, and its meaning on the right, such as "Solid: runtime call" and "Dashed: secrets, telemetry".
+- Add a row for a boundary style only when it is not a vendor boundary style or a thin solid outline.
 
-Label a relationship when its action, protocol, branch condition or contract would otherwise be ambiguous. Preserve specified distinctions on their exact hops, such as synchronous replication or wrapping XML in JSON. Leave obvious forwarding hops unlabeled. Do not repeat “[unspecified]” on every line; report material unknowns once without guessing values.
+## Step numbers
 
-When the source states an order of execution, such as a numbered list, show it: give each step's connector a number and a short label of its action. Number only those steps; label other interactions, such as sign-in or the user's request, without a number. Otherwise number interactions only when execution order matters and layout alone cannot establish it. Number them last, after layout, from the order the drawn architecture executes them: what must happen before what. A source's list order is evidence, not the numbering; when the logic differs from it, number by the logic and note the difference in the companion account. Use branch suffixes or separate prefixes only when they improve tracing. Separate auxiliary DNS/authentication from application traffic; do not imply that DNS forwards application payloads.
+Number steps only where execution order matters.
 
-Fold normal responses into the request relationship; label a response when its content matters. Use a separate return arrow for an explicitly specified failure, with its condition/result. Do not invent denial behavior.
+- When the source states an order, such as a numbered list, give each stated step's connector a number and a short action label. Give other interactions, such as sign-in or the user's request, a label without a number.
+- When the source states no order, number interactions only when the order matters and the layout alone cannot show it.
+- Number last, after the layout is settled. Number by the order in which the drawn architecture executes the steps: what must happen before what. The source's list order is evidence, not the numbering. When the logic differs from the list, number by the logic and note the difference in the companion account.
+- Use branch suffixes or separate prefixes only when they make tracing easier.
 
-Solid arrows show established runtime traffic. Dashed relationships, which the key must name, need one specific meaning per view such as DNS resolution, replication, management or monitoring; label it with one word. An unexplained source relationship stays unlabeled, as [relationships.md](relationships.md) describes. A monitoring association does not assert an application call to an alarm. If its exact metric or caller is unknown, retain that unresolved endpoint at logical scope without inventing a component or API. Keep unconfirmed operational paths in the companion assumptions record, not mixed into established flows. In an explicitly requested source-transcription view, isolate and label such source claims as unverified.
+## What each part says
 
-Do not infer load-balancer type, exposure, network classification or target-group configuration from target placement. Add deployment detail only when supplied or confirmed.
+Give each fact to the part of the diagram that can state it. Do not state a fact twice, and do not make one part imitate another.
 
-## Routes and annotations
+| Part                                      | Says                                                                          |
+| ----------------------------------------- | ----------------------------------------------------------------------------- |
+| Icons, boundaries and position            | What exists and where it belongs                                              |
+| Connectors, their direction and line kind | Who relates to whom, and in which direction                                   |
+| Text                                      | Names, and what the drawing cannot state: protocol, condition, transformation |
+| Companion account                         | Gaps, assumptions and doubts about the source                                 |
+| Special characters                        | Nothing. No `→`, `↔`, `->`, `·` or `•` in any visible text                    |
 
-Place needed connector labels on their host segments with an opaque background, off other captions, boundary titles and outlines. A label may interrupt its own stroke; it must not cause a detour. Avoid shared segments, and cross only the boundaries the relationship requires.
+A label that breaks this table is a signal. Do not reword it to pass. When the drawing already says it, remove the label. When the drawing cannot say it, the diagram is wrong or incomplete, so fix the drawing. When the source leaves it open, move it to the companion account.
 
-Use concise local labels before explanatory Notes. A table should expose a real repeated relation, not replace topology. If an indispensable explanation remains, use the native `Misc > Note` preset with automatic text fitting, near its subject and disconnected from call arrows. State why it was necessary. Deleting an important fact is not simplification.
+## Labels
+
+- Label a relationship when its action, protocol, branch condition or contract would otherwise be unclear. Keep the label to about three words: a name, role, verb, protocol, condition or value.
+- Keep a stated distinction on its exact hop, such as synchronous replication, or wrapping XML in JSON.
+- Do not label obvious forwarding hops. Do not write "[unspecified]" on lines; report material unknowns once, without guessed values.
+- Put a label on its own straight segment, on an opaque background, clear of captions, boundary titles and outlines. A label may interrupt its own line; it must not cause a detour.
+- Fold a normal response into its request. Label a response only when its content matters. Draw a separate return connector only for a failure that the source specifies, labelled with its condition or result. Do not invent denial behaviour.
+- Show DNS as resolution, not as HTTP forwarding. Draw a separate DNS response only when its answer must be shown. Keep DNS and authentication separate from application traffic.
+- Label origin retrieval differently from content delivery.
+
+## Notes and tables
+
+Prefer local labels to explanatory notes. Use a table only for a real repeated relation, such as firewall allowances, never in place of topology. When an explanation is still necessary, use the native `Misc > Note` preset with automatic text fitting. Place it near its subject, unconnected to any call arrow, and say in the companion account why it was necessary. Deleting an important fact is not simplification.
+
+## Source claims the drawing does not confirm
+
+- Do not infer load balancer type, exposure, network classification or target group configuration from where targets sit. Add deployment detail only when the source supplies or confirms it.
+- A monitoring association does not claim an application call to an alarm. When its metric or caller is unknown, keep the endpoint at a logical scope; do not invent a component or API.
+- Keep unconfirmed operational paths in the companion account, apart from established flows. In a view that the user asks to transcribe the source, mark such claims as unverified.

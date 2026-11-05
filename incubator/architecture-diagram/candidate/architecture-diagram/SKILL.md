@@ -8,42 +8,79 @@ metadata:
 
 # Architecture Diagram
 
-Produce one editable `.drawio` architecture diagram and a PNG of each of its pages, which is what most readers see in a document or wiki. Choose a logical, deployment or flow emphasis that the task and available evidence support; do not imply implementation detail from a high-level description. Make the architecture legible through spatial structure, recognizable symbols and selective labels.
+Produce one editable `.drawio` architecture diagram and a PNG of each of its pages. Most readers see only the PNG, in a document or wiki. Make the architecture readable through position, boundaries, known icons and a few labels.
+
+Choose a logical, deployment or flow emphasis that the task and the evidence support. Do not imply implementation detail that a high-level description does not give.
 
 ## Establish the architecture
 
-Identify the scenario, distinct instances, responsibilities, boundary membership, directed interactions and important conditions. Use supplied context before asking questions.
+Identify the scenario, the distinct instances, their responsibilities, boundary membership, directed interactions and important conditions. Use the supplied context before you ask questions.
 
-If the input contains several scenarios, ask which one to draw. Exclude struck-out text. Briefly disclose excluded business-rule details, schemas, sample data and unrelated alerting.
+- When the input contains several scenarios, ask which one to draw.
+- Exclude struck-out text. State briefly which business rules, schemas, sample data and unrelated alerting you left out.
+- Keep four kinds of statement apart: facts the source states, relationships you infer, details the source does not specify, and your recommendations. Never present an inferred path or recommended infrastructure as a fact.
+- A connection in the source does not prove a vendor capability or a deployed operation. When a consequential capability is uncertain, check it against official documentation.
+- Do not invent exposure, subnet attachments, protocols or capabilities.
 
-Distinguish source-stated facts, inferred relationships, unspecified details and recommendations. A connection present in a source is not proof of a vendor capability or deployed operation. Check consequential vendor capabilities against official documentation when uncertain. Never promote recommended infrastructure or inferred paths into established facts.
+Follow the user's instructions and intent first, and vendor practice where they are silent. When the two clearly conflict, name the conflicting statement and the practice before you draw, and recommend a resolution. When a central path or the requested implementation depends on a consequential open choice, explain the choice and wait for the user's decision.
 
-For a high-level view, draw the supported architecture and keep unresolved or technically suspect relationships in a short companion assumptions record, identifying what the source said and why it is not drawn as an operational path. Do not silently discard source information. If the requested implementation or a central path depends on a consequential unresolved choice, explain it and wait for the user's decision. Follow the user's instructions and intent first and vendor practice where they are silent; when the two clearly conflict, name the conflicting statement and practice before drawing and recommend a resolution. Do not invent exposure, subnet attachments, protocols or capabilities. Choose layout details yourself.
+For a high-level view, draw the architecture that the source supports. Keep unresolved or technically doubtful relationships in the companion account: say what the source states and why the drawing does not show it as an operational path. Do not drop source information without saying so. Choose the layout details yourself.
+
+## Plan the views
+
+Draw one view. Lay it out on one page first, with runtime and auxiliary relationships together as solid and dashed lines. Split into pages of the same file only when that page still breaks a limit in [composition](references/composition.md#split-the-view), such as a third kind of line or a width over 1400 units, and then make as few pages as fix it.
 
 ## Draw the meaning
 
-Before composing the view, read [composition.md](references/composition.md), [relationships.md](references/relationships.md), [notation.md](references/notation.md) and the sections of [cloud-conventions.md](references/cloud-conventions.md) for the clouds involved. Answer its engineering review. Read [drawio.md](references/drawio.md) when authoring or modifying the file.
+Read these references before you compose a view:
 
-Decide first whether one view can answer the reader's question within two kinds of line, three outlines and one page width. If it cannot, split it by concern, zoom or flow into pages of the same file, as composition.md describes, and repeat on each page.
+- [composition.md](references/composition.md): views, placement, routing and alignment.
+- [notation.md](references/notation.md): icons, connectors, the key, step numbers and labels.
+- [relationships.md](references/relationships.md): how to draw each kind of relationship.
+- [cloud-conventions.md](references/cloud-conventions.md): "All clouds", "Boundaries" and the section for each cloud in the view. Answer its engineering review.
+- [drawio.md](references/drawio.md): when you write or change the file.
 
-- Choose a readable arrangement around the main relationships before routing. Alignment, proximity and whitespace should help the reader recognize the structure; use a second axis when it expresses a real distinction, not to impose a template.
-- Show distinct instances in their actual boundaries and connect every participating group. Express fleets with repeated or stacked symbols and disclose representative counts; do not replace multiplicity or essential paths with prose.
-- Give each boundary a job: communicate meaningful membership or separation. Use whitespace or a light fill when another outline adds no distinction. Keep logical boundaries distinguishable from deployment and security boundaries.
-- Label what the reader cannot infer reliably from the symbols and topology. Preserve distinguishing roles, exact-hop contracts, branch conditions and transformations; omit repeated type names, obvious forwarding prose and unknown-value placeholders. Disclose material unknowns together outside the graph or once in a compact scope line.
-- Keep every route inside the boundaries shared by its endpoints. Cross only required boundaries. Move nodes or ports before adding detours; native inline labels interrupt their own stroke.
-- Prefer supported visual structure and concise local labels to explanatory Notes. Use a table for a real repeated relation, such as firewall allowances, not as a substitute for topology. Never delete a fact just to reduce text.
-- Use exact vendor/catalog matches from `find-icon.mjs`, with the size and style it returns. Use the documented plain-box fallback when no reliable match exists. Never borrow a similar icon or draw one.
+While you draw:
 
-## Inspect and deliver
+- Arrange the elements around the main relationships before you route. Use alignment, proximity and whitespace to show the structure. Add a second axis only when it shows a real distinction.
+- Show distinct instances in their actual boundaries, and connect every group that takes part. Draw an identical repeated structure, such as three environments or a standby region with the same stack, once with its count and names. Show fleets with repeated or stacked icons, and state that counts are representative. Do not replace multiplicity or essential paths with prose.
+- Give each boundary a job: it shows membership or separation that matters. When another outline adds no distinction, use whitespace or a light fill. Keep logical boundaries visibly different from deployment and security boundaries.
+- Label only what the reader cannot reliably infer from the icons and the topology: distinguishing roles, exact-hop contracts, branch conditions and transformations. Do not repeat type names, describe obvious forwarding or write placeholders for unknown values. State material unknowns together, outside the drawing.
+- Keep every route inside the boundaries that its ends share, and cross only the boundaries it must. Move elements or ports before you add a detour.
+- Prefer visual structure and short local labels to explanatory notes. Never delete a fact only to reduce text.
+- Use the exact icon that `find-icon.mjs` returns, at the size and style it returns. When no reliable match exists, use the plain-box fallback. Never borrow a similar icon or draw one.
 
-Run `node scripts/finalize.mjs <diagram.drawio>` after every edit. It embeds vendor icons and writes draw.io's own file layout, which tools such as Lucidchart require for import. Then run `node scripts/check-text.mjs <diagram.drawio>` and `node scripts/check-layout.mjs <diagram.drawio>`. When the source numbers its steps, save it as a file and run `node scripts/check-steps.mjs <source> <diagram.drawio>`, which reports stated steps that no connector label numbers. The layout check estimates where captions, boundary titles and connector labels fall, and reports text that overlaps or nearly touches other text, icons, outlines or lines. It also reports crossing connectors, connectors that should swap ports, detours, bends that a straight or one-bend route would avoid, members that repeat the boundary they sit in, nesting deeper than three outlines, mixed connector styles without a key table that explains each, dotted lines, dashed lines too short to show their dashes, more than one line weight, line ends other than one filled arrowhead that the key does not explain, key entries that differ between pages, page links to missing pages, an element whose symbol changes between pages, custom boundaries with dashed, coloured or uneven outlines, and connectors that leave and re-enter a boundary or pass through one.
+## Check the file
 
-Treat these reports as symptoms of the composition, not as the goal. Fix the cause: place elements by role, lane and true boundary, and order ports so that connectors do not cross. Never silence a report by deleting, merging or relabeling an element, moving it out of its boundary, rewording, moving a label away from its line, or bending a connector around text. If only a change of meaning would clear a report, keep it and name it in the companion account. An empty report does not mean the diagram reads well.
+After every edit, run these from the package directory:
 
-Run `node scripts/render.mjs <diagram.drawio>` and read the PNG; a file with several pages renders one PNG per page, and the layout check reports each page by name. Read every one. Squint at it: the main path and its start must stand out. Check the actual image, not XML alone, and repeat after every fix. If the script exits with code 3, nothing more can be rendered here: deliver the `.drawio`, pass on the link it prints, and state that the image was not inspected. Otherwise the work is unfinished until the PNG has been inspected.
+1. `node scripts/finalize.mjs <diagram.drawio>`. It embeds the vendor icons and writes draw.io's own file layout, which importers such as Lucidchart require.
+2. `node scripts/check-text.mjs <diagram.drawio>`.
+3. `node scripts/check-layout.mjs <diagram.drawio>`. With several pages, it reports each page by name.
+4. When the source numbers its steps, save the source as a file and run `node scripts/check-steps.mjs <source> <diagram.drawio>`. It reports stated steps that no connector label numbers.
 
-Trace every entry through its intended destination, including auxiliary calls and explicit failures. Verify instances, memberships, protocols and conditions against the source. Check that branch selection cannot be mistaken for broadcast.
+The layout check estimates where text and routes fall. It reports what can mislead a reader, such as collisions, crossings, detours, shared segments, unexplained line styles and inconsistencies between pages. Each report names the elements involved.
 
-Inspect both the whole view and readable detail. Can the reader recognize the tiers, peers, shared services and exceptions without reading every caption? Remove boundaries and labels that repeat information already clear in the view. Keep readable typography, distinct paths and necessary qualifiers; fix collisions without changing meaning. Leave clear arrangements alone; change a layout choice when it resolves a visible reading problem, not merely to satisfy a design preference. Fewer words, Notes or bends alone do not establish quality.
+The reports are symptoms of the composition, not the goal. Fix the cause: place elements by role, lane and true boundary, and order ports so that connectors do not cross. Never clear a report by deleting, merging or relabelling an element, moving it out of its boundary, rewording, moving a label away from its line, or bending a connector around text. When only a change of meaning would clear a report, keep the report and name it in the companion account. An empty report does not prove that the diagram reads well.
 
-Return the editable file, the PNG and a brief companion account of scope, unresolved assumptions, design risks, source deviations and checks actually performed. Keep that account off the canvas. State when visual or Desktop verification was unavailable. Check source fidelity separately from technical plausibility; neither a clean render nor faithful transcription proves the real deployment is correct.
+## Inspect the image
+
+Run `node scripts/render.mjs <diagram.drawio>`. It writes one PNG per page. Read every PNG, and repeat after every fix; the XML alone is not enough.
+
+- Look at each image at a small size: the main path and its start must stand out.
+- Trace every entry to its destination, including auxiliary calls and stated failures.
+- Check instances, memberships, protocols and conditions against the source. Make sure that a branch choice cannot be mistaken for a broadcast.
+- Check the whole view and the readable detail. The reader must recognise the tiers, peers, shared services and exceptions without reading every caption. Remove boundaries and labels that repeat what the view already shows.
+- Fix collisions without changing meaning. Keep a clear arrangement; change a layout only to solve a visible reading problem, not for a design preference. Fewer words, notes or bends do not by themselves make a better diagram.
+
+When `render.mjs` exits with code 3, this host cannot render. Deliver the `.drawio`, pass on the link that the script prints, and state that you did not inspect the image. In every other case, the work is not finished until you have inspected every PNG.
+
+## Deliver
+
+Return the editable file, the PNG of each page and a short companion account. Keep the account off the canvas. It covers:
+
+- the scope, and the pages with the reason for each;
+- unresolved assumptions, design risks and deviations from the source;
+- the checks you actually ran, and any visual or Desktop verification that was unavailable.
+
+Judge source fidelity and technical plausibility separately. Neither a clean render nor a faithful transcription proves that the real deployment is correct.
