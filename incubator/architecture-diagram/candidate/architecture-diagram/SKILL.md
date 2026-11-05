@@ -28,7 +28,7 @@ For a high-level view, draw the architecture that the source supports. Keep unre
 
 ## Plan the views
 
-Draw one view. Lay it out on one page first, with runtime and auxiliary relationships together as solid and dashed lines. Split into pages of the same file only when that page still breaks a limit in [composition](references/composition.md#split-the-view), such as a third kind of line or a width over 1400 units, and then make as few pages as fix it.
+Draw one view. Lay it out on one page first, with the main flow and the supporting relationships together as solid and dashed lines. Split into pages of the same file only when that page still breaks a limit in [composition](references/composition.md#split-the-view), such as a third kind of line or a width over 1400 units, and then make as few pages as fix it.
 
 ## Draw the meaning
 
@@ -68,7 +68,7 @@ The reports are symptoms of the composition, not the goal. Fix the cause: place 
 Run `node scripts/render.mjs <diagram.drawio>`. It writes one PNG per page. Read every PNG, and repeat after every fix; the XML alone is not enough.
 
 - Look at each image at a small size: the main path and its start must stand out.
-- Trace every entry to its destination, including auxiliary calls and stated failures.
+- Trace every entry to its destination, including supporting calls and stated failures.
 - Check instances, memberships, protocols and conditions against the source. Make sure that a branch choice cannot be mistaken for a broadcast.
 - Check the whole view and the readable detail. The reader must recognise the tiers, peers, shared services and exceptions without reading every caption. Remove boundaries and labels that repeat what the view already shows.
 - Fix collisions without changing meaning. Keep a clear arrangement; change a layout only to solve a visible reading problem, not for a design preference. Fewer words, notes or bends do not by themselves make a better diagram.

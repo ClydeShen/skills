@@ -29,9 +29,12 @@ Choose an icon at the level the source describes: service, resource or instance.
 
 Readers share only three connector meanings: a line relates two things, a solid line is the direct relationship, and an arrowhead gives direction. Build every view on these.
 
-- Draw one filled arrowhead on every connector, from the initiator to the callee. A poller's arrow points to the service it queries, not to the recipient of the data.
-- When both sides really initiate traffic, draw two connectors. Do not draw a double-headed arrow.
-- Use two kinds of line. A solid line is a runtime call or data flow. A dashed line is an auxiliary relationship, such as deployment, management, telemetry, secrets, DNS resolution or replication.
+- Draw one filled arrowhead on every connector. The arrowhead points where the request or the data moves.
+  - A call points to the service it calls, such as a request to an API, a database or a model.
+  - A read, pull, poll or sync of a stored thing points to the one that reads it. The stored things are a queue or topic, a secret store, configuration, a source repository and an image registry. Argo CD syncing from Git, an application reading a secret and a worker reading a queue each point from the store to the reader. An arrow into a queue or a secret store says that the sender writes there.
+  - Use a verb on the line, such as "reads", "pulls" or "polls", when the direction could be taken the other way.
+- When data or requests move both ways as separate steps, draw two connectors. Do not draw a double-headed arrow.
+- Use two kinds of line. A solid line is the main flow: a request or data moving between components, including ingestion and tunnels. A dashed line is a supporting flow, such as deployment, management, telemetry, secrets, DNS resolution or replication.
 - Give each dashed line a one-word label, and make it long enough to show at least three dashes.
 - Do not use dotted lines. Readers and tools do not tell them from dashed lines.
 - Give every connector one weight (`strokeWidth` 1.5). Readers barely tell weights apart, and they do not know whether a thicker line means more importance or more traffic. Show the main path by its place and its step numbers.
@@ -45,7 +48,7 @@ When a view seems to need a third kind of line or end, split the view first, as 
 A view with two or more kinds of line needs a key. A view whose connectors are all one kind (the same pattern, weight and colour) needs none.
 
 - Draw the key in the lower-right corner as a native draw.io table titled "Key". [draw.io authoring](./drawio.md) shows how to build it.
-- Give each kind of line or end one row, including the plain solid line: a short sample line on the left, and its meaning on the right, such as "Solid: runtime call" and "Dashed: secrets, telemetry".
+- Give each kind of line or end one row, including the plain solid line: a short sample line on the left, and its meaning on the right, such as "Solid: main flow (request or data)" and "Dashed: supporting flow (deployment, secrets, telemetry)".
 - Add a row for a boundary style only when it is not a vendor boundary style or a thin solid outline.
 
 ## Step numbers
