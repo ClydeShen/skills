@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import { checkSteps, diagramSteps, sourceSteps } from '../candidate/architecture-diagram/scripts/check-steps.mjs';
 
 const read = (name) => readFileSync(new URL(name, import.meta.url), 'utf8');
-const scenarioA = read('./semantic-routing-2026-11-02/scenario-a.md');
+const scenarioA = read('./scenarios/a.md');
 
 test('source steps come from top-level numbered items and inline markers, not nested items', () => {
   assert.deepEqual(sourceSteps('Intro\n\n1. search\n2. answer\n   1. nested detail\n3. store\n'), [1, 2, 3]);
@@ -23,8 +23,8 @@ test('label lines carry step numbers, including a second line and a series lette
 });
 
 test('the clean runs of scenario A are told apart: unnumbered steps are reported, numbered ones are not', () => {
-  assert.deepEqual(checkSteps(scenarioA, read('./houses-2026-11-03/a/diagram.drawio')), [
+  assert.deepEqual(checkSteps(scenarioA, read('./fixtures/houses-a.drawio')), [
     'The source orders steps 1, 2, 3; no connector label carries 1, 2, 3. Number each stated step on its connector by execution order, with a short action, or name in the companion account why a step is not drawn.',
   ]);
-  assert.deepEqual(checkSteps(scenarioA, read('./clean-session-2026-11-02/a-final/diagram.drawio')), []);
+  assert.deepEqual(checkSteps(scenarioA, read('./fixtures/clean-session-a-final.drawio')), []);
 });

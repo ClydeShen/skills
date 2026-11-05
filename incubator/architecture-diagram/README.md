@@ -4,11 +4,11 @@ Turn architecture requirements into an editable draw.io diagram that makes compo
 
 The skill is designed to preserve architectural meaning through layout: boundaries show real membership, arrows show directed relationships, and labels sit with the elements they explain. Consequential gaps and contradictions are raised before drawing.
 
-Stage: **public**. Updated: 2026-10-29. Basis: verified candidate installation and the trial guide below, under the owner's lifecycle definitions. This is an experimental candidate; installed-client effectiveness remains unverified. The owner set the package at `c14828a` as the evaluation baseline on 2026-11-03; see the [handoff](./HANDOFF.md#baseline).
+Stage: **public**. Updated: 2026-11-05. Basis: verified candidate installation and the trial guide below, under the owner's lifecycle definitions. This is an experimental candidate; installed-client effectiveness remains unverified. The owner set the package at `f7b7537` as the evaluation baseline on 2026-11-05; no change may lower the output quality below it, as the [baseline](./evals/baseline/README.md) defines.
 
 ## What you get
 
-One editable `.drawio` architecture diagram and its PNG for documents, Markdown and wikis, with a logical, deployment or flow emphasis supported by your English scenario description. Unresolved source claims and implementation choices stay in a concise companion account. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable. Icons cover AWS, Azure, Google Cloud and Kubernetes through draw.io's libraries, and common platform and AI vendors such as Terraform, GitHub, Microsoft Fabric, OpenAI, Anthropic, LangChain and MCP through bundled upstream artwork that is embedded in the file, so it opens in any draw.io without extra libraries. See the [icon coverage sheets](./evals/icon-coverage-2026-11-02/README.md).
+One editable `.drawio` architecture diagram and its PNG for documents, Markdown and wikis, with a logical, deployment or flow emphasis supported by your English scenario description. Unresolved source claims and implementation choices stay in a concise companion account. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable. Icons cover AWS, Azure, Google Cloud and Kubernetes through draw.io's libraries, and common platform and AI vendors such as Terraform, GitHub, Microsoft Fabric, OpenAI, Anthropic, LangChain and MCP through bundled upstream artwork that is embedded in the file, so it opens in any draw.io without extra libraries. See the [icon coverage sheets](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/icon-coverage-2026-11-02/README.md).
 
 Start with a specific interaction, such as a sign-in flow or a request crossing cloud and on-premises boundaries. Code/IaC input, and automatic redraw are outside current scope. Static export is the core goal; an interactive HTML and SVG version may follow.
 
@@ -57,6 +57,6 @@ Try your own scenario before reading the examples. In [Issue #7](https://github.
 
 - [Handoff](./HANDOFF.md): latest outputs, accepted direction, verification limits and next steps.
 - [Active package](./candidate/architecture-diagram/SKILL.md): installed instructions and runtime resources.
-- [Evaluation record](./evaluation.md) and [round-trip protocol](./evals/roundtrip.md): findings and description/image fidelity testing.
+- [Evaluation](./evaluation.md) and the [baseline](./evals/baseline/README.md): the quality boundary every change is checked against, and how to check it.
 - [Authoring tools](./tools/README.md): local checks and rendering setup.
 - [Requirements](../../research/diagrams/architecture-diagram/requirements-and-observed-style-2026-10-28.md) and [layout guidance](../../knowledge/diagrams/architecture-layout.md): design basis.

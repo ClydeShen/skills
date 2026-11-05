@@ -79,7 +79,7 @@ The raw SVGs in `@fabric-msft/svg-icons` 11.1.0 are under `svg/`, named `<item>_
 
 ### Recommendation for the project
 
-Use draw.io libraries first, then the vendor's own package (Microsoft Fabric), then `@thesvg/icons`, preferring its `light` variant on a white canvas. Use a horizontal wordmark as the component's logo and label when no symbol exists (MuleSoft, Confluent). Fall back to a plain box when the only mark is unreadable text (GitHub Pages). Simple Icons, `logos` and `devicon` are not needed: Simple Icons is single-colour and a subset; the other two lack per-icon provenance. A rendered check of all 109 selected icons is in [icon coverage check](../../../incubator/architecture-diagram/evals/icon-coverage-2026-11-02/README.md).
+Use draw.io libraries first, then the vendor's own package (Microsoft Fabric), then `@thesvg/icons`, preferring its `light` variant on a white canvas. Use a horizontal wordmark as the component's logo and label when no symbol exists (MuleSoft, Confluent). Fall back to a plain box when the only mark is unreadable text (GitHub Pages). Simple Icons, `logos` and `devicon` are not needed: Simple Icons is single-colour and a subset; the other two lack per-icon provenance. A rendered check of all 109 selected icons is in [icon coverage check](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/icon-coverage-2026-11-02/README.md).
 
 ### Relation to existing constraints
 
@@ -128,7 +128,7 @@ Iconify and svgl returned nothing for Semantic Kernel, AutoGen, A2A, Microsoft A
 
 ### Recommendation for the project
 
-Add the theSVG entries with explicitly chosen variants and the repository files pinned to a commit. Support PNG artwork where the vendor publishes no SVG. Use the plain-box fallback for OpenAI Agents SDK and Claude Agent SDK, and the parent brand mark with a precise caption for Palantir AIP, Agentforce and NVIDIA NIM. The [icon coverage check](../../../incubator/architecture-diagram/evals/icon-coverage-2026-11-02/README.md) shows the result.
+Add the theSVG entries with explicitly chosen variants and the repository files pinned to a commit. Support PNG artwork where the vendor publishes no SVG. Use the plain-box fallback for OpenAI Agents SDK and Claude Agent SDK, and the parent brand mark with a precise caption for Palantir AIP, Agentforce and NVIDIA NIM. The [icon coverage check](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/icon-coverage-2026-11-02/README.md) shows the result.
 
 ## Not verified
 

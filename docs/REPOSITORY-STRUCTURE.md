@@ -38,7 +38,8 @@ knowledge/<topic>/README.md
 knowledge/<topic>/<subject>.md
 incubator/<initiative>/README.md
 incubator/<initiative>/candidate/<skill-name>/SKILL.md
-incubator/<initiative>/evals/{suite.mjs,cases.json}
+incubator/<initiative>/evals/{suite.mjs,cases.json,README.md}
+incubator/<initiative>/evals/{scenarios,baseline,fixtures}/
 incubator/<initiative>/evaluation.md
 skills/<skill-name>/SKILL.md
 evals/{run.mjs,lib.mjs,...}
@@ -55,6 +56,8 @@ Use lowercase kebab-case for new directory and subject names. Use uppercase stem
 Use flat `skills/<skill-name>/` for releases at the current scale. Add a category only when it has a real organizational need and the discovery check verifies its depth. Do not create `SKILL.md` at the repository root, `skills/`, or a category/container root. Those files can shadow packages below them.
 
 Keep generated run output in ignored `evals/.local/`. Record a concise reproducible result in the initiative's `evaluation.md`; do not commit secrets, real user profiles, dependency installations or bulk run logs. Keep any approved, sanitized evaluation evidence with the initiative.
+
+An initiative's `evals/` folder holds its cases and its quality boundary, not a history of experiments. `scenarios/` holds the inputs given to the skill, one file per scenario. `baseline/` holds the boundary: its commit, scores, reference outputs and the rule for a pass. `fixtures/` holds frozen files that tests read. Tests are `*.test.mjs` files directly in `evals/`, next to the shared cases. Do not commit dated trial directories. The record of a change is its pull request, and its run output stays in ignored `evals/.local/`. Only the owner moves a baseline.
 
 ## Candidate and release lifecycle
 

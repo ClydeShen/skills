@@ -230,7 +230,7 @@ Annotations explain the architecture; they are not services, boundaries or data-
 
 ### 2.12 Two-round-trip semantic evaluation [owner, 2026-10-29]
 
-The owner specified the primary automated evaluation: description L0 generates diagram L1; a fresh image-only agent transcribes L1 into description L2; L2 alone generates diagram L3; another fresh image-only agent transcribes L3 into description L4. Cross-compare L0/L2, L2/L4 and L0/L4 for architectural drift. Compare elements, responsibilities, relationships, directions, protocols, boundary membership, critical conditions and architecture-bearing notes, not literal wording or visual resemblance. The owner confirmed these comparison dimensions. The [initiative protocol](../../../incubator/architecture-diagram/evals/roundtrip.md) owns the executable contract, isolation and grading rules. The [evaluation record](../../../incubator/architecture-diagram/evaluation.md) distinguishes actual runs from synthetic harness checks; the previous 4/4 clarification replay is not evidence that this chain ran.
+The owner specified the primary automated evaluation: description L0 generates diagram L1; a fresh image-only agent transcribes L1 into description L2; L2 alone generates diagram L3; another fresh image-only agent transcribes L3 into description L4. Cross-compare L0/L2, L2/L4 and L0/L4 for architectural drift. Compare elements, responsibilities, relationships, directions, protocols, boundary membership, critical conditions and architecture-bearing notes, not literal wording or visual resemblance. The owner confirmed these comparison dimensions. The [initiative protocol](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/roundtrip.md) owns the executable contract, isolation and grading rules. The [evaluation record](../../../incubator/architecture-diagram/evaluation.md) distinguishes actual runs from synthetic harness checks; the previous 4/4 clarification replay is not evidence that this chain ran.
 
 ### 2.13 Fidelity, architecture validity and intuitive layout [owner, 2026-10-29]
 
@@ -242,7 +242,7 @@ The owner requested research into visual guidance, directions and house interior
 
 The owner rejected the Note-heavy repaired diagrams. Text survival alone is insufficient: the architecture's visible structure and implied relationships should communicate the system. Every Note counts as a visual-design drawback. If the graph can express a fact through boundaries, nodes, relationships, meaningful labels or a genuine relational matrix, use that representation. Moving a paragraph to a differently styled text box does not solve the problem.
 
-This clarification narrows section 2.11: permission to use native Notes is not encouragement to use them as the normal information carrier. Keep the exact native style only when a necessary residual Note is justified. Do not discard information or invent architecture to eliminate Notes. Review visual expression separately from round-trip fidelity. The [candidate](../../../incubator/architecture-diagram/candidate/architecture-diagram/SKILL.md) now owns runtime guidance; the [visual-expression evidence](../../../incubator/architecture-diagram/evals/visual-expression-2026-10-29/README.md) preserves the initial correction and its remaining limitations.
+This clarification narrows section 2.11: permission to use native Notes is not encouragement to use them as the normal information carrier. Keep the exact native style only when a necessary residual Note is justified. Do not discard information or invent architecture to eliminate Notes. Review visual expression separately from round-trip fidelity. The [candidate](../../../incubator/architecture-diagram/candidate/architecture-diagram/SKILL.md) now owns runtime guidance; the [visual-expression evidence](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/visual-expression-2026-10-29/README.md) preserves the initial correction and its remaining limitations.
 
 The owner further rejected replacing repeated components with prose. Different environment instances remain distinct architectural objects even when their type and responsibility repeat. Restore the test/prod workload symbols in their own VNets and align them with dev. Reuse rendering patterns, not component identity; deduplication requires evidence that the represented entity is actually shared. Relations may use a compact matrix, but it must not replace the components themselves.
 
@@ -250,7 +250,7 @@ The owner further rejected replacing repeated components with prose. Different e
 
 The goal is a standard, accurate and information-rich architecture diagram, not a more complicated diagramming system. Show what exists, where it belongs, how it interacts and which conditions matter. Use visual structure and precise local labels; avoid introducing machinery or deleting architectural information merely to simplify the picture. Repeated participating instances need their essential paths, not just restored symbols accompanied by "same as above" prose.
 
-The owner requested a standard skill package during incubation. Candidates and releases use the same best practices; only maturity and publication status differ. Keep auxiliary experiments outside the runtime package, prune obsolete materials as the skill develops, and make eventual release a directory move with minimal discovery updates. The [repository lifecycle contract](../../../docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) owns this project-wide rule. The [candidate-layout report](../../../incubator/architecture-diagram/evals/candidate-layout-2026-10-29/README.md) records the initial implementation, without claiming release readiness.
+The owner requested a standard skill package during incubation. Candidates and releases use the same best practices; only maturity and publication status differ. Keep auxiliary experiments outside the runtime package, prune obsolete materials as the skill develops, and make eventual release a directory move with minimal discovery updates. The [repository lifecycle contract](../../../docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) owns this project-wide rule. The [candidate-layout report](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/candidate-layout-2026-10-29/README.md) records the initial implementation, without claiming release readiness.
 
 ## 3. Style prototype
 
@@ -293,10 +293,10 @@ A throwaway prototype draws a synthetic cross-cloud scenario in the style above.
 
 The four owner-approved drafts now live in the [architecture-diagram initiative](../../../incubator/architecture-diagram/README.md). The scenario documents are the authoritative inputs and expectations:
 
-- [Scenario 01 — token-based API authorization](../../../incubator/architecture-diagram/evals/scenario-01.md)
-- [Scenario 02 — private cross-cloud API access](../../../incubator/architecture-diagram/evals/scenario-02.md)
-- [Scenario 03 — SOAP request processing](../../../incubator/architecture-diagram/evals/scenario-03.md)
-- [Scenario 04 — event-driven metadata sync](../../../incubator/architecture-diagram/evals/scenario-04.md)
+- [Scenario 01 — token-based API authorization](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/scenario-01.md)
+- [Scenario 02 — private cross-cloud API access](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/scenario-02.md)
+- [Scenario 03 — SOAP request processing](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/scenario-03.md)
+- [Scenario 04 — event-driven metadata sync](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/scenario-04.md)
 
 Scenario 05 (Google Cloud or Kubernetes) is deferred while the owner is offline; no new scenario is represented as owner-approved.
 

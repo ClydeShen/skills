@@ -8,8 +8,8 @@ import { validateBoundaryRoutes, validateDiagram, validateRender } from '../tool
 import { createSuite, gradeClarification } from './suite.mjs';
 
 const read = (name) => readFileSync(new URL(name, import.meta.url), 'utf8');
-const diagram = read('../prototype/scenario-01.drawio');
-const catalog = JSON.parse(read('../prototype/catalog.json'));
+const diagram = read('./fixtures/scenario-01.drawio');
+const catalog = JSON.parse(read('../candidate/architecture-diagram/assets/catalog.json'));
 
 test('actual prototype XML passes static checks; unknown and altered vendor icons fail', () => {
   assert.deepEqual(validateDiagram(diagram, catalog), []);
@@ -88,7 +88,7 @@ test('four approved cases reach grading without expected answers entering the in
 });
 
 test('actual browser geometry preserves boundaries, clear node text and inline connector labels', () => {
-  const report = JSON.parse(read('../prototype/scenario-01.render.json'));
+  const report = JSON.parse(read('./fixtures/scenario-01.render.json'));
   assert.deepEqual(validateRender(report), []);
   const altered = structuredClone(report);
   const edge = altered.metrics.find((m) => m.points);
@@ -314,7 +314,7 @@ test('local comments have explicit subjects; legend cells stay editable and tria
       e.includes('must not target an annotation'),
     ),
   );
-  const report = JSON.parse(read('../prototype/scenario-01.render.json'));
+  const report = JSON.parse(read('./fixtures/scenario-01.render.json'));
   assert.equal(report.metrics.find((m) => m.id === 'token').annotationFor, 'cognito');
   const altered = structuredClone(report),
     edge = altered.metrics.find((m) => m.id === 'request');
@@ -404,7 +404,7 @@ test('visible text cannot imitate a connector or separate terms with a symbol', 
 });
 
 test('the first supporting-services delivery is the known counterexample', () => {
-  const found = findForbiddenText(read('./three-tier-supporting-2026-10-29/first.drawio'));
+  const found = findForbiddenText(read('./fixtures/supporting-services-first.drawio'));
   assert.deepEqual(new Set(found.map(({ symbol }) => symbol)), new Set(['·', '→', 'Relationship only', 'unspecified']));
 });
 

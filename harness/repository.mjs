@@ -71,6 +71,12 @@ export function frontmatter(source) {
   return data;
 }
 
+// An initiative keeps its cases and its baseline in evals/, not a dated directory per experiment.
+export function evalsLayoutError(file) {
+  if (!/^incubator\/[^/]+\/evals\/[^/]+-\d{4}-\d{2}-\d{2}(?:\/|$)/.test(file)) return undefined;
+  return 'dated trial directory in evals/; the record of a change is its pull request, so keep only baseline/, scenarios/ and fixtures/';
+}
+
 export function frameworkFilenameError(file) {
   if (!['.', 'docs'].includes(path.posix.dirname(file))) return;
   const basename = path.posix.basename(file);
@@ -184,6 +190,8 @@ export function checkRepository(root, files = repositoryFiles(root)) {
     if (imported(file)) continue;
     const namingError = frameworkFilenameError(file);
     if (namingError) error(file, namingError);
+    const layoutError = evalsLayoutError(file);
+    if (layoutError) error(file, layoutError);
     if (
       !/\.(?:md|mjs|json|ya?ml|toml)$/.test(file) &&
       !['.editorconfig', '.gitattributes', '.gitignore', '.nvmrc'].includes(file)

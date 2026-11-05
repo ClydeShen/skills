@@ -8,6 +8,7 @@ import { parse as parseYaml } from 'yaml';
 import {
   checkRepository,
   checkSkill,
+  evalsLayoutError,
   exactPathExists,
   frameworkFilenameError,
   markdownTargets,
@@ -319,4 +320,19 @@ test('client hook configurations point to the shared implementation and do not g
   });
   assert.equal(result.status, 1);
   assert.match(result.stderr, /No repository validation/);
+});
+
+test('an initiative keeps no dated trial directory in evals', () => {
+  for (const file of [
+    'incubator/example/evals/baseline/README.md',
+    'incubator/example/evals/scenarios/a.md',
+    'incubator/example/evals/fixtures/first.drawio',
+    'incubator/example/evals/suite.mjs',
+  ])
+    assert.equal(evalsLayoutError(file), undefined, file);
+  for (const file of [
+    'incubator/example/evals/wording-2026-11-05/README.md',
+    'incubator/example/evals/three-tier-2026-10-29',
+  ])
+    assert.match(evalsLayoutError(file), /dated trial directory/, file);
 });
