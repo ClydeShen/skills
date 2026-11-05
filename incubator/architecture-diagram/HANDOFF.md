@@ -5,7 +5,7 @@ Updated: 2026-11-04. The last merged change is [PR #34](https://github.com/Clyde
 ## Start here
 
 - Active package: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md), a public-stage candidate, not a release. The [initiative README](./README.md) owns installation and lifecycle status.
-- Latest evidence: [terminology trial](./evals/terminology-2026-11-04/README.md), [view-splitting trial](./evals/view-splitting-2026-11-04/README.md), [legend trial](./evals/legend-2026-11-04/README.md) and [connector encoding research](../../research/diagrams/architecture-diagram/connector-encoding-conventions-2026-11-04.md), [region placement by intent](./evals/region-intent-2026-11-04/README.md), [boundary conventions trial](./evals/houses-2026-11-03/README.md), [boundary-membership check](./evals/boundary-check-2026-11-03/README.md), [clean-session trials](./evals/clean-session-2026-11-02/README.md), then [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
+- Latest evidence: [wording trial](./evals/wording-2026-11-05/README.md), [terminology trial](./evals/terminology-2026-11-04/README.md), [view-splitting trial](./evals/view-splitting-2026-11-04/README.md), [legend trial](./evals/legend-2026-11-04/README.md) and [connector encoding research](../../research/diagrams/architecture-diagram/connector-encoding-conventions-2026-11-04.md), [region placement by intent](./evals/region-intent-2026-11-04/README.md), [boundary conventions trial](./evals/houses-2026-11-03/README.md), [boundary-membership check](./evals/boundary-check-2026-11-03/README.md), [clean-session trials](./evals/clean-session-2026-11-02/README.md), then [semantic routing trials](./evals/semantic-routing-2026-11-02/README.md), [vendor mix](./evals/vendor-mix-2026-11-02/README.md) and [icon coverage](./evals/icon-coverage-2026-11-02/README.md). Older history is in [evaluation.md](./evaluation.md). Keep frozen trial evidence; put new runs in new directories.
 
 ## Baseline
 
@@ -44,6 +44,10 @@ The owner set the package as of commit `c863742` (PR #36) as the baseline and st
    - build and deployment drawn solid, notably on an operations page (scenario C, legend trial A);
    - an overview that links to only one of several detail pages, and does not show which boxes have detail pages;
    - a collinear but non-overlapping pair of lines that reads as one bus (legend trial B).
+   - arrows for pull relationships (Argo CD sync, secrets reads, a queue read) point from caller to provider and read as the reverse;
+   - a dashed boundary reads like a dashed connector, and the key lists no boundary style;
+   - one broad key word, such as "auxiliary", names several unlike dashed relationships;
+   - a repeated standby region drawn as a single database reader does not show "same stack" ([wording trial](./evals/wording-2026-11-05/README.md)).
 6. Not verified: repeatability across several runs, Claude Code sessions (usage limit hit during this work), offline Desktop use on another machine, and redistribution terms for icons whose licence requires attribution (Jenkins, CC-BY-SA-3.0) or limits use (Microsoft Fabric).
 
 ## How to evaluate a change
