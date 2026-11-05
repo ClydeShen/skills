@@ -453,7 +453,7 @@ test('layout errors catch a broken parent edge, small text and double-headed arr
 
 test('layout warnings point at proportions, overlaps, detours and missing emphasis', () => {
   const messages = (cells) => checkLayout(page(cells)).warnings.join(' ');
-  assert.match(checkLayout(page(box('a', 0, 0, 1800, 500))).errors.join(' '), /keep it at most 1600/);
+  assert.match(checkLayout(page(box('a', 0, 0, 1800, 500))).errors.join(' '), /keep it at most 1400/);
   assert.match(messages(box('a', 0, 0, 400, 900)), /taller than wide/);
   assert.match(messages(box('a', 0, 0, 100, 100) + box('b', 50, 50, 100, 100)), /overlap/);
   const route = box('a', 0, 0, 72, 72) + box('b', 600, 0, 72, 72) + box('c', 300, 200, 72, 72);

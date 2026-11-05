@@ -28,7 +28,7 @@ For a high-level view, draw the architecture that the source supports. Keep unre
 
 ## Plan the views
 
-Draw one view. Lay it out on one page first, with runtime and auxiliary relationships together as solid and dashed lines. Split into pages of the same file only when that page still breaks a limit in [composition](references/composition.md#split-the-view), such as a third kind of line or a width over about 1600 units, and then make as few pages as fix it.
+Draw one view. Lay it out on one page first, with runtime and auxiliary relationships together as solid and dashed lines. Split into pages of the same file only when that page still breaks a limit in [composition](references/composition.md#split-the-view), such as a third kind of line or a width over 1400 units, and then make as few pages as fix it.
 
 ## Draw the meaning
 

@@ -279,10 +279,10 @@ function checkPage(xml) {
     const top = Math.min(...vertices.map((c) => boxes.get(c.id).y));
     const bottom = Math.max(...vertices.map((c) => boxes.get(c.id).y + boxes.get(c.id).h));
     const [width, height] = [right - left, bottom - top];
-    // A page over 1600 units shrinks below readable text at the usual document width.
-    if (width > 1600)
+    // A page over 1400 units shrinks below readable text at the usual document width.
+    if (width > 1400)
       errors.push(
-        `Page is ${Math.round(width)} wide; keep it at most 1600. Draw identical repeated structures once with a count, fold boundary levels, or split the view.`,
+        `Page is ${Math.round(width)} wide; keep it at most 1400. Draw identical repeated structures once with a count, fold boundary levels, or split the view.`,
       );
     if (height > width)
       warnings.push(

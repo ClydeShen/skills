@@ -9,7 +9,7 @@ Draw one view. Most architectures fit one page, and one page is easier to read t
 Lay the view out on one page first. Split it only when that page still fails one of these limits after you have grouped elements, folded boundary levels and drawn identical repeated structures once with a count:
 
 - It needs a third kind of line or end.
-- It is wider than about 1600 units at 16-point text.
+- It is wider than 1400 units at 16-point text.
 - It needs more than three nested outlines.
 - It has two main directions that cross.
 
@@ -112,5 +112,5 @@ Draw a connector from the element that acts. Attach a connector to a boundary on
 
 The PNG usually appears about 900 pixels wide in a wiki.
 
-- Keep the page near 16:9 to 3:2, at most about 1400 units wide, with 16-point text. Over 1600 units wide, split the view; do not shrink the text.
+- Keep the page near 16:9 to 3:2, at most 1400 units wide, with 16-point text. When the page is wider, split the view; do not shrink the text.
 - Give the view a descriptive title, and add nothing else above it. Name the view type only when it helps the audience. Scope belongs in the companion account, not in a subtitle.
