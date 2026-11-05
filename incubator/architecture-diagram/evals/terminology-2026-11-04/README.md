@@ -11,9 +11,9 @@ Setup: the clean Claude Code setup and prompt of the [clean-session trials](../c
 | 02   | [file](./02/diagram.drawio), [report](./02/agent-report.md), `02/diagram-*.png`     | 15 turns, 441 s  | layout 0 errors, 2 items (page width); steps 0 | Private access path; firewall allowances                      | 7/10  | 7/10     |
 | C    | [file](./c/diagram.drawio), [report](./c/agent-report.md), `c/diagram-*.png`        | 26 turns, 590 s  | layout 0 errors, 0 items; steps 0              | Overview; browse; checkout; operations                        | 7/10  | 7/10     |
 
-No score fell below the baseline. A and B now split into pages by concern and flow, which their baseline runs, made before the split rules, did not.
+No score fell below the baseline.
 
-Findings that hold, for the watch list rather than this change:
+Findings:
 
 - Every reviewer missed a key on pages with one kind of line, which the rules leave keyless.
 - Regional services drawn inside a stated region the source gives only one service (B), and B's secrets arrows read as writes.
