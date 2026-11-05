@@ -1,26 +1,27 @@
 # Composition
 
-Decide the views first. Then plan each view on an invisible three-by-three grid before you place anything. The grid guides roles; real boundary membership wins when they conflict. Empty cells are fine.
+Plan the view on an invisible three-by-three grid before you place anything. The grid guides roles; real boundary membership wins when they conflict. Empty cells are fine.
 
 ## Split the view
 
-A view answers one question for one reader. Split it when it must answer more than one. A view answers more than one question when it would need any of these:
+Draw one view. Most architectures fit one page, and one page is easier to read than several: the reader sees every path and needs no cross-reference. Runtime calls and auxiliary relationships, such as telemetry, secrets and deployment, belong in the same view; solid and dashed lines tell them apart, so two concerns are not a reason to split.
 
-- a third kind of line or end;
-- a second main direction;
-- more than three nested outlines, or boundary detail deeper than two levels;
-- more than about six elements in the center;
-- a page wider than about 1600 units at 16-point text.
+Lay the view out on one page first. Split it only when that page still fails one of these limits after you have grouped elements and folded boundary levels:
 
-Split along the first axis that removes the cause:
+- It needs a third kind of line or end.
+- It is wider than about 1600 units at 16-point text.
+- It needs more than three nested outlines.
+- It has two main directions that cross.
 
-| Axis    | Pages                                                                                                    | Removes                                          |
-| ------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| Concern | Runtime calls and data; then operations: build, deployment, management, telemetry and secrets            | A third kind of line; auxiliary lines in the way |
-| Zoom    | An overview that draws each part as one box; then a detail page for each part the reader must see inside | Deep nesting, a crowded center, a wide page      |
-| Flow    | One page per path or scenario, such as DNS resolution and the API call                                   | Two main directions, tangled paths               |
+Do not split to avoid a crossing, a crowded corner or a long label; fix those by placement. When you split, make as few pages as remove the failure, usually two, along the first axis that removes it:
 
-Apply the same test to each new page. Split again while a page still answers two questions. Stop when every page fits two kinds of line, three outlines and the page width, or when a further split would leave a page with a single relationship. Show every path whole on at least one page: a detail page may show part of a path only when the overview shows all of it.
+| Axis    | Pages                                                                                                    | Removes                      |
+| ------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| Concern | Runtime calls and data; then operations: build, deployment, management, telemetry and secrets            | A third kind of line         |
+| Zoom    | An overview that draws each part as one box; then a detail page for each part the reader must see inside | Deep nesting, a wide page    |
+| Flow    | One page per path or scenario, such as DNS resolution and the API call                                   | Two crossing main directions |
+
+Apply the same limits to each new page, and split again only while a page still fails one. Never make a page with a single relationship. Show every path whole on at least one page: a detail page may show part of a path only when the overview shows all of it.
 
 Split views are one system seen several ways, so they must read as one:
 
@@ -30,7 +31,7 @@ Split views are one system seen several ways, so they must read as one:
 - Link an overview box to its detail page, and use the page's title as the box's name. On the detail page, draw that part as the outer boundary, and show the outside elements it talks to at the edge, with their overview names.
 - Keep the numbered steps of one flow on one page.
 - When the user asks for one diagram, draw one. In the companion account, recommend the split that would show what one page cannot show clearly.
-- List the pages, and why each exists, in the companion account.
+- List the pages, and the limit that made each split necessary, in the companion account.
 
 ## Choose one direction
 
@@ -78,7 +79,7 @@ Draw a connector from the element that acts. Attach a connector to a boundary on
 - Make the main path the most visible thing on the page. It must still read at a small size.
 - The middle row comes before the outer rows; corners carry the least.
 - Show the main path by its place, a straight run along the middle row in reading order, and by its step numbers. All connectors have one weight, as [notation](./notation.md#connectors) describes.
-- Put about two to six elements in the center, and one or two in a corner. With more, group them or split the view by zoom.
+- Put about two to six elements in the center, and one or two in a corner. With more, group them.
 
 ## Route
 
