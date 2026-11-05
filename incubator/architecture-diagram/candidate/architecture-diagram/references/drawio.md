@@ -35,7 +35,7 @@ Use one `mxfile` with one `diagram` / `mxGraphModel` page per view, each with ro
 
 For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`, `vendor` and `iconKey`. Its child `mxCell` has `vertex="1"`, the real parent ID, the selected style and an `mxGeometry`. Labels use escaped XML attributes and HTML line breaks when `html=1`. Keep inspection metadata separate from the short visible caption; print a type or technology only when it clarifies the element.
 
-Draw a house as a container (`container=1`) whose members are its children. Use the catalog's group style when it has one for that boundary. Otherwise use a generic group: a rounded rectangle with a light fill, its label at the top left after `spacingLeft=36`, and the service icon as a 24-unit child at offset (6, 6), so the icon marks the house without becoming a member.
+Draw a boundary as a container (`container=1`) whose members are its children. Use the catalog's boundary style when it has one; draw.io names these styles groups. Otherwise use a generic boundary: a rounded rectangle with a light fill, its label at the top left after `spacingLeft=36`, and the service icon as a 24-unit child at offset (6, 6), so the icon marks the boundary without becoming a member.
 
 Build the key as a table: a `shape=table;childLayout=tableLayout;container=1;startSize=24;collapsible=0;fontSize=12;align=left;` cell titled "Key", with one `shape=tableRow` per style and two `shape=partialRectangle;connectable=0;fontSize=12;` cells per row, the left empty and the right holding the meaning. Draw each sample as a free connector on the page (`sourcePoint` and `targetPoint`, no `source` or `target`) across its left cell, with exactly the style of the connectors it explains, including `edgeStyle=orthogonalEdgeStyle`.
 
@@ -50,6 +50,6 @@ For a necessary label, set a readable label width and use relative edge geometry
 
 ## Verify the actual view
 
-Check XML parsing, unique IDs, valid parents/endpoints, catalog identity and consistent style. Then inspect the rendered diagram for clipped labels, crossings through nodes/captions, accidental shared segments and incorrect domain transitions. Test at a useful reading scale as well as an overview; a large raster can hide unreadable labels at fit-to-page scale.
+Check XML parsing, unique IDs, valid parents/endpoints, catalog identity and consistent style. Then inspect the rendered diagram for clipped labels, crossings through nodes/captions, accidental shared segments and incorrect boundary crossings. Test at a useful reading scale as well as an overview; a large raster can hide unreadable labels at fit-to-page scale.
 
 Use the host's available draw.io editor/export capability for inspection. Browser rendering is not evidence of offline Desktop compatibility. If no compatible viewer is available, deliver only with an explicit unverified-render warning; do not substitute a generated illustration for the editable architecture.

@@ -21,17 +21,17 @@ Prefer position and nesting, then connectors, then shape and line style. The ima
 
 ## Add the smallest word
 
-| Relationship                        | Draw                                                  | Add only                        |
-| ----------------------------------- | ----------------------------------------------------- | ------------------------------- |
-| Asynchronous call                   | A queue or topic node between the parties             | Its name                        |
-| Connected, no direction             | Avoid for flows; give each direction its own arrow    | Protocol if it matters          |
-| Auxiliary such as DNS or monitoring | Thin dashed line, away from the main path             | One word                        |
-| Standby, replica                    | Same symbol in its own domain                         | The role                        |
-| Logical ownership                   | Light fill region, distinct from a deployment outline | The region name                 |
-| Same kind, different implementation | Peers aligned in one frame, each with its own symbol  | The frame name                  |
-| Trust boundary                      | One fixed, stronger outline                           | The boundary name               |
-| Failure path                        | Separate return connector in one fixed line style     | The result, such as `403`       |
-| Parallel split                      | Shape other than the decision diamond                 | Nothing, if the key explains it |
+| Relationship                        | Draw                                                      | Add only                        |
+| ----------------------------------- | --------------------------------------------------------- | ------------------------------- |
+| Asynchronous call                   | A queue or topic node between the parties                 | Its name                        |
+| Connected, no direction             | Avoid for flows; give each direction its own arrow        | Protocol if it matters          |
+| Auxiliary such as DNS or monitoring | Thin dashed line, away from the main path                 | One word                        |
+| Standby, replica                    | Same symbol in its own boundary                           | The role                        |
+| Logical ownership                   | Light-filled boundary, distinct from a deployment outline | The boundary name               |
+| Same kind, different implementation | Peers aligned in one boundary, each with its own symbol   | The boundary name               |
+| Trust boundary                      | One fixed, stronger outline                               | The boundary name               |
+| Failure path                        | Separate return connector in one fixed line style         | The result, such as `403`       |
+| Parallel split                      | Shape other than the decision diamond                     | Nothing, if the key explains it |
 
 ## Words are required
 
@@ -58,7 +58,7 @@ Prefer position and nesting, then connectors, then shape and line style. The ima
 | Traffic    | DNS                                         | Thin dashed line from the resolving client to the DNS symbol, and from there to the endpoint it returns |
 | Data       | Read, write                                 | Arrow from the initiator; one verb only if it matters                                                   |
 | Data       | Cache in front of a database                | The application connects to each; no cache-to-database line unless stated                               |
-| Data       | Replication, standby                        | Dashed line between same symbols in their own domains                                                   |
+| Data       | Replication, standby                        | Dashed line between same symbols in their own boundaries                                                |
 | Data       | Backup, archive                             | Thin dashed line to the store, with one word                                                            |
 | Events     | Queue, topic, stream, schedule              | A node between the parties; the consumer's arrow shows whether it polls                                 |
 | Identity   | Sign-in and tokens                          | Connectors in order, with the token named once                                                          |

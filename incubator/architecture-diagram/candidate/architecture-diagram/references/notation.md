@@ -4,9 +4,9 @@ Use a consistent visual vocabulary for one scenario. C4's useful distinctions in
 
 ## Structure and elements
 
-Choose a descriptive scenario title. Add the view type only when it helps the audience. [composition.md](composition.md) sets placement and [cloud-conventions.md](cloud-conventions.md) sets boundaries. Size regions to their contents and paths.
+Choose a descriptive scenario title. Add the view type only when it helps the audience. [composition.md](composition.md) sets placement and [cloud-conventions.md](cloud-conventions.md) sets boundaries. Size boundaries to their contents and paths.
 
-Preserve meaningful deployment membership, ownership and trust distinctions. Show a boundary when crossing or membership matters. A labeled light-filled region can define a subnet without a second heavy outline. Omit unspecified or redundant enclosing levels when their omission changes no known membership.
+Preserve meaningful deployment membership, ownership and trust distinctions. Show a boundary when crossing or membership matters. A labeled light-filled boundary can define a subnet without a second heavy outline. Omit unspecified or redundant enclosing levels when their omission changes no known membership.
 
 Choose a recognizable symbol at the level actually described: service, resource or instance. An exact table or email-resource symbol can be more informative than a generic service logo; do not introduce a resource the source did not specify. Use a short name and add a role, technology or type only when it disambiguates the element. Retain useful metadata in the editable file without repeating it in captions or wrapping every icon in a generic card.
 
@@ -18,7 +18,7 @@ Use matching built-in group styles only when their meaning fits. Do not use publ
 
 ## Visual hierarchy
 
-Use muted region fills, thin outlines and a restrained palette with stable meanings. Keep frames visually secondary to symbols and the main path. Distinguish network boundaries from logical groups through line style and labels as well as color. Whitespace can group peers without creating a new architectural domain.
+Use muted boundary fills, thin outlines and a restrained palette with stable meanings. Keep boundaries visually secondary to symbols and the main path. Distinguish network boundaries from logical groups through line style and labels as well as color. Whitespace can group peers without creating a new boundary.
 
 Use a small, consistent text hierarchy for the title, names and secondary details. Do not shrink a difficult label to fit. Remove redundant detail or adjust spacing instead.
 
@@ -52,6 +52,6 @@ Do not infer load-balancer type, exposure, network classification or target-grou
 
 ## Routes and annotations
 
-Place needed connector labels on their host segments with an opaque background, off other captions, boundary titles and outlines. A label may interrupt its own stroke; it must not cause a detour. Avoid shared segments, and cross only domains the relationship requires.
+Place needed connector labels on their host segments with an opaque background, off other captions, boundary titles and outlines. A label may interrupt its own stroke; it must not cause a detour. Avoid shared segments, and cross only the boundaries the relationship requires.
 
 Use concise local labels before explanatory Notes. A table should expose a real repeated relation, not replace topology. If an indispensable explanation remains, use the native `Misc > Note` preset with automatic text fitting, near its subject and disconnected from call arrows. State why it was necessary. Deleting an important fact is not simplification.

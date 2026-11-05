@@ -1,6 +1,6 @@
 # Cloud conventions
 
-Read All clouds and Houses, then only the section for each cloud in the view. Draw the hierarchy that cloud really has: a wrong nesting is a technical error, not a style choice. Show only levels the source supports, and collapse levels that change no decision.
+Read All clouds and Boundaries, then only the section for each cloud in the view. Draw the hierarchy that cloud really has: a wrong nesting is a technical error, not a style choice. Show only levels the source supports, and collapse levels that change no decision.
 
 ## All clouds
 
@@ -10,15 +10,15 @@ Read All clouds and Houses, then only the section for each cloud in the view. Dr
 - Draw one arrow from initiator to dependency. For traffic truly initiated from both sides, draw two connectors. Do not use a double-headed arrow.
 - Layer rather than overload: an overview does not need subnets; a network view does not need every API call.
 
-## Houses
+## Boundaries
 
-A boundary answers one question: who owns it and where it runs (cloud, account, subscription, project, region), what can reach what (VPC, VNet, subnet), what members run on (cluster, scaling group, workflow), or which services share one job (a light-filled logical group).
+A boundary answers one question: who owns it and where it runs (cloud, account, subscription, project, region), what can reach what (VPC, VNet, subnet), what members run on (cluster, scaling group, workflow), or which services share one job (a light-filled logical boundary).
 
 - Draw a level only when it separates elements the reader must tell apart, such as a trust, failure or exposure boundary, or when it holds at least two drawn members. Otherwise fold it: put a single region in its parent's title, omit subnets whose role decides nothing, and draw a host with no drawn members as one icon.
-- A house that represents a service is that service. Put its service icon at the top left with the name beside it, using the catalog's group style where one exists and a generic group with the service icon otherwise. Never draw that service again as a node inside it.
+- A boundary that represents a service is that service. Put its service icon at the top left with the name beside it, using the vendor boundary style where the catalog has one and a generic boundary with the service icon otherwise. Never draw that service again as a node inside it.
 - Draw zones only when zonal redundancy is the point, in the cloud's own hierarchy below.
-- Security groups and network security groups are policy, not location: outside a security view, state the access rule on the connector or in the companion account instead of drawing a house per group.
-- Use the vendor's group style where the catalog has one; its dashes and colours are that vendor's notation. Draw every other house with one thin solid neutral outline, or a light fill, and name its kind in the title, not by dashes, colour or weight. A house style beyond that needs a key entry.
+- Security groups and network security groups are policy, not location: outside a security view, state the access rule on the connector or in the companion account instead of drawing a boundary per group.
+- Use the vendor boundary style where the catalog has one; its dashes and colours are that vendor's notation. Draw every other boundary with one thin solid neutral outline, or a light fill, and name its kind in the title, not by dashes, colour or weight. A boundary style beyond that needs a key entry.
 - Nest at most three outlines in one view; a light fill without an outline does not count. Split deeper detail into its own view.
 
 ## AWS
