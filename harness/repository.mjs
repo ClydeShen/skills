@@ -6,6 +6,7 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import GithubSlugger from 'github-slugger';
 import MarkdownIt from 'markdown-it';
 import { parse as parseYaml } from 'yaml';
+import { verifySnapshot } from './publication.mjs';
 
 export const repositoryRoot = fileURLToPath(new URL('../', import.meta.url));
 const markdown = new MarkdownIt({ html: true });
@@ -232,9 +233,19 @@ export function checkRepository(root, files = repositoryFiles(root)) {
   }
 
   const names = new Map();
+  for (const pkg of packages) names.set(pkg.name, [...(names.get(pkg.name) ?? []), pkg]);
+  for (const [name, group] of names) {
+    if (group.length < 2) continue;
+    const source = group.find((pkg) => pkg.directory.startsWith('incubator/'));
+    const snapshot = group.find((pkg) => pkg.directory === `skills/${name}`);
+    try {
+      if (group.length !== 2 || !source || !snapshot) throw new Error('not one source/snapshot pair');
+      verifySnapshot(root, path.join(root, snapshot.directory), source.directory);
+    } catch (failure) {
+      error(group.at(-1).file, `duplicate authored name ${name}; unverified publication pair: ${failure.message}`);
+    }
+  }
   for (const pkg of packages) {
-    if (names.has(pkg.name)) error(pkg.file, `duplicate authored name ${pkg.name}; also at ${names.get(pkg.name)}`);
-    names.set(pkg.name, pkg.file);
     if (pkg.directory.startsWith('skills/')) {
       const introduction = `${pkg.directory}/README.md`;
       if (!files.includes(introduction) || !read(introduction).trim())
