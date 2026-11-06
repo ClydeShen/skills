@@ -8,11 +8,13 @@ import { parse as parseYaml } from 'yaml';
 import {
   checkRepository,
   checkSkill,
+  evalsLayoutError,
   exactPathExists,
   frameworkFilenameError,
   markdownTargets,
   repositoryFiles,
   repositoryRoot,
+  researchNameError,
 } from './repository.mjs';
 import { stopDecision } from './stop-hook.mjs';
 
@@ -34,8 +36,10 @@ function fixture(t, extra = {}) {
     'incubator/example/README.md':
       '# Example\n\nStage: candidate; active: [candidate/example/](./candidate/example/SKILL.md).\n',
     'incubator/example/evaluation.md': '# Evaluation\n',
+    'incubator/example/evals/README.md': '# Example evals\n',
     'incubator/example/evals/suite.mjs': 'export default {};\n',
     'incubator/example/evals/cases.json': '[]\n',
+    'incubator/example/evals/trigger.json': '{"cases":[]}\n',
     ...extra,
   };
   for (const [file, content] of Object.entries(files)) {
@@ -319,4 +323,35 @@ test('client hook configurations point to the shared implementation and do not g
   });
   assert.equal(result.status, 1);
   assert.match(result.stderr, /No repository validation/);
+});
+
+test('an initiative keeps no dated trial directory in evals', () => {
+  for (const file of [
+    'incubator/example/evals/baseline/README.md',
+    'incubator/example/evals/scenarios/a.md',
+    'incubator/example/evals/fixtures/first.drawio',
+    'incubator/example/evals/suite.mjs',
+  ])
+    assert.equal(evalsLayoutError(file), undefined, file);
+  for (const file of [
+    'incubator/example/evals/wording-2026-11-05/README.md',
+    'incubator/example/evals/three-tier-2026-10-29',
+  ])
+    assert.match(evalsLayoutError(file), /dated trial directory/, file);
+});
+
+test('research notes are numbered with a slug that states the finding, and the older dated notes keep their names', () => {
+  for (const file of [
+    'research/diagrams/architecture-diagram/0007-connector-encodings-solid-dashed-one-weight.md',
+    'research/harness/adr/0004-anything.md',
+    'research/harness/skill-repository/README.md',
+    'research/diagrams/architecture-diagram/connector-encoding-conventions-2026-11-04.md',
+  ])
+    assert.equal(researchNameError(file), undefined, file);
+  for (const file of [
+    'research/diagrams/architecture-diagram/vendor-notes-2026-12-01.md',
+    'research/diagrams/architecture-diagram/0008-notes.md',
+    'research/diagrams/architecture-diagram/legend.md',
+  ])
+    assert.match(researchNameError(file), /NNNN-<slug>/, file);
 });

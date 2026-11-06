@@ -1,0 +1,10 @@
+{
+  "commit": "f7b7537",
+  "tolerance": 0.5,
+  "scenarios": {
+    "a": { "title": "Support assistant on AWS", "scores": [7] },
+    "b": { "title": "Document Q&A on Azure", "scores": [7.5] },
+    "02": { "title": "Private cross-cloud API call from Azure to AWS", "scores": [7] },
+    "c": { "title": "Online store on AWS", "scores": [7, 6.5] }
+  }
+}

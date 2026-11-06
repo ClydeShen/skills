@@ -71,6 +71,26 @@ export function frontmatter(source) {
   return data;
 }
 
+const legacyResearchNames = new Set(
+  JSON.parse(readFileSync(new URL('./legacy-research-names.json', import.meta.url), 'utf8')),
+);
+
+// A research note is numbered in its topic folder, and its slug states the finding or decision.
+// The notes named before this rule, with a date suffix, keep their names.
+export function researchNameError(file) {
+  if (!/^research\/[^/]+\/[^/]+\/[^/]+\.md$/.test(file)) return undefined;
+  const name = path.posix.basename(file);
+  if (name === 'README.md' || file.split('/')[2] === 'adr' || legacyResearchNames.has(file)) return undefined;
+  if (/^\d{4}-[a-z0-9]+(?:-[a-z0-9]+){2,}\.md$/.test(name)) return undefined;
+  return 'research notes are named NNNN-<slug>.md with a slug of three or more words that states the finding or decision; the date goes in the header';
+}
+
+// An initiative keeps its cases and its baseline in evals/, not a dated directory per experiment.
+export function evalsLayoutError(file) {
+  if (!/^incubator\/[^/]+\/evals\/[^/]+-\d{4}-\d{2}-\d{2}(?:\/|$)/.test(file)) return undefined;
+  return 'dated trial directory in evals/; the record of a change is its pull request, so keep only baseline/, scenarios/ and fixtures/';
+}
+
 export function frameworkFilenameError(file) {
   if (!['.', 'docs'].includes(path.posix.dirname(file))) return;
   const basename = path.posix.basename(file);
@@ -184,6 +204,8 @@ export function checkRepository(root, files = repositoryFiles(root)) {
     if (imported(file)) continue;
     const namingError = frameworkFilenameError(file);
     if (namingError) error(file, namingError);
+    const layoutError = evalsLayoutError(file);
+    if (layoutError) error(file, layoutError);
     if (
       !/\.(?:md|mjs|json|ya?ml|toml)$/.test(file) &&
       !['.editorconfig', '.gitattributes', '.gitignore', '.nvmrc'].includes(file)
@@ -215,7 +237,14 @@ export function checkRepository(root, files = repositoryFiles(root)) {
     names.set(pkg.name, pkg.file);
     if (pkg.directory.startsWith('incubator/')) {
       const initiative = pkg.directory.split('/').slice(0, 2).join('/');
-      for (const required of ['README.md', 'evaluation.md', 'evals/suite.mjs', 'evals/cases.json']) {
+      for (const required of [
+        'README.md',
+        'evaluation.md',
+        'evals/README.md',
+        'evals/suite.mjs',
+        'evals/cases.json',
+        'evals/trigger.json',
+      ]) {
         if (!files.includes(`${initiative}/${required}`))
           error(pkg.file, `missing initiative artifact ${initiative}/${required}`);
       }

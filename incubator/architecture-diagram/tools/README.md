@@ -10,7 +10,7 @@ npm run eval -- --suite incubator/architecture-diagram/evals/suite.mjs
 node incubator/architecture-diagram/tools/validate.mjs incubator/architecture-diagram/prototype/scenario-01.drawio
 ```
 
-The validator checks uncompressed XML, catalog references and declared route geometry. The suite is synthetic clarification replay; neither establishes model quality. Behavioral evaluation uses the [round-trip protocol](../evals/roundtrip.md); measured results belong in the [evaluation record](../evaluation.md).
+The validator checks uncompressed XML, catalog references and declared route geometry. The suite is synthetic clarification replay; neither establishes model quality. Behavioral evaluation uses the [round-trip protocol](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/roundtrip.md); measured results belong in the [evaluation record](../evaluation.md).
 
 ## Render locally
 
@@ -22,7 +22,7 @@ Use the package's [lookup and regeneration instructions](../candidate/architectu
 
 ## Vendor icons
 
-`build-vendor-icons.mjs` regenerates the package's `assets/vendor-icons.json` from the pinned npm releases and official repository files it names. Without an argument it downloads them with `npm pack` and from `raw.githubusercontent.com` at the pinned commit; pass a directory holding unpacked `thesvg/` and `fabric/` packages, and optionally `github/<owner>/<repo>/<path>` copies, to work offline. `--check-latest` compares the pinned npm versions with the registry and exits 2 when an update exists. To update, change the pinned version or commit, regenerate, review the [icon coverage sheets](../evals/icon-coverage-2026-11-02/README.md) and run the tests.
+`build-vendor-icons.mjs` regenerates the package's `assets/vendor-icons.json` from the pinned npm releases and official repository files it names. Without an argument it downloads them with `npm pack` and from `raw.githubusercontent.com` at the pinned commit; pass a directory holding unpacked `thesvg/` and `fabric/` packages, and optionally `github/<owner>/<repo>/<path>` copies, to work offline. `--check-latest` compares the pinned npm versions with the registry and exits 2 when an update exists. To update, change the pinned version or commit, regenerate, review the [icon coverage sheets](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/icon-coverage-2026-11-02/README.md) and run the tests.
 
 ```sh
 node incubator/architecture-diagram/tools/build-vendor-icons.mjs --check-latest

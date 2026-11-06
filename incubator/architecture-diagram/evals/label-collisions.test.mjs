@@ -187,7 +187,7 @@ test('a connector label on a bend is reported; one on a straight segment is not'
 });
 
 test('the vendor-mix trial reports the collisions visible in its image', () => {
-  const xml = readFileSync(new URL('./vendor-mix-2026-11-02/diagram.drawio', import.meta.url), 'utf8');
+  const xml = readFileSync(new URL('./fixtures/vendor-mix.drawio', import.meta.url), 'utf8');
   const found = collisions(xml);
   for (const expected of [
     'The caption of openai and the connector label runterraform overlap or nearly touch.',
@@ -279,8 +279,7 @@ test('numbered steps that tangle are told to swap ports; numbers out of spatial 
 
 test('round 3 semantic routing trials report the tangle and avoidable bends visible in their images', () => {
   const trial = (name) =>
-    checkLayout(readFileSync(new URL(`./semantic-routing-2026-11-02/${name}/diagram.drawio`, import.meta.url), 'utf8'))
-      .warnings;
+    checkLayout(readFileSync(new URL(`./fixtures/routing-${name}.drawio`, import.meta.url), 'utf8')).warnings;
   const a = trial('round3-a');
   assert.ok(
     a.includes(
@@ -367,9 +366,9 @@ test('a run shared by connectors of different meaning is an error; identical con
   assert.deepEqual(shared(trunk(['Deploy', 'Deploy'], 'dashed=1;')), [
     'Connectors a and b share a 128-unit segment. That reads as one relationship; keep it only if they are one.',
   ]);
-  const b = checkLayout(readFileSync(new URL('./region-intent-2026-11-04/b/diagram.drawio', import.meta.url), 'utf8'));
+  const b = checkLayout(readFileSync(new URL('./fixtures/region-intent-b.drawio', import.meta.url), 'utf8'));
   assert.ok(b.errors.some((m) => m.startsWith('Connectors e3 and e4 have different meanings')));
-  const a = checkLayout(readFileSync(new URL('./region-intent-2026-11-04/a/diagram.drawio', import.meta.url), 'utf8'));
+  const a = checkLayout(readFileSync(new URL('./fixtures/region-intent-a.drawio', import.meta.url), 'utf8'));
   assert.ok(!a.errors.some((m) => /segment/.test(m)));
 });
 

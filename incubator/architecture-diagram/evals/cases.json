@@ -1,7 +1,7 @@
 [
   {
     "id": "S01",
-    "source": "scenario-01.md",
+    "source": "scenarios/01.md",
     "findings": ["Cognito[\\s\\S]*(?:password|credential)|(?:password|credential)[\\s\\S]*Cognito"],
     "fixture": {
       "action": "clarify",
@@ -21,7 +21,7 @@
   },
   {
     "id": "S02",
-    "source": "scenario-02.md",
+    "source": "scenarios/02.md",
     "findings": ["outbound[\\s\\S]*DNS", "(?:hosted zone|zone)[\\s\\S]*VPC"],
     "fixture": {
       "action": "clarify",
@@ -45,7 +45,7 @@
   },
   {
     "id": "S03",
-    "source": "scenario-03.md",
+    "source": "scenarios/03.md",
     "findings": ["(?:amend|amendment)", "ManageDocuments", "(?:HTTPS|JSON)"],
     "ignored_min": 2,
     "fixture": {
@@ -70,7 +70,7 @@
   },
   {
     "id": "S04",
-    "source": "scenario-04.md",
+    "source": "scenarios/04.md",
     "findings": [
       "(?:three|3)[\\s\\S]*queue|queue[\\s\\S]*(?:three|3)",
       "(?:public[\\s\\S]*HTTPS|HTTPS[\\s\\S]*public)",
