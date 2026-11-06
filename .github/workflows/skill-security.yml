@@ -9,6 +9,8 @@ on:
       - .agents/skills/**
       - incubator/*/candidate/*/scripts/**
       - skills/*/scripts/**
+      - harness/skill-security*
+      - .github/workflows/skill-security.yml
   workflow_dispatch:
 
 permissions:
@@ -23,11 +25,20 @@ jobs:
         with:
           persist-credentials: false
       - uses: astral-sh/setup-uv@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
       - name: Scan each skill package
         run: |
           status=0
           for skill in incubator/*/candidate/* skills/* .agents/skills/*; do
             [ -f "$skill/SKILL.md" ] || continue
-            uvx --from cisco-ai-skill-scanner==2.3.2 skill-scanner scan "$skill" --format summary --fail-on-severity high || status=1
+            node harness/skill-security.mjs "$skill" || status=1
           done
           exit $status
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: skill-security-reports
+          path: evals/.local/security/
+          if-no-files-found: warn

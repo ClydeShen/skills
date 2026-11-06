@@ -25,6 +25,10 @@ Choose an icon at the level the source describes: service, resource or instance.
 - Whitespace can group peers without a new boundary.
 - Use a small text hierarchy: the title, then boundary titles, then element names, then connector labels, which are the smallest. Do not shrink a label to make it fit; remove detail or add space.
 
+Apply WCAG 2.2 SC 1.4.1 (Level A): colour is never the only clue to identity, status or grouping. Keep names, true nesting and line patterns meaningful in greyscale; a red/green distinction needs words or another visible cue, including in the Key. For readability, also aim for the AA guidance of SC 1.4.3/1.4.11: 4.5:1 for authored text and 3:1 for essential lines and outlines against each adjacent background. These numbers are AA guidance, not Level A thresholds. Use 4.5:1 for captions even when the source calls them large: a PNG may be scaled down in a wiki.
+
+Prefer dark neutral text and connectors on white or light fills. Decorative fills need not differ by 3:1 when labels and visible boundaries already explain membership. Keep vendor artwork intact; choose a suitable background or an available official variant and add readable captions rather than recolouring it. Check palette pairs with `node scripts/check-colors.mjs '#1F2937' '#FFFFFF'`, then inspect the rendered image at its intended size. This pair calculator cannot establish colour-independent meaning or full WCAG conformance; image descriptions in the host document remain its author's responsibility.
+
 ## Connectors
 
 Readers share only three connector meanings: a line relates two things, a solid line is the direct relationship, and an arrowhead gives direction. Build every view on these.

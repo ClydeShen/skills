@@ -14,6 +14,18 @@ The baseline is the quality boundary of the skill. No change to the package may 
 | 02       | 7               |
 | C        | 7, 6.5          |
 
+## Owner-approved baseline standards
+
+Effective 2026-11-06, the owner approved these additional acceptance standards:
+
+- Every drawn AWS, Azure or Google Cloud cloud-level boundary has its correct provider corner marker and a readable name. Preserve native AWS boundary artwork; use the pinned Azure and Google Cloud provider marks on generic cloud boundaries. Deeper boundaries use their own actual scope, never an unrelated service icon. Do not add boundaries solely to display a logo.
+- Apply WCAG 2.2 SC 1.4.1 (Level A): colour is not the sole cue to identity, grouping or status. Names, nesting, line patterns and the Key must keep the meaning readable without hue.
+- Borrow AA readability targets: 4.5:1 for authored text and 3:1 for essential lines/outlines against adjacent backgrounds. These numerical targets are AA guidance, not Level A criteria. Keep vendor artwork unchanged and select suitable backgrounds and readable captions.
+
+The package's [cloud conventions](../../candidate/architecture-diagram/references/cloud-conventions.md#boundaries) and [notation](../../candidate/architecture-diagram/references/notation.md#visual-hierarchy) own implementation guidance. The reviewer checks these standards alongside architecture correctness. An image-only assessment cannot establish full WCAG conformance or measure every contrast pair reliably.
+
+The earlier scores, commit and reference images above remain historical measurements; they have not been re-scored under these additions. In particular, baseline 02 lacks the Azure provider marker. Do not treat that omission as an accepted precedent for new output. Replacing the measured baseline still requires matching new runs, scores and reference artifacts, not only approval of a standard.
+
 ## How a run is made
 
 - Prompt for the skill, unchanged: `Use the architecture-diagram skill to create diagram.drawio from scenario.md. Write your companion account to agent-report.md.`

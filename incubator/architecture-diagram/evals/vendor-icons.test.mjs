@@ -5,8 +5,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { contrastRatio } from '../candidate/architecture-diagram/scripts/check-colors.mjs';
 import {
   artwork,
+  boundaryPlacement,
   checkEmbeddedIcons,
   dataUri,
   embedVendorIcons,
@@ -29,6 +31,19 @@ const byId = (id) => icons.entries.find((e) => e.id === id);
 const page = (style) =>
   `<mxfile><diagram><mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="a" value="x" style="${style}" vertex="1" parent="1"/></root></mxGraphModel></diagram></mxfile>`;
 
+test('colour-pair guidance measures sRGB contrast without treating it as Level A compliance', () => {
+  assert.equal(contrastRatio('#000', '#fff'), 21);
+  assert.equal(contrastRatio('#FFFFFF', '#ffffff'), 1);
+  assert.equal(contrastRatio('#123456', '#ABCDEF'), contrastRatio('#ABCDEF', '#123456'));
+  assert.ok(contrastRatio('#777', '#fff') < 4.5);
+  assert.ok(contrastRatio('#767676', '#fff') > 4.5);
+  assert.ok(contrastRatio('#1F2937', '#FFFFFF') >= 4.5);
+  assert.ok(contrastRatio('#64748B', '#FFFFFF') >= 3);
+  assert.ok(contrastRatio('#64748B', '#F4F7FA') >= 3);
+  assert.throws(() => contrastRatio('red', '#fff'), /opaque/);
+  assert.throws(() => contrastRatio('#0000', '#fff'), /opaque/);
+});
+
 test('bundled vendor icons are pinned, unique and hash-identified', () => {
   assert.deepEqual(icons.sources, { '@thesvg/icons': '4.0.0', '@fabric-msft/svg-icons': '11.1.0' });
   assert.equal(new Set(icons.entries.map((e) => e.id)).size, icons.entries.length);
@@ -39,6 +54,77 @@ test('bundled vendor icons are pinned, unique and hash-identified', () => {
     assert.ok(e.vendor && e.title && e.license, e.id);
     assert.ok(e.source.version || /^[0-9a-f]{40}$/.test(e.source.commit), `${e.id} is pinned`);
     assert.ok(!catalog.entries.some((c) => c.id === e.id), `${e.id} collides with the draw.io catalog`);
+  }
+});
+
+test('boundary markers preserve exact artwork and scope without duplicating native corner icons', () => {
+  const azure = byId('thesvg-microsoft-azure');
+  assert.equal(azure.vendor, 'Azure');
+  assert.equal(azure.title, 'Microsoft Azure');
+  const boundary = boundaryPlacement(azure);
+  assert.equal(boundary.kind, 'marked-boundary');
+  assert.deepEqual(
+    [boundary.marker.x, boundary.marker.y, boundary.marker.width, boundary.marker.height],
+    [6, 6, 24, 24],
+  );
+  assert.equal(boundary.marker.label, '');
+  assert.match(boundary.style, /container=1;.*spacingLeft=36;/);
+  assert.doesNotMatch(boundary.marker.style, /labelWidth|verticalLabelPosition/);
+  assert.match(boundary.marker.style, /vendorIcon=thesvg-microsoft-azure;/);
+  const xml = embedVendorIcons(page(boundary.marker.style), icons).xml;
+  checkEmbeddedIcons(xml, icons);
+  const aws = catalog.entries.find((e) => e.vendor === 'AWS' && e.title === 'AWS Cloud' && e.palette === 'aws4Groups');
+  assert.deepEqual(boundaryPlacement(aws), { kind: 'native-boundary', style: aws.style, marker: null });
+  const network = catalog.entries.find((e) => e.vendor === 'Azure' && e.title === 'Virtual Networks');
+  assert.match(boundaryPlacement(network).marker.style, /Virtual_Networks.svg/);
+  const cli = spawnSync(
+    process.execPath,
+    [
+      fileURLToPath(new URL('../candidate/architecture-diagram/scripts/find-icon.mjs', import.meta.url)),
+      '--vendor',
+      'Azure',
+      '--title',
+      'Microsoft Azure',
+      '--boundary',
+    ],
+    { encoding: 'utf8' },
+  );
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.deepEqual(JSON.parse(cli.stdout).matches[0].boundary, boundary);
+});
+
+test('all three cloud providers have exact boundary identities and portable marker rendering', () => {
+  const aws = catalog.entries.find((e) => e.id === 'aws4-61258b1e47d472ca');
+  assert.equal(aws.vendor, 'AWS');
+  assert.match(boundaryPlacement(aws).style, /grIcon=mxgraph.aws4.group_aws_cloud/);
+  for (const [id, vendor, title] of [
+    ['thesvg-microsoft-azure', 'Azure', 'Microsoft Azure'],
+    ['thesvg-google-cloud', 'Google Cloud', 'Google Cloud'],
+  ]) {
+    const entry = byId(id);
+    assert.equal(entry.vendor, vendor);
+    assert.equal(entry.title, title);
+    const { marker } = boundaryPlacement(entry);
+    assert.equal(Math.max(marker.width, marker.height), 24);
+    assert.equal(marker.label, '');
+    const xml = embedVendorIcons(page(marker.style), icons).xml;
+    checkEmbeddedIcons(xml, icons);
+    assert.deepEqual(referencedAssets(xml, catalog, icons), []);
+    const cli = spawnSync(
+      process.execPath,
+      [
+        fileURLToPath(new URL('../candidate/architecture-diagram/scripts/find-icon.mjs', import.meta.url)),
+        '--vendor',
+        vendor,
+        '--title',
+        title,
+        '--boundary',
+      ],
+      { encoding: 'utf8' },
+    );
+    assert.equal(cli.status, 0, cli.stderr);
+    assert.equal(JSON.parse(cli.stdout).matches.length, 1);
+    assert.deepEqual(JSON.parse(cli.stdout).matches[0].boundary.marker, marker);
   }
 });
 

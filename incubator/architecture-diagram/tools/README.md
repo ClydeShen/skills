@@ -18,7 +18,13 @@ Rendering is part of the package: run `node incubator/architecture-diagram/candi
 
 ## Catalog helpers
 
-Use the package's [lookup and regeneration instructions](../candidate/architecture-diagram/references/drawio.md#exact-icon-lookup). `catalog.mjs` here is a compatibility entry for historical fixture generators; the package owns the implementation. Generated metadata must not be edited manually.
+Use the package's [lookup instructions](../candidate/architecture-diagram/references/drawio.md#exact-icon-lookup). To regenerate metadata, obtain a trusted draw.io checkout at the commit pinned in the package's runtime `scripts/catalog.mjs`, then run:
+
+```sh
+node incubator/architecture-diagram/tools/catalog.mjs /path/to/pinned-drawio incubator/architecture-diagram/candidate/architecture-diagram/assets/catalog.json
+```
+
+The builder reads and executes pinned upstream palette definitions in a bounded context. Git may retrieve missing objects in a partial clone. No artwork is copied; generated metadata must not be edited manually. The installed package retains only the version constants and style parser, not this authoring-time executable.
 
 ## Vendor icons
 
