@@ -34,9 +34,9 @@ When creating, reviewing or revising a skill, use [the skill design principles](
 
 Before changing skill layout, validation, installation, or release behavior, verify time-sensitive claims against current official sources.
 
-Follow [candidate and release rules](docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) and [package format](docs/DOCUMENT-FORMATS.md#skill-package-format). Maintain one active source per authored skill. Update package targets and links when promotion changes the source path.
+Follow [candidate and release rules](docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle), [skill maintenance](docs/HARNESS.md#skill-maintenance) and [package format](docs/DOCUMENT-FORMATS.md#skill-package-format). Maintain one authoring source in the incubator; published packages are verified snapshots, not independently edited sources.
 
-Use the same package best practices during incubation and after release. Keep runtime files relocatable and authoring support outside the package. Prune obsolete material as the skill matures; preserve necessary evaluation evidence. Release should move the validated package, not rebuild it into another format.
+Use the same package best practices during incubation and after release. Keep runtime files relocatable and authoring support outside the package. Consolidate fixes, retain regression evidence and isolate hotfixes from unfinished work. Authoring changes do not publish automatically; never bypass missing snapshot/provenance checks to create a release.
 
 ## Project tools
 

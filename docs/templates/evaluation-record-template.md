@@ -5,7 +5,7 @@ Date: YYYY-MM-DD. Status: <planned, executed, or partially verified>.
 ## Scope and target
 
 - Mode: fixture | transport | model | host-integration.
-- Package target: <the active package path>.
+- Package target: <explicit authoring source or publication snapshot path>.
 - Target identity: <commit or content hashes>.
 - Cases: <suite path and IDs>.
 
@@ -19,6 +19,10 @@ Date: YYYY-MM-DD. Status: <planned, executed, or partially verified>.
 ## Findings
 
 <Observed results, failures and effect on the task. Distinguish assertions from manual judgment.>
+
+## Release evidence
+
+<Only for publication: source commit, publication digest/ref, declared transformations, snapshot installation/check results and matching skills.sh audit link/date/verdicts. Keep pending items explicit; omit this section otherwise.>
 
 ## Limits and next step
 

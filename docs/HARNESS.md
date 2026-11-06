@@ -59,7 +59,7 @@ agnix is optional because its postinstall downloads a platform binary from GitHu
 
 On this cloud executor, the installer required Node's `NODE_USE_ENV_PROXY=1` environment setting to use the inherited proxy. Set it through the host's normal environment configuration when needed; do not unset proxy settings or disable TLS verification. Failed optional installation does not remove the core gate.
 
-The candidate's boolean `metadata.internal` is a documented skills CLI extension, and the core checker validates it explicitly. The candidate marker is removed at authorized release. Other heuristics remain advisory until their usefulness and false positives are reviewed. Do not enable automatic fixes as a gate. Repository-wide agnix now skips candidate packages: `npm run skill:check` runs agnix on an exported copy without the marker, because the parse error otherwise stopped every other check on those packages.
+The candidate's boolean `metadata.internal` is a documented skills CLI extension, and the core checker validates it explicitly. Publication removes the marker from the snapshot, not its authoring source. Other heuristics remain advisory until their usefulness and false positives are reviewed. Do not enable automatic fixes as a gate. Repository-wide agnix now skips candidate packages: `npm run skill:check` runs agnix on an exported copy without the marker, because the parse error otherwise stopped every other check on those packages.
 
 ## Skill Quality Governance
 
@@ -73,18 +73,31 @@ Owner clarification, 2026-11-06: use the shared Promptfoo runner for regressions
 | Effectiveness | Does it trigger correctly and help?        | `eval:trigger`, Promptfoo suites, comparison with a baseline | Evaluation results and people |
 | Efficiency    | What does it cost?                         | `skill:report`, cost and time in evaluation reports          | People                        |
 
-| Activity                     | When                                                       | Blocks a merge                                                                                     |
-| ---------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Static checks                | Each commit and pull request                               | Errors only                                                                                        |
-| Security report              | Third-party skills or skill scripts change; before release | No; high findings need human review                                                                |
-| skills.sh audit              | Each intended published skill version                      | Required for release acceptance; verify external results and record evidence, not a local CI score |
-| Trigger and suite evaluation | After an important skill change, by hand                   | No; judge the results                                                                              |
-| Baseline comparison          | Model upgrade or large skill change, by hand               | No; compare versions                                                                               |
-| AI improvement               | A failure or regression                                    | No automatic merge; candidate changes only, with before and after evaluation                       |
+| Activity                     | When                                                        | Blocks a merge                                                                                     |
+| ---------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Static checks                | Each commit and pull request                                | Errors only                                                                                        |
+| Security report              | Third-party skills or skill scripts change; before release  | No; high findings need human review                                                                |
+| skills.sh audit              | Each intended published skill version                       | Required for release acceptance; verify external results and record evidence, not a local CI score |
+| Trigger and suite evaluation | After an important skill change, by hand                    | No; judge the results                                                                              |
+| Baseline comparison          | Every public/released package PR; model/client/tool changes | Required evidence for owner review; no score automatically merges or blocks a change               |
+| AI improvement               | A failure or regression                                     | No automatic merge; candidate changes only, with before and after evaluation                       |
 
 By stage: `draft` needs the static checks. `internal` adds Promptfoo evaluation. `public` and release add comparison evidence and the security report; release also runs the pinned reference validator.
 
 Never use a quality score as a gate. A score rewards adding rules. Treat growth as a cost: a skill that grows must say what the growth buys.
+
+### Skill maintenance
+
+Adopted by the owner on 2026-11-06 for every authored skill, before and after release. [ADR 0004](../research/harness/adr/0004-versioned-skill-maintenance.md) records the decision and [repository structure](./REPOSITORY-STRUCTURE.md#package-progression) owns source/snapshot placement.
+
+1. **Diagnose.** Record the issue, installed revision, client/model, sanitized reproduction and expected result. Separate instruction defects from installation, configuration, model, tool and resource failures. Fix the owning layer; a new capability may instead start from an explicit goal.
+2. **Revise.** Use a short task branch/worktree. Make one focused change to the authoring source. Consolidate or remove obsolete guidance instead of appending a rule per complaint. Repeated deterministic work may justify a reusable script.
+3. **Compare.** Run shared Promptfoo regressions first. For behavior changes, compare old/new artifacts and traces in clean agent sessions under matched settings; test triggering, nearby cases and held-out examples. Follow the skill's baseline protocol and report variation, quality, time and tokens. Use fresh repeats/tool runs; inspect subjective outputs. Record unavailable comparisons as pending, not passes. Model/client/tool upgrades also warrant reevaluation, including whether the skill still adds value without its old scaffolding. Only the owner changes a baseline.
+4. **Promote deliberately.** Select an explicit source commit and generate the publication snapshot with only declared transformations. Test the actual snapshot, including isolated installation, against the [release checks](./REPOSITORY-STRUCTURE.md#installation-and-release-checks). Authoring merges and evaluation scores cannot publish or approve a version. Keep the previous release stable while the next revision is evaluated.
+5. **Hotfix or recover.** Reproduce against the affected release in an isolated worktree. Patch its recorded authoring source, generate/test the minimal correction, then integrate only that skill's publication and forward-port the fix to ongoing work. Do not import unrelated experiments. If recovery is urgent, restore the last verified package through a reviewable change, not the whole repository. Preserve published history and tags.
+6. **Record and hand off.** Keep tasks in issues and concise evaluation/release evidence in the initiative's evaluation record: source commit, publication digest/ref, checks, matching audit and material compatibility changes. Distinguish published status from the next revision's stage. Explain how installed users update or pin versions; verify CLI syntax rather than assuming it. Close and clean the short branch after integration.
+
+Automation limit: snapshot generation and provenance-aware source/snapshot pairing are not implemented yet. They must be verified before the first snapshot release. Current duplicate-package checks remain intact; do not hand-copy a release and disable the check to clear it. The workflow above is an agent procedure, not a claim that every step is automated.
 
 ### Environments
 

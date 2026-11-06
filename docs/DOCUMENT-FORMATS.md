@@ -55,6 +55,8 @@ Use scaffolds selectively. Preserve necessary historical evidence in its owning 
 
 Use the [incubation stages](./REPOSITORY-STRUCTURE.md#incubation-stages) for current initiative status and explain its basis. At `public`, include copyable candidate installation commands, prerequisites, a first-trial prompt and a feedback route in the README. Research and discussion at `init` or `plan` do not require an installable package.
 
+For published skills, distinguish the current published revision from the next revision's stage and link both source and snapshot. Keep source commit, publication digest/ref, comparisons and matching audit evidence in the evaluation record, not a README history dump.
+
 ## Skill package format
 
 Use the [skill design principles](../knowledge/skill-design/skill-design-principles.md) for behavioral value, freedom, interaction and iteration. This section owns package format and resource boundaries.
@@ -73,7 +75,7 @@ External services and dependencies require explicit setup information. A remote 
 
 ## Skill package README
 
-Each released skill carries `README.md` beside `SKILL.md` (owner requirement, 2026-11-06). Prepare it during incubation so promotion remains a small move. The initiative README introduces development and testing; the package README introduces the installed product to a first-time user.
+Each released skill carries `README.md` beside `SKILL.md` (owner requirement, 2026-11-06). Prepare it in the authoring source so publication remains a minimal export. The initiative README introduces development and testing; the package README introduces the installed product to a first-time user.
 
 Lead with the problem it helps solve, who it is for and the useful outcome. Briefly cover what it can do, important limits or prerequisites, the correct installation command and how to start. When useful, include one short realistic input/example and the expected kind of output; label illustrative output honestly. Keep the tone inviting and concrete, without unsupported claims.
 

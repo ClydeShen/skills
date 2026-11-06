@@ -6,24 +6,24 @@ This file defines the authoritative locations, folder rules, and lifecycle for t
 
 A source of truth owns one kind of fact. Other files link to it or contain an explicitly derived representation.
 
-| Fact                                                     | Authoritative artifact                                                    | Other representations                                                                                                             |
-| -------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| Shared agent operating instructions                      | Root `AGENTS.md`                                                          | `CLAUDE.md` imports it                                                                                                            |
-| Repository structure, ownership and lifecycle            | This file                                                                 | Root README and directory READMEs provide navigation                                                                              |
-| Project document formats                                 | `docs/DOCUMENT-FORMATS.md`                                                | Templates illustrate those formats                                                                                                |
-| Shared vocabulary                                        | Root `GLOSSARY.md`                                                        | Definitions are referenced, not redefined                                                                                         |
-| Evidence and dated findings                              | `research/<category>/<topic>/`                                            | Knowledge cites the research                                                                                                      |
-| Architectural decision history                           | `research/<category>/adr/NNNN-<slug>.md`                                  | Repository docs state current rules and link to the decision                                                                      |
-| Current reusable domain guidance                         | `knowledge/<topic>/`                                                      | Skill instructions adapt the relevant guidance                                                                                    |
-| Initiative stage, active package path and trial status   | `incubator/<initiative>/README.md`                                        | Root README links to it                                                                                                           |
-| Executable skill behavior and runtime resources          | The one active package's `SKILL.md`, `references/`, `scripts/`, `assets/` | No independently maintained candidate/release copies                                                                              |
-| Initiative cases and assertions                          | `incubator/<initiative>/evals/`                                           | `evaluation.md` records runs and interpretation                                                                                   |
-| Shared evaluation implementation                         | Root `evals/`                                                             | npm scripts and CI call it                                                                                                        |
-| Repository checks and client-neutral hook implementation | Root `harness/`                                                           | Client adapters, Git hooks and CI reuse it; `docs/HARNESS.md` explains coverage and activation                                    |
-| Git workflow and session/cleanup instructions            | `docs/HARNESS.md` Git strategy                                            | `AGENTS.md` links the procedure; `harness/git-policy.mjs`, Git hooks and CI enforce observable rules                              |
-| Executable project commands and dependencies             | `package.json` and `package-lock.json`                                    | Agent instructions link to documented commands                                                                                    |
-| Optional stricter `main` protection preset               | `.github/main-protection.json`                                            | GitHub holds actual enforcement state; `docs/HARNESS.md` records the accepted soft policy and any separately requested activation |
-| Imported development-skill provenance                    | `skills-lock.json` and its upstream sources                               | `.agents/skills/` is the canonical installed tree; `.claude/skills/` is a synchronized projection                                 |
+| Fact                                                     | Authoritative artifact                                                             | Other representations                                                                                                             |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Shared agent operating instructions                      | Root `AGENTS.md`                                                                   | `CLAUDE.md` imports it                                                                                                            |
+| Repository structure, ownership and lifecycle            | This file                                                                          | Root README and directory READMEs provide navigation                                                                              |
+| Project document formats                                 | `docs/DOCUMENT-FORMATS.md`                                                         | Templates illustrate those formats                                                                                                |
+| Shared vocabulary                                        | Root `GLOSSARY.md`                                                                 | Definitions are referenced, not redefined                                                                                         |
+| Evidence and dated findings                              | `research/<category>/<topic>/`                                                     | Knowledge cites the research                                                                                                      |
+| Architectural decision history                           | `research/<category>/adr/NNNN-<slug>.md`                                           | Repository docs state current rules and link to the decision                                                                      |
+| Current reusable domain guidance                         | `knowledge/<topic>/`                                                               | Skill instructions adapt the relevant guidance                                                                                    |
+| Initiative stage, active package path and trial status   | `incubator/<initiative>/README.md`                                                 | Root README links to it                                                                                                           |
+| Executable skill behavior and runtime resources          | The incubator authoring package's `SKILL.md`, `references/`, `scripts/`, `assets/` | `skills/` holds verified publication snapshots; never independently edit them                                                     |
+| Initiative cases and assertions                          | `incubator/<initiative>/evals/`                                                    | `evaluation.md` records runs and interpretation                                                                                   |
+| Shared evaluation implementation                         | Root `evals/`                                                                      | npm scripts and CI call it                                                                                                        |
+| Repository checks and client-neutral hook implementation | Root `harness/`                                                                    | Client adapters, Git hooks and CI reuse it; `docs/HARNESS.md` explains coverage and activation                                    |
+| Git workflow and session/cleanup instructions            | `docs/HARNESS.md` Git strategy                                                     | `AGENTS.md` links the procedure; `harness/git-policy.mjs`, Git hooks and CI enforce observable rules                              |
+| Executable project commands and dependencies             | `package.json` and `package-lock.json`                                             | Agent instructions link to documented commands                                                                                    |
+| Optional stricter `main` protection preset               | `.github/main-protection.json`                                                     | GitHub holds actual enforcement state; `docs/HARNESS.md` records the accepted soft policy and any separately requested activation |
+| Imported development-skill provenance                    | `skills-lock.json` and its upstream sources                                        | `.agents/skills/` is the canonical installed tree; `.claude/skills/` is a synchronized projection                                 |
 
 Reusable knowledge explains mechanisms and limits. A package defines installed behavior. These are distinct responsibilities: a runtime instruction must not require the knowledge tree to be installed. The initiative README records which knowledge informed the package.
 
@@ -41,7 +41,7 @@ incubator/<initiative>/candidate/<skill-name>/SKILL.md
 incubator/<initiative>/evals/{README.md,suite.mjs,cases.json,trigger.json}
 incubator/<initiative>/evals/{scenarios,baseline,fixtures}/
 incubator/<initiative>/evaluation.md
-skills/<skill-name>/SKILL.md
+skills/<skill-name>/SKILL.md             # generated, verified publication snapshot
 evals/{run.mjs,lib.mjs,...}
 evals/.local/                         # ignored run artifacts
 harness/                             # shared repository checks and their tests
@@ -76,35 +76,37 @@ The owner defined these stages on 2026-10-29. Record the current stage and its b
 
 Owner rule, 2026-10-30: a skill at `draft` or an earlier stage is very early, so authors may use custom programs and methods to check feasibility and initial effect. Once evaluation cases are built for `internal`, they use the shared Promptfoo runner and no skill-specific evaluation framework. Draft-era methods, such as the Architecture Diagram round-trip, may remain as dated history or temporary diagnostics until the skill settles, then retire; they do not count as `internal` evaluation.
 
-These stages replace the former broad README labels `candidate`, `external-trial` and `released` for current lifecycle reporting. Candidate remains the package-location term for an unreleased skill, not an additional stage. Preserve dated historical evaluation labels in their original context.
+These stages replace the former broad README labels `candidate`, `external-trial` and `released` for current lifecycle reporting. Candidate names the authoring package location, including successors of published skills; it is not an additional stage. Preserve dated historical evaluation labels in their original context.
 
 `public` describes installable test availability, not repository visibility or a formal release. A public-stage candidate can retain `metadata.internal: true` and provide explicit-path installation with `INSTALL_INTERNAL_SKILLS=1`. That CLI marker does not determine lifecycle stage. Record a pause separately from the stage. Update the README when work changes phase; elapsed time or a merged document alone does not advance it.
+
+After release, keep the current published revision/path and the next revision's stage separate in the initiative README. An `internal` successor does not unpublish an existing release. Evaluation targets must identify whether they test authoring content or a publication snapshot.
 
 ### Package progression
 
 1. Create or update the initiative README before introducing a package.
    Once the owner authorizes a specific skill's implementation, start with a minimal standard candidate package. Incubation is experimental maturity, not a script-only format. Keep behavior in `SKILL.md`, loadable guidance in `references/`, and reusable runtime helpers in `scripts/` only when needed. Research-only initiatives may remain without a package. Evaluation generators and delivery history stay outside the package. This clarification was requested by the owner on 2026-10-29.
 2. Keep a new active candidate at `incubator/<initiative>/candidate/<skill-name>/`.
-3. Give every authored skill a unique repository-wide name that does not collide with a locked development tool.
+3. Give every independently authored skill a unique repository-wide name that does not collide with a locked development tool.
 4. Match frontmatter `name` to the package's immediate directory name.
 5. Keep candidate `metadata.internal: true` while using the current skills CLI.
 6. Validate candidate format, package boundaries, references and discovery.
 7. Record trial evidence separately from fixture checks.
-8. On authorized release, move the package into `skills/<skill-name>/`.
-9. Remove the candidate-only internal marker from the released package.
-10. Update the initiative stage, evaluation target, installation instructions and all affected links in the same change.
+8. On authorized release, select an explicit authoring commit and generate a verified snapshot at `skills/<skill-name>/`; retain the authoring source.
+9. Remove the candidate-only internal marker from the snapshot, not the source. Declare and verify any other publication transformation.
+10. Verify the actual snapshot and record its source commit, digest/ref and acceptance evidence in the initiative's evaluation record. Update trial/published status, test targets, installation instructions and affected links together.
 
-Release moves the package; it does not leave another editable source copy. Git history preserves the former candidate. Once released, maintain that skill's active source in `skills/`; use branches/worktrees for revisions rather than a second same-name package. Rename or split packages only through an explicit decision with updated references.
+Owner decision, 2026-11-06: keep one manually maintained authoring source in the incubator throughout the skill's life. `skills/` is its controlled publication surface, not another authoring tree. Source and snapshot correspond at publication, apart from declared transformations; later authoring changes must not alter the published snapshot automatically. This supersedes moving the source at release; [ADR 0004](../research/harness/adr/0004-versioned-skill-maintenance.md) records the trade-off. Follow [skill maintenance](./HARNESS.md#skill-maintenance) for repairs and hotfixes.
 
-Owner clarification, 2026-10-29: candidates and releases follow the same skill design, package format and runtime-boundary practices from the start. Their difference is maturity and publication status, not a separate experimental format. Keep the candidate relocatable: moving its directory to the release location must not require rewriting instructions, changing internal paths, copying in repository dependencies or rebuilding a different distribution. If relocation requires those changes, repair the candidate before promotion.
+Candidates and snapshots use the same package format and runtime boundaries. Publication must not require redesigning instructions, rewriting runtime paths or importing repository dependencies. Keep the package relocatable; verify an isolated copy before promotion. Evaluation and authoring tools stay in the initiative, outside the runtime package.
 
 Prune during incubation, not only at release. Remove superseded scratch files, unused helpers and duplicate current guidance after checking their callers and inbound links. Keep only useful runtime resources in the package; keep evaluation cases, generators and concise design evidence in the initiative. Preserve evidence still needed to explain or reproduce a recorded result. Do not rewrite frozen measurements or keep every abandoned experiment as current guidance; Git history can recover retired tracked material. Update navigation when removing files.
 
-The final migration should therefore be small: move the validated package, remove its candidate-only discovery marker, update repository-side paths and documentation, and verify installation. Add skills CLI discovery configuration only if the chosen layout needs it. Standard `skills/` locations are already discovered; do not create a second hand-maintained skill registry or expose the incubator through a custom discovery path. Category nesting remains subject to the folder contract and an actual discovery check. Verify an isolated copy of the package during incubation so missing runtime dependencies are found before release.
+Only a declared, provenance-verified source/snapshot pair may share a skill name. Never rely on CLI name deduplication to prove that the correct copy is installed. Verify default discovery selects publication content, explicit candidate trials select authoring content, and neither depends on the other at runtime. Do not add a second manually maintained discovery registry. Future category nesting requires matching checks and actual installation evidence.
 
-The initiative workspace remains after release to own its design history, evaluation cases and feedback. Its stage is `release`; its active package path points to `skills/`. Consequently, tests need not move when the package is promoted. The suite must target the active package path and must fail clearly if that target is absent. Do not silently fall back to an old copy.
+Snapshot generation and pairing validation are prerequisites, not currently available commands. Until they exist and are verified, keep the current uniqueness checker intact and treat snapshot publication as blocked rather than manually adding an unchecked duplicate. No existing package is moved or published by this policy change.
 
-The initiative README owns lifecycle and trial status. Do not add a hand-maintained second catalog or status manifest. Package frontmatter owns package metadata. Installation listings are derived from package discovery, not manually curated in another index.
+The initiative retains source ownership, cases and feedback after release. Tests select the intended source or snapshot explicitly and fail if it is absent; do not silently fall back. The initiative README owns lifecycle/trial status, its evaluation record owns verification/release evidence, and package frontmatter owns package metadata.
 
 ## Installed development tools
 
@@ -125,11 +127,12 @@ The documented public install command is `npx skills add ClydeShen/skills --skil
 Before release, verify these independent properties:
 
 - Format compatibility with a pinned reference validator.
-- Filesystem inventory: no duplicate authored names or shadowing container files.
+- Filesystem inventory: no independent duplicate sources or shadowing container files; declared snapshots require source/provenance validation.
+- Reproducible snapshot generation from the selected source commit, with a verified digest and only declared transformations.
 - Package-local runtime resources and valid relative references, including case-sensitive paths.
 - Actual default repository discovery lists exactly the intended released packages.
 - Explicit candidate discovery lists the requested candidate only.
-- Installation from a clean temporary checkout into an isolated client workspace includes required resources.
+- Installation of the actual publication snapshot from a clean temporary checkout into an isolated client workspace includes required resources and does not select its incubator source instead.
 - Relevant behavioral evidence is recorded; fixture success alone is not skill effectiveness.
 - Each released package has its own `README.md` for first-time users, following [the package README contract](./DOCUMENT-FORMATS.md#skill-package-readme).
 - The intended published version has passed skills.sh audit. Record the audit URL, check date, repository revision or package digest, partner verdicts and any resolved findings in the initiative evaluation/release evidence. Local scanners and format validators do not substitute for this external audit.

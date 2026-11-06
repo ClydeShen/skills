@@ -6,6 +6,8 @@ status: accepted
 
 Date: 2026-10-25. Decision authority: agent decision under the owner's explicit request to research and determine the repository's SOT, folder and format system. This records the selected plan; automated enforcement and migration tasks are not claimed complete.
 
+Partially superseded on 2026-11-06 by [ADR 0004](./0004-versioned-skill-maintenance.md): the single-source principle remains, but publication retains the incubator authoring source and generates a verified snapshot instead of moving the source. The text below records the original decision.
+
 The repository contains evidence, reusable knowledge, concrete initiatives, installable packages and development tools. Codex and Claude must maintain the same durable model. Duplicate client instructions and copied runtime packages create drift; skills CLI discovery alone can hide duplicate names or expose development dependencies.
 
 ## Decision
