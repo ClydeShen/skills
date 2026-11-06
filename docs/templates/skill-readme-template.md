@@ -12,7 +12,7 @@
 
 ## What happens next
 
-<Optional: show the expected deliverable or a small usage/feedback diagram when it makes the interaction clearer. Explain the user's experience, not package internals or the repository's incubation stages. Do not add a graphic solely as decoration.>
+<Optional: show the expected deliverable. Include a diagram only for a meaningful relationship the example and prose cannot explain as clearly; omit obvious describe/generate/review chains and repeated visuals. Explain the user's experience, not package internals or the repository's incubation stages.>
 
 ## Before you use it
 

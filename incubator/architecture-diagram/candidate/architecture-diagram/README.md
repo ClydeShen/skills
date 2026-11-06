@@ -12,16 +12,7 @@ Give your agent the description and start with an **editable draw.io diagram** y
 
 [Try it with a flow you already know →](#try-the-preview)
 
-## From a description to a discussion
-
-```mermaid
-flowchart LR
-    accTitle: From a system description to an editable diagram
-    accDescr: Describe your system, generate an editable diagram and review it in draw.io. Feedback returns to diagram refinement.
-    brief["Describe your system"] --> diagram["Generate an editable diagram"]
-    diagram --> review["Open it in draw.io"]
-    review -->|"Refine with feedback"| diagram
-```
+## Start with a flow you know
 
 Try a prompt like this:
 
