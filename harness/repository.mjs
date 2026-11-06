@@ -235,6 +235,11 @@ export function checkRepository(root, files = repositoryFiles(root)) {
   for (const pkg of packages) {
     if (names.has(pkg.name)) error(pkg.file, `duplicate authored name ${pkg.name}; also at ${names.get(pkg.name)}`);
     names.set(pkg.name, pkg.file);
+    if (pkg.directory.startsWith('skills/')) {
+      const introduction = `${pkg.directory}/README.md`;
+      if (!files.includes(introduction) || !read(introduction).trim())
+        error(pkg.file, 'released skill requires its own nonempty first-use README.md');
+    }
     if (pkg.directory.startsWith('incubator/')) {
       const initiative = pkg.directory.split('/').slice(0, 2).join('/');
       for (const required of [

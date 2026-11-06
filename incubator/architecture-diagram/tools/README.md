@@ -7,10 +7,10 @@ Repository-side validation and browser rendering for development fixtures. These
 ```sh
 node --test incubator/architecture-diagram/evals/checks.test.mjs
 npm run eval -- --suite incubator/architecture-diagram/evals/suite.mjs
-node incubator/architecture-diagram/tools/validate.mjs incubator/architecture-diagram/prototype/scenario-01.drawio
+node incubator/architecture-diagram/tools/validate.mjs incubator/architecture-diagram/evals/fixtures/scenario-01.drawio
 ```
 
-The validator checks uncompressed XML, catalog references and declared route geometry. The suite is synthetic clarification replay; neither establishes model quality. Behavioral evaluation uses the [round-trip protocol](https://github.com/ClydeShen/skills/blob/facc1f1/incubator/architecture-diagram/evals/roundtrip.md); measured results belong in the [evaluation record](../evaluation.md).
+The repository validator checks legacy fixtures using the active package catalog. For new outputs, use the package's finalize, text, layout, step and render scripts in [SKILL.md](../candidate/architecture-diagram/SKILL.md#check-the-file). The suite above is synthetic clarification replay; neither establishes model quality. Behavioral changes use the [baseline comparison](../evals/baseline/README.md); measured status belongs in the [evaluation record](../evaluation.md).
 
 ## Render locally
 
@@ -27,7 +27,6 @@ Use the package's [lookup and regeneration instructions](../candidate/architectu
 ```sh
 node incubator/architecture-diagram/tools/build-vendor-icons.mjs --check-latest
 node incubator/architecture-diagram/tools/build-vendor-icons.mjs
-node incubator/architecture-diagram/evals/icon-coverage-2026-11-02/generate.mjs
 ```
 
 The curated list in the builder decides which icons ship. theSVG variant names are not consistent (Mastra's `light` is white artwork), so AI entries name their variant explicitly after a visual check. `trim-viewbox.mjs` tightens only the `viewBox` of marks drawn in a square canvas with wide transparent margins; artwork paths and colours stay unchanged.

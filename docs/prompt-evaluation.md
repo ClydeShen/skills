@@ -56,7 +56,15 @@ npm run eval:model
 
 The endpoint must support Chat Completions. Use a local service or an explicitly authorized remote service. Remote runs send cases and prompts and may incur charges. Missing configuration produces an error; the runner does not silently use other host credentials. This project neither installs models nor starts a local model server.
 
-Variables come from `.env.evaluation` or the host environment, avoiding OS-specific assignments in npm commands. Existing environment variables take precedence. Evaluation disables Promptfoo telemetry, update checks, caching and result sharing; the local runner writes reports.
+Variables come from `.env.evaluation` or the host environment. Existing environment variables take precedence. Evaluation disables telemetry, update checks and result sharing; the local runner writes reports.
+
+### Regression cost and caching
+
+Run deterministic checks and targeted Promptfoo regressions before requesting another full agent generation. For single-run model suites whose complete input is in the prompt, the runner enables Promptfoo response caching by default. Identical provider settings and prompts can reuse responses; changed prompt content is evaluated again. Reports record the requested/effective cache mode and each response's cache status. Use `--cache off` for a fresh measurement.
+
+Fixture runs, `--repeat` greater than one and suites that supply providers (including agents and image/tool suites) always bypass response caching. A cached answer cannot recreate generated files or count as an independent sample. Cache reuse does not establish a new live pass, and cached latency/cost is not fresh execution performance. Keep model/agent changes separate from prompt changes when comparing a baseline.
+
+Clean scenario evaluation is agent-neutral: isolate the selected client's settings, memory and global skills, provide only the package and scenario, and give the reviewer only the scenario and outputs. Existing trigger checks have the isolation limits described below; they are not yet the clean scenario runner in the handoff. The historical Architecture Diagram baseline used Claude Code.
 
 ## Image judge
 

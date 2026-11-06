@@ -71,6 +71,14 @@ Use `references/` for runtime explanations, `scripts/` for reusable executable w
 
 External services and dependencies require explicit setup information. A remote URL may be a research source or service endpoint; it is not a substitute for a missing package-local file. Runtime package dependencies must not point into the repository's authoring directories.
 
+## Skill package README
+
+Each released skill carries `README.md` beside `SKILL.md` (owner requirement, 2026-11-06). Prepare it during incubation so promotion remains a small move. The initiative README introduces development and testing; the package README introduces the installed product to a first-time user.
+
+Lead with the problem it helps solve, who it is for and the useful outcome. Briefly cover what it can do, important limits or prerequisites, the correct installation command and how to start. When useful, include one short realistic input/example and the expected kind of output; label illustrative output honestly. Keep the tone inviting and concrete, without unsupported claims.
+
+Use [the package README scaffold](./templates/skill-readme-template.md) selectively. Keep examples concise, links package-local where needed, and installation instructions appropriate to candidate or release status. Do not copy runtime instructions, evaluation logs, internal task history or an initiative's folder inventory into it. Do not advertise a public release before the [release checks](./REPOSITORY-STRUCTURE.md#installation-and-release-checks), including skills.sh audit, are complete.
+
 ## Evaluation result semantics
 
 Use `fixture`, `transport`, `model` or `host-integration` to describe what was actually checked. Distinguish author self-review from independent review. Keep unresolved or unexecuted outcomes unknown.

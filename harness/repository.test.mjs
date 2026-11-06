@@ -53,6 +53,19 @@ test('valid isolated repository fixture passes without a network or model', (t) 
   assert.deepEqual(fixture(t).check().errors, []);
 });
 
+test('a released skill requires its own nonempty README, not only an initiative introduction', (t) => {
+  const published = skill.replace('name: example', 'name: published').replace('metadata:\n  internal: true\n', '');
+  const missing = fixture(t, { 'skills/published/SKILL.md': published });
+  assert.ok(missing.check().errors.some((e) => e.includes('first-use README')));
+  const empty = fixture(t, { 'skills/published/SKILL.md': published, 'skills/published/README.md': '\n' });
+  assert.ok(empty.check().errors.some((e) => e.includes('first-use README')));
+  const complete = fixture(t, {
+    'skills/published/SKILL.md': published,
+    'skills/published/README.md': '# Published\n\nHelp users complete a concrete task.\n',
+  });
+  assert.deepEqual(complete.check().errors, []);
+});
+
 test('main protection preset matches the CI matrix, pins Actions and leaves advisory lint optional', () => {
   const workflow = parseYaml(
     readFileSync(path.join(repositoryRoot, '.github/workflows/prompt-evaluation.yml'), 'utf8'),

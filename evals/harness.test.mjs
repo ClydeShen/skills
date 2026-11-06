@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { createSuite } from '../incubator/meta-thinking/evals/suite.mjs';
 import {
+  evaluationCache,
   gradeDecision,
   modelProvider,
   nvidiaApiBaseUrl,
@@ -90,10 +91,21 @@ test('portable options accept suite paths with spaces and reject unknown flags',
   assert.throws(() => parseArgs(['--repeat', 'many']));
   assert.throws(() => parseArgs(['--typo', 'value']));
   assert.throws(() => parseArgs(['--mode']));
+  assert.equal(parseArgs([]).cache, 'auto');
+  assert.equal(parseArgs(['--cache', 'off']).cache, 'off');
+  assert.throws(() => parseArgs(['--cache', 'on']));
   assert.equal(parseArgs(['--provider', 'nvidia']).provider, 'nvidia');
   assert.equal(parseArgs(['--case', 'C6']).case, 'C6');
   assert.throws(() => parseArgs(['--provider', 'unknown']));
   assert.equal(JSON.parse(renderPrompt('', { conversation: 'line 1\nline 2' }))[1].content, 'line 1\nline 2');
+});
+
+test('regression caching saves prompt calls without replacing independent samples or tool execution', () => {
+  const options = { mode: 'model', repeat: 1, cache: 'auto', suiteProviders: false };
+  assert.equal(evaluationCache(options), true);
+  for (const override of [{ mode: 'fixture' }, { repeat: 2 }, { cache: 'off' }, { suiteProviders: true }]) {
+    assert.equal(evaluationCache({ ...options, ...override }), false);
+  }
 });
 
 test('NVIDIA preset uses only its key at the fixed endpoint and records explicit model parameters', () => {
