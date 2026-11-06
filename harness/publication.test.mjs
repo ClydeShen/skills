@@ -23,7 +23,9 @@ const git = (root, ...args) => execFileSync('git', args, { cwd: root, encoding: 
 
 function fixture(t, extras = {}) {
   const root = mkdtempSync(path.join(os.tmpdir(), 'skill-publication-'));
+  const staging = mkdtempSync(path.join(os.tmpdir(), 'skill-stage-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => rmSync(staging, { recursive: true, force: true }));
   for (const [file, content] of Object.entries({
     '.gitignore': 'evals/.local/\n',
     [`${source}/SKILL.md`]: skill,
@@ -51,7 +53,7 @@ function fixture(t, extras = {}) {
     'fixture',
   );
   const commit = git(root, 'rev-parse', 'HEAD');
-  return { root, commit, stage: (name) => path.join(root, 'evals/.local/publication', name) };
+  return { root, commit, stage: (name) => path.join(staging, name, 'example') };
 }
 
 test('publication is reproducible from committed source and never exports working edits', (t) => {
@@ -100,6 +102,14 @@ test('publication verification detects changed, extra, missing and forged conten
 test('staging refuses stable paths, overwrites, ambiguous names and missing first-use files', (t) => {
   const f = fixture(t);
   assert.throws(() => stageSnapshot(f.root, 'example', f.commit, path.join(f.root, 'skills/example')), /Stage only/);
+  assert.throws(
+    () => stageSnapshot(f.root, 'example', f.commit, path.join(path.dirname(f.stage('one')), 'wrong-name')),
+    /directory name/,
+  );
+  assert.throws(
+    () => stageSnapshot(f.root, 'example', f.commit, path.join(f.root, 'evals/.local/publication/example')),
+    /outside the repository/,
+  );
   stageSnapshot(f.root, 'example', f.commit, f.stage('one'));
   assert.throws(() => stageSnapshot(f.root, 'example', f.commit, f.stage('one')), /already exists/);
   assert.throws(() => snapshotAtRef(f.root, '../example', f.commit), /skill name/);

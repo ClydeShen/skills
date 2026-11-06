@@ -20,10 +20,7 @@ const THESVG = [
   ['Google Cloud', 'Google Cloud', 'google-cloud', { variant: 'default' }],
   ['Kubernetes', 'Kubernetes', 'kubernetes'],
   ['Kubernetes', 'Helm', 'helm'],
-  ['OpenShift', 'Red Hat OpenShift', 'openshift'],
   ['Docker', 'Docker', 'docker'],
-  ['Terraform', 'Terraform', 'terraform'],
-  ['Ansible', 'Ansible', 'ansible'],
   ['Argo CD', 'Argo CD', 'argocd'],
   ['Argo CD', 'Argo', 'argo'],
   ['GitHub', 'GitHub', 'github'],
@@ -39,18 +36,8 @@ const THESVG = [
   ['MuleSoft', 'MuleSoft', 'mulesoft', { wordmark: true }],
   ['Kong', 'Kong', 'kong'],
   ['Kafka', 'Apache Kafka', 'apache-kafka'],
-  ['Confluent', 'Confluent', 'confluent', { wordmark: true }],
-  ['HashiCorp', 'HashiCorp', 'hashicorp'],
-  ['HashiCorp', 'Vault', 'vault'],
-  ['HashiCorp', 'Consul', 'consul'],
-  ['HashiCorp', 'Nomad', 'nomad'],
-  ['HashiCorp', 'Packer', 'packer'],
-  ['HashiCorp', 'Vagrant', 'vagrant'],
-  ['HashiCorp', 'Waypoint', 'waypoint'],
   ['Splunk', 'Splunk', 'splunk', { trim: true, wordmark: true }],
   ['Dynatrace', 'Dynatrace', 'dynatrace'],
-  ['Grafana', 'Grafana', 'grafana'],
-  ['Grafana', 'Grafana Loki', 'grafana-loki'],
   ['Grafana', 'Prometheus', 'prometheus'],
   ['Cloudflare', 'Cloudflare', 'cloudflare'],
   ['Cloudflare', 'Cloudflare Workers', 'cloudflare-workers'],
@@ -63,8 +50,6 @@ const THESVG = [
   ['Anthropic', 'Claude', 'claude', { variant: 'default' }],
   ['Anthropic', 'Claude Code', 'claude-code', { variant: 'default' }],
   ['Google', 'Gemini', 'gemini', { variant: 'default' }],
-  ['Microsoft', 'Microsoft Copilot', 'microsoft-copilot', { variant: 'default' }],
-  ['Microsoft', 'Microsoft 365 Copilot', 'microsoft-365-copilot', { variant: 'default' }],
   ['NVIDIA', 'NVIDIA', 'nvidia', { variant: 'light' }],
   ['Hugging Face', 'Hugging Face', 'hugging-face', { variant: 'default' }],
   ['LangChain', 'LangChain', 'langchain', { variant: 'default' }],
@@ -103,38 +88,6 @@ const GITHUB = [
     '2623c710868d832b6d5119f38e22d82adb3de66b',
     'src/google/adk/cli/browser/assets/ADK-512-color.svg',
     'Apache-2.0',
-  ],
-  [
-    'Microsoft',
-    'AutoGen',
-    'microsoft/autogen',
-    '4a3634d6da6365ca4e774d4d7be61f863a5f360d',
-    'python/docs/src/_static/images/logo/logo.svg',
-    'CC-BY-4.0',
-  ],
-  [
-    'Microsoft',
-    'Semantic Kernel',
-    'microsoft/semantic-kernel',
-    '1e6039769ed4d9648b4598a13b1962402203574b',
-    'dotnet/nuget/icon.png',
-    'MIT',
-  ],
-  [
-    'Microsoft',
-    'Microsoft Agent Framework',
-    'microsoft/agent-framework',
-    'e7c7f7477a1f28b8fd2caa01e7c869cb87f6f4e8',
-    'dotnet/nuget/icon.png',
-    'MIT',
-  ],
-  [
-    'Weaviate',
-    'Weaviate',
-    'weaviate/weaviate-io',
-    '4e8c78603d34561a5e3bc311d9a560109e0523bd',
-    'static/img/site/weaviate-logo-icon.svg',
-    'Trademark of Weaviate; repository has no licence',
   ],
 ];
 // Microsoft Fabric: workload marks are *_48_color, items are *_64_item.
@@ -274,6 +227,17 @@ function write(icons) {
   );
 }
 
+async function writeLicenses(root) {
+  const directory = fileURLToPath(new URL('../candidate/architecture-diagram/assets/licenses/', import.meta.url));
+  mkdirSync(directory, { recursive: true });
+  writeFileSync(path.join(directory, 'thesvg-MIT.txt'), readFileSync(path.join(root, 'thesvg/package/LICENSE')));
+  for (const [repo, commit, name] of [
+    ['a2aproject/A2A', '6fd5c389147b0095fd718d51d0a68dfa52bff698', 'a2a-Apache-2.0.txt'],
+    ['google/adk-python', '2623c710868d832b6d5119f38e22d82adb3de66b', 'adk-Apache-2.0.txt'],
+  ])
+    writeFileSync(path.join(directory, name), await githubFile(root, repo, commit, 'LICENSE'));
+}
+
 function checkLatest() {
   let stale = 0;
   for (const [name, { version }] of Object.entries(SOURCES)) {
@@ -293,6 +257,7 @@ if (process.argv[1] && realpathSync(process.argv[1]) === realpathSync(fileURLToP
     try {
       const icons = await buildVendorIcons(root);
       write(icons);
+      await writeLicenses(root);
       console.log(`${icons.entries.length} vendor icons written to ${path.relative(process.cwd(), OUTPUT)}.`);
     } finally {
       if (fetched) rmSync(root, { recursive: true, force: true });

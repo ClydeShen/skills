@@ -6,7 +6,7 @@ Conclusion: **no blanket MIT declaration**. [official] The SVG supplier separate
 
 ## Inventory and coverage
 
-[measured] The inspected [vendor catalog](../../../incubator/architecture-diagram/candidate/architecture-diagram/assets/vendor-icons.json) contains 94 entries: 21 labelled MIT, 39 CC0-1.0, 22 Fabric restricted-use, three Apache-2.0, one CC-BY-SA-3.0, one CC-BY-4.0 and seven with brand-use/fair-use/trademark/no-license descriptions. These counts describe supplier metadata, not independent clearance. VMware and Splunk have `viewBoxTrimmed: true`; other entries have no recorded artwork modification.
+[measured] Before the authorized rights-filtering change, the inspected [vendor catalog](../../../incubator/architecture-diagram/candidate/architecture-diagram/assets/vendor-icons.json) contained 94 entries: 21 labelled MIT, 39 CC0-1.0, 22 Fabric restricted-use, three Apache-2.0, one CC-BY-SA-3.0, one CC-BY-4.0 and seven with brand-use/fair-use/trademark/no-license descriptions. These counts describe that historical supplier inventory, not independent clearance or the eventual release inventory. VMware and Splunk had `viewBoxTrimmed: true`; other entries had no recorded artwork modification.
 
 The source families are `@thesvg/icons@4.0.0`, `@fabric-msft/svg-icons@11.1.0`, and six pinned repositories: A2A, Google ADK, AutoGen, Semantic Kernel, Microsoft Agent Framework and Weaviate's website. Package/source licenses and relevant primary policies were inspected below. Every supplier-labelled MIT/CC0 logo's original grant and current brand policy were **not** independently established. In particular, supplier metadata and a brand owner's policy can differ.
 
@@ -40,11 +40,45 @@ The draw.io catalog primarily identifies library styles and paths; it is not thi
 
 [inference] Restricting or excluding uncertain artwork is a product change, not a license-text substitution. It may be the simplest first-release treatment, but must preserve honest coverage claims and pass the relevant regression review. No artwork or runtime behavior was changed by this research.
 
+## Conservative first-release selection
+
+Follow-up owner direction on 2026-11-06: exclude unclear-rights icons from the authoring candidate, use the existing plain-box fallback and retain proven permitted artwork with notices. The following 19 original IDs have an identified conflicting or insufficient permission basis and form a **minimum exclusion set**, not a clearance claim for the remaining entries:
+
+```text
+thesvg-openshift
+thesvg-ansible
+thesvg-terraform
+thesvg-hashicorp
+thesvg-vault
+thesvg-consul
+thesvg-nomad
+thesvg-packer
+thesvg-vagrant
+thesvg-waypoint
+thesvg-confluent
+thesvg-grafana
+thesvg-grafana-loki
+thesvg-microsoft-copilot
+thesvg-microsoft-365-copilot
+github-autogen-logo
+github-semantic-kernel-icon
+github-agent-framework-icon
+github-weaviate-io-weaviate-logo-icon
+```
+
+This includes supplier-labelled CC0 HashiCorp graphics and Ansible/Grafana, because a permissive supplier label does not settle the respective owner's graphic-mark rules. The list includes all seven original nonstandard-license entries; Waypoint overlaps the HashiCorp group. A conservative retained set needs positive evidence, not merely absence from this list.
+
+Specific architecture grants are established for the official Fabric and Azure collections. Match exact retained artwork to those sources and preserve their permitted-use conditions. The existing `thesvg-microsoft-azure` bytes were not matched against an official Azure download in this review; the specific collection grant must not be silently applied to an unrelated logo copy.
+
+For `thesvg-google-cloud`, [Google's icon page](https://cloud.google.com/icons) supplies product icons for diagrams and documentation, but this is not an explicit blanket grant for the provider's brand logo. Its linked [2026 product guide](https://services.google.com/fh/files/misc/google-cloud-product-icons.pdf) describes core/category product icons rather than the provider mark. Official [press assets](https://www.googlecloudpresscorner.com/assets-and-events) offer a Google Cloud logo download without an express redistribution license on the inspected page. An exact source/permission basis for this bundled provider mark remains unverified. Keeping AWS/Azure/GCP visual standards does not justify inventing that permission; resolve the exact mark or record a release blocker.
+
+Notice verification: the SVG supplier's exact copyright is `Copyright (c) 2025 thesvg.org`. The two pinned Microsoft MIT texts state `Copyright (c) Microsoft Corporation.` A2A and ADK root Apache texts contain the standard unfilled appendix `Copyright [yyyy] [name of copyright owner]`, not an observed asset-specific year/holder. Their pinned SVG headers have no copyright statement; root `NOTICE` paths returned 404. Preserve full license texts, source identities and actual notices; do not manufacture a Google copyright year. The A2A README identifies the project as Google LLC's; ADK confirms Apache-2.0 project licensing. Neither observation alone settles graphic-mark use. Kafka's Apache label was inspected in supplier metadata, not independently matched to its original artwork grant.
+
 ## Not verified and owner decisions
 
 Not verified: exact upstream rights for every supplier-labelled MIT/CC0 icon; permission for the identified reserved marks; whether any given fair-use exception applies in the intended jurisdictions; legal derivative-versus-collection treatment; compliance of standalone generated images; viewer dependency clearance. The observations above are not an infringement finding or a legal certification.
 
-The owner already approved MIT for original content. Remaining decisions concern resolving uncertain marks through permission/qualified review versus excluding/replacing them, and how required attribution accompanies generated deliverables. These decisions cannot be replaced by an agent asserting that a generic disclaimer cures all rights.
+The owner approved MIT for original content and conservative removal of unclear-rights artwork. Remaining work is to verify a positive retained set and how required attribution accompanies generated deliverables. Unresolved exact-mark permissions, including provider boundaries, cannot be replaced by an agent asserting that a generic disclaimer cures all rights.
 
 Confidence: high that the blanket-MIT/notice-only approach is insufficient, 3.5/4 (owner direction 1, primary evidence 1, reasoning 1, local execution history 0.5). Completeness of asset-by-asset legal clearance remains unverified.
 
@@ -62,3 +96,4 @@ Confidence: high that the blanket-MIT/notice-only approach is insufficient, 3.5/
 - S10: [HashiCorp trademark policy](https://www.hashicorp.com/en/trademark-policy).
 - S11: [Grafana trademark policy](https://grafana.com/trademark-policy/).
 - S12: [Azure architecture icon terms](https://learn.microsoft.com/en-us/azure/architecture/icons/).
+- Follow-up sources: [Google product icon library](https://cloud.google.com/icons), [2026 product guide](https://services.google.com/fh/files/misc/google-cloud-product-icons.pdf), [official product/brand resource routing](https://about.google/brand-resource-center/products-and-services/), [Google Cloud press assets](https://www.googlecloudpresscorner.com/assets-and-events), [Google general brand guidance](https://about.google/brand-resource-center/guidance/) and [books/media guidance](https://about.google/brand-resource-center/guidance/media/). These pages distinguish permitted contexts and attribution; they do not establish a broad license for arbitrary logo redistribution in software.

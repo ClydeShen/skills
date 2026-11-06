@@ -1,6 +1,17 @@
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { chmodSync, existsSync, lstatSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  chmodSync,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  realpathSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
@@ -13,6 +24,16 @@ const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const git = (repository, args, encoding = 'utf8') =>
   execFileSync('git', args, { cwd: repository, encoding, maxBuffer: 32 * 1024 * 1024 });
 const validName = (name) => typeof name === 'string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name);
+
+// macOS may expose the system temporary directory through /var or /tmp aliases.
+// Canonicalize only that trusted base; user-created symlinks below it still fail.
+function temporaryPath(directory) {
+  const absolute = path.resolve(directory);
+  const relative = path.relative(path.resolve(tmpdir()), absolute);
+  if (relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative))
+    return path.resolve(realpathSync(tmpdir()), relative);
+  return absolute;
+}
 
 function assertNoSymlinks(directory) {
   let current = path.resolve(directory);
@@ -87,6 +108,7 @@ export function snapshotAtRef(repository, skill, ref) {
 }
 
 function readSnapshot(directory) {
+  directory = temporaryPath(directory);
   assertNoSymlinks(directory);
   if (!lstatSync(directory).isDirectory()) throw new Error('Snapshot must be a directory.');
   const files = new Map();
@@ -111,6 +133,8 @@ export function verifySnapshot(repository, directory, expectedSource) {
   const manifest = JSON.parse(actual.get(manifestName)?.toString('utf8') ?? 'null');
   if (!manifest || !validName(manifest.skill) || !/^[a-f0-9]{40}$/.test(manifest.source?.commit ?? ''))
     throw new Error('Snapshot requires an explicit immutable source manifest.');
+  if (path.basename(path.resolve(directory)) !== manifest.skill)
+    throw new Error('Snapshot directory name must match the skill.');
   const expected = snapshotAtRef(repository, manifest.skill, manifest.source.commit);
   if (
     !isDeepStrictEqual(manifest, expected.manifest) ||
@@ -128,10 +152,23 @@ export function verifySnapshot(repository, directory, expectedSource) {
 }
 
 export function stageSnapshot(repository, skill, ref, destination) {
-  const target = path.resolve(destination);
-  const relative = path.relative(path.resolve(repository, 'evals/.local/publication'), target);
-  if (!relative || relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative))
-    throw new Error('Stage only below evals/.local/publication; never write the stable tree.');
+  const target = temporaryPath(destination);
+  const relative = path.relative(realpathSync(tmpdir()), target);
+  const repositoryRelative = path.relative(temporaryPath(repository), target);
+  const inRepository =
+    !path.isAbsolute(repositoryRelative) &&
+    repositoryRelative !== '..' &&
+    !repositoryRelative.startsWith(`..${path.sep}`);
+  if (
+    !relative ||
+    relative.split(path.sep).length < 2 ||
+    relative === '..' ||
+    relative.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(relative) ||
+    inRepository
+  )
+    throw new Error('Stage only in an isolated temporary directory outside the repository.');
+  if (path.basename(target) !== skill) throw new Error('Stage directory name must match the skill.');
   assertNoSymlinks(target);
   if (existsSync(target)) throw new Error('Stage destination already exists; do not overwrite it.');
   const snapshot = snapshotAtRef(repository, skill, ref);
@@ -151,16 +188,28 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   try {
     const [operation, ...args] = process.argv.slice(2);
     let manifest;
-    if (operation === 'stage' && args.length === 3)
-      manifest = stageSnapshot(root, args[0], args[1], path.resolve(root, args[2]));
-    else if (operation === 'verify' && args.length === 1) manifest = verifySnapshot(root, path.resolve(root, args[0]));
+    let directory;
+    if (operation === 'stage' && [2, 3].includes(args.length)) {
+      directory = args[2]
+        ? temporaryPath(args[2])
+        : path.join(mkdtempSync(path.join(realpathSync(tmpdir()), 'skill-publication-')), args[0]);
+      manifest = stageSnapshot(root, args[0], args[1], directory);
+    } else if (operation === 'verify' && args.length === 1)
+      manifest = verifySnapshot(root, path.resolve(root, args[0]));
     else
       throw new Error(
-        'Usage: npm run skill:publication -- stage <skill> <source-ref> <staging-directory> | verify <snapshot-directory>',
+        'Usage: npm run skill:publication -- stage <skill> <source-ref> [external-temporary-directory] | verify <snapshot-directory>',
       );
     console.log(
       JSON.stringify(
-        { ...manifest, acceptance: 'Not evaluated: provenance verification is not release approval.' },
+        {
+          skill: manifest.skill,
+          directory: directory ?? path.resolve(args[0]),
+          source: manifest.source,
+          digest: manifest.digest,
+          file_count: manifest.files.length,
+          acceptance: 'Not evaluated: provenance verification is not release approval.',
+        },
         null,
         2,
       ),
