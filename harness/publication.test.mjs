@@ -14,8 +14,25 @@ import {
 import os from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
+import { parse as parseYaml } from 'yaml';
 import { snapshotAtRef, stageSnapshot, verifySnapshot } from './publication.mjs';
 import { checkRepository, repositoryFiles } from './repository.mjs';
+
+test('CI retains source history for provenance and scans instruction/resource-only package changes', () => {
+  const workflow = parseYaml(
+    readFileSync(new URL('../.github/workflows/prompt-evaluation.yml', import.meta.url), 'utf8'),
+  );
+  const checkout = workflow.jobs['local-evaluation'].steps.find((step) => step.uses?.startsWith('actions/checkout@'));
+  assert.equal(checkout.with['fetch-depth'], 0);
+  const security = parseYaml(readFileSync(new URL('../.github/workflows/skill-security.yml', import.meta.url), 'utf8'));
+  assert.ok(security.on.pull_request.paths.includes('incubator/*/candidate/**'));
+  assert.ok(security.on.pull_request.paths.includes('skills/**'));
+  assert.equal(
+    security.jobs.scan['continue-on-error'],
+    true,
+    'Coverage expansion does not silently make a scanner verdict approval.',
+  );
+});
 
 const source = 'incubator/example/candidate/example';
 const skill = '---\nname: example\ndescription: A concrete task.\nmetadata:\n  internal: true\n---\n\n# Example\n';

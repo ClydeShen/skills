@@ -1,14 +1,14 @@
 name: Skill security report
 
-# Runs when third-party skills or executable skill files change. Findings need human review:
+# Runs when third-party or authored skill content changes. Findings need human review:
 # the scanner is best effort, so a clean result is not proof of safety and a finding is not a verdict.
 on:
   pull_request:
     paths:
       - skills-lock.json
       - .agents/skills/**
-      - incubator/*/candidate/*/scripts/**
-      - skills/*/scripts/**
+      - incubator/*/candidate/**
+      - skills/**
       - harness/skill-security*
       - .github/workflows/skill-security.yml
   workflow_dispatch:
