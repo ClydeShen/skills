@@ -4,13 +4,14 @@ The target is draw.io **v32.6.1**, upstream commit `84487b4891cbc0f32d7e30f34cf8
 
 ## Exact icon lookup
 
-The package carries two icon sources. The draw.io [catalog](../assets/catalog.json) holds palette titles, style strings and IDs for AWS, Azure, Google Cloud and Kubernetes; draw.io draws that artwork itself. The [vendor icons](../assets/vendor-icons.json) hold unmodified upstream SVG or PNG artwork, with source, pinned version or commit, licence and SHA-256, for vendors draw.io lacks: platform tools such as Docker, Terraform, GitHub, Microsoft Fabric, Kafka, HashiCorp and Cloudflare, and AI providers and tooling such as OpenAI, Anthropic, Gemini, Microsoft Copilot, NVIDIA, LangChain, MCP and A2A. AWS Bedrock, Azure AI and Microsoft Foundry, and Vertex AI come from the draw.io catalog. Run `--list` for the full set. Do not load either file into the conversation. Query both with [find-icon.mjs](../scripts/find-icon.mjs), from the installed package directory:
+The package carries two icon sources. The draw.io [catalog](../assets/catalog.json) holds palette titles, style strings and IDs for AWS, Azure, Google Cloud and Kubernetes; draw.io draws that artwork itself. The [vendor icons](../assets/vendor-icons.json) hold unmodified upstream SVG or PNG artwork, with source, pinned version or commit, licence and SHA-256, for identities the catalog lacks: Azure and Google Cloud provider marks, platform tools such as Docker, Terraform, GitHub, Microsoft Fabric, Kafka, HashiCorp and Cloudflare, and AI providers and tooling such as OpenAI, Anthropic, Gemini, Microsoft Copilot, NVIDIA, LangChain, MCP and A2A. AWS Bedrock, Azure AI and Microsoft Foundry, and Vertex AI come from the draw.io catalog. Run `--list` for the full set. Do not load either file into the conversation. Query both with [find-icon.mjs](../scripts/find-icon.mjs), from the installed package directory:
 
 ```text
 node scripts/find-icon.mjs --list
 node scripts/find-icon.mjs --vendor HashiCorp --list
 node scripts/find-icon.mjs --vendor AWS --title "Lambda"
 node scripts/find-icon.mjs --vendor Azure --id azure2-dcd8189c36a60111
+node scripts/find-icon.mjs --vendor Azure --title "Microsoft Azure" --boundary
 ```
 
 Titles are upstream labels, not a complete service-alias dictionary. Compare a candidate entry's meaning with the required service. If several entries match, select the evidenced palette/ID explicitly. A missing or unusable entry requires the plain-box fallback, not fuzzy matching; the helper then returns the fallback's style and size. It makes no network call.
@@ -35,7 +36,7 @@ Use one `mxfile` with one `diagram` / `mxGraphModel` page per view, each with ro
 
 For an icon, an `object` wrapper can hold `id`, `label`, `c4Type`, `technology`, `vendor` and `iconKey`. Its child `mxCell` has `vertex="1"`, the real parent ID, the selected style and an `mxGeometry`. Labels use escaped XML attributes and HTML line breaks when `html=1`. Keep inspection metadata separate from the short visible caption; print a type or technology only when it clarifies the element.
 
-Draw a boundary as a container (`container=1`) whose members are its children. Use the catalog's boundary style when it has one; draw.io names these styles groups. Otherwise use a generic boundary: a rounded rectangle with a light fill, its label at the top left after `spacingLeft=36`, and the service icon as a 24-unit child at offset (6, 6), so the icon marks the boundary without becoming a member.
+Draw a boundary as a container (`container=1`) whose members are its children. `find-icon.mjs --boundary` returns either a native boundary style with its built-in corner icon, or a generic boundary style plus a small title marker. For the latter, add the marker as a child with an empty label at the returned offset, preserving aspect ratio, and reserve the returned title spacing. It identifies the boundary, not a deployed member or connector endpoint. Choose the identity by [cloud conventions](./cloud-conventions.md#boundaries). Do not apply ordinary 72-unit element placement to this marker.
 
 Build the key as a table: a `shape=table;childLayout=tableLayout;container=1;startSize=24;collapsible=0;fontSize=12;align=left;` cell titled "Key", with one `shape=tableRow` per style and two `shape=partialRectangle;connectable=0;fontSize=12;` cells per row, the left empty and the right holding the meaning. Draw each sample as a free connector on the page (`sourcePoint` and `targetPoint`, no `source` or `target`) across its left cell, with exactly the style of the connectors it explains, including `edgeStyle=orthogonalEdgeStyle`.
 

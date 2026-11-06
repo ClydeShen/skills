@@ -22,6 +22,7 @@ The baseline scores, from clean runs with a context-free review, are A 7/10, B 7
 
 ## Limits and next step
 
+- Current candidate changes, 2026-11-06: [boundary identity markers](../../research/diagrams/architecture-diagram/0001-boundary-markers-identify-cloud-scope.md) cover AWS's native cloud style plus Azure and Google Cloud provider artwork with explicit boundary placement. [Colour guidance](../../research/diagrams/architecture-diagram/0002-colour-cues-and-contrast-levels.md) distinguishes WCAG Level A colour independence from AA contrast targets and adds an opaque-pair calculator. Existing icon contents and the fixed baseline are unchanged. Package checks, helper tests, four Promptfoo synthetic assertions and an illustrative baseline-02-copy render passed. Full clean-session trigger/scenario comparison remains pending; this is not a new quality score.
 - The reviewer is a model, not a person. It finds problems; it does not prove quality.
 - Codex is not evaluated.
 - A person should look at the images of any change that alters notation, because a score cannot tell a better convention from a different one.

@@ -14,8 +14,10 @@ export const SOURCES = {
 const OUTPUT = fileURLToPath(new URL('../candidate/architecture-diagram/assets/vendor-icons.json', import.meta.url));
 
 // [vendor, title, slug, options]. A wordmark already shows the name, so its caption carries only the role.
-// Vendors already covered by draw.io libraries stay in the catalog, not here.
+// Use catalog service icons; add a provider mark only where the catalog lacks that identity.
 const THESVG = [
+  ['Azure', 'Microsoft Azure', 'microsoft-azure', { variant: 'default' }],
+  ['Google Cloud', 'Google Cloud', 'google-cloud', { variant: 'default' }],
   ['Kubernetes', 'Kubernetes', 'kubernetes'],
   ['Kubernetes', 'Helm', 'helm'],
   ['OpenShift', 'Red Hat OpenShift', 'openshift'],
@@ -257,7 +259,7 @@ export async function buildVendorIcons(root) {
     version: 1,
     sources: Object.fromEntries(Object.entries(SOURCES).map(([name, s]) => [name, s.version])),
     scope:
-      'Unmodified upstream SVG or PNG artwork for vendors without a draw.io library, except a tightened viewBox where marked. Brand marks are trademarks of their owners; check each entry license and url.',
+      'Unmodified upstream SVG or PNG artwork for identities without an exact draw.io catalog match, except a tightened viewBox where marked. Brand marks are trademarks of their owners; check each entry license and url.',
     entries,
   };
 }

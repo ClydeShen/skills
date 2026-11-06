@@ -15,6 +15,14 @@ A boundary answers one of four questions: who owns its members and where they ru
 
 - Draw a level only when it separates elements that the reader must tell apart, such as a trust, failure or exposure boundary, or when it holds at least two drawn members. Otherwise, fold it: put a single region in its parent's title, omit subnets whose role decides nothing, and draw a host with no drawn members as one icon.
 - A boundary that represents a service is that service. Put its service icon at the top left with the name beside it, using the vendor boundary style where the catalog has one and a generic boundary with the service icon otherwise. Never draw that service again as an element inside it.
+- Every drawn AWS, Azure or Google Cloud cloud-level boundary has its provider marker and a readable title. Preserve a native boundary's built-in corner icon; use the exact provider mark for a generic cloud boundary. Do not add a cloud outline merely to display a logo. Query `find-icon.mjs --boundary` with the identities below. For deeper scopes, choose their actual identity, such as `Subscriptions` or `Virtual Networks`, rather than the cloud brand. Attach a marker to its boundary's title, not its traffic paths. A provider logo does not imply an unspecified subscription, region or network. For other boundaries with no reliable identity, keep a text-only title; do not borrow a service icon or duplicate a native corner marker.
+
+| Cloud boundary  | Exact lookup with `--boundary`                   | Source                                                                        |
+| --------------- | ------------------------------------------------ | ----------------------------------------------------------------------------- |
+| AWS Cloud       | `--vendor AWS --id aws4-61258b1e47d472ca`        | Native AWS Cloud boundary with its corner icon                                |
+| Microsoft Azure | `--vendor Azure --title "Microsoft Azure"`       | Pinned provider artwork, not an Azure service                                 |
+| Google Cloud    | `--vendor "Google Cloud" --title "Google Cloud"` | Pinned provider artwork, not Distributed Cloud, Marketplace or a product icon |
+
 - Draw zones only when zonal redundancy is the point, in the cloud's own hierarchy below.
 - Security groups and network security groups are policy, not location. Outside a security view, state the access rule on the connector or in the companion account; do not draw a boundary per group.
 - Use the vendor boundary style where the catalog has one; its dashes and colours are that vendor's notation. Draw every other boundary with one thin solid neutral outline, or a light fill. Name its kind in the title, not by dashes, colour or weight. Any other boundary style needs a key row.

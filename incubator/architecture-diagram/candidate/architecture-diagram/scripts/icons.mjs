@@ -26,7 +26,7 @@ export const FALLBACK = {
   width: 144,
   height: 72,
   style:
-    'rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9E9E9E;align=center;verticalAlign=middle;fontSize=16;',
+    'rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;align=center;verticalAlign=middle;fontSize=16;',
 };
 
 export const sha256 = (data) => createHash('sha256').update(data).digest('hex');
@@ -82,6 +82,26 @@ export function iconPlacement(entry) {
 }
 
 const styleAttributes = /\bstyle="([^"]*)"/g;
+// A title marker identifies its parent boundary; it is not another deployed resource.
+export function boundaryPlacement(entry) {
+  if (entry.palette === 'aws4Groups') return { kind: 'native-boundary', style: entry.style, marker: null };
+  const placement = iconPlacement(entry);
+  const scale = 24 / Math.max(placement.width, placement.height);
+  return {
+    kind: 'marked-boundary',
+    style:
+      'rounded=0;container=1;collapsible=0;html=1;fillColor=none;strokeColor=#64748B;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=36;fontSize=14;fontColor=#1F2937;',
+    marker: {
+      x: 6,
+      y: 6,
+      width: Math.round(placement.width * scale * 10) / 10,
+      height: Math.round(placement.height * scale * 10) / 10,
+      style: `${withoutKeys(placement.style, LABEL_KEYS)};html=1;noLabel=1;`,
+      label: '',
+    },
+  };
+}
+
 const vendorIconId = (style) => style.match(/(?:^|;)vendorIcon=([^;]+)/)?.[1];
 
 // Writes each referenced icon's exact artwork into its cell, replacing any earlier copy.
