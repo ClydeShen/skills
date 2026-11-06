@@ -16,6 +16,7 @@
     "skills:sync": "node harness/sync-skills.mjs --write",
     "skill:check": "node harness/skill-quality.mjs",
     "skill:report": "node harness/skill-quality.mjs --report",
+    "security:scan": "node harness/skill-security.mjs",
     "test": "node --test harness/*.test.mjs evals/harness.test.mjs evals/vision-judge.test.mjs evals/trigger-suite.test.mjs incubator/*/evals/*.test.mjs",
     "test:transport": "node --test evals/provider.test.mjs",
     "eval": "node evals/run.mjs",

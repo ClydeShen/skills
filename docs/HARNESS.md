@@ -21,22 +21,23 @@ npm run check
 
 `npm ci` also enables the Git hooks and downloads pinned tools; a failure there warns and surfaces later in the gate. `package.json` owns command definitions and exact dependency versions; the lockfile owns resolved npm dependencies. No Python, Bash or model key is required for the core gate. The optional Git hook uses Git's shell, available with Git for Windows.
 
-| Entry                    | Purpose                                                                                   | Gate                                                    |
-| ------------------------ | ----------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `npm run check:repo`     | Fast repository contracts, Git policy, format and lint                                    | Blocking                                                |
-| `npm run check:static`   | Knip, dependency-cruiser, Gitleaks and skill package validation                           | Blocking                                                |
-| `npm run fix`            | Apply Biome and Prettier                                                                  | Mutation                                                |
-| `npm run skill:check`    | Validate all skills, or the named ones                                                    | Blocking; errors only                                   |
-| `npm run skill:report`   | Report skill token size against the base branch                                           | Report only                                             |
-| `npm run check:pr`       | Check the pull request title and description in CI                                        | Blocking in its own job                                 |
-| `npm run git:setup`      | Enable reviewed repository Git hooks in this clone; refuses conflicting hooks             | Runs from `npm ci`; repeat after reconciling a conflict |
-| `npm run git:check`      | Check current branch, authoring state and local hook activation, or CI source/target refs | Blocking; also part of `check:repo`                     |
-| `npm test`               | Shared checker and evaluation-harness regression tests                                    | Blocking                                                |
-| `npm run eval`           | Offline synthetic replay of initiative cases                                              | Blocking harness smoke, not skill quality               |
-| `npm run check`          | Runs `check:repo`, `check:static`, `test` and `eval`, stopping at the first failure       | Shared handoff/CI gate                                  |
-| `npm run test:transport` | Loopback HTTP provider contract tests; no remote model                                    | Additional CI gate; needs local socket access           |
-| `npm run lint:agents`    | Pinned agnix diagnostics for skills and agent configuration                               | Advisory CI job; nonzero exit remains visible           |
-| `npm run skills:sync`    | Explicitly copy reviewed canonical development tools to the Claude projection             | Mutation, followed by `check:repo`                      |
+| Entry                                   | Purpose                                                                                   | Gate                                                    |
+| --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `npm run check:repo`                    | Fast repository contracts, Git policy, format and lint                                    | Blocking                                                |
+| `npm run check:static`                  | Knip, dependency-cruiser, Gitleaks and skill package validation                           | Blocking                                                |
+| `npm run fix`                           | Apply Biome and Prettier                                                                  | Mutation                                                |
+| `npm run skill:check`                   | Validate all skills, or the named ones                                                    | Blocking; errors only                                   |
+| `npm run skill:report`                  | Report skill token size against the base branch                                           | Report only                                             |
+| `npm run security:scan -- <skill-path>` | Cisco scan with byte-pinned false-positive reviews; requires uv                           | Advisory CI; high/critical findings fail the scan job   |
+| `npm run check:pr`                      | Check the pull request title and description in CI                                        | Blocking in its own job                                 |
+| `npm run git:setup`                     | Enable reviewed repository Git hooks in this clone; refuses conflicting hooks             | Runs from `npm ci`; repeat after reconciling a conflict |
+| `npm run git:check`                     | Check current branch, authoring state and local hook activation, or CI source/target refs | Blocking; also part of `check:repo`                     |
+| `npm test`                              | Shared checker and evaluation-harness regression tests                                    | Blocking                                                |
+| `npm run eval`                          | Offline synthetic replay of initiative cases                                              | Blocking harness smoke, not skill quality               |
+| `npm run check`                         | Runs `check:repo`, `check:static`, `test` and `eval`, stopping at the first failure       | Shared handoff/CI gate                                  |
+| `npm run test:transport`                | Loopback HTTP provider contract tests; no remote model                                    | Additional CI gate; needs local socket access           |
+| `npm run lint:agents`                   | Pinned agnix diagnostics for skills and agent configuration                               | Advisory CI job; nonzero exit remains visible           |
+| `npm run skills:sync`                   | Explicitly copy reviewed canonical development tools to the Claude projection             | Mutation, followed by `check:repo`                      |
 
 Real-model commands and configuration remain in [prompt evaluation](./prompt-evaluation.md). They are explicit, quota-consuming checks and are never triggered by hooks or the default gate. Evaluation output stays in ignored `evals/.local/`. The repository checker does not open actual user profiles or ignored environment files; the evaluation runner loads `.env.evaluation` only in explicit model mode.
 
@@ -156,6 +157,8 @@ These are bypassable workflow controls, as accepted by the owner. Hooks and CI p
 ## CI and protected integration
 
 The workflow runs the shared gate plus transport tests on Ubuntu, Windows and macOS, with no model key. The separate Linux agnix job reports advisory findings. The pull request conventions workflow checks the title and description and reports skill size. The skill security workflow reports Cisco Skill Scanner findings for third-party skills and skill scripts; it never blocks. WSL uses the same Node path but is not a separate CI runner. A workflow definition is not evidence of a successful remote run.
+
+Security false-positive reviews live in [skill-security-reviews.json](../harness/skill-security-reviews.json). The [scan runner](../harness/skill-security.mjs) checks the pinned scanner version and exact source SHA-256 before generating a native policy scoped to one package, file and rule. Reviewed findings remain visible as INFO with their original severity, reason and review date; no rule is disabled. A source or scanner change invalidates the review. Review the actual calls again before updating a hash; do not refresh hashes merely to clear CI. New files and other rules retain the default policy. CI uploads the full native reports and generated policies as `skill-security-reports`; local output stays in `evals/.local/security/`. These author reviews are not independent security approval or skills.sh audit evidence.
 
 The owner approved PR-based integration and three platform checks on 2026-10-24 (UTC). The clarification on 2026-10-28 retains these as the default workflow and makes server-side enforcement optional. [main-protection.json](../.github/main-protection.json) remains an optional stricter preset, not a required setup task. If applied, it requires the three `local-evaluation` matrix checks from the GitHub Actions app (observed app ID 15368), an up-to-date head and a pull request; it applies restrictions to administrators and disallows force pushes and deletion. agnix remains advisory. A regression test checks that the preset's names match the actual workflow matrix.
 

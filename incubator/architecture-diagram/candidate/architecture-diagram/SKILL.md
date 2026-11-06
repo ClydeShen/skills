@@ -1,7 +1,7 @@
 ---
 name: architecture-diagram
 description: Create an editable draw.io architecture diagram and a PNG for documents and wikis from a text scenario, or refine a generated diagram against its source. Use for request, event, authentication or cross-cloud flows with deployment and system boundaries. Not for general flowcharts, infrastructure inventories, code/IaC reverse engineering or image tracing.
-compatibility: Requires file access and Node.js 24. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. With neither, it delivers the .drawio and a browser link for viewing and export. Targets draw.io v32.6.1. Catalog regeneration also requires the pinned draw.io source checkout. No model endpoint is required.
+compatibility: Requires file access and Node.js 24. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. With neither, it delivers the .drawio and a browser link for viewing and export. Targets draw.io v32.6.1. No model endpoint is required.
 metadata:
   internal: true
 ---
