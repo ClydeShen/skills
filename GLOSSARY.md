@@ -4,9 +4,11 @@ The shared terms of this repository. Each term has one meaning across repository
 
 ## Repository knowledge
 
-| Term                | Meaning                                                                                                                                                                                                                                                                                                                   |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Source of truth** | The single authoritative maintenance location for a fact or rule, abbreviated SoT. Navigation, derived copies and historical evidence may reference it, but do not independently define the same current rule. _Avoid_: treating chat, client auto-memory or multiple manual copies as parallel authorities for one rule. |
+| Term                     | Meaning                                                                                                                                                                                                                                                                                                                   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Source of truth**      | The single authoritative maintenance location for a fact or rule, abbreviated SoT. Navigation, derived copies and historical evidence may reference it, but do not independently define the same current rule. _Avoid_: treating chat, client auto-memory or multiple manual copies as parallel authorities for one rule. |
+| **Authoring source**     | The one manually maintained runtime package for a skill, retained in the incubator before and after publication. It can advance without publishing a new version; see [package progression](./docs/REPOSITORY-STRUCTURE.md#package-progression).                                                                          |
+| **Publication snapshot** | A verified runtime package generated from an explicit authoring revision. Its recorded version is immutable; `skills/` serves the currently published snapshot. It is not a second manually maintained source.                                                                                                            |
 
 ## Human-AI interaction
 

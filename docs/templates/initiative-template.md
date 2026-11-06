@@ -18,7 +18,8 @@ Stage: <init | plan | draft | internal | public | release>. Updated: YYYY-MM-DD.
 
 ## Development
 
-- Package: <one active path, when present>.
+- Authoring package: <incubator source path, when present>.
+- Published package: <verified snapshot path and revision, only after release>; next revision: <stage and basis>.
 - Evaluation: <record and runnable suite, when established>.
 - Design basis: <key knowledge or requirements link>.
 

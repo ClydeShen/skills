@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Portable skill lifecycle checklist",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project", "target", "items"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "project": { "$ref": "#/$defs/text" },
+    "target": { "$ref": "#/$defs/text" },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/item" }
+    }
+  },
+  "$defs": {
+    "text": { "type": "string", "pattern": "\\S" },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "phase", "gate", "executor", "applicability", "requirement", "status", "evidence"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)+$" },
+        "phase": { "enum": ["init", "plan", "draft", "internal", "public", "release", "maintenance"] },
+        "gate": { "enum": ["mechanical", "evidence", "human"] },
+        "executor": { "enum": ["tool", "agent", "owner"] },
+        "applicability": { "enum": ["always", "conditional"] },
+        "when": { "$ref": "#/$defs/text" },
+        "requirement": { "$ref": "#/$defs/text" },
+        "status": { "enum": ["todo", "pass", "fail", "inconclusive", "not-applicable"] },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/text" }, "uniqueItems": true },
+        "rationale": { "$ref": "#/$defs/text" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "gate": { "const": "human" } } },
+          "then": { "properties": { "executor": { "const": "owner" } } }
+        },
+        {
+          "if": { "properties": { "gate": { "const": "mechanical" } } },
+          "then": { "properties": { "executor": { "const": "tool" } } }
+        },
+        {
+          "if": { "properties": { "applicability": { "const": "conditional" } } },
+          "then": { "properties": { "when": { "$ref": "#/$defs/text" } }, "required": ["when"] }
+        },
+        {
+          "if": { "properties": { "status": { "const": "pass" } } },
+          "then": { "properties": { "evidence": { "type": "array", "minItems": 1 } } }
+        },
+        {
+          "if": { "properties": { "status": { "const": "not-applicable" } } },
+          "then": {
+            "properties": { "applicability": { "const": "conditional" }, "rationale": { "$ref": "#/$defs/text" } },
+            "required": ["rationale"]
+          }
+        }
+      ]
+    }
+  }
+}

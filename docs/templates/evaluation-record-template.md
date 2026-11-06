@@ -5,7 +5,7 @@ Date: YYYY-MM-DD. Status: <planned, executed, or partially verified>.
 ## Scope and target
 
 - Mode: fixture | transport | model | host-integration.
-- Package target: <the active package path>.
+- Package target: <explicit authoring source or publication snapshot path>.
 - Target identity: <commit or content hashes>.
 - Cases: <suite path and IDs>.
 
@@ -19,6 +19,12 @@ Date: YYYY-MM-DD. Status: <planned, executed, or partially verified>.
 ## Findings
 
 <Observed results, failures and effect on the task. Distinguish assertions from manual judgment.>
+
+## Release evidence
+
+<Only for publication: use the portable publication/recovery record linked below and this project's selected publication profile. Include source/snapshot identity, acceptance evidence, exact-artifact owner approval and promotion/recovery results. The default skills.sh profile requires matching audit evidence. Keep pending items explicit; omit this section otherwise.>
+
+Field guidance: [portable lifecycle records](../../knowledge/skill-lifecycle/records.md).
 
 ## Limits and next step
 

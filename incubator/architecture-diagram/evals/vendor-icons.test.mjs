@@ -31,6 +31,45 @@ const byId = (id) => icons.entries.find((e) => e.id === id);
 const page = (style) =>
   `<mxfile><diagram><mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="a" value="x" style="${style}" vertex="1" parent="1"/></root></mxGraphModel></diagram></mxfile>`;
 
+test('conservative first-release exclusions are absent and exact lookup uses the plain-box fallback', () => {
+  for (const id of [
+    'thesvg-openshift',
+    'thesvg-ansible',
+    'thesvg-terraform',
+    'thesvg-hashicorp',
+    'thesvg-vault',
+    'thesvg-consul',
+    'thesvg-nomad',
+    'thesvg-packer',
+    'thesvg-vagrant',
+    'thesvg-waypoint',
+    'thesvg-confluent',
+    'thesvg-grafana',
+    'thesvg-grafana-loki',
+    'thesvg-microsoft-copilot',
+    'thesvg-microsoft-365-copilot',
+    'github-autogen-logo',
+    'github-semantic-kernel-icon',
+    'github-agent-framework-icon',
+    'github-weaviate-io-weaviate-logo-icon',
+  ])
+    assert.equal(byId(id), undefined, `${id} must not be distributed without an approved rights change`);
+  const run = spawnSync(
+    process.execPath,
+    [
+      fileURLToPath(new URL('../candidate/architecture-diagram/scripts/find-icon.mjs', import.meta.url)),
+      '--vendor',
+      'HashiCorp',
+      '--title',
+      'Vault',
+    ],
+    { encoding: 'utf8' },
+  );
+  assert.equal(run.status, 1);
+  assert.deepEqual(JSON.parse(run.stdout).matches, []);
+  assert.deepEqual(JSON.parse(run.stdout).fallback, FALLBACK);
+});
+
 test('colour-pair guidance measures sRGB contrast without treating it as Level A compliance', () => {
   assert.equal(contrastRatio('#000', '#fff'), 21);
   assert.equal(contrastRatio('#FFFFFF', '#ffffff'), 1);
@@ -128,19 +167,27 @@ test('all three cloud providers have exact boundary identities and portable mark
   }
 });
 
-test('official PNG artwork embeds and verifies like SVG', () => {
-  const kernel = icons.entries.find((e) => e.title === 'Semantic Kernel');
+test('PNG artwork embeds and verifies like SVG using a neutral test fixture', () => {
+  const png = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a2ioAAAAASUVORK5CYII=';
+  const kernel = {
+    id: 'fixture-png',
+    title: 'Neutral PNG fixture',
+    aspect: 1,
+    png,
+    sha256: sha256(Buffer.from(png, 'base64')),
+  };
+  const fixtureIcons = { entries: [kernel] };
   assert.ok(kernel.png);
-  const { xml } = embedVendorIcons(page(iconPlacement(kernel).style), icons);
+  const { xml } = embedVendorIcons(page(iconPlacement(kernel).style), fixtureIcons);
   assert.ok(xml.includes(`image=${entryUri(kernel)};`));
-  checkEmbeddedIcons(xml, icons);
-  assert.deepEqual(referencedAssets(xml, catalog, icons), []);
-  assert.throws(() => checkEmbeddedIcons(xml.replace(kernel.png.slice(-12), 'AAAAAAAAAAAA'), icons), /differs/);
+  checkEmbeddedIcons(xml, fixtureIcons);
+  assert.deepEqual(referencedAssets(xml, catalog, fixtureIcons), []);
+  assert.throws(() => checkEmbeddedIcons(xml.replace(kernel.png.slice(-12), 'AAAAAAAAAAAA'), fixtureIcons), /differs/);
 });
 
 test('placement gives every source the same size and caption standard', () => {
   const lambda = catalog.entries.find((e) => e.usable && e.vendor === 'AWS' && e.title === 'Lambda');
-  for (const entry of [lambda, byId('thesvg-vault'), byId('fabric-lakehouse_64_item')]) {
+  for (const entry of [lambda, byId('fabric-fabric_48_color'), byId('fabric-lakehouse_64_item')]) {
     const p = iconPlacement(entry);
     assert.equal(Math.max(p.width, p.height), ICON_SIZE);
     assert.match(p.style, /verticalLabelPosition=bottom;align=center;verticalAlign=top;fontSize=16;labelWidth=\d+;$/);
@@ -151,13 +198,13 @@ test('placement gives every source the same size and caption standard', () => {
   assert.equal(mule.height, WIDE_HEIGHT);
   assert.ok(mule.caption);
   assert.equal(iconPlacement(byId('thesvg-cloudflare')).caption, undefined);
-  assert.match(iconPlacement(byId('thesvg-vault')).style, /vendorIcon=thesvg-vault;/);
-  assert.doesNotMatch(iconPlacement(byId('thesvg-vault')).style, /image=/);
+  assert.match(iconPlacement(byId('fabric-fabric_48_color')).style, /vendorIcon=fabric-fabric_48_color;/);
+  assert.doesNotMatch(iconPlacement(byId('fabric-fabric_48_color')).style, /image=/);
   assert.equal(FALLBACK.height, ICON_SIZE);
 });
 
 test('embedding writes the exact artwork and checks reject missing, altered or unknown images', () => {
-  const vault = byId('thesvg-vault');
+  const vault = byId('fabric-fabric_48_color');
   const source = page(iconPlacement(vault).style);
   assert.throws(() => checkEmbeddedIcons(source, icons), /has no artwork/);
   const { xml, count } = embedVendorIcons(source, icons);
@@ -169,7 +216,7 @@ test('embedding writes the exact artwork and checks reject missing, altered or u
   const altered = xml.replace(dataUri(vault.svg), dataUri(vault.svg.replace('<svg', '<svg data-x="1"')));
   assert.throws(() => checkEmbeddedIcons(altered, icons), /differs/);
   assert.throws(() => referencedAssets(altered, catalog, icons));
-  const swapped = xml.replace('vendorIcon=thesvg-vault', 'vendorIcon=thesvg-consul');
+  const swapped = xml.replace('vendorIcon=fabric-fabric_48_color', 'vendorIcon=fabric-one_lake_48_color');
   assert.throws(() => checkEmbeddedIcons(swapped, icons), /differs/);
   assert.throws(() => embedVendorIcons(page('shape=image;vendorIcon=missing;'), icons), /Unknown vendorIcon/);
   assert.throws(() => referencedAssets(page(`shape=image;image=${dataUri('<svg/>')};`), catalog, icons));

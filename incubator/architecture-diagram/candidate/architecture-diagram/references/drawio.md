@@ -4,11 +4,13 @@ The target is draw.io **v32.6.1**, upstream commit `84487b4891cbc0f32d7e30f34cf8
 
 ## Exact icon lookup
 
-The package carries two icon sources. The draw.io [catalog](../assets/catalog.json) holds palette titles, style strings and IDs for AWS, Azure, Google Cloud and Kubernetes; draw.io draws that artwork itself. The [vendor icons](../assets/vendor-icons.json) hold unmodified upstream SVG or PNG artwork, with source, pinned version or commit, licence and SHA-256, for identities the catalog lacks: Azure and Google Cloud provider marks, platform tools such as Docker, Terraform, GitHub, Microsoft Fabric, Kafka, HashiCorp and Cloudflare, and AI providers and tooling such as OpenAI, Anthropic, Gemini, Microsoft Copilot, NVIDIA, LangChain, MCP and A2A. AWS Bedrock, Azure AI and Microsoft Foundry, and Vertex AI come from the draw.io catalog. Run `--list` for the full set. Do not load either file into the conversation. Query both with [find-icon.mjs](../scripts/find-icon.mjs), from the installed package directory:
+The package carries two icon sources. The draw.io [catalog](../assets/catalog.json) holds palette titles, style strings and IDs for AWS, Azure, Google Cloud and Kubernetes; draw.io draws that artwork itself. The [vendor icons](../assets/vendor-icons.json) hold pinned upstream artwork and provenance for additional provider, platform and AI identities. Available coverage is the actual lookup result, not a promise that every brand has an icon. Assets with unresolved redistribution/use terms are being removed before release; use the existing plain-box fallback when lookup finds none. AWS Bedrock, Azure AI and Microsoft Foundry, and Vertex AI come from the draw.io catalog. Run `--list` for the full set. Do not load either catalog into the conversation. Query both with [find-icon.mjs](../scripts/find-icon.mjs), from the installed package directory:
+
+Check [third-party notices](../THIRD-PARTY-NOTICES.md) before using bundled artwork. Keep required credit with each displayed output, not only in the installed package. For Jenkins, include visible Jenkins-project credit and its project/license links on each page displaying the mark; if that cannot be retained in a standalone PNG, use a plain labelled box instead. Never hide attribution to improve layout. Unresolved asset clearance does not become permission merely because lookup returns an entry.
 
 ```text
 node scripts/find-icon.mjs --list
-node scripts/find-icon.mjs --vendor HashiCorp --list
+node scripts/find-icon.mjs --vendor "Microsoft Fabric" --list
 node scripts/find-icon.mjs --vendor AWS --title "Lambda"
 node scripts/find-icon.mjs --vendor Azure --id azure2-dcd8189c36a60111
 node scripts/find-icon.mjs --vendor Azure --title "Microsoft Azure" --boundary

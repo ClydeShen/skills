@@ -1,7 +1,9 @@
 # Skill repository engineering research
 
-Date: 2026-10-25. Status: targeted research complete. These notes preserve observations at the time of research; current implementation is owned by the engineering guides.
+Updated: 2026-11-06. These notes investigate skill design, delivery controls, discovery and post-release maintenance. Findings describe sources at their recorded research dates; current implementation is owned by the engineering guides.
 
+- [Lifecycle gap audit](./0002-skill-lifecycle-needs-verifiable-release-boundaries.md): release/audit identity, runtime trust, evaluation reliability, state recovery and post-release support. Findings are recommendations, not additional adopted gates.
+- [Post-release maintenance](./0001-published-skills-need-versioned-feedback-loops.md): evidence for reproducible defects, evaluated improvements, publication snapshots and hotfixes. [ADR 0004](../adr/0004-versioned-skill-maintenance.md) records adoption; publication automation remains unverified.
 - [Engineering baseline and sequence](./engineering-baseline-2026-10-25.md): gaps, shared checks, layered feedback and server gates.
 - [Skill quality tools](./skill-quality-tools-2026-10-25.md): agnix, skills-ref, official authoring and evaluation guidance, optional Skill Scanner.
 - [Codex and Claude controls](./agent-controls-2026-10-25.md): hooks, permissions, sandboxes, platform differences and enforcement limits.

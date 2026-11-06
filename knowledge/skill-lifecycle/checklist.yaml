@@ -1,0 +1,197 @@
+schema_version: 1
+project: "<project profile reference>"
+target: "<skill and candidate revision or snapshot digest>"
+items:
+  - id: concept-value
+    phase: init
+    gate: human
+    executor: owner
+    applicability: always
+    requirement: Confirm the user task, intended benefit and simpler or no-skill alternative.
+    status: todo
+    evidence: []
+  - id: scope-contract
+    phase: plan
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Record scope, non-goals, observable success, support targets and the owner.
+    status: todo
+    evidence: []
+  - id: capability-boundary
+    phase: plan
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Declare data, reads, writes, network, credentials, irreversible effects and confirmations, including none where true.
+    status: todo
+    evidence: []
+  - id: package-format
+    phase: draft
+    gate: mechanical
+    executor: tool
+    applicability: always
+    requirement: Validate package format, inventory, relocated resources and dependency boundaries.
+    status: todo
+    evidence: []
+  - id: resources-and-rights
+    phase: draft
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Identify runtime dependencies, their provenance, distribution rights and required attribution.
+    status: todo
+    evidence: []
+  - id: evaluation-ready
+    phase: internal
+    gate: mechanical
+    executor: tool
+    applicability: always
+    requirement: Establish runnable cases, grading criteria and a result-recording path before assigning internal stage.
+    status: todo
+    evidence: []
+  - id: evaluation-identity
+    phase: internal
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Identify package, cases, graders, resolved environment, isolation, cache policy and all attempts.
+    status: todo
+    evidence: []
+  - id: grader-calibration
+    phase: internal
+    gate: evidence
+    executor: agent
+    applicability: conditional
+    when: Automated graders influence behavioral conclusions.
+    requirement: Verify known-good and known-wrong outputs and inspect disagreement with human assessment.
+    status: todo
+    evidence: []
+  - id: behavior-and-trigger
+    phase: internal
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Compare applicable old/new/no-skill behavior, activation, held-out cases and actual outputs or traces; report uncertainty.
+    status: todo
+    evidence: []
+  - id: trial-entry
+    phase: public
+    gate: evidence
+    executor: agent
+    applicability: conditional
+    when: An opt-in public trial is offered.
+    requirement: Verify candidate installation, first-trial README, safety limits and feedback route without claiming release approval.
+    status: todo
+    evidence: []
+  - id: freeze-provenance
+    phase: release
+    gate: mechanical
+    executor: tool
+    applicability: always
+    requirement: Generate the snapshot from explicit source identity; verify inventory, digest and declared transformations.
+    status: todo
+    evidence: []
+  - id: security-acceptance
+    phase: release
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Review all runtime material and applicable adversarial, denied-permission and missing-tool behavior against declared policy.
+    status: todo
+    evidence: []
+  - id: platform-audit-binding
+    phase: release
+    gate: evidence
+    executor: agent
+    applicability: conditional
+    when: The selected publication policy requires an external audit.
+    requirement: Obtain the required provider verdict and evidence binding it to the intended artifact; do not substitute installation success.
+    status: todo
+    evidence: []
+  - id: consumer-smoke
+    phase: release
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Verify actual snapshot installation, discovery, activation, resources and useful output on declared consumer targets.
+    status: todo
+    evidence: []
+  - id: state-compatibility
+    phase: release
+    gate: evidence
+    executor: agent
+    applicability: conditional
+    when: The skill persists or changes user or project state.
+    requirement: Test supported schemas, migration, interrupted or concurrent writes as applicable, and non-destructive recovery limits.
+    status: todo
+    evidence: []
+  - id: upgrade-recovery
+    phase: release
+    gate: evidence
+    executor: agent
+    applicability: conditional
+    when: A previous version exists or execution has recoverable side effects.
+    requirement: Verify updates and package/state restoration separately, or document irreversible effects and the achievable recovery procedure.
+    status: todo
+    evidence: []
+  - id: release-approval
+    phase: release
+    gate: human
+    executor: owner
+    applicability: always
+    requirement: Approve the exact artifact, targets, acceptance evidence and known limits before stable exposure.
+    status: todo
+    evidence: []
+  - id: stable-promotion-smoke
+    phase: release
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Promote the same approved bytes, verify published identity and installation, and record recovery if smoke fails.
+    status: todo
+    evidence: []
+  - id: feedback-support
+    phase: maintenance
+    gate: evidence
+    executor: agent
+    applicability: always
+    requirement: Provide version-aware feedback, update or pin guidance, supported targets and security or deprecation notices.
+    status: todo
+    evidence: []
+  - id: change-regression
+    phase: maintenance
+    gate: evidence
+    executor: agent
+    applicability: conditional
+    when: Instructions, dependencies, models, clients or tools change after acceptance.
+    requirement: Diagnose the owning layer, add focused regression evidence and reopen affected gates before republication.
+    status: todo
+    evidence: []
+  - id: hotfix-forward-port
+    phase: maintenance
+    gate: evidence
+    executor: agent
+    applicability: conditional
+    when: An affected release needs an isolated correction.
+    requirement: Fix its recorded source, publish only the verified correction and forward-port it without importing unfinished work.
+    status: todo
+    evidence: []
+  - id: baseline-change
+    phase: maintenance
+    gate: human
+    executor: owner
+    applicability: conditional
+    when: An accepted evaluation baseline or compatibility contract changes.
+    requirement: Approve the new boundary with comparison evidence; preserve the previous accepted identity.
+    status: todo
+    evidence: []
+  - id: retirement-notice
+    phase: maintenance
+    gate: human
+    executor: owner
+    applicability: conditional
+    when: A skill or supported version is deprecated or retired.
+    requirement: Approve distribution changes, replacement and recovery guidance; preserve provenance and warn installed users.
+    status: todo
+    evidence: []
