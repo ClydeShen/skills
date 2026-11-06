@@ -4,7 +4,6 @@
     "harness/*.mjs",
     "evals/*.test.mjs",
     "incubator/*/evals/suite.mjs",
-    "incubator/*/evals/regression.mjs",
     "incubator/*/evals/*.test.{mjs,cjs}",
     "incubator/*/evals/{run,promptfooconfig}.cjs",
     "incubator/*/candidate/*/scripts/*.mjs",

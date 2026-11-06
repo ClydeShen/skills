@@ -1,6 +1,6 @@
 # Baseline
 
-The baseline is the quality boundary of the skill. A change to the package passes only when its output is not lower than the baseline.
+The baseline is the quality boundary of the skill. No change to the package may lower the output below it.
 
 - Package: commit `f7b7537`.
 - Cases: the scenarios [A](../scenarios/a.md), [B](../scenarios/b.md), [02](../scenarios/02.md) and [C](../scenarios/c.md).
@@ -21,11 +21,11 @@ The baseline is the quality boundary of the skill. A change to the package passe
 - For scenario 02, the session gets only the block "Input text given to the skill", not the expected errors and elements that the file also holds.
 - The reviewer gets the scenario and the images, and the [review prompt](./review-prompt.md). It never sees the rules of the package.
 
-## When a change passes
+## How a change is judged
 
-For each scenario, take at least two runs of the changed package. The change passes when the mean of those scores is not lower than the mean of the baseline scores for that scenario minus the tolerance in `baseline.json` (0.5). The tolerance covers the run-to-run spread of up to one point that the baseline runs showed. A change also keeps the trigger check at full pass: `npm run eval:trigger -- --skill architecture-diagram --agent claude --repeat 3 --baseline <ref>`.
+Every pull request that changes the package carries a baseline comparison: for each scenario, at least two runs of the changed package, their scores, and the baseline scores. A scenario whose mean is lower than the mean of its baseline scores minus the tolerance in `baseline.json` (0.5) is reported as below the baseline. The tolerance covers the run-to-run spread of up to one point that the baseline runs showed. The owner judges the comparison; no score merges or blocks a change by itself. The trigger check also stays at full pass: `npm run eval:trigger -- --skill architecture-diagram --agent claude --repeat 3 --baseline <ref>`.
 
-`node incubator/architecture-diagram/evals/regression.mjs` runs the scenarios and applies this rule. A person still looks at the images of a change that alters notation.
+A person looks at the images of any change that alters notation, because a score cannot tell a better convention from a different one.
 
 ## When the baseline moves
 
