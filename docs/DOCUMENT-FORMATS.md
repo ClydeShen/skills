@@ -22,15 +22,17 @@ State each rule or fact in its authoritative location. Elsewhere, provide only t
 
 A README introduces its containing folder and directs readers to relevant detail. Choose its structure by role:
 
-| README role                      | Lead with                                                                                      | Keep elsewhere                                                                  |
-| -------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| Repository overview              | Project purpose, useful entry points and contributor startup                                   | Detailed procedures, individual trial histories and repeated folder inventories |
-| Skill or skill initiative        | Who it helps, the useful outcome, a concrete example, how to try it and honest maturity/limits | Authoring history, tool internals and full evaluation reports                   |
-| Functional folder or tool        | Function, prerequisites, minimal usage, inputs/outputs and necessary cautions                  | Project-wide background and unrelated functionality                             |
-| Engineering or agent context     | Local responsibilities, invariants, commands and links needed to work safely                   | Rules already owned by parent instructions and chronological work logs          |
-| Knowledge or evidence collection | The question or subject, current conclusion/status and a selective reading path                | Full contents of the linked sources                                             |
+| README role                      | Lead with                                                                                      | Keep elsewhere                                                                                         |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Repository overview              | User value, skill discovery, trial/installation entry points and a brief release journey       | Detailed contributor setup, full release procedures, individual trials and repeated folder inventories |
+| Skill or skill initiative        | Who it helps, the useful outcome, a concrete example, how to try it and honest maturity/limits | Authoring history, tool internals and full evaluation reports                                          |
+| Functional folder or tool        | Function, prerequisites, minimal usage, inputs/outputs and necessary cautions                  | Project-wide background and unrelated functionality                                                    |
+| Engineering or agent context     | Local responsibilities, invariants, commands and links needed to work safely                   | Rules already owned by parent instructions and chronological work logs                                 |
+| Knowledge or evidence collection | The question or subject, current conclusion/status and a selective reading path                | Full contents of the linked sources                                                                    |
 
 Present a skill's value attractively through concrete uses and outputs; distinguish intended benefits from verified results. Omit inapplicable sections rather than imposing one README template everywhere. Optimize for understanding and useful context, not an arbitrary word or token limit. Apply the same purpose-and-scope review to every document type, including templates and agent instructions.
+
+Owner clarification, 2026-11-06: the root README primarily introduces and promotes the skill collection to users. Lead with value, skill discovery and trial/installation entry points, then give a concise explanation of incubation, publication and maintenance. Keep contribution information present but secondary, near the end; link engineering setup instead of making it the main presentation. Skill-package READMEs remain focused on that skill's first-use experience. Do not advertise unavailable releases or substitute marketing claims for evidence.
 
 ## Framework document filenames
 
