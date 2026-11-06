@@ -1,6 +1,6 @@
 # Architecture Diagram handoff
 
-Updated: 2026-11-05. This is a continuation guide for the current initiative, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md) before making changes, and start new work on a task branch from `origin/main`.
+Updated: 2026-11-06. This is a continuation guide for the current initiative, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md) before making changes, and start new work on a task branch from `origin/main`.
 
 ## Start here
 
@@ -30,6 +30,18 @@ Updated: 2026-11-05. This is a continuation guide for the current initiative, no
 - `check-layout.mjs` estimates caption, boundary-title and connector-label boxes and connector routes. It reports text collisions, labels away from their line or on a bend, connectors through captions, connectors that leave and re-enter or pass through a boundary, detours, jogs, crossings, ports to swap, bends that a clear straight or one-bend route would avoid, members named like the boundary they sit in, and more than three nested outlines. A segment shared by connectors of different meaning is an error. Errors also cover mixed connector styles without a key entry for each, dotted lines, more than one weight, ends other than one filled arrowhead that the key does not name, a page wider than 1400 units, key entries that differ between pages, page links to missing pages, and custom boundaries with dashed, multi-colour or multi-weight outlines. It reports dashed lines too short to show their dashes and an element whose symbol changes between pages.
 - `check-steps.mjs` compares a source's numbered steps (top-level `1.` items or inline `(1)`) with the step numbers on connector label lines. `render.mjs` writes one PNG per page.
 - `tools/build-vendor-icons.mjs` regenerates the vendor icons, and `--check-latest` reports newer upstream versions.
+
+## Next steps
+
+The owner approved these on 2026-11-06. Do them in order, each in its own pull request from `origin/main`.
+
+1. Shared scenario suite. Add a suite to the root `evals/` that runs on the shared Promptfoo runner, like `evals/trigger-suite.mjs`, so that no skill keeps its own evaluation framework (owner rule of 2026-10-30 in [repository structure](../../docs/REPOSITORY-STRUCTURE.md#incubation-stages)). A skill supplies `evals/scenarios/`, `evals/baseline/baseline.json` and the reviewer prompt, plus an optional hook that turns its output into images. Each run is a clean Claude Code session with only the package and one scenario, under the fixed prompt in [the baseline](./evals/baseline/README.md#how-a-run-is-made). A reviewer with only the scenario and the images scores it; reuse `evals/vision-judge.mjs` where it fits. Report each scenario's mean of at least two runs beside the baseline mean, and flag a mean below the baseline mean minus the tolerance. Connect this skill first; its draw.io output needs `render.mjs` as the image hook.
+2. ADR 0004. Record that a baseline comparison is required evidence on every pull request that changes a skill package from `public` onward, and that the owner judges it; no score merges or blocks a change by itself. It amends [ADR 0003](../../research/harness/adr/0003-static-tools-and-skill-quality-governance.md). Update the Skill Quality Governance table in [HARNESS.md](../../docs/HARNESS.md#skill-quality-governance) to match.
+3. General process. Write into the shared documents what this skill taught: in the stage table of [repository structure](../../docs/REPOSITORY-STRUCTURE.md#incubation-stages), what each stage requires (`public` fixes a baseline); in [HARNESS.md](../../docs/HARNESS.md), the evaluation standards (clean context, a context-free reviewer with a fixed prompt, at least two runs, the trigger check first) and what not to do (carry corrections from the authoring conversation into a run, commit run history, clear a check by changing meaning, keep a skill-specific evaluation framework). Add a "Baseline comparison" section to the [pull request template](../../.github/pull_request_template.md) and an incubator skeleton to `docs/templates/`.
+4. Security scan. Move the catalog regeneration in `candidate/architecture-diagram/scripts/catalog.mjs` (its `git` calls) to `tools/`, leaving only runtime helpers in the package. That removes one of the four `COMMAND_INJECTION_JS_CHILD_PROCESS` findings of the `scan` job. The three in `render.mjs` remain: they start the browser, draw.io Desktop and `git`, with argument arrays and no shell. Do not disable the rule.
+5. Reference validator. Wire the Agent Skills reference validator (skills-ref) into a script, as `AGENTS.md` and [HARNESS.md](../../docs/HARNESS.md#skill-quality-governance) require before release; no script runs it now.
+
+Not adopted, by first-principles review on 2026-11-06: markdownlint, because Prettier formats Markdown and the repository link check already catches the link and anchor failures that occurred; Lychee, because the link check covers local links more strictly, and remote links in frozen research are expected to rot and would make a gate depend on third-party hosts.
 
 ## Known issues
 
