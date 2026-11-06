@@ -7,4 +7,6 @@ This directory is for this repository's structure, skill lifecycle, quality mode
 - [Shared delivery harness](./HARNESS.md): commands, check coverage, agent coordination, client hooks and server-side limits.
 - [Local prompt evaluation](./prompt-evaluation.md): setup, model endpoints, suite layout, and cross-platform verification limits.
 
+The [portable skill lifecycle standard](../knowledge/skill-lifecycle/README.md) owns the reusable SOP and checklist; the harness maps it to this project's actual tools and remaining gaps.
+
 Research findings belong in [`research/`](../research/). Synthesized, cross-skill domain knowledge belongs in [`knowledge/`](../knowledge/). Concrete skill initiatives and candidate packages belong in [`incubator/`](../incubator/). Released skills belong in [`skills/`](../skills/).

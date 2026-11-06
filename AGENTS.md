@@ -34,7 +34,7 @@ When creating, reviewing or revising a skill, use [the skill design principles](
 
 Before changing skill layout, validation, installation, or release behavior, verify time-sensitive claims against current official sources.
 
-Follow [candidate and release rules](docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle), [skill maintenance](docs/HARNESS.md#skill-maintenance) and [package format](docs/DOCUMENT-FORMATS.md#skill-package-format). Maintain one authoring source in the incubator; published packages are verified snapshots, not independently edited sources.
+Follow the [portable lifecycle SOP](knowledge/skill-lifecycle/sop.md), its [local project profile](docs/HARNESS.md#skill-maintenance), [candidate and release rules](docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) and [package format](docs/DOCUMENT-FORMATS.md#skill-package-format). Maintain one authoring source in the incubator; published packages are verified snapshots, not independently edited sources.
 
 Use the same package best practices during incubation and after release. Keep runtime files relocatable and authoring support outside the package. Consolidate fixes, retain regression evidence and isolate hotfixes from unfinished work. Authoring changes do not publish automatically; never bypass missing snapshot/provenance checks to create a release.
 
@@ -42,7 +42,7 @@ Use the same package best practices during incubation and after release. Keep ru
 
 Use `package.json` as the command source. Run `npm run check` before handing off a change. Use `npm run check:repo` for fast feedback. Do not spend judgment on what a tool decides: run `npm run fix` for format and lint, and let the hooks check commits. Write commit messages by [the commit instructions](.github/commit-instructions.md) and pull requests by [the template](.github/pull_request_template.md). After changing a skill, run `npm run skill:check`; follow [Skill Quality Governance](docs/HARNESS.md#skill-quality-governance). Read [prompt evaluation setup](docs/prompt-evaluation.md) for model configuration and test limits. `npm test` checks the harness; `npm run eval` is synthetic replay, not a model-quality gate. Keep credentials and local run results out of commits. Never weaken a gate just to make the task pass; report pre-existing failures and unavailable checks.
 
-Validate `knowledge/harness/setup-checklist.yaml` against its adjacent schema when either changes. Keep stable checklist IDs and schema constraints consistent.
+Validate each changed structured checklist against its adjacent schema. Keep stable IDs unique and schema constraints consistent. Lifecycle checklist tests run in `npm test`; structural validation is not evidence verification or release approval.
 
 ## Verify
 
@@ -51,4 +51,4 @@ Validate `knowledge/harness/setup-checklist.yaml` against its adjacent schema wh
 3. For a skill package, run the current Agent Skills reference validator on the package. Run `npx skills add . --list` from the repository root and confirm that every intended released skill appears exactly once.
 4. If a required validator or network-backed check is unavailable, report the unverified check and the reason. Do not claim release readiness.
 5. Inspect the authored package inventory independently; CLI name deduplication cannot prove uniqueness. Use the full [release checks](docs/REPOSITORY-STRUCTURE.md#installation-and-release-checks) before publication.
-6. Before completing a release, verify the matching skills.sh audit has passed and the package includes its own first-use README. Missing audit evidence is not approval; follow the release contract for recording results.
+6. Before completing a release, satisfy the selected publication profile and verify the package includes its own first-use README. This project's default skills.sh profile requires matching audit approval; missing artifact-bound evidence is not approval. Follow the release contract for recording results.

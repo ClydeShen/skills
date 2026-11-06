@@ -22,7 +22,9 @@ Date: YYYY-MM-DD. Status: <planned, executed, or partially verified>.
 
 ## Release evidence
 
-<Only for publication: source commit, publication digest/ref, declared transformations, snapshot installation/check results and matching skills.sh audit link/date/verdicts. Keep pending items explicit; omit this section otherwise.>
+<Only for publication: use the portable publication/recovery record linked below and this project's selected publication profile. Include source/snapshot identity, acceptance evidence, exact-artifact owner approval and promotion/recovery results. The default skills.sh profile requires matching audit evidence. Keep pending items explicit; omit this section otherwise.>
+
+Field guidance: [portable lifecycle records](../../knowledge/skill-lifecycle/records.md).
 
 ## Limits and next step
 

@@ -19,7 +19,7 @@ Each initiative owns its maturity and verification status. No skill has been rel
 - [`docs/`](./docs/README.md): repository organization and operating procedures.
 - [`GLOSSARY.md`](./GLOSSARY.md): shared terminology.
 
-Incubation uses the same package format as release; supporting experiments stay outside the package. See the [lifecycle contract](./docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) for stages and promotion.
+Incubation uses the same package format as release; supporting experiments stay outside the package. See the [portable lifecycle SOP](./knowledge/skill-lifecycle/README.md) and [local lifecycle contract](./docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) for stages and promotion.
 
 ## Contribute
 
