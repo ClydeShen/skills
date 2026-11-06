@@ -1,6 +1,27 @@
 # Architecture Diagram handoff
 
-Updated: 2026-11-06. This is a continuation guide for the current initiative, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md) before making changes, and start new work on a task branch from `origin/main`.
+Updated: 2026-11-07 (Pacific/Auckland). This is a continuation guide for the current initiative, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md) before making changes, and start new work on a task branch from `origin/main`.
+
+## Immediate continuation: skills.sh audit
+
+The owner reports that the environment configuration now permits skills.sh. The current session still observes enforced specification revision `11`, with neither `skills.sh` nor `www.skills.sh` in its effective allowlist. At `2026-11-06T18:43:04Z`, proxied HEAD requests to both hosts failed with `curl: (56) CONNECT tunnel failed, response 403`. This is a proxy access failure, not a platform audit rejection. No platform verdict was retrieved. Continue in a fresh session that observes the updated configuration; do not bypass the proxy or repeatedly retry this denied session.
+
+The immediate task is to retrieve and understand the Architecture Diagram audit status. This takes priority over the backlog below; implementing scenario orchestration is not a prerequisite for read-only audit diagnosis.
+
+1. Read this file, [release evidence](./evaluation.md#release-preparation), the [skills.sh adapter](../../knowledge/skill-lifecycle/adapters/skills-sh.md#audit-limitation), and the [release contract](../../docs/REPOSITORY-STRUCTURE.md#installation-and-release-checks). Fetch `origin/main` and inspect local changes before choosing a task branch. This handoff is on `work/readme-product-story`, in [PR #44](https://github.com/ClydeShen/skills/pull/44); check whether it has merged before assuming it is on `main`.
+2. Check the new session's actual environment status and `/etc/codex/network-policy.json`. Use its inherited proxy and CA trust. Test both hosts using the bounded commands below. Desired configuration alone is not proof of access. Stop and report any renewed policy denial.
+3. Recheck the current official skills CLI audit implementation before requesting results. CLI `1.7.4` used `https://www.skills.sh/tele/audit`; inspect its request schema and telemetry conditions rather than inventing a `skills audit` command. Start with the repository's `architecture-diagram` result and identify whether it exists, is pending, or reports findings. HTTP 200 or a successful install is not audit approval.
+4. Record the response's scope, date, partner verdicts, findings and any revision/digest identifiers in `evaluation.md`. Distinguish a retrieved result from acceptance of the intended publication snapshot. The inspected CLI requested source and skill names without a revision/digest field; backend version binding remains unverified, not proven impossible. Establish correspondence using provider evidence or report that specific gap to the owner.
+5. If changes are needed, fix the actual finding and rerun affected checks. Select an explicit source revision and use `npm run skill:publication -- stage architecture-diagram <source-ref>` to regenerate an external temporary snapshot. README edits changed package bytes after earlier preparation, so do not reuse historical snapshot digests as current acceptance. Keep unapproved content out of default stable discovery.
+
+```sh
+curl --silent --show-error --head --max-time 15 https://skills.sh/
+curl --silent --show-error --head --max-time 15 https://www.skills.sh/
+```
+
+This handoff does not authorize publication or waive gates. Retained-artwork rights, final live behavior/trigger acceptance, exact-artifact audit evidence, owner approval and verified promotion remain open as [the release record](./evaluation.md#remaining-acceptance) details. Local Cisco scanning and `skills-ref` format validation passed their recorded checks; neither substitutes for skills.sh audit. No paid model evaluation is needed to diagnose access or retrieve existing audit status; obtain appropriate endpoint/data/budget approval before additional remote model evaluations.
+
+PR #44 also contains the current human-facing README work. The owner accepted the lifecycle information and requested cleaner presentation. Its latest diagram uses fixed columns, bottom-up progression and plain ASCII labels; do not reopen that design work to diagnose the audit.
 
 ## Start here
 
