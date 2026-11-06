@@ -51,3 +51,4 @@ Validate `knowledge/harness/setup-checklist.yaml` against its adjacent schema wh
 3. For a skill package, run the current Agent Skills reference validator on the package. Run `npx skills add . --list` from the repository root and confirm that every intended released skill appears exactly once.
 4. If a required validator or network-backed check is unavailable, report the unverified check and the reason. Do not claim release readiness.
 5. Inspect the authored package inventory independently; CLI name deduplication cannot prove uniqueness. Use the full [release checks](docs/REPOSITORY-STRUCTURE.md#installation-and-release-checks) before publication.
+6. Before completing a release, verify the matching skills.sh audit has passed and the package includes its own first-use README. Missing audit evidence is not approval; follow the release contract for recording results.
