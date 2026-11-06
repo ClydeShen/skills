@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { externalIconEntries } from './external-icons.mjs';
 
 // One display standard for every icon source.
 export const ICON_SIZE = 72;
@@ -37,7 +38,8 @@ export const entryUri = (entry) => (entry.png ? `data:image/png,${entry.png}` : 
 const isVendorIcon = (entry) => Boolean(entry.svg || entry.png);
 
 export function loadVendorIcons(url = new URL('../assets/vendor-icons.json', import.meta.url)) {
-  return JSON.parse(readFileSync(url, 'utf8'));
+  const icons = JSON.parse(readFileSync(url, 'utf8'));
+  return { ...icons, entries: [...icons.entries, ...externalIconEntries()] };
 }
 
 // Searchable entries for find-icon: vendor icons look like usable catalog entries.

@@ -41,6 +41,8 @@ Read these references before you compose a view:
 - [cloud-conventions.md](references/cloud-conventions.md): "All clouds", "Boundaries" and the section for each cloud in the view. Answer its engineering review.
 - [drawio.md](references/drawio.md): when you write or change the file.
 
+For missing native icons, use the optional consumer-library path in [drawio.md](references/drawio.md#optional-consumer-icon-libraries). Select the exact product and preserve source artwork; keep the library setting for lookup, finalization and rendering. Continue with a labelled box when no supported image exists.
+
 While you draw:
 
 - Arrange the elements around the main relationships before you route. Use alignment, proximity and whitespace to show the structure. Add a second axis only when it shows a real distinction.

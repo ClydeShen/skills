@@ -8,7 +8,7 @@ export function findIcons(catalog, { vendor, title, id }) {
 }
 
 const usage =
-  'Usage: node scripts/find-icon.mjs --vendor <vendor> (--title <exact-title> | --id <exact-id>) [--boundary]\n       node scripts/find-icon.mjs [--vendor <vendor>] --list';
+  'Usage: node scripts/find-icon.mjs --vendor <vendor> (--title <exact-title> | --id <exact-id>) [--boundary] [--library <local-file>]\n       node scripts/find-icon.mjs [--vendor <vendor>] --list';
 
 if (
   process.argv[1] &&
@@ -24,9 +24,11 @@ if (
         continue;
       }
       const key = args[i].slice(2);
-      if (!['--vendor', '--title', '--id'].includes(args[i]) || !args[i + 1] || options[key]) throw new Error(usage);
+      if (!['--vendor', '--title', '--id', '--library'].includes(args[i]) || !args[i + 1] || options[key])
+        throw new Error(usage);
       options[key] = args[++i];
     }
+    if (options.library) process.env.ARCHITECTURE_ICON_LIBRARIES = options.library;
     const catalog = JSON.parse(readFileSync(new URL('../assets/catalog.json', import.meta.url), 'utf8'));
     const entries = iconEntries(catalog, loadVendorIcons()).filter((e) => e.usable);
     if (options.list) {
