@@ -375,8 +375,10 @@ if (
   existsSync(process.argv[1]) &&
   realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url))
 ) {
-  const [file, catalogFile = fileURLToPath(new URL('../prototype/catalog.json', import.meta.url))] =
-    process.argv.slice(2);
+  const [
+    file,
+    catalogFile = fileURLToPath(new URL('../candidate/architecture-diagram/assets/catalog.json', import.meta.url)),
+  ] = process.argv.slice(2);
   const xml = readFileSync(file, 'utf8');
   const errors = [
     ...validateDiagram(xml, JSON.parse(readFileSync(catalogFile, 'utf8'))),

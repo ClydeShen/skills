@@ -4,7 +4,7 @@ Date: 2026-11-05. Status: the baseline is fixed. Every change to the package is 
 
 ## Scope and target
 
-- Mode: model, with a real Claude Code session for each run.
+- Mode: model, with a clean agent session for each run. Existing baseline runs used Claude Code; future runs may use another configured agent and must record that difference.
 - Package target: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md).
 - Target identity: the baseline is commit `f7b7537`. The [baseline](./evals/baseline/README.md) records its scores and how a change is judged.
 - Cases: the four scenarios A, B, 02 and C in [evals/scenarios](./evals/scenarios), and the trigger cases in [trigger.json](./evals/trigger.json).

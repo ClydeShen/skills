@@ -59,6 +59,28 @@ test('the real framework adapter talks to a loopback Chat Completions stub', asy
     assert.equal(nvidiaRequest.body.reasoning_effort, 'none');
     assert.equal(nvidiaRequest.body.stream, false);
     assert.equal(nvidiaRequest.body.max_tokens, 4096);
+    const regression = {
+      prompts: [renderPrompt('Cache transport only.', { conversation: 'Cacheable regression input.' })],
+      providers: [modelProvider({ EVAL_MODEL: 'cache-stub', EVAL_API_BASE_URL: loopback })],
+      tests: [{ assert: [{ type: 'equals', value: 'transport-ok' }] }],
+      writeLatestResults: false,
+      sharing: false,
+    };
+    const beforeCache = received.length;
+    await promptfoo.evaluate(regression, { cache: true });
+    const reused = await promptfoo.evaluate(regression, { cache: true });
+    assert.equal(received.length, beforeCache + 1, 'Unchanged prompt reuses the first HTTP response.');
+    assert.equal((await reused.toEvaluateSummary()).results[0].response.cached, true);
+    await promptfoo.evaluate(
+      {
+        ...regression,
+        prompts: [renderPrompt('Changed instructions.', { conversation: 'Cacheable regression input.' })],
+      },
+      { cache: true },
+    );
+    assert.equal(received.length, beforeCache + 2, 'Changed prompt cannot reuse the old response.');
+    await promptfoo.evaluate(regression, { cache: false, repeat: 2 });
+    assert.equal(received.length, beforeCache + 4, 'Two fresh samples make two HTTP calls.');
   } finally {
     server.closeAllConnections();
     await new Promise((resolve) => server.close(resolve));

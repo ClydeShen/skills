@@ -17,7 +17,7 @@ The baseline is the quality boundary of the skill. No change to the package may 
 ## How a run is made
 
 - Prompt for the skill, unchanged: `Use the architecture-diagram skill to create diagram.drawio from scenario.md. Write your companion account to agent-report.md.`
-- The session runs in an empty directory with a fresh home folder. The directory holds the package under `.claude/skills/` and one scenario as `scenario.md`. Nothing else reaches the session: no repository instructions, no memory, and no correction from the authoring conversation.
+- The session is a clean agent session in an empty directory, with isolated settings and memory. Install the package in the selected client's native skill location and provide one scenario as `scenario.md`. Nothing else reaches the session: no repository instructions, global skills, memory or correction from the authoring conversation. The owner clarified on 2026-11-06 that Claude Code is not required; record the agent, model, settings and isolation mechanism. The existing baseline was measured with Claude Code, so agent or model changes must be reported as separate comparisons.
 - For scenario 02, the session gets only the block "Input text given to the skill", not the expected errors and elements that the file also holds.
 - The reviewer gets the scenario and the images, and the [review prompt](./review-prompt.md). It never sees the rules of the package.
 

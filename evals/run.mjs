@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { armSummary, digest, modelProvider, parseArgs } from './lib.mjs';
+import { armSummary, digest, evaluationCache, modelProvider, parseArgs } from './lib.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const local = resolve(root, 'evals/.local');
@@ -18,17 +18,19 @@ async function main() {
     agent,
     baseline,
     repeat,
+    cache,
   } = parseArgs(process.argv.slice(2));
   // Offline repository gates must not load the user's model credentials.
   if (mode === 'model' && existsSync(envFile)) process.loadEnvFile(envFile);
   process.env.PROMPTFOO_DISABLE_TELEMETRY = '1';
   process.env.PROMPTFOO_DISABLE_UPDATE = '1';
-  process.env.PROMPTFOO_CACHE_ENABLED = 'false';
   process.env.PROMPTFOO_CONFIG_DIR = resolve(local, 'promptfoo');
   const { createSuite } = await import(pathToFileURL(resolve(root, suitePath)).href);
   const suite = await createSuite({ mode, env: process.env, options: { skill, agent, baseline } });
   // A suite that supplies its own providers, such as the image judge or a real agent, keeps them in model mode.
   const suiteProviders = Boolean(suite.providers?.length);
+  const useCache = evaluationCache({ mode, repeat, cache, suiteProviders });
+  process.env.PROMPTFOO_CACHE_ENABLED = String(useCache);
   const provider = mode === 'model' && !suiteProviders ? modelProvider(process.env, selection) : null;
   if (caseId) {
     suite.tests = suite.tests.filter((test) => test.vars?.case_id === caseId);
@@ -42,7 +44,7 @@ async function main() {
       writeLatestResults: false,
       sharing: false,
     },
-    { cache: false, maxConcurrency: 1, repeat },
+    { cache: useCache, maxConcurrency: 1, repeat },
   );
   const summary = await record.toEvaluateSummary();
   const packageInfo = JSON.parse(await readFile(resolve(root, 'node_modules/promptfoo/package.json'), 'utf8'));
@@ -58,6 +60,7 @@ async function main() {
           : 'Prompt decision checks; no agent tools or persistent memory execution.',
     suite: suitePath,
     case_filter: caseId || null,
+    cache: { requested: cache, enabled: useCache, repeat },
     suite_sha256: digest(await readFile(resolve(root, suitePath), 'utf8')),
     framework: { name: 'promptfoo', version: packageInfo.version },
     runtime: { node: process.version, platform: process.platform, arch: process.arch },
@@ -84,6 +87,7 @@ async function main() {
       cost: r.cost,
       latency_ms: r.latencyMs,
       token_usage: r.tokenUsage ?? r.response?.tokenUsage,
+      cached: r.response?.cached === true,
       prompt_label: r.prompt?.label,
       prompt_sha256: digest(r.prompt?.raw || ''),
       prompt: r.prompt?.raw,

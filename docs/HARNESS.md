@@ -64,6 +64,8 @@ The candidate's boolean `metadata.internal` is a documented skills CLI extension
 
 Static rules run automatically, AI suggests semantic changes, and evaluation with human review decides what ships. [ADR 0003](../research/harness/adr/0003-static-tools-and-skill-quality-governance.md) records the choices.
 
+Owner clarification, 2026-11-06: use the shared Promptfoo runner for regressions before broader agent trials, reducing repeated token use where cached prompt responses remain valid. Clean agent sessions may use any configured client; they are not restricted to Claude Code. Record client/model and isolation. Repeated samples and agent/tool executions must remain fresh; [evaluation configuration](./prompt-evaluation.md#regression-cost-and-caching) owns the cache rules.
+
 | Measure       | Question                                   | Evidence                                                     | Who decides                   |
 | ------------- | ------------------------------------------ | ------------------------------------------------------------ | ----------------------------- |
 | Correctness   | Is the package well formed and consistent? | `check:repo`, `check:static`                                 | Tools                         |

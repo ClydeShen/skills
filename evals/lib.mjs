@@ -64,13 +64,21 @@ export function parseArgs(args) {
   const options = { mode: 'fixture', provider: 'auto', suite: 'incubator/meta-thinking/evals/suite.mjs' };
   for (let i = 0; i < args.length; i += 2) {
     if (
-      !['--mode', '--suite', '--provider', '--case', '--skill', '--agent', '--baseline', '--repeat'].includes(
-        args[i],
-      ) ||
+      ![
+        '--mode',
+        '--suite',
+        '--provider',
+        '--case',
+        '--skill',
+        '--agent',
+        '--baseline',
+        '--repeat',
+        '--cache',
+      ].includes(args[i]) ||
       !args[i + 1]
     )
       throw new Error(
-        'Usage: npm run eval -- [--mode fixture|model] [--provider auto|generic|nvidia] [--suite path/to/suite.mjs] [--case case-id] [--skill name] [--agent all|claude|codex] [--baseline git-ref] [--repeat n]',
+        'Usage: npm run eval -- [--mode fixture|model] [--provider auto|generic|nvidia] [--suite path/to/suite.mjs] [--case case-id] [--skill name] [--agent all|claude|codex] [--baseline git-ref] [--repeat n] [--cache auto|off]',
       );
     options[args[i].slice(2)] = args[i + 1];
   }
@@ -79,7 +87,15 @@ export function parseArgs(args) {
     throw new Error('Provider must be auto, generic, or nvidia.');
   options.repeat = Number(options.repeat ?? 1);
   if (!Number.isInteger(options.repeat) || options.repeat < 1) throw new Error('Repeat must be a positive integer.');
+  options.cache ??= 'auto';
+  if (!['auto', 'off'].includes(options.cache)) throw new Error('Cache must be auto or off.');
   return options;
+}
+
+// Agent/tool suites produce files or read mutable resources outside the prompt.
+// Their responses cannot safely stand in for a new execution or sample.
+export function evaluationCache({ mode, repeat, cache = 'auto', suiteProviders }) {
+  return mode === 'model' && repeat === 1 && cache === 'auto' && !suiteProviders;
 }
 
 export function modelProvider(env, selection = 'auto') {
