@@ -26,6 +26,23 @@ Built-in Azure SVG references resolve through draw.io's own installed assets; th
 
 Catalog and vendor-icon regeneration belong to the authoring repository, not the installed skill. An upgrade requires reviewing the new library and rerendering examples, not just changing a version string.
 
+## Optional consumer icon libraries
+
+Prefer an exact native draw.io match. When none exists, use a local draw.io custom library selected for this task; do not require every brand image to ship with the skill. The helper accepts `.mxlibrary`/XML files and their JSON entry arrays. This expands component coverage without changing which diagram types this skill handles.
+
+Set `ARCHITECTURE_ICON_LIBRARIES` to the local library path before lookup, finalization and rendering. Multiple paths use the host path delimiter (`:` on POSIX, `;` on Windows). The same files must remain available for validation; changed library bytes invalidate their selected IDs. For a one-off lookup, `--library <file>` selects one local file:
+
+```sh
+node scripts/find-icon.mjs --library /path/to/library.xml --vendor "Local library" --list
+node scripts/find-icon.mjs --library /path/to/library.xml --vendor "Local library" --title Terraform
+```
+
+A supported entry contains one SVG/PNG image, a title and positive `w`/`h`; compressed single-image XML entries work too. Unsupported groups, remote images and active SVG are skipped. This is an image importer, not a general library-script executor. Use the returned exact ID when symbol and wordmark share a title. Default vendor is `Local library`; it does not imply the source is the product vendor. Inspect the artwork and confirm the actual product, source and applicable use/attribution terms. An Azure managed service or Copilot Studio is not a substitute for a different product.
+
+Use `placement` as usual. Finalization embeds the selected original image bytes and validation checks their SHA-256 against the selected library. The final diagram can display without the local library in draw.io. Keep required source/credit information in the companion account and visibly on the output where the source requires it. The skill neither uploads nor bundles the user's library. A library's public availability is not a blanket license, and no automatic legal-clearance decision is made.
+
+Obtain libraries through the user's available drawing tool or an explicit trusted source. draw.io documents custom libraries at https://github.com/jgraph/drawio-libs; its Integration library has Ansible and Terraform entries. Prefer a pinned source URL and record it with the selected library hash. If no compatible entry is available, continue with a labelled box and report the coverage gap rather than blocking the whole diagram. Render and inspect the resulting image; actual Lucidchart import remains a separate compatibility check.
+
 ## XML essentials
 
 Use one `mxfile` with one `diagram` / `mxGraphModel` page per view, each with root cells `0` and `1`, a unique page `id` and a `name` that states the page's question. Use unique IDs within a page. To link an overview box to its detail page, wrap the box in a `UserObject` with `link="data:page/id,<page id>"`. Set the file version to `32.6.1`. Parent child nodes to their actual boundary cells; coordinates of child vertices are relative to that parent. Write the XML in any layout; `finalize.mjs` rewrites it in draw.io's own layout, one element per line, because importers such as Lucidchart reject other layouts of the same valid XML.

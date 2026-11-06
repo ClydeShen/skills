@@ -15,3 +15,7 @@ The package's MIT license covers original instructions, scripts and documentatio
 On 2026-11-06, the owner approved excluding unclear-rights artwork and using the existing text-box fallback. The first exclusion removes the identified HashiCorp/Red Hat, Confluent, Grafana, ungranted Microsoft marks and Weaviate entries from the builder and generated bundle. Historical diagrams are not rewritten.
 
 This exclusion does **not** establish clearance for every remaining supplier-labelled icon. Exact grants for retained provider marks and other assets, required output attribution and viewer/dependency rights still need verification or an authorized further exclusion before stable release. Do not describe this candidate as fully cleared. Obtain applicable permission or qualified clarification where necessary.
+
+## Consumer-selected libraries
+
+Optional local libraries are supplied by the consumer and are not distributed in this package. The helper records their content hash and embeds selected original SVG/PNG bytes into generated diagrams. Native-library references and consumer libraries do not grant blanket rights to artwork: retain the applicable source terms and output attribution. Missing package artwork does not prevent a compatible consumer-provided image from being used.

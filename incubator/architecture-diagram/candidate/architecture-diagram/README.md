@@ -49,3 +49,7 @@ The runtime scripts run local programs and may clone a pinned draw.io viewer for
 Original instructions and scripts use the [MIT license](./LICENSE). Third-party artwork retains its own terms in the [asset catalog](./assets/vendor-icons.json); this is not blanket MIT licensing of icons. Redistribution clearance and output-attribution handling are still being checked before stable publication.
 
 Report issues with the input, first diagram, client/model, installed source revision and expected result in [the feedback issue](https://github.com/ClydeShen/skills/issues/7).
+
+### Additional icon libraries
+
+Native draw.io icons remain the first choice. You can also supply a local draw.io SVG/PNG custom library through `ARCHITECTURE_ICON_LIBRARIES`; use the same setting for lookup, finalization and rendering. Selected image bytes are embedded in your diagram, not added to the skill package. See [optional libraries](./references/drawio.md#optional-consumer-icon-libraries) for lookup, provenance and supported entry formats. Missing brands use labelled boxes; a matching image must represent the correct product.
