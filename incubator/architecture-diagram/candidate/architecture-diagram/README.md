@@ -1,51 +1,79 @@
 # Architecture Diagram
 
-Turn a text architecture scenario into an editable draw.io diagram and PNGs for reviews, documents and wikis. Use it when the important question is how components interact, where they run, or which boundaries a request crosses.
+**You know the system. Help everyone else see it.**
 
-## What it helps with
+A browser, an API, a queue, a worker. The pieces are familiar; the discussion gets harder when people have to picture every connection in their heads.
 
-- Request, event, authentication and cross-cloud flows.
-- Logical and deployment views with explicit component ownership and directed relationships.
-- Exact vendor icons, package-local checks and image inspection, with plain boxes when a suitable icon is unavailable.
+Give your agent the description and start with an **editable draw.io diagram** you can question, refine and share.
 
-The skill asks about consequential contradictions rather than inventing infrastructure. It is not an IaC generator, code reverse-engineering tool, image tracer or general flowchart skill.
+- **For a design review:** put the request path and system boundaries on the page, so people can point to the part they mean.
+- **For a document or wiki:** export a PNG when rendering is available, while keeping the editable original.
+- **When the design changes:** revise the diagram with feedback or open it in draw.io and make the change yourself.
 
-## Get started
+[Try it with a flow you already know →](#try-the-preview)
 
-Use Codex or Claude Code with file access and Node.js 24. PNG export uses draw.io Desktop, or Git and Chromium/Chrome with network access on first use. Without those, you receive the editable file and a browser link for viewing/export. The package targets draw.io 32.6.1.
+## From a description to a discussion
 
-Before an approved stable release, install the opt-in candidate in a disposable project:
+```mermaid
+flowchart LR
+    accTitle: From a system description to an editable diagram
+    accDescr: Describe your system, generate an editable diagram and review it in draw.io. Feedback returns to diagram refinement.
+    brief["Describe your system"] --> diagram["Generate an editable diagram"]
+    diagram --> review["Open it in draw.io"]
+    review -->|"Refine with feedback"| diagram
+```
+
+Try a prompt like this:
+
+```text
+Use the architecture-diagram skill to draw this flow:
+
+A browser calls an API in AWS. The API sends jobs to a queue.
+A worker reads the queue and stores results in a database.
+Show the request path and background processing separately.
+
+Create diagram.drawio and a short agent-report.md for unresolved details.
+```
+
+You get the editable diagram, a PNG per page when local export is available, and a short account of assumptions or open questions. If a consequential detail is missing, the skill asks before committing it to the picture.
+
+## Try the preview
+
+Use **Codex or Claude Code**, file access and **Node.js 24**. It runs local programs; [review the scripts](./scripts/) before installing. Install in a disposable project, then start a fresh client session:
 
 ```bash
 INSTALL_INTERNAL_SKILLS=1 npx --yes skills@1.7.4 add https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/candidate/architecture-diagram --agent codex --copy --yes
 ```
 
-In PowerShell, set `$env:INSTALL_INTERNAL_SKILLS = "1"` first, then run the command starting with `npx`. For Claude Code, replace `--agent codex` with `--agent claude-code`. Start a fresh client session after installation.
+For Claude Code, replace `--agent codex` with `--agent claude-code`.
 
-Once a stable release is approved and published, its installation command is:
+<details>
+<summary>Windows PowerShell</summary>
 
-```sh
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
+```powershell
+$env:INSTALL_INTERNAL_SKILLS = "1"
+npx.cmd --yes skills@1.7.4 add https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/candidate/architecture-diagram --agent codex --copy --yes
 ```
 
-That stable command is not a claim that a release is already available. To pin a candidate trial, replace `/tree/main/` in its URL with `/tree/<full-commit-SHA>/`.
+</details>
 
-## Try it
+This is a candidate preview, not a stable release. To pin a trial, replace `/tree/main/` with `/tree/<full-commit-SHA>/` in the URL.
 
-```text
-Use the architecture-diagram skill to create diagram.drawio from this scenario:
+## Before you share the result
 
-A browser calls an API in AWS. The API publishes jobs to a queue.
-A worker consumes jobs and stores results in a database in the same VPC.
-Show the request path and background processing separately. Do not invent subnets.
-```
+Check the first diagram against your source: what is connected, which way each path goes, and what sits inside each boundary. The skill supports the discussion; the drawing still needs your review.
 
-Expected output: an editable `.drawio` file, a PNG per page when export is available, and a concise companion account of unresolved details. Inspect the first diagram before requesting corrections.
+Scope: architecture from text, including request, event, authentication and cross-cloud flows. Infrastructure-code generation, code reverse engineering and image tracing are not included.
 
-## Good to know
+<details>
+<summary>Rendering, safety and licensing</summary>
 
-The runtime scripts run local programs and may clone a pinned draw.io viewer for browser rendering. Review them and use sanitized scenarios. A successful static check is not proof of architectural correctness; image inspection remains necessary.
+PNG export uses draw.io Desktop, or Git plus Chromium/Chrome with network access on first use. Without those, the skill provides the editable file and a browser link for viewing/export. It targets draw.io 32.6.1.
 
-Original instructions and scripts use the [MIT license](./LICENSE). Third-party artwork retains its own terms in the [asset catalog](./assets/vendor-icons.json); this is not blanket MIT licensing of icons. Redistribution clearance and output-attribution handling are still being checked before stable publication.
+The runtime scripts start local programs and may clone a pinned draw.io viewer. Review them before installing, and use sanitized scenarios. A static check is not proof of architectural correctness.
 
-Report issues with the input, first diagram, client/model, installed source revision and expected result in [the feedback issue](https://github.com/ClydeShen/skills/issues/7).
+Original instructions and scripts use [MIT](./LICENSE). Artwork retains its own terms; see [third-party notices](./THIRD-PARTY-NOTICES.md). Remaining artwork clearance and output attribution are still being checked before stable publication.
+
+</details>
+
+Have a scenario it struggles with? Share the input, first diagram, client/model, installed revision and what you expected in [the feedback issue](https://github.com/ClydeShen/skills/issues/7).

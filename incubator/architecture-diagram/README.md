@@ -1,16 +1,18 @@
 # Architecture Diagram
 
-Turn architecture requirements into an editable draw.io diagram that makes components, deployment boundaries and interactions visible. Use it to discuss how a system works, review ownership and follow requests across services.
+**Make the next architecture conversation easier to follow.**
 
-The skill is designed to preserve architectural meaning through layout: boundaries show real membership, arrows show directed relationships, and labels sit with the elements they explain. Consequential gaps and contradictions are raised before drawing.
+Start with one request path or cross-cloud interaction. Give your agent the description, then review and refine an editable diagram together. For the short product tour, a sample prompt and what to expect, see [Architecture Diagram's user guide](./candidate/architecture-diagram/README.md).
 
-Stage: **public**. Updated: 2026-11-05. Basis: verified candidate installation and the trial guide below, under the owner's lifecycle definitions. This is an experimental candidate; installed-client effectiveness remains unverified. The owner set the package at `f7b7537` as the evaluation baseline on 2026-11-05; no change may lower the output quality below it, as the [baseline](./evals/baseline/README.md) defines.
+This is an open candidate trial, not a stable release. The guide below helps you install it and tell us where it helps or gets in the way.
 
 ## What you get
 
-One editable `.drawio` architecture diagram and its PNG for documents, Markdown and wikis, with a logical, deployment or flow emphasis supported by your English scenario description. Unresolved source claims and implementation choices stay in a concise companion account. The package includes notation guidance and exact vendor-icon lookup, with plain-box fallbacks when a suitable icon is unavailable. AWS, Azure, Google Cloud and Kubernetes use draw.io's libraries; additional bundled artwork travels with the diagram. First-release preparation removes assets with unresolved redistribution/use terms, so lookup results define current coverage. The [third-party notices](./candidate/architecture-diagram/THIRD-PARTY-NOTICES.md) distinguish retained artwork from completed clearance; the skill remains a candidate.
+- **An editable diagram:** open the `.drawio` file and keep working with it after the conversation.
+- **Images for sharing:** export PNGs for a design review, document or wiki when rendering is available.
+- **The questions that still matter:** assumptions and unresolved details stay in a short companion account, ready for your review.
 
-Start with a specific interaction, such as a sign-in flow or a request crossing cloud and on-premises boundaries. Code/IaC input, and automatic redraw are outside current scope. Static export is the core goal; an interactive HTML and SVG version may follow.
+Start with one interaction you know well: a sign-in flow, a background job or a request crossing cloud and on-premises boundaries. Input is an English text scenario; code/IaC reverse engineering and image tracing are outside current scope.
 
 ## Quick start: install and test the candidate
 
@@ -48,6 +50,10 @@ Open the result in draw.io. Check components, boundaries, arrow directions and c
 The package runs local programs: its Node scripts start draw.io Desktop or a browser and may run `git clone` for the pinned draw.io viewer, without a shell. Review them before installing.
 
 ## Status and feedback
+
+Stage: **public**. Updated: 2026-11-06. Basis: verified candidate installation and the trial guide, under the owner's lifecycle definitions. Installed-client effectiveness remains unverified. The owner set package `f7b7537` as the evaluation baseline on 2026-11-05; [the baseline protocol](./evals/baseline/README.md) governs comparisons and owner review.
+
+Icon coverage follows the actual lookup results, with plain-box fallback for unavailable identities. First-release preparation removes assets with unresolved use terms; [third-party notices](./candidate/architecture-diagram/THIRD-PARTY-NOTICES.md) record remaining clearance and attribution work.
 
 CLI delivery was checked on Linux for Codex and Claude Code. Real client activation, Windows command execution and offline draw.io Desktop remain unverified. Earlier diagram trials found information drift; authored repairs still need fresh end-to-end trials. See the [evaluation record](./evaluation.md) for evidence and remaining gaps.
 
