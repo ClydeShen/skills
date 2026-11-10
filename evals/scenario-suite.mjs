@@ -80,7 +80,14 @@ function runAfter(commands, workspace, skill) {
       encoding: 'utf8',
       timeout: 600000,
     });
-    return { command: command.join(' '), status: run.status, output: `${run.stdout}${run.stderr}`.trim() };
+    const last = (text = '') => text.trim().split('\n').at(-1) ?? '';
+    // A command's result line is its last line of standard output; its findings go to standard error.
+    return {
+      command: command.join(' '),
+      status: run.status,
+      summary: last(run.stdout) || last(run.stderr),
+      output: `${run.stdout}${run.stderr}`.trim(),
+    };
   });
 }
 
@@ -111,10 +118,11 @@ function scenarioProvider({ item, config, agent, env, base }) {
         run,
         generation_error: generated.error ? 'Generation failed.' : undefined,
         review_error: review.error ? 'Review failed.' : undefined,
-        after: after.map(({ command, status, output }) => ({ command, status, last_line: output.split('\n').at(-1) })),
+        after: after.map(({ command, status, summary }) => ({ command, status, summary })),
         reviewed: shown,
       };
       writeFileSync(path.join(run, 'review.md'), review.output ?? '');
+      writeFileSync(path.join(run, 'after.txt'), after.map((a) => `$ ${a.command}\n${a.output}`).join('\n\n'));
       writeFileSync(path.join(run, 'details.json'), `${JSON.stringify(details, null, 2)}\n`);
       return {
         output: review.output ?? '',

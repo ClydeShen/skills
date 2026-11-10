@@ -112,7 +112,7 @@ Each initiative declares its runs in `incubator/<initiative>/evals/scenarios.jso
 
 Every run starts in a new folder under `evals/.local/scenario-<skill>-*/`, with the working package in the client's project skill location and the source as its only other file. The agent may write files and run the package's scripts there. The reviewer runs in another new folder that holds only the listed files, with read-only tools and no skill. Claude loads project settings only, so no user memory, settings or global skills reach either session; Codex still reads your own `CODEX_HOME`. Both use your existing login and quota.
 
-A run passes when the reviewer gives a score. The run prints each case's scores beside its baseline scores and marks a mean below the baseline minus its tolerance. The owner judges the comparison; no score merges or blocks a change by itself. The report records each run's folder, the after-command results and the reviewed files. Promptfoo's cache is off for these runs.
+A run passes when the reviewer gives a score. The run prints each case's scores beside its baseline scores and marks a mean below the baseline minus its tolerance. The owner judges the comparison; no score merges or blocks a change by itself. The report records each run's folder, the result line of each after-command and the reviewed files; the folder also keeps their full output. Promptfoo's cache is off for these runs.
 
 ## Adding suites
 
