@@ -129,7 +129,7 @@ test('crossing connectors and swappable ports are reported; a clear outside chan
     edge('toUpper', 'agent', 'up', 'exitX=1;exitY=0.75;entryX=0;entryY=0.5;', '', pts([250, 154], [250, 36])),
   );
   assert.ok(
-    checkLayout(swapped).warnings.includes(
+    checkLayout(swapped).errors.includes(
       'Connectors toLower and toUpper share a side of one element and cross. Swap their ports.',
     ),
   );
@@ -263,7 +263,10 @@ test('numbered steps that tangle are told to swap ports; numbers out of spatial 
       edge('s1', 'agent', 't1', 'exitX=1;exitY=0.25;entryX=0;entryY=0.5;', '1. Step', waypoints([236, 218], [236, 36])),
       ...lines,
     );
-  const steps = (xml) => checkLayout(xml).warnings.filter((w) => /Swap their ports|[Ss]teps? /.test(w));
+  const steps = (xml) => {
+    const { errors, warnings } = checkLayout(xml);
+    return [...errors, ...warnings].filter((w) => /Swap their ports|[Ss]teps? /.test(w));
+  };
   // A reader finds the numbers on the page; 1, 3, 2 from top to bottom is fine when nothing crosses.
   const untangled = fan(
     edge('s3', 'agent', 't2', 'exitX=1;exitY=0.5;entryX=0;entryY=0.5;', '3. Step'),
@@ -278,8 +281,12 @@ test('numbered steps that tangle are told to swap ports; numbers out of spatial 
 });
 
 test('round 3 semantic routing trials report the tangle and avoidable bends visible in their images', () => {
-  const trial = (name) =>
-    checkLayout(readFileSync(new URL(`./fixtures/routing-${name}.drawio`, import.meta.url), 'utf8')).warnings;
+  const trial = (name) => {
+    const { errors, warnings } = checkLayout(
+      readFileSync(new URL(`./fixtures/routing-${name}.drawio`, import.meta.url), 'utf8'),
+    );
+    return [...errors.filter((e) => e.includes('Swap their ports')), ...warnings];
+  };
   const a = trial('round3-a');
   assert.ok(
     a.includes(

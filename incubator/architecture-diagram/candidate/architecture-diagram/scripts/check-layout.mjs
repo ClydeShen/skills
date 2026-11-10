@@ -377,6 +377,10 @@ function checkPage(xml) {
   warnings.push(...shortDashes(edges, boxes));
   warnings.push(...labelCollisions(cells, byId, boxes, vertices, edges));
   warnings.push(...routeIntegrity(cells, boxes, vertices, edges));
+  const crossed = crossings(edges, boxes);
+  errors.push(...crossed.errors);
+  warnings.push(...crossed.warnings);
+  errors.push(...boundaryTitles(cells, boxes, vertices));
   errors.push(...sharedSegments(edges, boxes));
   errors.push(...legend(cells, vertices, edges, boxes, warnings));
   warnings.push(...simplerRoutes(cells, byId, boxes, vertices, edges));
@@ -508,7 +512,6 @@ function routeIntegrity(cells, boxes, vertices, edges) {
         }
       }
   }
-  found.push(...crossings(edges, boxes));
   return found;
 }
 
@@ -709,7 +712,8 @@ export function keyAcrossPages(xml) {
 }
 
 function crossings(edges, boxes) {
-  const found = [];
+  const errors = [];
+  const warnings = [];
   const routed = edges.map((edge) => ({ edge, route: edgeRoute(edge, boxes) })).filter((r) => r.route);
   for (let i = 0; i < routed.length; i++)
     for (let j = i + 1; j < routed.length; j++) {
@@ -720,17 +724,30 @@ function crossings(edges, boxes) {
         (e.source === f.source && sideOf(e.style.exitX, e.style.exitY) === sideOf(f.style.exitX, f.style.exitY)) ||
         (e.target === f.target && sideOf(e.style.entryX, e.style.entryY) === sideOf(f.style.entryX, f.style.entryY));
       if (crossed && sameSide && e.style.exitX !== undefined && f.style.exitX !== undefined)
-        found.push(`Connectors ${e.id} and ${f.id} share a side of one element and cross. Swap their ports.`);
+        errors.push(`Connectors ${e.id} and ${f.id} share a side of one element and cross. Swap their ports.`);
       else if (crossed)
-        found.push(
+        warnings.push(
           `Connectors ${e.id} and ${f.id} cross. Reorder ports, move an element, or route one around the outside.`,
         );
       if (shared > 10 && sameMeaning(e, f))
-        found.push(
+        warnings.push(
           `Connectors ${e.id} and ${f.id} share a ${Math.round(shared)}-unit segment. That reads as one relationship; keep it only if they are one.`,
         );
     }
-  return found;
+  return { errors, warnings };
+}
+
+// Every boundary title sits in the same place, so a reader finds each scope's name the same way.
+// Only a corner icon, when the boundary has one, comes before the title.
+const TABLE_SHAPES = new Set(['table', 'tableRow', 'partialRectangle']);
+function boundaryTitles(cells, boxes, vertices) {
+  return regionsOf(cells, boxes, vertices)
+    .filter((c) => plain(c.value) && !TABLE_SHAPES.has(c.style.shape))
+    .filter((c) => c.style.align !== 'left' || c.style.verticalAlign !== 'top')
+    .map(
+      (c) =>
+        `Boundary ${c.id} has its title away from the top left. Set align=left;verticalAlign=top, as find-icon.mjs --boundary returns.`,
+    );
 }
 
 // A boundary that represents a service is that service: a member named like the boundary repeats it.

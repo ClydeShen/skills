@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import { checkLayout } from '../candidate/architecture-diagram/scripts/check-layout.mjs';
 import { findForbiddenText } from '../candidate/architecture-diagram/scripts/check-text.mjs';
 import { formatDrawio } from '../candidate/architecture-diagram/scripts/drawio-format.mjs';
+import { PLAIN_BOUNDARY } from '../candidate/architecture-diagram/scripts/icons.mjs';
 import { validateBoundaryRoutes, validateDiagram, validateRender } from '../tools/validate.mjs';
 import { createSuite, gradeClarification } from './suite.mjs';
 
@@ -417,7 +418,7 @@ const line = (id, source, target, style = '', points = []) =>
 
 test('layout errors catch a broken parent edge, small text and double-headed arrows', () => {
   const good = page(
-    box('zone', 0, 0, 400, 300) +
+    box('zone', 0, 0, 400, 300, '1', 'container=1;align=left;verticalAlign=top;') +
       box('vm', 40, 40, 72, 72, 'zone') +
       box('db', 500, 40, 72, 72) +
       line('e', 'vm', 'db', 'strokeWidth=2.5;endArrow=block;'),
@@ -515,7 +516,23 @@ test('split views are checked page by page and stay consistent across pages', ()
   assert.match(checkLayout(file('', '', 'gone')).errors.join('\n'), /page id "gone"/);
 });
 
+test('every boundary title sits at the top left, with or without a corner icon', () => {
+  const titled = (style) =>
+    checkLayout(page(box('region', 0, 0, 400, 300, '1', style) + box('vm', 40, 60, 72, 72, 'region')));
+  const titleErrors = (style) => titled(style).errors.filter((e) => e.includes('title away from the top left'));
+  assert.deepEqual(titleErrors(PLAIN_BOUNDARY.style), []);
+  assert.deepEqual(titleErrors('container=1;verticalAlign=top;'), [
+    'Boundary region has its title away from the top left. Set align=left;verticalAlign=top, as find-icon.mjs --boundary returns.',
+  ]);
+  assert.equal(titleErrors('container=1;align=left;').length, 1);
+  assert.match(PLAIN_BOUNDARY.style, /align=left;spacingLeft=8;/);
+});
+
 test('object-wrapped cells and nested parents use absolute positions', () => {
   const wrapped = `<object id="vm" label="VM"><mxCell vertex="1" parent="zone" style=""><mxGeometry x="10" y="10" width="72" height="72" as="geometry"/></mxCell></object>`;
-  assert.deepEqual(checkLayout(page(box('zone', 500, 500, 200, 200) + wrapped)).errors, []);
+  assert.deepEqual(
+    checkLayout(page(box('zone', 500, 500, 200, 200, '1', 'container=1;align=left;verticalAlign=top;') + wrapped))
+      .errors,
+    [],
+  );
 });

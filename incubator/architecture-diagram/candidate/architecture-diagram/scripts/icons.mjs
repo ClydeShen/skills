@@ -83,14 +83,18 @@ export function iconPlacement(entry) {
 
 const styleAttributes = /\bstyle="([^"]*)"/g;
 // A title marker identifies its parent boundary; it is not another deployed resource.
+// A boundary without an identity keeps the same outline and title place as a marked one, without the marker.
+const boundaryStyle = (spacingLeft) =>
+  `rounded=0;container=1;collapsible=0;html=1;fillColor=none;strokeColor=#64748B;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=${spacingLeft};fontSize=14;fontColor=#1F2937;`;
+export const PLAIN_BOUNDARY = { kind: 'plain-boundary', style: boundaryStyle(8), marker: null };
+
 export function boundaryPlacement(entry) {
   if (entry.palette === 'aws4Groups') return { kind: 'native-boundary', style: entry.style, marker: null };
   const placement = iconPlacement(entry);
   const scale = 24 / Math.max(placement.width, placement.height);
   return {
     kind: 'marked-boundary',
-    style:
-      'rounded=0;container=1;collapsible=0;html=1;fillColor=none;strokeColor=#64748B;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=36;fontSize=14;fontColor=#1F2937;',
+    style: boundaryStyle(36),
     marker: {
       x: 6,
       y: 6,
