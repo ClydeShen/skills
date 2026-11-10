@@ -649,9 +649,8 @@ const describe = (t) =>
 
 // Captions, boundary titles and connector labels must not cover each other or a line.
 function labelCollisions(page) {
-  const { cells, byId, boxes, vertices, edges } = page;
+  const { byId, boxes, vertices, edges } = page;
   const found = [];
-  const parents = new Set(cells.map((c) => c.parent));
   const routes = new Map(edges.map((edge) => [edge.id, edgeRoute(edge, boxes)]));
   const texts = textBoxes(page, routes);
 
