@@ -1,6 +1,6 @@
 # Architecture Diagram evaluation
 
-Date: 2026-11-05. Status: the baseline is fixed. Every change to the package is checked against it.
+Date: 2026-11-10. Status: published at the revision recorded below. The baseline is fixed; every change to the package is checked against it.
 
 ## Scope and target
 
@@ -20,28 +20,48 @@ Date: 2026-11-05. Status: the baseline is fixed. Every change to the package is 
 
 The baseline scores, from clean runs with a context-free review, are A 7/10, B 7.5/10, 02 7/10 and C 7 and 6.5/10. The same scenario on the same package scored up to one point apart between runs, so a comparison uses the mean of at least two runs, and the owner judges it.
 
-## Release preparation
+## Release record
 
-Date: 2026-11-06. Status: **blocked, not published**. Prepared source: `8a1f58c592fdea4dd33fbe169e6317f087e19bac`; snapshot digest: `64aca4256f56d4b811f58b535bd3a6217a348eac9331c0d4c2d6e7fe9a330635`. The `.publication.json` records its digest method, file inventory and the sole export transformation. Regenerate temporary artifacts from this commit instead of relying on a retained temporary path.
+Date: 2026-11-10. Published revision: [`skills/architecture-diagram/`](../../skills/architecture-diagram/README.md), source commit `71ca85da770b1307bbd6f9182d1c06e030ce859b`, snapshot digest `4224ee3cda065cfa5cc676c2ef8a36f1a32b80cf3d0f93c98f2e40715113c218`, 27 files. Its `.publication.json` records the digest method, the file inventory and the one export transformation (the candidate's internal marker is removed). Regenerate it with `npm run skill:publication -- stage architecture-diagram 71ca85da770b1307bbd6f9182d1c06e030ce859b`.
 
-| Check                       | Observed result                                                                                                                                                                                                                                                                                                                                                            |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Documentation/license       | Package README, owner-approved MIT for original content, supplier/project license texts and third-party notices added. Artwork is not blanket-MIT licensed.                                                                                                                                                                                                                |
-| Conservative artwork change | Owner-approved exclusion removed 19 entries from builder and generated catalog. The 75 retained entries equal their previous records, including artwork/hashes. Neutral/retained test fixtures preserve the PNG embedding and tamper assertions. No measured baseline artifact changed.                                                                                    |
-| Repository verification     | `npm run check`: 127 tests and 42 synthetic assertions passed; targeted clarification replay passed 4/4. These are not quality scores. Advisory README/LICENSE/notices/nesting warnings remain; no check was disabled.                                                                                                                                                     |
-| Reference format            | Official `skills-ref` at `83021e2be457a9b6679148719c1f6074f0ad975e` passed on the actual prepared snapshot.                                                                                                                                                                                                                                                                |
-| Discovery/install           | skills CLI 1.7.4 on Linux: a temporary source-plus-snapshot repository listed one default skill. An authoring-only canary was not installed. Codex/Claude Code project-local copies matched the snapshot digest. This verifies delivery, not activation or Windows/macOS execution.                                                                                        |
-| Security                    | Cisco scanner 2.3.2 passed existing policy with three exact-file reviewed INFO findings retained. Renderer SHA-256 remains `8c5637a3022599ec1a69d5d43232cd36603d1b1fb8f699e320ecb1791da3742c`. This is not external audit evidence.                                                                                                                                        |
-| Authorized live smoke       | One scenario-A generation plus one NVIDIA image assessment authorized. Codex CLI 0.163.0 failed at app-server initialization with a read-only-filesystem error, including after a supported temporary state/log-path adjustment. No model resolved, no diagram/image produced and no NVIDIA call made. Both attempts are infrastructure failures, not zero quality scores. |
+Owner approval: on 2026-11-10 the owner approved the snapshot of source commit `92872b042a6856ed782e6248ae0d774d7751be19` (digest `facc8d18d5a280f6996963888540ad78b1dc8901db0d78565bbc7c286c4e79d6`) and directed that its README, which still described the package as unreleased, be corrected. The published revision differs from the approved one only in `README.md` and `THIRD-PARTY-NOTICES.md`; every script, reference and asset is identical.
 
-Git-ignored in-repository staging was discoverable by the CLI. The tool now stages outside the repository and enforces the skill's directory name. Earlier temporary staging artifacts were moved outside, not deleted. Root discovery again reports no released skills. Failed smoke reports remain ignored; do not retry-select successes or substitute an old baseline image.
+### Behavioral regression
 
-Branch exception: release preparation retains the three locally accepted lifecycle commits as dependencies instead of discarding them to branch directly from `origin/main`; no verification was waived.
+Command: `npm run eval:scenario -- --skill architecture-diagram --agent claude --repeat 2`, against source `92872b0`, whose scripts and references the published revision shares. Agent and reviewer: Claude Code with `claude-sonnet-5-5`, each run in a clean session. A run interrupted by the usage limit has no score and was rerun.
 
-## Remaining acceptance
+| Scenario                | Baseline | Runs | Mean | Baseline mean minus 0.5 |
+| ----------------------- | -------- | ---- | ---- | ----------------------- |
+| AWS support assistant   | 7        | 8, 7 | 7.5  | 6.5                     |
+| Azure document Q&A      | 7.5      | 7, 7 | 7.0  | 7.0                     |
+| Cross-cloud private API | 7        | 7, 6 | 6.5  | 6.5                     |
+| AWS online store        | 7, 6.5   | 7, 6 | 6.5  | 6.25                    |
 
-1. Complete exact-artwork grants and output attribution using [the rights research](../../research/diagrams/architecture-diagram/0003-bundled-icon-rights-need-explicit-notices.md). Excluding 19 entries does not clear every remaining supplier-labelled icon; retained Azure/GCP provider-mark permissions remain unverified. Do not remove required provider identity or declare permission merely to pass a check.
-2. Use a writable supported client environment for a live smoke, then budget and execute full scenario/trigger comparisons on the final package. Relevant runtime changes invalidate affected evidence. The frozen baseline has not been re-scored for the new [boundary](../../research/diagrams/architecture-diagram/0001-boundary-markers-identify-cloud-scope.md) and [colour](../../research/diagrams/architecture-diagram/0002-colour-cues-and-contrast-levels.md) standards.
-3. Obtain required skills.sh audit approval tied to the actual artifact. The site returned proxy HTTP 403 in this environment; no verdict was obtained. Remote staging, artifact-bound owner approval and stable promotion remain pending.
+No mean is below its tolerance line; three are below the baseline mean, two of them exactly on the line. All eight runs had no layout error. The reviewers' recurring findings were small connector labels and key text at 900 pixels, long supporting (dashed) connectors in the two largest scenarios, and an incomplete standby region in the online store. The owner reviewed the eight images and accepted the comparison.
 
-The historical reviewer was a model, not independent human approval. A person must inspect notation/image changes. Earlier trials are recoverable from Git history, for example `facc1f1`; they are not a new baseline or current-release evidence.
+Trigger check: `npm run eval:trigger -- --skill architecture-diagram --agent claude --repeat 3 --baseline f7b7537`. Current 17 of 18 and baseline 17 of 18; the failing run of each was a provider request failure, not a trigger error. A rerun of that case gave current 2 of 3 and baseline 3 of 3, the failing one again a provider request failure. Every completed run triggered or skipped as its case expects.
+
+### Checks
+
+| Check            | Result                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Repository       | `npm run check`: tests and 42 synthetic assertions passed; they are not quality scores                                                                                                                                                                                                                                                                                                                                                         |
+| Reference format | Official `skills-ref` at `83021e2be457a9b6679148719c1f6074f0ad975e`: valid skill                                                                                                                                                                                                                                                                                                                                                               |
+| Snapshot         | `npm run skill:publication -- verify skills/architecture-diagram` matches the digest above; formatters ignore `skills/` so the files stay byte-identical                                                                                                                                                                                                                                                                                       |
+| Security         | Cisco scanner 2.3.2 on `skills/architecture-diagram`: highest severity LOW (the provenance file `.publication.json`) and three INFO findings for `scripts/render.mjs`, reviewed from CRITICAL. The file is byte-identical to the one reviewed on 2026-11-06, so the review registry now covers the snapshot path too; renderer SHA-256 `8c5637a3022599ec1a69d5d43232cd36603d1b1fb8f699e320ecb1791da3742c`. This is not external audit evidence |
+| Discovery        | skills CLI 1.7.4, `npx skills add . --list` from the repository root: one skill, `architecture-diagram`, listed once                                                                                                                                                                                                                                                                                                                           |
+| Clean install    | skills CLI 1.7.4 into a new project for Claude Code and for Codex with `--copy`: both installed trees are identical to the snapshot. This verifies delivery, not activation or Windows and macOS execution                                                                                                                                                                                                                                     |
+| Package README   | The package carries its own first-use README with the install command                                                                                                                                                                                                                                                                                                                                                                          |
+| Artwork          | 75 bundled entries; the 19 with unclear rights are excluded and draw as plain labelled boxes. Exact grants for the Azure and Google Cloud provider marks and Jenkins output attribution remain open in [the rights research](../../research/diagrams/architecture-diagram/0003-bundled-icon-rights-need-explicit-notices.md)                                                                                                                   |
+
+### skills.sh audit
+
+Pending. The audit appears only after the first installation from the published repository. After this revision merges to `main`, install it once with `npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram`, read the audit and record its URL, date and verdict here. A missing or inconclusive result stays pending. An adverse finding is fixed in a new revision or the snapshot is withdrawn.
+
+## Remaining work
+
+1. Close the open artwork grants and output attribution, or authorize a further exclusion.
+2. Record the skills.sh audit.
+3. The next revision, including PR #45's consumer icon libraries, needs its own regression against the same baseline.
+
+The historical reviewer was a model, not independent human approval. A person must inspect notation and image changes. Earlier trials are recoverable from Git history, for example `facc1f1`; they are not a new baseline or current-release evidence.

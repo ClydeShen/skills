@@ -14,9 +14,13 @@ These are intended uses, not guarantees. Each skill's page explains its current 
 
 ## Try a skill
 
-Start with the [Architecture Diagram trial guide](./incubator/architecture-diagram/README.md#quick-start-install-and-test-the-candidate). It includes copyable installation commands for Codex and Claude Code, the required environment and a first-use prompt. Use a sanitized scenario in a disposable project and inspect the first result before requesting corrections.
+Install the released Architecture Diagram skill in your project:
 
-No stable skill has been released yet. Candidate trials are opt-in experiments, not approved releases; follow their explicit installation instructions rather than assuming a stable package is available.
+```sh
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
+```
+
+For Claude Code, replace `--agent codex` with `--agent claude-code`. The [package README](./skills/architecture-diagram/README.md) lists the requirements and a first-use prompt. Use a sanitized scenario in a disposable project and inspect the first result before requesting corrections. Other skills here are candidates; their trial instructions are opt-in and not approved releases.
 
 ## From idea to release
 

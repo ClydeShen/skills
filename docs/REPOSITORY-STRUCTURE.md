@@ -42,7 +42,7 @@ incubator/<initiative>/candidate/<skill-name>/SKILL.md
 incubator/<initiative>/evals/{README.md,suite.mjs,cases.json,trigger.json,scenarios.json}
 incubator/<initiative>/evals/{scenarios,baseline,fixtures}/
 incubator/<initiative>/evaluation.md
-skills/<skill-name>/SKILL.md             # generated, verified publication snapshot
+skills/<skill-name>/SKILL.md             # generated, verified publication snapshot; formatters ignore it
 evals/{run.mjs,lib.mjs,...}
 evals/.local/                         # ignored run artifacts
 harness/                             # shared repository checks and their tests
@@ -142,7 +142,7 @@ Publish only an owner-approved snapshot. Right after publication, install the pa
 
 The [selected adapter](../knowledge/skill-lifecycle/adapters/skills-sh.md) owns verified CLI/audit mechanisms and limits. The initiative evaluation record of each released skill holds its platform verdict.
 
-No released packages currently exist. For that state, a CLI result of no installable skills can be expected; it is not a reason to expose the candidate. Add an explicit package license or applicable inherited license before publishing; do not invent license terms for imported materials.
+One package is released: `skills/architecture-diagram/`, a verified snapshot of the Architecture Diagram candidate. Candidates stay out of default discovery; a repository with no released package lists no installable skills, which is not a reason to expose a candidate. Add an explicit package license or applicable inherited license before publishing; do not invent license terms for imported materials.
 
 ## Agent maintenance
 

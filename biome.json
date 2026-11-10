@@ -14,7 +14,8 @@
       "!.claude/skills",
       "!incubator/*/evals/*-20*-*-*",
       "!incubator/architecture-diagram/candidate/architecture-diagram/assets/catalog.json",
-      "!incubator/architecture-diagram/prototype"
+      "!incubator/architecture-diagram/prototype",
+      "!skills"
     ]
   },
   "formatter": { "useEditorconfig": true, "lineWidth": 120 },

@@ -2,6 +2,10 @@
 
 Updated: 2026-11-06 (UTC). This is the consolidated continuation guide, not a parallel task tracker. Read root [AGENTS.md](../../AGENTS.md), inspect the working tree and fetch the relevant branches before changing anything.
 
+## Current state (2026-11-10)
+
+The first revision is published at [`skills/architecture-diagram/`](../../skills/architecture-diagram/README.md) (source `71ca85da770b1307bbd6f9182d1c06e030ce859b`, digest `4224ee3cda065cfa5cc676c2ef8a36f1a32b80cf3d0f93c98f2e40715113c218`), with 75 bundled icons. Its regression, checks and open items are in the [release record](./evaluation.md#release-record). Two things remain: record the skills.sh audit after the first installation from `main`, and close the open artwork grants. Everything below describes the next revision (PR #45's consumer icon libraries), which starts again at `internal` and needs its own regression with `npm run eval:scenario`, as step 3 below says.
+
 ## Immediate continuation: Claude behavioral regression, then publication
 
 Owner direction, 2026-11-06: continue this development and regression work in Claude's supported environment. Stop using Codex Cloud to advance it; repeated runtime/network diagnosis is not the task. The goal is to publish a useful Architecture Diagram skill quickly with broad icon coverage, not to redistribute an exhaustive brand-image bundle. Talk to the owner in Chinese; write repository content in English.
