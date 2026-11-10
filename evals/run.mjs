@@ -2,7 +2,8 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { armSummary, digest, evaluationCache, modelProvider, parseArgs } from './lib.mjs';
+import { armSummary, digest, evaluationCache, modelProvider, nvidiaApiBaseUrl, parseArgs } from './lib.mjs';
+import { providerDelayMs } from './rate-limit.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const local = resolve(root, 'evals/.local');
@@ -41,6 +42,8 @@ async function main() {
     suite.tests = suite.tests.filter((test) => test.vars?.case_id === caseId);
     if (!suite.tests.length) throw new Error('No test matches the requested case ID.');
   }
+  // The shared NVIDIA endpoint answers 429 above its request rate; leave a gap after each call to it.
+  const delay = providerDelayMs(provider, process.env, nvidiaApiBaseUrl);
   const { default: promptfoo } = await import('promptfoo');
   const record = await promptfoo.evaluate(
     {
@@ -49,7 +52,7 @@ async function main() {
       writeLatestResults: false,
       sharing: false,
     },
-    { cache: useCache, maxConcurrency: 1, repeat },
+    { cache: useCache, maxConcurrency: 1, repeat, delay },
   );
   const summary = await record.toEvaluateSummary();
   const packageInfo = JSON.parse(await readFile(resolve(root, 'node_modules/promptfoo/package.json'), 'utf8'));
@@ -82,6 +85,7 @@ async function main() {
             top_p: provider.config.top_p,
             max_tokens: provider.config.max_tokens,
             reasoning_effort: provider.config.passthrough?.reasoning_effort,
+            delay_ms: delay,
           }
         : null,
     stats: summary.stats,

@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises';
+import { createRateLimiter, retryDelayMs } from './rate-limit.mjs';
 
 // Image judge: reads one image and checks a list of claims against what is visible.
 // Claims are { id, text, key?, critical?: boolean, expect?: 'drawn' | 'not_drawn' }; id is what the judge sees, key labels reports. A 'not_drawn' claim is a
@@ -170,13 +171,20 @@ export function createVisionJudgeProvider({
   retries = 3,
   backoffMs = 2000,
   timeoutMs = 300000,
+  requestsPerMinute,
   fetchImpl = fetch,
   sleep = pause,
+  now = Date.now,
 }) {
+  // Every attempt, including a retry, takes its place in the request rate the endpoint allows.
+  const limiter = requestsPerMinute ? createRateLimiter({ requestsPerMinute, now, sleep }) : null;
   async function request(messages) {
     let lastError = 'request failed';
+    let wait = 0;
     for (let attempt = 0; attempt <= retries; attempt++) {
-      if (attempt) await sleep(backoffMs * 2 ** (attempt - 1));
+      if (attempt) await sleep(wait);
+      wait = retryDelayMs(null, attempt + 1, backoffMs);
+      await limiter?.acquire();
       try {
         const response = await fetchImpl(`${apiBaseUrl}/chat/completions`, {
           method: 'POST',
@@ -198,6 +206,7 @@ export function createVisionJudgeProvider({
         }
         lastError = `HTTP ${response.status}`;
         if (!retryable.has(response.status)) break;
+        wait = retryDelayMs(response.headers?.get?.('retry-after'), attempt + 1, backoffMs);
       } catch (error) {
         lastError = error?.name === 'TimeoutError' ? 'timeout' : 'network error';
       }
