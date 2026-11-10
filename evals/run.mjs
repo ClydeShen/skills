@@ -3,7 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { armSummary, digest, evaluationCache, modelProvider, nvidiaApiBaseUrl, parseArgs } from './lib.mjs';
-import { providerDelayMs } from './rate-limit.mjs';
+import { isNvidiaProvider, limitedProvider, requestsPerMinute, sharedNvidiaLimiter } from './rate-limit.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const local = resolve(root, 'evals/.local');
@@ -42,17 +42,23 @@ async function main() {
     suite.tests = suite.tests.filter((test) => test.vars?.case_id === caseId);
     if (!suite.tests.length) throw new Error('No test matches the requested case ID.');
   }
-  // The shared NVIDIA endpoint answers 429 above its request rate; leave a gap after each call to it.
-  const delay = providerDelayMs(provider, process.env, nvidiaApiBaseUrl);
   const { default: promptfoo } = await import('promptfoo');
+  // Every request to the NVIDIA endpoint takes its start time from the schedule shared by all processes.
+  const nvidia = isNvidiaProvider(provider, nvidiaApiBaseUrl);
+  const limited = nvidia
+    ? limitedProvider(
+        await promptfoo.loadApiProvider(provider.id, { options: { config: provider.config } }),
+        sharedNvidiaLimiter(process.env),
+      )
+    : null;
   const record = await promptfoo.evaluate(
     {
       ...suite,
-      ...(provider && !suiteProviders ? { providers: [provider] } : {}),
+      ...(provider && !suiteProviders ? { providers: [limited ?? provider] } : {}),
       writeLatestResults: false,
       sharing: false,
     },
-    { cache: useCache, maxConcurrency: 1, repeat, delay },
+    { cache: useCache, maxConcurrency: 1, repeat },
   );
   const summary = await record.toEvaluateSummary();
   const packageInfo = JSON.parse(await readFile(resolve(root, 'node_modules/promptfoo/package.json'), 'utf8'));
@@ -85,7 +91,7 @@ async function main() {
             top_p: provider.config.top_p,
             max_tokens: provider.config.max_tokens,
             reasoning_effort: provider.config.passthrough?.reasoning_effort,
-            delay_ms: delay,
+            requests_per_minute: nvidia ? requestsPerMinute(process.env) : undefined,
           }
         : null,
     stats: summary.stats,

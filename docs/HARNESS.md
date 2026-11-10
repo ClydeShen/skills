@@ -67,6 +67,8 @@ Static rules run automatically, AI suggests semantic changes, and evaluation wit
 
 Owner clarification, 2026-11-06: use the shared Promptfoo runner for regressions before broader agent trials, reducing repeated token use where cached prompt responses remain valid. Clean agent sessions may use any configured client; they are not restricted to Claude Code. Record client/model and isolation. Repeated samples and agent/tool executions must remain fresh; [evaluation configuration](./prompt-evaluation.md#regression-cost-and-caching) owns the cache rules.
 
+Owner decision, 2026-11-10: every request to the NVIDIA API takes its start time from one shared schedule for all skills and processes, at no more than 40 requests per minute; no session may call it directly ([evaluation configuration](./prompt-evaluation.md#nvidia-trial-endpoint) owns the setting).
+
 Owner decision, 2026-11-10: make a baseline comparison only with `npm run eval:scenario` and a trigger check only with `npm run eval:trigger`. Scores from any other runner, such as a direct client call or an ad hoc script, are not evidence. When the shared runner cannot do what a comparison needs, extend it first.
 
 | Measure       | Question                                   | Evidence                                                     | Who decides                   |
@@ -136,7 +138,7 @@ A change to network settings may apply only to new sessions. After setup, `npm r
 
 ## Client and Git adapters
 
-`AGENTS.md` is shared instruction authority; `CLAUDE.md` imports it. Both client configurations call `harness/session-start.mjs`, which installs missing dependencies, and `harness/stop-hook.mjs`, which runs the same fast `check:repo` implementation. Hook checks do not replace the full handoff gate.
+`AGENTS.md` is shared instruction authority; `CLAUDE.md` imports it. Both client configurations call `harness/session-start.mjs`, which installs missing dependencies, and `harness/stop-hook.mjs`, which runs the same fast `check:repo` implementation. They also call `harness/nvidia-guard.mjs` before shell commands (and, for Claude Code, file writes): it exits with code 2 and the reason when a command connects to the NVIDIA inference host or a script names it, so a new session cannot spend the endpoint's rate limit outside the shared schedule. It guards against accidents and is not a security boundary; `check:repo` rejects committed code that bypasses the shared runner, and Codex hosted paths that do not load project hooks rely on that check and on `AGENTS.md`. Hook checks do not replace the full handoff gate.
 
 The Stop hook asks for one repair pass after a failed check. If `stop_hook_active` is already true, it surfaces an incomplete-verification message without another continuation. Missing dependencies, failed child processes and timeouts are failures, not green checks. Malformed event input exits nonzero without claiming validation. Scope-limited blockers can be handed back; a hook is not permission to fix unrelated changes.
 

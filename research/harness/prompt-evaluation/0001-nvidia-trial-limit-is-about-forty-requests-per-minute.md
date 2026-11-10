@@ -1,6 +1,6 @@
 # The NVIDIA trial endpoint allows about 40 requests per minute and rejects bursts
 
-Date: 2026-11-10. Status: implemented in the shared evaluation runner; the figure is unofficial and unverified against an NVIDIA page.
+Date: 2026-11-10. Status: implemented in the shared evaluation runner and its hooks; the figure is unofficial and unverified against an NVIDIA page.
 
 ## Finding
 
@@ -17,10 +17,13 @@ The hosted trial endpoint at `https://integrate.api.nvidia.com/v1` answers HTTP 
 
 ## Rule
 
-- Space requests at least `60000 / NVIDIA_RPM` milliseconds apart; the default `NVIDIA_RPM` is 36, four below the reported limit because other sessions may share a key. One gap serves as the average rate limit and the burst limit.
+- Every request to the endpoint, from any skill, suite or process on the machine, takes its start time from one schedule file, at least `60000 / NVIDIA_RPM` milliseconds after the previous one. One gap serves as the average limit and the burst limit.
+- `NVIDIA_RPM` defaults to 36, four below the reported limit because other sessions may share a key, and cannot exceed 40.
 - On a 429, retry after the larger of `Retry-After` (when sent) and an exponential backoff of 2, 4 and 8 seconds. The measured recovery was within 7 seconds.
-- Promptfoo calls leave the gap through its `delay` option; the image judge, which makes its own requests, takes each attempt through a limiter. Repeated Promptfoo responses served from cache skip the gap, because they make no request.
+- Promptfoo calls and the image judge both take their place in the schedule before each request, retries included. A cached Promptfoo response takes a place too, because it cannot be told from a request before the call.
+- A session may not call the endpoint directly. A `PreToolUse` hook and a repository check enforce it.
 - Persistent 429s at 36 per minute mean the account's limit is lower. Lower `NVIDIA_RPM`; do not switch model or endpoint automatically.
+- The schedule is a file on one machine. Separate cloud sessions have separate filesystems, so concurrent sessions on one key do not share it; the margin below 40 is the only protection between them.
 
 ## Not verified
 

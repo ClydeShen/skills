@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { createRateLimiter, retryDelayMs } from './rate-limit.mjs';
+import { retryDelayMs } from './rate-limit.mjs';
 
 // Image judge: reads one image and checks a list of claims against what is visible.
 // Claims are { id, text, key?, critical?: boolean, expect?: 'drawn' | 'not_drawn' }; id is what the judge sees, key labels reports. A 'not_drawn' claim is a
@@ -171,13 +171,11 @@ export function createVisionJudgeProvider({
   retries = 3,
   backoffMs = 2000,
   timeoutMs = 300000,
-  requestsPerMinute,
+  limiter,
   fetchImpl = fetch,
   sleep = pause,
-  now = Date.now,
 }) {
-  // Every attempt, including a retry, takes its place in the request rate the endpoint allows.
-  const limiter = requestsPerMinute ? createRateLimiter({ requestsPerMinute, now, sleep }) : null;
+  // Every attempt, including a retry, takes its place in the schedule shared by all NVIDIA requests.
   async function request(messages) {
     let lastError = 'request failed';
     let wait = 0;
