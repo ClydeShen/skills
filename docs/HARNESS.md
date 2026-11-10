@@ -67,6 +67,8 @@ Static rules run automatically, AI suggests semantic changes, and evaluation wit
 
 Owner clarification, 2026-11-06: use the shared Promptfoo runner for regressions before broader agent trials, reducing repeated token use where cached prompt responses remain valid. Clean agent sessions may use any configured client; they are not restricted to Claude Code. Record client/model and isolation. Repeated samples and agent/tool executions must remain fresh; [evaluation configuration](./prompt-evaluation.md#regression-cost-and-caching) owns the cache rules.
 
+Owner decision, 2026-11-10: make a baseline comparison only with `npm run eval:scenario` and a trigger check only with `npm run eval:trigger`. Scores from any other runner, such as a direct client call or an ad hoc script, are not evidence. When the shared runner cannot do what a comparison needs, extend it first.
+
 | Measure       | Question                                   | Evidence                                                     | Who decides                   |
 | ------------- | ------------------------------------------ | ------------------------------------------------------------ | ----------------------------- |
 | Correctness   | Is the package well formed and consistent? | `check:repo`, `check:static`                                 | Tools                         |
@@ -79,7 +81,7 @@ Owner clarification, 2026-11-06: use the shared Promptfoo runner for regressions
 | Security report              | Any runtime package content/dependency change; before release | No; high findings need human review                                                                           |
 | skills.sh audit              | Each intended published skill version                         | Required after publication; install once, then verify the external result and record it, not a local CI score |
 | Trigger and suite evaluation | After an important skill change, by hand                      | No; judge the results                                                                                         |
-| Baseline comparison          | Every public/released package PR; model/client/tool changes   | Required evidence for owner review; no score automatically merges or blocks a change                          |
+| Baseline comparison          | Every public/released package PR; model/client/tool changes   | Required evidence from `eval:scenario` for owner review; no score automatically merges or blocks a change     |
 | AI improvement               | A failure or regression                                       | No automatic merge; candidate changes only, with before and after evaluation                                  |
 
 By stage: `draft` needs the static checks. `internal` adds Promptfoo evaluation. `public` and release add comparison evidence and the security report; release also runs the pinned reference validator.

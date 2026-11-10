@@ -28,7 +28,7 @@ The earlier scores, commit and reference images above remain historical measurem
 
 ## How a run is made
 
-`npm run eval:scenario -- --skill architecture-diagram --agent claude --repeat 2` makes the runs below, as [scenarios.json](../scenarios.json) declares them, and prints each case's scores beside these. [Clean scenario runs](../../../../docs/prompt-evaluation.md#clean-scenario-runs) describe the isolation.
+Make every run with `npm run eval:scenario -- --skill architecture-diagram --agent claude --repeat 2`; a score from any other runner is not evidence. It makes the runs below, as [scenarios.json](../scenarios.json) declares them, and prints each case's scores beside these. [Clean scenario runs](../../../../docs/prompt-evaluation.md#clean-scenario-runs) describe the isolation.
 
 - Prompt for the skill, unchanged: `Use the architecture-diagram skill to create diagram.drawio from scenario.md. Write your companion account to agent-report.md.`
 - The session is a clean agent session in an empty directory, with isolated settings and memory. Install the package in the selected client's native skill location and provide one scenario as `scenario.md`. Nothing else reaches the session: no repository instructions, global skills, memory or correction from the authoring conversation. The owner clarified on 2026-11-06 that Claude Code is not required; record the agent, model, settings and isolation mechanism. The existing baseline was measured with Claude Code, so agent or model changes must be reported as separate comparisons.
