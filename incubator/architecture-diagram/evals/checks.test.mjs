@@ -452,8 +452,8 @@ test('layout errors catch a broken parent edge, small text and double-headed arr
   assert.match(checkLayout(straight).errors.join(' '), /Connector d is not orthogonal/);
 });
 
-test('layout warnings point at proportions, overlaps, detours and missing emphasis', () => {
-  const messages = (cells) => checkLayout(page(cells)).warnings.join(' ');
+test('layout checks point at proportions, overlaps, detours and missing emphasis', () => {
+  const messages = (cells) => checkLayout(page(cells)).checks.join(' ');
   assert.match(checkLayout(page(box('a', 0, 0, 1800, 500))).errors.join(' '), /keep it at most 1400/);
   assert.match(messages(box('a', 0, 0, 400, 900)), /taller than wide/);
   assert.match(messages(box('a', 0, 0, 100, 100) + box('b', 50, 50, 100, 100)), /overlap/);
@@ -487,9 +487,9 @@ test('layout warnings point at proportions, overlaps, detours and missing emphas
 test('a dashed connector too short to show its dashes is reported', () => {
   const dashed = 'dashed=1;dashPattern=8 6;strokeWidth=1.5;exitX=1;exitY=0.5;entryX=0;entryY=0.5;';
   const near = checkLayout(page(box('a', 0, 0, 72, 72) + box('b', 100, 0, 72, 72) + line('e', 'a', 'b', dashed)));
-  assert.match(near.warnings.join('\n'), /Dashed connector e is about 28 long/);
+  assert.match(near.checks.join('\n'), /Dashed connector e is about 28 long/);
   const far = checkLayout(page(box('a', 0, 0, 72, 72) + box('b', 300, 0, 72, 72) + line('e', 'a', 'b', dashed)));
-  assert.doesNotMatch(far.warnings.join('\n'), /Dashed connector/);
+  assert.doesNotMatch(far.checks.join('\n'), /Dashed connector/);
 });
 
 test('split views are checked page by page and stay consistent across pages', () => {
@@ -501,7 +501,7 @@ test('split views are checked page by page and stay consistent across pages', ()
     );
   const same = checkLayout(file(icon('a', 'img/lib/a.svg'), icon('a', 'img/lib/a.svg')));
   assert.deepEqual(same.errors, []);
-  assert.deepEqual(same.warnings, []);
+  assert.deepEqual(same.checks, []);
   const tiny = checkLayout(
     file(
       icon('a', 'img/lib/a.svg'),
@@ -510,7 +510,7 @@ test('split views are checked page by page and stay consistent across pages', ()
   );
   assert.deepEqual(tiny.errors, ['Page "Detail": Text smaller than 12 in t: 9.']);
   assert.match(
-    checkLayout(file(icon('a', 'img/lib/a.svg'), icon('a', 'img/lib/b.svg'))).warnings.join('\n'),
+    checkLayout(file(icon('a', 'img/lib/a.svg'), icon('a', 'img/lib/b.svg'))).checks.join('\n'),
     /"orders api" has one symbol on page "Overview" and another on page "Detail"/,
   );
   assert.match(checkLayout(file('', '', 'gone')).errors.join('\n'), /page id "gone"/);

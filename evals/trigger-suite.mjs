@@ -1,8 +1,9 @@
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exportPackageAtRef, exportWorkingPackage, packages } from '../harness/skill-quality.mjs';
+import { packages } from '../harness/skill-quality.mjs';
+import { agentProvider, installSkill } from './agents.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 
@@ -19,51 +20,9 @@ export function readTriggerCases(skill) {
   return cases;
 }
 
-// Each arm is a throwaway project holding one version of the skill in both clients' native locations.
+// Each arm is a throwaway project holding one version of the skill.
 function createArm(item, ref, base) {
-  const directory = path.join(base, ref ?? 'current');
-  const exported = ref
-    ? exportPackageAtRef(item, ref, path.join(directory, '.export'))
-    : exportWorkingPackage(item, path.join(directory, '.export'));
-  if (!exported) throw new Error(`${item.name} does not exist at ${ref}.`);
-  for (const location of ['.claude/skills', '.agents/skills']) {
-    mkdirSync(path.join(directory, location), { recursive: true });
-    cpSync(exported, path.join(directory, location, item.name), { recursive: true });
-  }
-  rmSync(path.join(directory, '.export'), { recursive: true, force: true });
-  return directory;
-}
-
-export function agentProvider(agent, { skill, directory, label, env }) {
-  if (agent === 'claude') {
-    return {
-      id: 'anthropic:claude-agent-sdk',
-      label,
-      config: {
-        working_dir: directory,
-        setting_sources: ['project'],
-        skills: [skill],
-        append_allowed_tools: ['Read', 'Glob', 'Grep'],
-        max_turns: 6,
-        persist_session: false,
-        // Without an API key the SDK uses the existing Claude Code login.
-        apiKeyRequired: Boolean(env.ANTHROPIC_API_KEY),
-        ...(env.EVAL_CLAUDE_MODEL ? { model: env.EVAL_CLAUDE_MODEL } : {}),
-      },
-    };
-  }
-  return {
-    id: 'openai:codex-sdk',
-    label,
-    config: {
-      working_dir: directory,
-      skip_git_repo_check: true,
-      sandbox_mode: 'read-only',
-      // Promptfoo infers Codex skill use from streamed SKILL.md reads.
-      enable_streaming: true,
-      ...(env.EVAL_CODEX_MODEL ? { model: env.EVAL_CODEX_MODEL } : {}),
-    },
-  };
+  return installSkill(item, ref, path.join(base, ref ?? 'current'));
 }
 
 export async function createSuite({ mode, env = {}, options = {} }) {

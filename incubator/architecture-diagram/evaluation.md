@@ -7,12 +7,12 @@ Date: 2026-11-05. Status: the baseline is fixed. Every change to the package is 
 - Mode: model, with a clean agent session for each run. Existing baseline runs used Claude Code; future runs may use another configured agent and must record that difference.
 - Package target: [candidate/architecture-diagram](./candidate/architecture-diagram/SKILL.md).
 - Target identity: the baseline is commit `f7b7537`. The [baseline](./evals/baseline/README.md) records its scores and how a change is judged.
-- Cases: the four scenarios A, B, 02 and C in [evals/scenarios](./evals/scenarios), and the trigger cases in [trigger.json](./evals/trigger.json).
+- Cases: the four scenarios that [scenarios.json](./evals/scenarios.json) names, and the trigger cases in [trigger.json](./evals/trigger.json).
 
 ## Execution
 
 - Environment: Node.js 24, the Claude Code CLI, and a network that reaches the Anthropic API.
-- Command: `npm run eval:trigger -- --skill architecture-diagram --agent claude --repeat 3 --baseline <ref>` checks that the skill triggers when it should and skips when it should not. The four scenarios run as [the baseline](./evals/baseline/README.md#how-a-run-is-made) describes: each in a clean session, scored by a reviewer that has only the scenario and the images.
+- Command: `npm run eval:trigger -- --skill architecture-diagram --agent claude --repeat 3 --baseline <ref>` checks that the skill triggers when it should and skips when it should not. `npm run eval:scenario -- --skill architecture-diagram --agent claude --repeat 2` runs the four scenarios as [the baseline](./evals/baseline/README.md#how-a-run-is-made) describes: each in a clean session, scored by a reviewer that has only the scenario and the images.
 - Model and parameters: the default model of the Claude Code CLI, which `EVAL_CLAUDE_MODEL` overrides. The reviewer uses the same model.
 - Evidence: the output of each run stays in the ignored `evals/.local/`. The pull request of a change carries its result. The folder holds only the baseline.
 

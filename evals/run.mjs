@@ -26,7 +26,12 @@ async function main() {
   process.env.PROMPTFOO_DISABLE_UPDATE = '1';
   process.env.PROMPTFOO_CONFIG_DIR = resolve(local, 'promptfoo');
   const { createSuite } = await import(pathToFileURL(resolve(root, suitePath)).href);
-  const suite = await createSuite({ mode, env: process.env, options: { skill, agent, baseline } });
+  // A suite may add a summary of its results, printed after the run; Promptfoo does not receive it.
+  const { summary: summarize, ...suite } = await createSuite({
+    mode,
+    env: process.env,
+    options: { skill, agent, baseline },
+  });
   // A suite that supplies its own providers, such as the image judge or a real agent, keeps them in model mode.
   const suiteProviders = Boolean(suite.providers?.length);
   const useCache = evaluationCache({ mode, repeat, cache, suiteProviders });
@@ -84,6 +89,7 @@ async function main() {
       case_id: r.vars?.case_id,
       provider_label: r.provider?.label,
       skill_calls: r.response?.metadata?.skillCalls,
+      details: r.response?.metadata?.details,
       cost: r.cost,
       latency_ms: r.latencyMs,
       token_usage: r.tokenUsage ?? r.response?.tokenUsage,
@@ -106,6 +112,7 @@ async function main() {
     `\n${report.scope}\n${report.results.length - failures}/${report.results.length} checks passed.\nReport: ${file}`,
   );
   if (suiteProviders && mode === 'model') console.log(armSummary(report.results));
+  if (summarize) console.log(summarize(report.results));
   process.exitCode = failures ? 1 : 0;
 }
 

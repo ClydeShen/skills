@@ -39,7 +39,7 @@ knowledge/<topic>/README.md
 knowledge/<topic>/<subject>.md
 incubator/<initiative>/README.md
 incubator/<initiative>/candidate/<skill-name>/SKILL.md
-incubator/<initiative>/evals/{README.md,suite.mjs,cases.json,trigger.json}
+incubator/<initiative>/evals/{README.md,suite.mjs,cases.json,trigger.json,scenarios.json}
 incubator/<initiative>/evals/{scenarios,baseline,fixtures}/
 incubator/<initiative>/evaluation.md
 skills/<skill-name>/SKILL.md             # generated, verified publication snapshot

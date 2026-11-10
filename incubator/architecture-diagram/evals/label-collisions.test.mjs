@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { checkLayout, keyAcrossPages, textSize } from '../candidate/architecture-diagram/scripts/check-layout.mjs';
+import { checkLayout, keyAcrossPages } from '../candidate/architecture-diagram/scripts/check-layout.mjs';
+import { textSize } from '../candidate/architecture-diagram/scripts/diagram.mjs';
 import { formatDrawio, isFormatted } from '../candidate/architecture-diagram/scripts/drawio-format.mjs';
 
 const icon = (id, x, y, value, parent = '1') =>
@@ -14,7 +15,7 @@ const page = (...cells) =>
   );
 const side = 'exitX=1;exitY=0.5;entryX=0;entryY=0.5;';
 const collisions = (xml) =>
-  checkLayout(xml).warnings.filter((w) =>
+  checkLayout(xml).checks.filter((w) =>
     /overlap or nearly touch|runs through|covers|crosses the outline|away from its connector/.test(w),
   );
 
@@ -101,7 +102,7 @@ test('routes that leave a shared region, pass through a foreign one, detour or j
     edge('through', 'c', 'd', 'exitX=0.5;exitY=0;entryX=0.5;entryY=0;', '', pts([76, 500], [476, 500])),
     edge('jog', 'e', 'f', side),
   );
-  const found = checkLayout(xml).warnings;
+  const found = checkLayout(xml).checks;
   assert.ok(found.some((w) => w.startsWith('Connector out leaves vpc and re-enters it')));
   assert.ok(found.some((w) => w.startsWith('Connector out detours')));
   assert.ok(found.includes('Connector through passes through other, which holds neither end.'));
@@ -113,7 +114,7 @@ test('routes that leave a shared region, pass through a foreign one, detour or j
     edge('ok', 'a', 'b', side),
   );
   assert.deepEqual(
-    checkLayout(straight).warnings.filter((w) => /detour|re-enter|passes through|jog/.test(w)),
+    checkLayout(straight).checks.filter((w) => /detour|re-enter|passes through|jog/.test(w)),
     [],
   );
 });
@@ -154,7 +155,7 @@ test('crossing connectors and swappable ports are reported; a clear outside chan
     ),
   );
   assert.ok(
-    checkLayout(through).warnings.some(
+    checkLayout(through).checks.some(
       (w) => w.startsWith('Connectors manage and write cross') || w.startsWith('Connectors write and manage cross'),
     ),
   );
@@ -163,7 +164,7 @@ test('crossing connectors and swappable ports are reported; a clear outside chan
     edge('write', 'ci', 'db', 'exitX=0.5;exitY=0;entryX=0.5;entryY=0;', '', pts([36, 120], [736, 120])),
   );
   assert.deepEqual(
-    checkLayout(around).warnings.filter((w) => /cross|detour|Swap|share a/.test(w)),
+    checkLayout(around).checks.filter((w) => /cross|detour|Swap|share a/.test(w)),
     [],
   );
 });
@@ -182,8 +183,8 @@ test('a connector label on a bend is reported; one on a straight segment is not'
       icon('b', 400, 264, 'Model'),
       edge('call', 'a', 'b', 'exitX=0.5;exitY=1;entryX=0;entryY=0.5;', 'Write answer', pts, ` x="${x}"`),
     );
-  assert.ok(checkLayout(bent(0.1)).warnings.some((w) => w.includes('sits on a bend')));
-  assert.ok(!checkLayout(at(0)).warnings.some((w) => w.includes('sits on a bend')));
+  assert.ok(checkLayout(bent(0.1)).checks.some((w) => w.includes('sits on a bend')));
+  assert.ok(!checkLayout(at(0)).checks.some((w) => w.includes('sits on a bend')));
 });
 
 test('the vendor-mix trial reports the collisions visible in its image', () => {
@@ -216,7 +217,7 @@ test("files must use draw.io's own layout, which importers such as Lucidchart re
 });
 
 const waypoints = (...p) => `<Array as="points">${p.map(([x, y]) => `<mxPoint x="${x}" y="${y}"/>`).join('')}</Array>`;
-const simpler = (xml) => checkLayout(xml).warnings.filter((w) => /route is clear|to avoid the/.test(w));
+const simpler = (xml) => checkLayout(xml).checks.filter((w) => /route is clear|to avoid the/.test(w));
 
 test('a clear one-bend route reports the extra bend of a Z', () => {
   const xml = page(
@@ -264,8 +265,8 @@ test('numbered steps that tangle are told to swap ports; numbers out of spatial 
       ...lines,
     );
   const steps = (xml) => {
-    const { errors, warnings } = checkLayout(xml);
-    return [...errors, ...warnings].filter((w) => /Swap their ports|[Ss]teps? /.test(w));
+    const { errors, checks } = checkLayout(xml);
+    return [...errors, ...checks].filter((w) => /Swap their ports|[Ss]teps? /.test(w));
   };
   // A reader finds the numbers on the page; 1, 3, 2 from top to bottom is fine when nothing crosses.
   const untangled = fan(
@@ -282,10 +283,10 @@ test('numbered steps that tangle are told to swap ports; numbers out of spatial 
 
 test('round 3 semantic routing trials report the tangle and avoidable bends visible in their images', () => {
   const trial = (name) => {
-    const { errors, warnings } = checkLayout(
+    const { errors, checks } = checkLayout(
       readFileSync(new URL(`./fixtures/routing-${name}.drawio`, import.meta.url), 'utf8'),
     );
-    return [...errors.filter((e) => e.includes('Swap their ports')), ...warnings];
+    return [...errors.filter((e) => e.includes('Swap their ports')), ...checks];
   };
   const a = trial('round3-a');
   assert.ok(
@@ -308,7 +309,7 @@ test('a member named like its boundary repeats it; a corner marker does not; dee
     `<mxCell id="${id}" value="${value}" style="rounded=1;container=1;${extra}" vertex="1" parent="${parent}"><mxGeometry x="${x}" y="${y}" width="${w}" height="${h}" as="geometry"/></mxCell>`;
   const small = (id, x, y, value, parent) =>
     `<mxCell id="${id}" value="${value}" style="shape=image;" vertex="1" parent="${parent}"><mxGeometry x="${x}" y="${y}" width="24" height="24" as="geometry"/></mxCell>`;
-  const repeats = (xml) => checkLayout(xml).warnings.filter((w) => /repeats the boundary|nest \d+ deep/.test(w));
+  const repeats = (xml) => checkLayout(xml).checks.filter((w) => /repeats the boundary|nest \d+ deep/.test(w));
   const duplicate = page(
     house('cluster', 0, 0, 600, 400, 'Amazon EKS cluster'),
     icon('eks', 40, 260, 'EKS', 'cluster'),
@@ -361,8 +362,8 @@ test('a run shared by connectors of different meaning is an error; identical con
       ),
     );
   const shared = (xml) => {
-    const { errors, warnings } = checkLayout(xml);
-    return [...errors, ...warnings].filter((m) => /segment/.test(m));
+    const { errors, checks } = checkLayout(xml);
+    return [...errors, ...checks].filter((m) => /segment/.test(m));
   };
   assert.deepEqual(shared(trunk(['1 Search', '2 Answer'])), [
     'Connectors a and b have different meanings but share a 128-unit segment, so they read as one connection. Give each its own port and route.',
