@@ -2,7 +2,7 @@ import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
 import { findForbiddenText } from '../candidate/architecture-diagram/scripts/check-text.mjs';
-import { styleMap, upstreamVersion } from './catalog.mjs';
+import { styleOf, upstreamVersion } from './catalog.mjs';
 
 const list = (value) => (value == null ? [] : Array.isArray(value) ? value : [value]);
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', parseAttributeValue: false });
@@ -220,7 +220,7 @@ export function validateDiagram(xml, catalog) {
   };
   const boxes = new Map();
   for (const n of nodes.filter((n) => n.vertex === '1')) {
-    const s = styleMap(n.style || '');
+    const s = styleOf(n.style || '');
     let box;
     try {
       box = geometry(n);
@@ -257,7 +257,7 @@ export function validateDiagram(xml, catalog) {
       const entry = catalog.entries.find((e) => e.id === n.iconKey);
       if (!entry?.usable || entry.vendor !== n.vendor) errors.push(`Unknown, unusable or wrong-vendor icon: ${n.id}`);
       else {
-        const original = styleMap(entry.style);
+        const original = styleOf(entry.style);
         for (const key of [...refs, 'fillColor', 'strokeColor', 'gradientColor']) {
           if (s[key] !== original[key]) errors.push(`Catalog style mismatch (${key}): ${n.id}`);
         }
@@ -274,7 +274,7 @@ export function validateDiagram(xml, catalog) {
     if (!n.label?.trim() || catalog.entries.find((e) => e.id === n.iconKey)?.palette === 'aws4Groups') continue;
     const b = boxes.get(n.id);
     if (!b) continue;
-    const s = styleMap(n.mxCell.style),
+    const s = styleOf(n.mxCell.style),
       width = Number(s.labelWidth || 200),
       captionFont = Number(s.fontSize);
     const lines = n.label
@@ -302,7 +302,7 @@ export function validateDiagram(xml, catalog) {
   for (const e of nodes.filter((n) => n.edge === '1')) {
     const source = byId.get(e.source),
       target = byId.get(e.target),
-      s = styleMap(e.style || '');
+      s = styleOf(e.style || '');
     if (!source || !target || !boxes.has(e.source) || !boxes.has(e.target)) {
       errors.push(`Missing edge endpoint: ${e.id}`);
       continue;
