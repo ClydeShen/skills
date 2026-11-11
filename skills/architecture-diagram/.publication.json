@@ -2,14 +2,14 @@
   "schema_version": 1,
   "skill": "architecture-diagram",
   "source": {
-    "commit": "eacf45065a0700a0fb1c58feb0a3ddfc15dbff73",
+    "commit": "6428b321b83dd84103a1ee67da5a7c981a773eb7",
     "directory": "incubator/architecture-diagram/candidate/architecture-diagram"
   },
   "transformations": [
     "remove-candidate-internal-marker-v1"
   ],
   "digest_method": "sha256-json-file-inventory-v1",
-  "digest": "7f6b2a6adb18347a4d2efcef6fab9f0fc25f10fb0e732519dc7d7f53e2ca4276",
+  "digest": "d1be7679301d61e20b5e16da61205422328132e23ec9b06af8c1c0fc3662e4b3",
   "files": [
     {
       "path": "LICENSE",
@@ -18,8 +18,8 @@
     },
     {
       "path": "README.md",
-      "size": 18664,
-      "sha256": "06cac63d8516470dc084669b6ac5b445b9ebce8be32acc70afdcc0e8f33810b4"
+      "size": 17097,
+      "sha256": "2f4baf4fdc2b4c12d9ee6b666a077546f6dfa7466344a42d2825d3b59724f107"
     },
     {
       "path": "SKILL.md",

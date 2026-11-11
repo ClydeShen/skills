@@ -31,6 +31,16 @@
 
 ---
 
+## Install
+
+Run this in your project. The [skills CLI](https://www.npmjs.com/package/skills) asks which agent to install into and handles the rest:
+
+```sh
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
+```
+
+Start a fresh agent session afterwards and confirm that `architecture-diagram` appears in its skill list. The skill needs an agent that reads `SKILL.md`, writes files into your project and runs Node.js 24 scripts. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. Without those you still get the editable file and a browser link for viewing and export.
+
 ## Why use it
 
 You know how the system works. Everyone else has to picture it. This skill turns a description of requests, services and boundaries into a diagram you can bring to a design review, paste into a wiki or keep editing.
@@ -131,34 +141,6 @@ The package ships its own scripts, so the agent can verify a diagram without a m
 
 Checks catch what can mislead a reader; they do not prove the architecture is right. The agent still has to read the picture, and so should you.
 
-## Install
-
-The skill is a folder of instructions and scripts in the open Agent Skills format, so it installs into any agent that the [skills CLI](https://www.npmjs.com/package/skills) supports. Run this in your project and choose your agent when asked:
-
-```sh
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
-```
-
-To skip the question, name the agent. The ids below are examples; the CLI lists the full set:
-
-```sh
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent claude-code --copy --yes
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent cursor --copy --yes
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent github-copilot --copy --yes
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent gemini-cli --copy --yes
-```
-
-What the skill needs from an agent: it reads `SKILL.md`, writes files into your project and runs Node.js 24 scripts. What has been tried:
-
-| Agent                         | Status                                                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Claude Code                   | Used for every example and every evaluation run in this repository.                                                 |
-| Codex                         | The CLI installs the skill there. A Codex sandbox may be unable to render a PNG; see [Good to know](#good-to-know). |
-| Any other agent the CLI lists | The CLI installs the same files. Not tested here; it should work wherever the agent meets the needs above.          |
-
-The command copies the package into the project without automatic updates; run it again to update. Start a fresh agent session afterwards and confirm that `architecture-diagram` appears in its skill list. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. Without those you still get the editable file and a browser link for viewing and export.
-
 ## Try it
 
 ```text
@@ -223,7 +205,7 @@ The scripts start local programs: Git to fetch the pinned draw.io viewer once, a
 ## Good to know
 
 - **Check the picture.** A static check is not proof of architectural correctness. Inspect the first diagram against your source.
-- **Codex rendering.** A Codex sandbox may be unable to render a PNG. You then receive the `.drawio` file and a link for viewing and export.
+- **Restricted environments.** If the environment cannot start a browser or reach the network, PNG export may be unavailable. You still receive the `.drawio` file and a link for viewing and export.
 - **License.** Original instructions and scripts use the [MIT license](./LICENSE). Third-party artwork retains its own terms in the [asset catalog](./assets/vendor-icons.json); this is not blanket MIT licensing of icons. Redistribution clearance and output attribution for some bundled artwork are not complete; the [third-party notices](./THIRD-PARTY-NOTICES.md) list what is cleared and what remains open.
 
 Something drawn wrongly, or a scenario it struggles with? Share the input, the first diagram, the agent and model, the installed revision and what you expected in [the feedback issue](https://github.com/ClydeShen/skills/issues/7).
