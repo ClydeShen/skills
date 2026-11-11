@@ -21,7 +21,9 @@ Replace placeholders. This form alone does not pin package content. Verify immut
 
 ## Installing from a proxied environment
 
-Checked 2026-11-11: the CLI reports an installation and requests audit data with Node's built-in `fetch`, which ignores `HTTP_PROXY` and `HTTPS_PROXY`, and it discards a failed report without a message. In an environment whose only route out is a proxy, the install succeeds but skills.sh never receives it, so the repository and skill stay absent from the site and the audit endpoint returns an empty object. Run the installation with `NODE_USE_ENV_PROXY=1` (Node 24 or later) and the host allowed. Then both `tele/audit` and `tele/t` answer 200, and the repository and skill appeared on skills.sh within minutes. Do not read "no audit yet" as a platform result before the report is known to have been delivered.
+Checked 2026-11-11: the CLI reports an installation and requests audit data with Node's built-in `fetch`, which ignores `HTTP_PROXY` and `HTTPS_PROXY`, and it discards a failed report without a message. In an environment whose only route out is a proxy, the install succeeds but skills.sh never receives it, so the repository and skill stay absent from the site. A skill is listed through this install report; [the documentation](https://www.skills.sh/docs/faq) names no other way. Run the installation with `NODE_USE_ENV_PROXY=1` (Node 24 or later) and the host allowed. Then both `tele/audit` and `tele/t` answer 200, and the repository, the skill page and the audits appeared within minutes, which [the API documentation](https://www.skills.sh/docs/api) describes as audits generated automatically after the first install. Do not read "no audit yet" as a platform result before the report is known to have been delivered.
+
+Read the result from the skill page, `https://www.skills.sh/<owner>/<repo>/<skill>`, and from each partner's page under `/security/<partner>` (`snyk`, `socket`, `agent-trust-hub`). The legacy `tele/audit` endpoint returned only the Snyk entry while all three partners had reported, so it is not a complete record.
 
 ## Audit limitation
 
