@@ -1,41 +1,141 @@
 # Personal Agent Skills
 
-A curated collection of agent skills for clearer architecture diagrams, more natural technical writing and more productive AI conversations. Each skill focuses on a practical task, with reusable instructions and tools where they help.
+**Good results shouldn't disappear with the chat.**
 
-## Find your skill
+A diagram you can bring to a review. A technical draft that sounds like you. A useful next step when a conversation stalls. This collection turns those recurring needs into skills you can try with your own agent.
 
-| Skill                                                              | When it helps                                                 | What to expect                                                                                   |
-| ------------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| [Architecture Diagram](./incubator/architecture-diagram/README.md) | Explain a request path, deployment or cross-cloud interaction | Editable draw.io diagrams, PNGs when export is available, and explicit architectural assumptions |
-| [Meta Thinking](./incubator/meta-thinking/README.md)               | An AI conversation is stuck or solving the wrong problem      | A clearer goal, a challenged assumption and a useful next action                                 |
-| [Tech Humanizer](./incubator/tech-humanizer/README.md)             | Technical writing sounds generic or unnatural                 | More natural wording while preserving meaning and technical vocabulary                           |
+## What would you like to get done?
 
-These are intended uses, not guarantees. Each skill's page explains its current maturity, prerequisites and verified limits.
+### Put your architecture on the page
 
-## Try a skill
-
-Install the released Architecture Diagram skill in your project:
+Describe how your system works. **Architecture Diagram** helps turn it into an editable draw.io diagram: follow a request, see the boundaries, and bring something concrete to the discussion.
 
 ```sh
 npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
 ```
 
-For Claude Code, replace `--agent codex` with `--agent claude-code`. The [package README](./skills/architecture-diagram/README.md) lists the requirements and a first-use prompt. Use a sanitized scenario in a disposable project and inspect the first result before requesting corrections. Other skills here are candidates; their trial instructions are opt-in and not approved releases.
+[See what it does and what to try first →](./skills/architecture-diagram/README.md)
 
-## From idea to release
+### Keep the technical meaning. Make the writing sound like you.
 
-`init → plan → draft → internal → public → release`
+An email, a design document, a paragraph that feels too generic. **Tech Humanizer** helps rewrite it naturally while preserving the details that matter.
 
-Ideas begin with research and a clear user problem. A standard skill package takes shape during drafting, then enters internal evaluation. At public trial, users can install the candidate and share feedback. Formal release requires a verified package, installation checks, applicable security/audit acceptance and owner approval.
+[Explore Tech Humanizer →](./incubator/tech-humanizer/README.md)
 
-Release publishes a snapshot, not unfinished authoring work. Later improvements are evaluated separately; fixes and upgrades retain version history. skills.sh is the current distribution example, not a requirement of the reusable process.
+### Get an unproductive chat moving again
 
-Explore the [lifecycle SOP and checklist](./knowledge/skill-lifecycle/README.md) for the full process, or the [local release contract](./docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) for this repository's requirements.
+When the conversation keeps circling, **Meta Thinking** helps uncover the goal or assumption worth revisiting and choose the next useful action.
 
-## Explore how they are built
+[Explore Meta Thinking →](./incubator/meta-thinking/README.md)
 
-[Research](./research/) informs [reusable knowledge](./knowledge/) and the skills in the [incubator](./incubator/). Approved publication snapshots belong in [skills/](./skills/). The [skill design principles](./knowledge/skill-design/skill-design-principles.md) explain the approach: focused guidance, room for model judgment and evidence from real tasks.
+Architecture Diagram is released; for Claude Code, replace `--agent codex` with `--agent claude-code`. The writing and thinking skills are still in internal testing and are not released.
+
+## A skill gets better by being used
+
+An installable skill is not necessarily a useful one, and a passing test is not permission to publish. Read from the bottom up: each gate asks for evidence before the next step.
+
+```mermaid
+%%{init: {"theme": "base", "block": {"padding": 32}, "fontFamily": "Arial, sans-serif", "themeVariables": {"fontSize": "15px", "lineColor": "#8292A5", "edgeLabelBackground": "#FFFFFF"}}}%%
+block-beta
+    columns 3
+
+    releaseVersion["Release
+    Promote approved bytes without rebuilding
+    Verify published identity and post-publication install smoke
+    Preserve version identity and the recovery path"]:2
+    maintenance["Recover or improve
+    Failed smoke: restore or withdraw
+    Next revision returns to Draft
+    Hotfix released source and forward-port"]
+
+    approval["Owner approval
+    Approve this exact snapshot, its targets and known limits
+    Scores and CI do not approve a release"]:2
+    declined["Approval declined
+    Return to Public
+    Revise snapshot and evidence"]
+
+    acceptance["Release acceptance
+    Security, dependencies and third-party rights
+    Matching platform audit verdict
+    Clean install, activation, resources and useful output
+    Supported targets, updates and applicable recovery"]:2
+    hold["Failed or missing checks
+    Hold at Public
+    Repair and revalidate"]
+
+    publicTrial["Public
+    Offer an opt-in candidate with a first-use guide
+    Collect reproducible feedback tied to a version
+    Freeze source revision, file inventory and digest"]:2
+    feedback["Trial feedback
+    Return to Draft
+    Improve the candidate"]
+
+    internal["Internal
+    Promptfoo first, then authorized fresh agent runs
+    Calibrate graders and inspect actual outputs
+    Baseline, no-skill, held-out and trigger comparisons
+    Human review and verified trial installation"]:2
+    retest["Weak or inconclusive evidence
+    Return to Draft
+    Repair and retest"]
+
+    draft["Draft
+    Focused instructions and package-local resources
+    Tool gate: format, links, lint, resources and secrets
+    Runnable evaluation cases, rubric and result path"]:2
+    repair["Package or test failure
+    Stay in Draft
+    Repair and rerun checks"]
+
+    plan["Plan
+    Research the need and compare simpler alternatives
+    Owner agrees scope, success and supported targets
+    Declare capabilities and data boundaries"]:2
+    space
+
+    idea["Init
+    Identify a recurring user task and its intended benefit"]:2
+    space
+
+    idea --> plan
+    plan --> draft
+    draft --> internal
+    internal --> publicTrial
+    publicTrial --> acceptance
+    acceptance --> approval
+    approval --> releaseVersion
+
+    releaseVersion --> maintenance
+    approval --> declined
+    acceptance --> hold
+    publicTrial --> feedback
+    internal --> retest
+    draft --> repair
+
+    classDef stage fill:#F8FAFC,stroke:#CBD5E1,color:#243247
+    classDef tool fill:#EFF6FF,stroke:#93B4D7,color:#1E3A5F
+    classDef evidence fill:#FFFBEB,stroke:#D6BC78,color:#59451D
+    classDef human fill:#F5F3FF,stroke:#B6A5D2,color:#493568
+    classDef stable fill:#ECFDF5,stroke:#86BDA5,color:#20543D
+    classDef returnPath fill:#FFFFFF,stroke:#CBD5E1,color:#475569
+    class idea,publicTrial stage
+    class draft tool
+    class internal,acceptance evidence
+    class plan,approval human
+    class releaseVersion stable
+    class maintenance,declined,hold,feedback,retest,repair returnPath
+```
+
+**Tools check correctness. Agents produce evidence. The owner decides what ships.** Read upward for progress; the right-hand cards name return and recovery actions, not extra lifecycle stages. Missing required evidence blocks progress. Changed content reopens affected checks; an audit or approval for different bytes does not carry over.
+
+These are required controls, not a claim that every gate is automated. Local checks and snapshot verification are implemented; real-client acceptance, rights review, platform audit and release approval still need recorded evidence. This project's publication profile requires skills.sh audit. Entering `internal` means evaluation is runnable; entering `public` means a candidate can be tried—not that it has passed release acceptance.
+
+After release, improvements leave the published version intact. A hotfix starts from its recorded source, passes the same applicable gates and is forward-ported to ongoing work. Failed delivery restores the previous verified package or withdraws a failed first release; state recovery is separate where relevant. Only the owner changes an accepted baseline.
+
+Want to use the same approach for your own skills? Borrow the [lifecycle playbook and checklist](./knowledge/skill-lifecycle/README.md). It covers trials, release checks, upgrades and hotfixes without tying you to one publishing platform.
 
 ## Contribute
 
-Feedback from trying a skill is welcome; use its page's feedback route. For repository changes, start with [AGENTS.md](./AGENTS.md) and the [engineering setup](./docs/HARNESS.md). Detailed organization and procedures live in [docs/](./docs/README.md).
+Try a skill and tell us what happened: your input, the first result and what you wished it had done differently. Each skill's page has a feedback link. For repository changes, start with [AGENTS.md](./AGENTS.md) and the [engineering setup](./docs/HARNESS.md).

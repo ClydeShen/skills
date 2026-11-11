@@ -2,7 +2,7 @@
 
 ## Start here
 
-1. Read [`README.md`](README.md) for the lifecycle and repository map.
+1. Read [`README.md`](README.md) for the project overview and skill entry points.
 2. Read [`GLOSSARY.md`](GLOSSARY.md) before naming or changing a repository-wide concept.
 3. Inspect the working tree. Preserve changes outside the task.
    `npm ci` enables the Git hooks. Run `npm run git:check` at session start. Resume the task's existing branch/worktree, or create `work/<kebab-case-topic>` from freshly fetched `origin/main` before editing. Hosted Claude and Codex agents may use `claude/<topic>` or `codex/<topic>` instead. In a fresh hosted workspace with Node.js older than 24, follow [Cloud environment setup](docs/HARNESS.md#cloud-environment-setup) first. Concurrent independent sessions use separate worktrees. Follow [Git strategy](docs/HARNESS.md#git-strategy) for integration and cleanup.
