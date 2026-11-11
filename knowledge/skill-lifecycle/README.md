@@ -14,26 +14,26 @@ The [skills.sh adapter](./adapters/skills-sh.md) is an optional example, not a d
 
 ## The lifecycle at a glance
 
-Read from the top down. Each diamond is a decision: "yes" moves on, and "no" follows a dashed line back to the stage where the work is redone. Purple is decided by a person, blue by tools, amber by evidence that a person reads, and green is the published release.
+Read from the top down. Each diamond is a decision: "yes" moves on, and "no" follows a dashed line back to the stage where the work is redone. Purple marks an owner decision, blue automated checks, amber evidence review and green the published release.
 
 ```mermaid
 %%{init: {"theme": "base", "fontFamily": "Arial, sans-serif", "flowchart": {"curve": "basis", "nodeSpacing": 40, "rankSpacing": 38, "htmlLabels": true, "padding": 10}, "themeVariables": {"fontSize": "14px", "lineColor": "#8292A5", "edgeLabelBackground": "#FFFFFF"}}}%%
 flowchart TB
-    init(["<b>Init</b><br/>Name a recurring task and its benefit"])
-    plan["<b>Plan</b><br/>Research, compare simpler options<br/>Owner agrees scope and success"]
-    draft["<b>Draft</b><br/>Write instructions and local resources<br/>Prepare eval cases, rubric and result path"]
-    d1{"Tools pass?"}
-    internal["<b>Internal</b><br/>Run evals: shared regressions, fresh agent runs<br/>Baseline comparison, a person inspects"]
-    d2{"Eval results strong?"}
-    public["<b>Public</b><br/>Opt-in trial with a first-use guide<br/>Freeze source revision and digest"]
-    d3{"Feedback<br/>reproducible?"}
-    accept["<b>Release acceptance</b><br/>Security, rights, platform audit<br/>Clean install, activation, useful output"]
-    d4{"All checks pass?"}
-    d5{"Owner approves<br/>this exact snapshot?"}
-    release["<b>Release</b><br/>Promote the approved bytes unchanged<br/>Smoke-check the published install"]
-    d6{"Smoke passes?"}
-    live(["<b>Published</b><br/>The version stays intact"])
-    undo(["<b>Restore</b> the previous verified version<br/>or withdraw a failed first release"])
+    init(["<b>Init</b><br/>Identify the user task and intended benefit"])
+    plan["<b>Plan</b><br/>Research and alternatives analysis<br/>Owner approves scope, success criteria and risks"]
+    draft["<b>Draft</b><br/>Author instructions and package-local resources<br/>Define eval cases, rubric and result path"]
+    d1{"Static checks pass?"}
+    internal["<b>Internal</b><br/>Run evals: regression suite, clean-session agent runs<br/>Baseline comparison and human review"]
+    d2{"Eval evidence sufficient?"}
+    public["<b>Public</b><br/>Opt-in trial with first-use guide<br/>Freeze source revision, file inventory and digest"]
+    d3{"Trial feedback<br/>reproducible?"}
+    accept["<b>Release acceptance</b><br/>Security, licensing, platform audit<br/>Clean-install, activation and output verification"]
+    d4{"Acceptance criteria met?"}
+    d5{"Owner approves<br/>the exact snapshot?"}
+    release["<b>Release</b><br/>Promote the approved artifact unchanged<br/>Post-publication smoke test"]
+    d6{"Smoke test passes?"}
+    live(["<b>Published</b><br/>Version identity preserved"])
+    undo(["<b>Roll back</b> to the previous verified artifact<br/>or withdraw a failed first release"])
 
     init --> plan --> draft --> d1
     d1 -- yes --> internal --> d2
@@ -44,12 +44,12 @@ flowchart TB
     d6 -- yes --> live
     d6 -- no --> undo
 
-    d1 -. "no: repair, rerun" .-> draft
-    d2 -. "no: repair, re-run evals" .-> draft
-    d3 -. "no: improve the candidate" .-> draft
-    d4 -. "no: hold, repair, revalidate" .-> public
+    d1 -. "no: remediate, rerun checks" .-> draft
+    d2 -. "no: remediate, re-run evals" .-> draft
+    d3 -. "no: iterate on the candidate" .-> draft
+    d4 -. "no: hold, remediate, revalidate" .-> public
     d5 -. "no: revise snapshot and evidence" .-> public
-    live -. "next revision or hotfix" .-> draft
+    live -. "next revision or hotfix (forward-ported)" .-> draft
 
     classDef person fill:#F5F3FF,stroke:#8B7BC0,color:#3F2D66
     classDef tool fill:#EFF6FF,stroke:#60A5FA,color:#1E3A5F
