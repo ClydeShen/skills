@@ -8,7 +8,7 @@
 [![Node.js 24](https://img.shields.io/badge/node-24-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![draw.io 32.6.1](https://img.shields.io/badge/draw.io-32.6.1-F08705?logo=diagramsdotnet&logoColor=white)](https://www.drawio.com/)
 [![Agents: any skills.sh agent](https://img.shields.io/badge/agents-any%20skills.sh%20agent-D97757)](#install)
-[![Output: .drawio, PNG and SVG](https://img.shields.io/badge/output-.drawio%20%C2%B7%20PNG%20%C2%B7%20SVG-3b82f6)](#what-you-get)
+[![Output: .drawio, PNG and SVG](https://img.shields.io/badge/output-.drawio%20%C2%B7%20PNG%20%C2%B7%20SVG-3b82f6)](#see-it-work)
 [![Icons: AWS, Azure, Google Cloud, Kubernetes](https://img.shields.io/badge/icons-AWS%20%C2%B7%20Azure%20%C2%B7%20Google%20Cloud%20%C2%B7%20Kubernetes-232F3E)](#why-use-it)
 [![skills.sh](https://img.shields.io/badge/skills.sh-architecture--diagram-000000)](https://www.skills.sh/clydeshen/skills/architecture-diagram)
 
@@ -31,6 +31,16 @@
 
 ---
 
+## Install
+
+Run this in your project. The [skills CLI](https://www.npmjs.com/package/skills) asks which agent to install into and handles the rest:
+
+```sh
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
+```
+
+Start a fresh agent session afterwards and confirm that `architecture-diagram` appears in its skill list. The skill needs an agent that reads `SKILL.md`, writes files into your project and runs Node.js 24 scripts. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. Without those you still get the editable file and a browser link for viewing and export.
+
 ## Why use it
 
 You know how the system works. Everyone else has to picture it. This skill turns a description of requests, services and boundaries into a diagram you can bring to a design review, paste into a wiki or keep editing.
@@ -39,8 +49,8 @@ You know how the system works. Everyone else has to picture it. This skill turns
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Layout that carries meaning**  | Boundaries show real membership. An arrowhead points where a request or data moves. Solid lines carry the main flow; dashed lines carry deployment, telemetry, secrets and DNS. One page by default, and a repeated structure is drawn once with its count. |
 | **Real icons, never lookalikes** | More than 1,700 official AWS, Azure, Google Cloud and Kubernetes icons from the draw.io libraries, plus 75 bundled marks for platforms and AI services such as Cloudflare, GitHub, OpenAI, Pinecone and Langfuse. No exact icon? A plain labelled box.      |
-| **Editable, not just a picture** | A `.drawio` file to open and change in draw.io, plus a PNG and an SVG of every page for documents and wikis.                                                                                                                                                |
-| **It questions your source**     | A technical contradiction in your text is raised with a recommendation instead of being drawn as fact. Assumptions and open questions go into a short companion account, not onto the canvas.                                                               |
+| **Editable in draw.io**          | A `.drawio` file to open and change, plus a PNG and an SVG of every page for documents and wikis.                                                                                                                                                           |
+| **It questions your source**     | A technical contradiction in your text is raised with a recommendation, and the skill draws only what your source supports. Assumptions and open questions go into a short companion account.                                                               |
 | **It checks its own work**       | Scripts report overlapping text, crossings, shared segments, detours and missing keys. The agent must read every rendered PNG before it hands the result over.                                                                                              |
 
 ## See it work
@@ -68,7 +78,16 @@ You know how the system works. Everyone else has to picture it. This skill turns
 
 </details>
 
-**You get** four files: `diagram.drawio`, `diagram.png`, `diagram.svg` and `agent-report.md`. The report is where the skill says what it assumed. Two lines from this run, verbatim:
+**You get** four files:
+
+| File              | What it is                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------- |
+| `diagram.drawio`  | The editable diagram, one page per view. Open it in draw.io and change anything.                        |
+| `diagram.png`     | A PNG of each page, rendered with draw.io's own viewer, so it matches the file.                         |
+| `diagram.svg`     | A vector copy of each page.                                                                             |
+| `agent-report.md` | The companion account: scope, assumptions, doubts about the source, design risks and the checks it ran. |
+
+Two lines from the report of this run, verbatim:
 
 > - **Shoppers appears twice** (origin and notification recipient) to avoid a return line across the whole diagram. Both are the same actor.
 > - All icons are exact AWS catalog matches. Amazon S3 has no service icon in the catalog, only the Bucket resource icon, so the two S3 elements use it, with captions "S3 web app" and "S3 data lake".
@@ -77,7 +96,7 @@ You know how the system works. Everyone else has to picture it. This skill turns
 
 ## Examples
 
-Every example is unedited output of a clean agent session: only this package and the scenario, nothing else. Each scenario was run more than once and the denser result is shown, so these pictures are the skill at its better end, not an average. Each folder holds the scenario, `diagram.drawio`, PNG, SVG and the companion account.
+Every example is unedited output of a clean agent session: only this package and the scenario, nothing else. Each scenario was run more than once and the denser result is shown, so these pictures show the skill at its better end. Each folder holds the scenario, `diagram.drawio`, PNG, SVG and the companion account.
 
 ### Knowledge and data platform on Azure
 
@@ -108,17 +127,6 @@ Function Apps in three Azure environments reach private API Gateways in AWS thro
 
 [Input, editable file and report](https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/examples/cross-cloud-private-api)
 
-## What you get
-
-| File              | What it is                                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------- |
-| `diagram.drawio`  | The editable diagram, one page per view. Open it in draw.io and change anything.                        |
-| `diagram.png`     | A PNG of each page, sized for a wiki or a document.                                                     |
-| `diagram.svg`     | A vector copy of each page.                                                                             |
-| `agent-report.md` | The companion account: scope, assumptions, doubts about the source, design risks and the checks it ran. |
-
-The PNG is rendered with draw.io's own viewer, so it matches the file.
-
 ## What it checks
 
 The package ships its own scripts, so the agent can verify a diagram without a model or a network call:
@@ -130,34 +138,6 @@ The package ships its own scripts, so the agent can verify a diagram without a m
 - **Colour:** a contrast calculator for palette choices. Meaning never depends on colour alone.
 
 Checks catch what can mislead a reader; they do not prove the architecture is right. The agent still has to read the picture, and so should you.
-
-## Install
-
-The skill is a folder of instructions and scripts in the open Agent Skills format, so it installs into any agent that the [skills CLI](https://www.npmjs.com/package/skills) supports. Run this in your project and choose your agent when asked:
-
-```sh
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
-```
-
-To skip the question, name the agent. The ids below are examples; the CLI lists the full set:
-
-```sh
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent claude-code --copy --yes
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent cursor --copy --yes
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent github-copilot --copy --yes
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent gemini-cli --copy --yes
-```
-
-What the skill needs from an agent: it reads `SKILL.md`, writes files into your project and runs Node.js 24 scripts. What has been tried:
-
-| Agent                         | Status                                                                                                              |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Claude Code                   | Used for every example and every evaluation run in this repository.                                                 |
-| Codex                         | The CLI installs the skill there. A Codex sandbox may be unable to render a PNG; see [Good to know](#good-to-know). |
-| Any other agent the CLI lists | The CLI installs the same files. Not tested here; it should work wherever the agent meets the needs above.          |
-
-The command copies the package into the project without automatic updates; run it again to update. Start a fresh agent session afterwards and confirm that `architecture-diagram` appears in its skill list. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. Without those you still get the editable file and a browser link for viewing and export.
 
 ## Try it
 
@@ -184,13 +164,6 @@ Read the first diagram against your source: what is connected, which way each pa
 | A plain labelled box                | A service with no exact icon available. The skill never borrows a similar one.               |
 
 ## FAQ
-
-<details>
-<summary><strong>Can I edit the result?</strong></summary>
-
-Yes. `diagram.drawio` is a normal draw.io file. Boundaries are containers and icons are real shapes, so moving an element keeps its connectors attached.
-
-</details>
 
 <details>
 <summary><strong>What if my architecture is not on AWS, Azure or Google Cloud?</strong></summary>
@@ -220,10 +193,8 @@ The scripts start local programs: Git to fetch the pinned draw.io viewer once, a
 
 </details>
 
-## Good to know
+## License
 
-- **Check the picture.** A static check is not proof of architectural correctness. Inspect the first diagram against your source.
-- **Codex rendering.** A Codex sandbox may be unable to render a PNG. You then receive the `.drawio` file and a link for viewing and export.
-- **License.** Original instructions and scripts use the [MIT license](./LICENSE). Third-party artwork retains its own terms in the [asset catalog](./assets/vendor-icons.json); this is not blanket MIT licensing of icons. Redistribution clearance and output attribution for some bundled artwork are not complete; the [third-party notices](./THIRD-PARTY-NOTICES.md) list what is cleared and what remains open.
+Original instructions and scripts use the [MIT license](./LICENSE). Third-party artwork retains its own terms in the [asset catalog](./assets/vendor-icons.json); this is not blanket MIT licensing of icons. Redistribution clearance and output attribution for some bundled artwork are not complete; the [third-party notices](./THIRD-PARTY-NOTICES.md) list what is cleared and what remains open.
 
 Something drawn wrongly, or a scenario it struggles with? Share the input, the first diagram, the agent and model, the installed revision and what you expected in [the feedback issue](https://github.com/ClydeShen/skills/issues/7).
