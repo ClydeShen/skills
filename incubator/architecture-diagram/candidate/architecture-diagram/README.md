@@ -31,6 +31,16 @@
 
 ---
 
+## Install
+
+Run this in your project. The [skills CLI](https://www.npmjs.com/package/skills) asks which agent to install into and handles the rest:
+
+```sh
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
+```
+
+Start a fresh agent session afterwards and confirm that `architecture-diagram` appears in its skill list. The skill needs an agent that reads `SKILL.md`, writes files into your project and runs Node.js 24 scripts. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. Without those you still get the editable file and a browser link for viewing and export.
+
 ## Why use it
 
 You know how the system works. Everyone else has to picture it. This skill turns a description of requests, services and boundaries into a diagram you can bring to a design review, paste into a wiki or keep editing.
@@ -130,16 +140,6 @@ The package ships its own scripts, so the agent can verify a diagram without a m
 - **Colour:** a contrast calculator for palette choices. Meaning never depends on colour alone.
 
 Checks catch what can mislead a reader; they do not prove the architecture is right. The agent still has to read the picture, and so should you.
-
-## Install
-
-Run this in your project. The [skills CLI](https://www.npmjs.com/package/skills) asks which agent to install into and handles the rest:
-
-```sh
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
-```
-
-Start a fresh agent session afterwards and confirm that `architecture-diagram` appears in its skill list. The skill needs an agent that reads `SKILL.md`, writes files into your project and runs Node.js 24 scripts. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. Without those you still get the editable file and a browser link for viewing and export.
 
 ## Try it
 
