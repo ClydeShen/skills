@@ -23,7 +23,7 @@
 
 <img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/aws-order-platform/diagram.png" alt="An architecture diagram of an order and analytics platform on AWS, drawn by the skill: CloudFront, API Gateway and Lambda functions inside a Region boundary, with DynamoDB, SQS, EventBridge, Step Functions, SNS, OpenSearch, Bedrock, Kinesis, Glue, Athena, Secrets Manager, KMS, CloudWatch, X-Ray, CodePipeline and CodeBuild, each with its official icon" width="900">
 
-<sub>Drawn by this skill from the description under [See it work](#see-it-work). Unedited output of a clean agent session.</sub>
+<sub>Drawn by this skill from the description under [See it work](#see-it-work). Unedited output.</sub>
 
 [Install](#install) · [See it work](#see-it-work) · [Examples](#examples) · [What it checks](#what-it-checks) · [FAQ](#faq)
 
@@ -50,7 +50,7 @@ You know how the system works. Everyone else has to picture it. This skill turns
 | **Layout that carries meaning**  | Boundaries show real membership. An arrowhead points where a request or data moves. Solid lines carry the main flow; dashed lines carry deployment, telemetry, secrets and DNS. One page by default, and a repeated structure is drawn once with its count. |
 | **Real icons, never lookalikes** | More than 1,700 official AWS, Azure, Google Cloud and Kubernetes icons from the draw.io libraries, plus 75 bundled marks for platforms and AI services such as Cloudflare, GitHub, OpenAI, Pinecone and Langfuse. No exact icon? A plain labelled box.      |
 | **Editable in draw.io**          | A `.drawio` file to open and change, plus a PNG and an SVG of every page for documents and wikis.                                                                                                                                                           |
-| **It questions your source**     | A technical contradiction in your text is raised with a recommendation, and the skill draws only what your source supports. Assumptions and open questions go into a short companion account.                                                               |
+| **It questions your source**     | A technical contradiction in your text is raised with a recommendation, and the skill draws only what your source supports. Assumptions and open questions go into a short report.                                                                          |
 | **It checks its own work**       | Scripts report overlapping text, crossings, shared segments, detours and missing keys. The agent must read every rendered PNG before it hands the result over.                                                                                              |
 
 ## See it work
@@ -80,12 +80,12 @@ You know how the system works. Everyone else has to picture it. This skill turns
 
 **You get** four files:
 
-| File              | What it is                                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------- |
-| `diagram.drawio`  | The editable diagram, one page per view. Open it in draw.io and change anything.                        |
-| `diagram.png`     | A PNG of each page, rendered with draw.io's own viewer, so it matches the file.                         |
-| `diagram.svg`     | A vector copy of each page.                                                                             |
-| `agent-report.md` | The companion account: scope, assumptions, doubts about the source, design risks and the checks it ran. |
+| File              | What it is                                                                                   |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| `diagram.drawio`  | The editable diagram, one page per view. Open it in draw.io and change anything.             |
+| `diagram.png`     | A PNG of each page, rendered with draw.io's own viewer, so it matches the file.              |
+| `diagram.svg`     | A vector copy of each page.                                                                  |
+| `agent-report.md` | The report: scope, assumptions, doubts about the source, design risks and the checks it ran. |
 
 Two lines from the report of this run, verbatim:
 
@@ -96,7 +96,7 @@ Two lines from the report of this run, verbatim:
 
 ## Examples
 
-Every example is unedited output of a clean agent session: only this package and the scenario, nothing else. Each scenario was run more than once and the denser result is shown, so these pictures show the skill at its better end. Each folder holds the scenario, `diagram.drawio`, PNG, SVG and the companion account.
+Every example is the skill's unedited output for the description shown. Each description was run more than once and the denser result is shown, so these pictures show the skill at its better end. Each folder holds the input description, `diagram.drawio`, PNG, SVG and the report.
 
 ### Knowledge and data platform on Azure
 

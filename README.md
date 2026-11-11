@@ -22,11 +22,9 @@ npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
 
 More skills are in testing. They appear here when they are released.
 
-## Why you can rely on a release
+## About the releases
 
-Before a skill is published, it is compared with a fixed quality baseline, checked by the skills.sh security audit and approved by the owner. Each release records its checks and the decision, and a published version is never edited in place.
-
-To build and check your own skills the same way, borrow the [lifecycle playbook and checklist](./knowledge/skill-lifecycle/README.md).
+A skill is published only as an exact package that the owner has approved, and a published version is never edited in place. To build and check your own skills the same way, borrow the [lifecycle playbook and checklist](./knowledge/skill-lifecycle/README.md).
 
 ## Feedback
 
