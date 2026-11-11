@@ -14,107 +14,37 @@ The [skills.sh adapter](./adapters/skills-sh.md) is an optional example, not a d
 
 ## The lifecycle at a glance
 
-Read from the bottom up: each gate asks for evidence before the next step.
-
 ```mermaid
-%%{init: {"theme": "base", "block": {"padding": 32}, "fontFamily": "Arial, sans-serif", "themeVariables": {"fontSize": "15px", "lineColor": "#8292A5", "edgeLabelBackground": "#FFFFFF"}}}%%
-block-beta
-    columns 3
+%%{init: {"theme": "base", "flowchart": {"curve": "basis", "nodeSpacing": 28, "rankSpacing": 36}, "themeVariables": {"fontFamily": "Arial, sans-serif", "fontSize": "15px", "lineColor": "#8292A5"}}}%%
+flowchart LR
+    init["<b>init</b>"] --> plan["<b>plan</b>"] --> draft["<b>draft</b>"] --> internal["<b>internal</b>"] --> public["<b>public</b>"] --> accept["<b>acceptance</b>"] --> approve["<b>owner<br/>approval</b>"] --> release["<b>release</b>"]
 
-    releaseVersion["Release
-    Promote approved bytes without rebuilding
-    Verify published identity and post-publication install smoke
-    Preserve version identity and the recovery path"]:2
-    maintenance["Recover or improve
-    Failed smoke: restore or withdraw
-    Next revision returns to Draft
-    Hotfix released source and forward-port"]
-
-    approval["Owner approval
-    Approve this exact snapshot, its targets and known limits
-    Scores and CI do not approve a release"]:2
-    declined["Approval declined
-    Return to Public
-    Revise snapshot and evidence"]
-
-    acceptance["Release acceptance
-    Security, dependencies and third-party rights
-    Matching platform audit verdict
-    Clean install, activation, resources and useful output
-    Supported targets, updates and applicable recovery"]:2
-    hold["Failed or missing checks
-    Hold at Public
-    Repair and revalidate"]
-
-    publicTrial["Public
-    Offer an opt-in candidate with a first-use guide
-    Collect reproducible feedback tied to a version
-    Freeze source revision, file inventory and digest"]:2
-    feedback["Trial feedback
-    Return to Draft
-    Improve the candidate"]
-
-    internal["Internal
-    Promptfoo first, then authorized fresh agent runs
-    Calibrate graders and inspect actual outputs
-    Baseline, no-skill, held-out and trigger comparisons
-    Human review and verified trial installation"]:2
-    retest["Weak or inconclusive evidence
-    Return to Draft
-    Repair and retest"]
-
-    draft["Draft
-    Focused instructions and package-local resources
-    Tool gate: format, links, lint, resources and secrets
-    Runnable evaluation cases, rubric and result path"]:2
-    repair["Package or test failure
-    Stay in Draft
-    Repair and rerun checks"]
-
-    plan["Plan
-    Research the need and compare simpler alternatives
-    Owner agrees scope, success and supported targets
-    Declare capabilities and data boundaries"]:2
-    space
-
-    idea["Init
-    Identify a recurring user task and its intended benefit"]:2
-    space
-
-    idea --> plan
-    plan --> draft
-    draft --> internal
-    internal --> publicTrial
-    publicTrial --> acceptance
-    acceptance --> approval
-    approval --> releaseVersion
-
-    releaseVersion --> maintenance
-    approval --> declined
-    acceptance --> hold
-    publicTrial --> feedback
-    internal --> retest
-    draft --> repair
-
-    classDef stage fill:#F8FAFC,stroke:#CBD5E1,color:#243247
-    classDef tool fill:#EFF6FF,stroke:#93B4D7,color:#1E3A5F
-    classDef evidence fill:#FFFBEB,stroke:#D6BC78,color:#59451D
-    classDef human fill:#F5F3FF,stroke:#B6A5D2,color:#493568
-    classDef stable fill:#ECFDF5,stroke:#86BDA5,color:#20543D
-    classDef returnPath fill:#FFFFFF,stroke:#CBD5E1,color:#475569
-    class idea,publicTrial stage
+    classDef person fill:#F5F3FF,stroke:#8B7BC0,color:#3F2D66
+    classDef tool fill:#EFF6FF,stroke:#60A5FA,color:#1E3A5F
+    classDef evidence fill:#FFFBEB,stroke:#D6A93C,color:#59451D
+    classDef done fill:#ECFDF5,stroke:#34A56F,color:#14532D
+    class init,plan,approve person
     class draft tool
-    class internal,acceptance evidence
-    class plan,approval human
-    class releaseVersion stable
-    class maintenance,declined,hold,feedback,retest,repair returnPath
+    class internal,public,accept evidence
+    class release done
 ```
 
-**Tools check correctness. Agents produce evidence. The owner decides what ships.** Read upward for progress; the right-hand cards name return and recovery actions, not extra lifecycle stages. Missing required evidence blocks progress. Changed content reopens affected checks; an audit or approval for different bytes does not carry over.
+Colour shows who decides: purple a person, blue tools, amber evidence that a person reads, green the published release. Each step needs its evidence before the next:
 
-These are required controls, not a claim that every gate is automated; each project's harness decides what it automates. Entering `internal` means evaluation is runnable; entering `public` means a candidate can be tried, not that it has passed release acceptance.
+| Step           | To advance                                                                                              | Decided by            | If it fails                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------- | --------------------- | ---------------------------------------------------------------- |
+| `init`         | The user, task and expected benefit are named, and a simpler alternative is compared                    | The owner             | Drop the idea or keep it recorded                                |
+| `plan`         | The owner agrees scope, non-goals, observable success, capabilities and risks                           | The owner             | Keep researching                                                 |
+| `draft`        | Format, links, lint, resources and secret checks pass; runnable cases, a rubric and a result path exist | Tools                 | Stay in `draft`; repair and rerun the checks                     |
+| `internal`     | Shared regressions and a baseline comparison are run, and a person inspects the outputs                 | Evidence and a person | Weak or inconclusive evidence returns to `draft`                 |
+| `public`       | A trial install works with a first-use guide; feedback is reproducible and tied to a version            | Evidence              | Feedback returns to `draft`                                      |
+| acceptance     | Security, rights, platform audit, clean install, activation and useful output are checked               | Evidence              | A failed or missing check holds at `public` until repaired       |
+| owner approval | The owner approves this exact snapshot, its targets and its known limits                                | The owner             | Declined: return to `public` and revise the snapshot             |
+| `release`      | The approved bytes are promoted unchanged and a smoke check passes after publication                    | Tools and the owner   | Failed smoke: restore the previous verified artifact or withdraw |
 
-After release, improvements leave the published version intact. A hotfix starts from its recorded source, passes the same applicable gates and is forward-ported to ongoing work. Failed delivery restores the previous verified package or withdraws a failed first release; state recovery is separate where relevant. Only the owner changes an accepted baseline.
+**Tools check correctness. Agents produce evidence. The owner decides what ships.** Missing required evidence blocks progress. Changed content reopens the affected checks; an audit or approval for different bytes does not carry over. These are required controls, not a claim that every gate is automated; each project's harness decides what it automates.
+
+After release, an improvement leaves the published version intact and starts again at `draft`. A hotfix starts from its recorded source, passes the same applicable gates and is forward-ported to ongoing work. Only the owner changes an accepted baseline.
 
 ## Scope and limits
 
