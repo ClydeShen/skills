@@ -4,7 +4,7 @@ Updated: 2026-11-06 (UTC). This is the consolidated continuation guide, not a pa
 
 ## Current state (2026-11-10)
 
-The first revision is published at [`skills/architecture-diagram/`](../../skills/architecture-diagram/README.md) (source `71ca85da770b1307bbd6f9182d1c06e030ce859b`, digest `4224ee3cda065cfa5cc676c2ef8a36f1a32b80cf3d0f93c98f2e40715113c218`), with 75 bundled icons. Its regression, checks and open items are in the [release record](./evaluation.md#release-record). Two things remain: record the skills.sh audit after the first installation from `main`, and close the open artwork grants. Everything below describes the next revision (PR #45's consumer icon libraries), which starts again at `internal` and needs its own regression with `npm run eval:scenario`, as step 3 below says.
+The first revision is published at [`skills/architecture-diagram/`](../../skills/architecture-diagram/README.md) (source `fd453ea34a46b250c0e70a53969f7f95eac1b2fe`, digest `4224ee3cda065cfa5cc676c2ef8a36f1a32b80cf3d0f93c98f2e40715113c218`), with 75 bundled icons. Its regression, checks and open items are in the [release record](./evaluation.md#release-record). Two things remain: record the skills.sh audit after the first installation from `main`, and close the open artwork grants. Everything below describes the next revision (PR #45's consumer icon libraries), which starts again at `internal` and needs its own regression with `npm run eval:scenario`, as step 3 below says.
 
 ## Immediate continuation: Claude behavioral regression, then publication
 
