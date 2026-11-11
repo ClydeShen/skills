@@ -130,6 +130,6 @@ Reports show prompts, outputs and grading reasons. New rules should include reje
 
 ## Verification status
 
-See [candidate evaluation](../incubator/meta-thinking/evaluation.md) for local Linux runs. The [CI workflow](../.github/workflows/prompt-evaluation.yml) runs identical checks on Linux, Windows and macOS without model credentials or paid evaluation. Subsequent successful three-platform evidence is recorded in [HARNESS.md](./HARNESS.md); WSL-specific execution and current candidate behavior remain separate checks.
+See [candidate evaluation](../incubator/meta-thinking/evaluation.md) for local Linux runs. The [CI workflow](../.github/workflows/prompt-evaluation.yml) runs identical checks on Linux, Windows and macOS without model credentials or paid evaluation. Dated three-platform evidence is in [the verification record](../research/harness/skill-repository/harness-verification-2026-10-28.md); WSL-specific execution and current candidate behavior remain separate checks.
 
 See the [framework research](../research/harness/prompt-evaluation/local-evaluation-framework-2026-10-25.md) for selection evidence and reading scope. Recheck runtime requirements and report structure when upgrading dependencies.
