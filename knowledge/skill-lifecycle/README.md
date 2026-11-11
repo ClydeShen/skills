@@ -21,10 +21,10 @@ Read from the top down. Each diamond is a decision: "yes" moves on, and "no" fol
 flowchart TB
     init(["<b>Init</b><br/>Name a recurring task and its benefit"])
     plan["<b>Plan</b><br/>Research, compare simpler options<br/>Owner agrees scope and success"]
-    draft["<b>Draft</b><br/>Write instructions and local resources<br/>Prepare cases, rubric and result path"]
+    draft["<b>Draft</b><br/>Write instructions and local resources<br/>Prepare eval cases, rubric and result path"]
     d1{"Tools pass?"}
-    internal["<b>Internal</b><br/>Shared regressions, fresh agent runs<br/>Baseline comparison, a person inspects"]
-    d2{"Evidence strong?"}
+    internal["<b>Internal</b><br/>Run evals: shared regressions, fresh agent runs<br/>Baseline comparison, a person inspects"]
+    d2{"Eval results strong?"}
     public["<b>Public</b><br/>Opt-in trial with a first-use guide<br/>Freeze source revision and digest"]
     d3{"Feedback<br/>reproducible?"}
     accept["<b>Release acceptance</b><br/>Security, rights, platform audit<br/>Clean install, activation, useful output"]
@@ -45,7 +45,7 @@ flowchart TB
     d6 -- no --> undo
 
     d1 -. "no: repair, rerun" .-> draft
-    d2 -. "no: repair, retest" .-> draft
+    d2 -. "no: repair, re-run evals" .-> draft
     d3 -. "no: improve the candidate" .-> draft
     d4 -. "no: hold, repair, revalidate" .-> public
     d5 -. "no: revise snapshot and evidence" .-> public
