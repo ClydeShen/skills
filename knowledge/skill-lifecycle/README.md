@@ -14,9 +14,107 @@ The [skills.sh adapter](./adapters/skills-sh.md) is an optional example, not a d
 
 ## The lifecycle at a glance
 
-![The lifecycle in five phases, with what the owner, agents and tools do in each. Frame: the owner agrees scope, success and risks; agents research the need. Author: agents write the package, cases and rubric; tools check format, links, lint, resources and secrets. Evaluate: agents run shared regressions and compare with the baseline; tools run deterministic checks; the owner judges the outputs. Trial: agents collect reproducible feedback; tools check installation; the owner opens the trial. Release: agents prove security, rights, audit and clean install; tools verify the snapshot digest and run the smoke check; the owner approves the exact snapshot. Weak evidence or feedback returns to Author, a failed check or declined approval holds at Trial, and after release a next revision or hotfix starts again at Author.](./lifecycle.svg)
+Read from the bottom up: each gate asks for evidence before the next step.
 
-**Tools check correctness. Agents produce evidence. The owner decides what ships.** Missing required evidence blocks progress. Changed content reopens the affected checks; an audit or approval for different bytes does not carry over. These are required controls, not a claim that every gate is automated; each project's harness decides what it automates. The phases map to the SOP stages `init` and `plan` (Frame), `draft` (Author), `internal` (Evaluate), `public` (Trial) and `release` after acceptance and approval (Release); [the SOP](./sop.md#stages-and-gates) defines each stage and its entry basis. Only the owner changes an accepted baseline.
+```mermaid
+%%{init: {"theme": "base", "block": {"padding": 32}, "fontFamily": "Arial, sans-serif", "themeVariables": {"fontSize": "15px", "lineColor": "#8292A5", "edgeLabelBackground": "#FFFFFF"}}}%%
+block-beta
+    columns 3
+
+    releaseVersion["Release
+    Promote approved bytes without rebuilding
+    Verify published identity and post-publication install smoke
+    Preserve version identity and the recovery path"]:2
+    maintenance["Recover or improve
+    Failed smoke: restore or withdraw
+    Next revision returns to Draft
+    Hotfix released source and forward-port"]
+
+    approval["Owner approval
+    Approve this exact snapshot, its targets and known limits
+    Scores and CI do not approve a release"]:2
+    declined["Approval declined
+    Return to Public
+    Revise snapshot and evidence"]
+
+    acceptance["Release acceptance
+    Security, dependencies and third-party rights
+    Matching platform audit verdict
+    Clean install, activation, resources and useful output
+    Supported targets, updates and applicable recovery"]:2
+    hold["Failed or missing checks
+    Hold at Public
+    Repair and revalidate"]
+
+    publicTrial["Public
+    Offer an opt-in candidate with a first-use guide
+    Collect reproducible feedback tied to a version
+    Freeze source revision, file inventory and digest"]:2
+    feedback["Trial feedback
+    Return to Draft
+    Improve the candidate"]
+
+    internal["Internal
+    Promptfoo first, then authorized fresh agent runs
+    Calibrate graders and inspect actual outputs
+    Baseline, no-skill, held-out and trigger comparisons
+    Human review and verified trial installation"]:2
+    retest["Weak or inconclusive evidence
+    Return to Draft
+    Repair and retest"]
+
+    draft["Draft
+    Focused instructions and package-local resources
+    Tool gate: format, links, lint, resources and secrets
+    Runnable evaluation cases, rubric and result path"]:2
+    repair["Package or test failure
+    Stay in Draft
+    Repair and rerun checks"]
+
+    plan["Plan
+    Research the need and compare simpler alternatives
+    Owner agrees scope, success and supported targets
+    Declare capabilities and data boundaries"]:2
+    space
+
+    idea["Init
+    Identify a recurring user task and its intended benefit"]:2
+    space
+
+    idea --> plan
+    plan --> draft
+    draft --> internal
+    internal --> publicTrial
+    publicTrial --> acceptance
+    acceptance --> approval
+    approval --> releaseVersion
+
+    releaseVersion --> maintenance
+    approval --> declined
+    acceptance --> hold
+    publicTrial --> feedback
+    internal --> retest
+    draft --> repair
+
+    classDef stage fill:#F8FAFC,stroke:#CBD5E1,color:#243247
+    classDef tool fill:#EFF6FF,stroke:#93B4D7,color:#1E3A5F
+    classDef evidence fill:#FFFBEB,stroke:#D6BC78,color:#59451D
+    classDef human fill:#F5F3FF,stroke:#B6A5D2,color:#493568
+    classDef stable fill:#ECFDF5,stroke:#86BDA5,color:#20543D
+    classDef returnPath fill:#FFFFFF,stroke:#CBD5E1,color:#475569
+    class idea,publicTrial stage
+    class draft tool
+    class internal,acceptance evidence
+    class plan,approval human
+    class releaseVersion stable
+    class maintenance,declined,hold,feedback,retest,repair returnPath
+```
+
+**Tools check correctness. Agents produce evidence. The owner decides what ships.** Read upward for progress; the right-hand cards name return and recovery actions, not extra lifecycle stages. Missing required evidence blocks progress. Changed content reopens affected checks; an audit or approval for different bytes does not carry over.
+
+These are required controls, not a claim that every gate is automated; each project's harness decides what it automates. Entering `internal` means evaluation is runnable; entering `public` means a candidate can be tried, not that it has passed release acceptance.
+
+After release, improvements leave the published version intact. A hotfix starts from its recorded source, passes the same applicable gates and is forward-ported to ongoing work. Failed delivery restores the previous verified package or withdraws a failed first release; state recovery is separate where relevant. Only the owner changes an accepted baseline.
 
 ## Scope and limits
 
