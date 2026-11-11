@@ -76,6 +76,8 @@ export function createRateLimiter({ requestsPerMinute: rpm, file, now = Date.now
       const start = await (file ? reserveShared() : reserve());
       const wait = start - now();
       if (wait > 0) await sleep(wait);
+      // The reserved start time, which a caller or test can check without depending on when its timer fired.
+      return start;
     },
   };
 }
