@@ -34,6 +34,19 @@ Present a skill's value attractively through concrete uses and outputs; distingu
 
 Owner clarification, 2026-11-06: root and skill-package READMEs are human-facing product introductions. Structure the invitation around recognizable friction, a concrete desired outcome, an example or usage preview, and one low-effort next action. Help readers recognize their own need without inventing performance claims, social proof, scarcity or urgency. Use natural language rather than a feature taxonomy, package inventory or process lecture. Keep maturity, necessary setup, safety and material limits easy to find without dominating the pitch. Contributions stay secondary near the end. Never advertise unavailable releases or present illustrative output as verified performance.
 
+Boundary between the root README and a skill-package README (owner clarification, 2026-11-11). Each fact has one home; the other README links to it.
+
+| Question       | Root README                                                                                            | Skill-package README                                                                                        |
+| -------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Reader         | A visitor who may know no skill yet and is choosing what to try                                        | Someone who picked this skill and decides whether to install and how to use it                              |
+| Goal           | Help the reader find the right skill and trust the collection                                          | Help the reader judge the skill's value, install it and succeed on the first use                            |
+| Owns           | The catalog (need, outcome, one picture, release status), how skills earn release, contribution        | Benefits, examples with their inputs, installation per agent, first prompt, how to read output, limits, FAQ |
+| Does not carry | Badges or chips, per-agent commands, feature lists, output formats, icon counts, runtime prerequisites | Collection status of other skills, the lifecycle, repository contribution rules                             |
+| Pictures       | One representative output per released skill, credited, linking to the package page                    | Several outputs with the input behind each                                                                  |
+| Next action    | Open a skill page, or one generic install command for a released skill                                 | Install, then run the first prompt                                                                          |
+
+Release status is a root fact kept true by each release. A skill's facts (supported agents, output formats, versions) live in its package README, where badges are allowed.
+
 The root's single lifecycle diagram reads from Idea at the bottom to Release at the top. Show consequential gates, their tool/evidence/human responsibilities, required evidence, failure paths and post-release improvement, hotfix and recovery loops. Summarize the owning SOP; do not invent new policy or imply all required checks are automated. A status chain alone adds no information. Skill-package READMEs show the useful output and first-use interaction, not the incubation process. Omit obvious usage-flow graphics and repeated diagrams; include a visual only when it explains a relationship better than the surrounding prose. Detailed procedures stay behind a link.
 
 ## Framework document filenames
@@ -83,7 +96,16 @@ Each released skill carries `README.md` beside `SKILL.md` (owner requirement, 20
 
 Lead with the problem it helps solve, who it is for and the useful outcome. Briefly cover what it can do, important limits or prerequisites, the correct installation command and how to start. When useful, include one short realistic input/example and the expected kind of output; label illustrative output honestly. Keep the tone inviting and concrete, without unsupported claims.
 
-Use [the package README scaffold](./templates/skill-readme-template.md) selectively. Keep examples concise, links package-local where needed, and installation instructions appropriate to candidate or release status. Do not copy runtime instructions, evaluation logs, internal task history or an initiative's folder inventory into it. Do not advertise a public release before the [release checks](./REPOSITORY-STRUCTURE.md#installation-and-release-checks), including skills.sh audit, are complete.
+Use [the package README scaffold](./templates/skill-readme-template.md) selectively. Keep examples concise, links package-local where needed, and installation instructions appropriate to candidate or release status. Do not copy runtime instructions, evaluation logs, internal task history or an initiative's folder inventory into it.
+
+A package README may be visually rich when the richness is true and checkable:
+
+- **Badges** state only facts that the package keeps true, such as its license, runtime and tool versions, supported agents, output formats and topic tags. They carry no install counts, ratings, audit results or other figures that change without a new release.
+- **Pictures** are real, unedited output of the skill, shown with the input that produced it and a line that says so. They live in the initiative's `examples/` folder, outside the package, so that installing the skill does not copy them into every project. The package README is a byte copy in its snapshot, so it refers to them by GitHub's raw URL on `main`, not by a path relative to the package. The repository check rejects such a URL whose file is not in the repository.
+- **Quotes** from a companion account are verbatim, not shortened or reworded.
+- Illustrative output is never presented as measured performance; scores stay in the evaluation record.
+
+Do not advertise a public release before the [release checks](./REPOSITORY-STRUCTURE.md#installation-and-release-checks), including skills.sh audit, are complete.
 
 ## Evaluation result semantics
 

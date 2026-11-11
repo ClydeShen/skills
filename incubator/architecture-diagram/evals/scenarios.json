@@ -7,19 +7,44 @@
   ],
   "review": {
     "prompt": "baseline/review-prompt.md",
-    "files": { "scenario.md": "scenario.md", "images/": ".png" },
+    "files": {
+      "scenario.md": "scenario.md",
+      "images/": ".png"
+    },
     "score": "SCORE:\\s*([0-9.]+)\\s*$"
   },
   "baseline": "baseline/baseline.json",
   "cases": [
-    { "id": "aws-support-assistant", "source": "scenarios/a.md", "baseline": "a" },
-    { "id": "azure-document-qa", "source": "scenarios/b.md", "baseline": "b" },
+    {
+      "id": "aws-support-assistant",
+      "source": "scenarios/a.md",
+      "baseline": "a"
+    },
+    {
+      "id": "azure-document-qa",
+      "source": "scenarios/b.md",
+      "baseline": "b"
+    },
     {
       "id": "cross-cloud-private-api",
       "source": "scenarios/02.md",
       "input": "quoted",
       "baseline": "02"
     },
-    { "id": "aws-online-store", "source": "scenarios/c.md", "baseline": "c" }
+    {
+      "id": "aws-online-store",
+      "source": "scenarios/c.md",
+      "baseline": "c"
+    },
+    {
+      "id": "example-aws-order-platform",
+      "source": "../examples/aws-order-platform/scenario.md",
+      "optIn": true
+    },
+    {
+      "id": "example-azure-knowledge-platform",
+      "source": "../examples/azure-knowledge-platform/scenario.md",
+      "optIn": true
+    }
   ]
 }

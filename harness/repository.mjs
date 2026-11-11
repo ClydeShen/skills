@@ -183,6 +183,14 @@ export const snapshotSourceHint = (message) =>
     ? " The snapshot's source commit is not in this history. After a squash merge, regenerate the snapshot from the merge commit on main (docs/REPOSITORY-STRUCTURE.md#release-sequence)."
     : '';
 
+// A package README is a byte copy in its snapshot, so its images cannot use paths relative to the package. They use
+// GitHub's raw URL on main, which breaks without a message if the file is moved or never added.
+const repositoryFileUrl = /https:\/\/raw\.githubusercontent\.com\/ClydeShen\/skills\/main\/([^\s)"'<>]+)/g;
+export const missingRepositoryFiles = (source, files) =>
+  [...source.matchAll(repositoryFileUrl)]
+    .map((match) => decodeURIComponent(match[1]))
+    .filter((file) => !files.includes(file));
+
 // Words that mark a README as written before its release; a published package's README states the release.
 const unreleasedPatterns =
   /INSTALL_INTERNAL_SKILLS|opt-in candidate|candidate (?:preview|trial)|stable release|before (?:an )?approved|not yet (?:released|published)|unreleased/i;
@@ -305,6 +313,8 @@ export function checkRepository(root, files = repositoryFiles(root)) {
   for (const file of files.filter((f) => f.endsWith('.md') && !imported(f))) {
     if (privatePath(file) || hasSymlink(root, file)) continue;
     const source = read(file);
+    for (const missing of missingRepositoryFiles(source, files))
+      error(file, `links to ${missing} on GitHub, but that file is not in the repository`);
     const pkg = packages.find((p) => file.startsWith(`${p.directory}/`));
     const targets = markdownTargets(source);
     // Also inspect literal resource paths in inline code, but not fenced examples.

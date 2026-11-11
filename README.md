@@ -6,29 +6,35 @@ A diagram you can bring to a review. A technical draft that sounds like you. A u
 
 ## What would you like to get done?
 
+Each skill below solves one recurring need. Open its page for examples, setup and limits.
+
 ### Put your architecture on the page
 
-Describe how your system works. **Architecture Diagram** helps turn it into an editable draw.io diagram: follow a request, see the boundaries, and bring something concrete to the discussion.
+Describe how your system works. **Architecture Diagram** turns it into an editable draw.io diagram with real cloud icons: follow a request, see the boundaries, and bring something concrete to the discussion.
+
+<img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/cross-cloud-private-api/diagram.png" alt="An architecture diagram drawn by the skill: Azure integration workloads reaching a private API Gateway in AWS through a VPN, a Transit Gateway and DNS forwarding" width="860">
+
+<sub>Drawn by the skill from a text description, unedited.</sub>
+
+**Status: released.** Works with the agents the [skills CLI](https://www.npmjs.com/package/skills) supports. Try it:
 
 ```sh
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
 ```
 
-[See what it does and what to try first →](./skills/architecture-diagram/README.md)
+[Examples, supported agents and limits →](./skills/architecture-diagram/README.md)
 
 ### Keep the technical meaning. Make the writing sound like you.
 
 An email, a design document, a paragraph that feels too generic. **Tech Humanizer** helps rewrite it naturally while preserving the details that matter.
 
-[Explore Tech Humanizer →](./incubator/tech-humanizer/README.md)
+**Status: internal testing, not released.** [Explore Tech Humanizer →](./incubator/tech-humanizer/README.md)
 
 ### Get an unproductive chat moving again
 
 When the conversation keeps circling, **Meta Thinking** helps uncover the goal or assumption worth revisiting and choose the next useful action.
 
-[Explore Meta Thinking →](./incubator/meta-thinking/README.md)
-
-Architecture Diagram is released; for Claude Code, replace `--agent codex` with `--agent claude-code`. The writing and thinking skills are still in internal testing and are not released.
+**Status: internal testing, not released.** [Explore Meta Thinking →](./incubator/meta-thinking/README.md)
 
 ## A skill gets better by being used
 

@@ -12,6 +12,7 @@ import {
   exactPathExists,
   frameworkFilenameError,
   markdownTargets,
+  missingRepositoryFiles,
   nonPortablePath,
   repositoryFiles,
   repositoryRoot,
@@ -414,4 +415,21 @@ test('a script cannot pass a file URL pathname as a file path', (t) => {
   assert.equal(nonPortablePath(`const origin = url.origin + ${pathnameOf("'https://a.b/c'")};`), null);
   const bad = fixture(t, { 'scripts/run.mjs': `export const file = ${pathnameOf(here)};\n` });
   assert.ok(bad.check().errors.some((e) => e.startsWith('scripts/run.mjs') && e.includes('fileURLToPath')));
+});
+
+test('an image that a README takes from GitHub must exist in the repository', (t) => {
+  const raw = 'https://raw.githubusercontent.com/ClydeShen/skills/main/';
+  const files = ['docs/shot one.png', 'docs/b.svg'];
+  assert.deepEqual(
+    missingRepositoryFiles(`![a](${raw}docs/shot%20one.png) <img src="${raw}docs/b.svg" width="9">`, files),
+    [],
+  );
+  assert.deepEqual(missingRepositoryFiles(`![a](${raw}docs/gone.png) and ![b](${raw}docs/b.svg)`, files), [
+    'docs/gone.png',
+  ]);
+  assert.deepEqual(missingRepositoryFiles('![x](https://example.com/a.png)', files), []);
+  const present = fixture(t, { 'docs/a.png': 'png', 'docs/page.md': `# Page\n\n![a](${raw}docs/a.png)\n` });
+  assert.deepEqual(present.check().errors, []);
+  const absent = fixture(t, { 'docs/page.md': `# Page\n\n![a](${raw}docs/a.png)\n` });
+  assert.ok(absent.check().errors.some((e) => e.startsWith('docs/page.md') && e.includes('docs/a.png')));
 });

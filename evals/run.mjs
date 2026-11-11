@@ -31,7 +31,7 @@ async function main() {
   const { summary: summarize, ...suite } = await createSuite({
     mode,
     env: process.env,
-    options: { skill, agent, baseline },
+    options: { skill, agent, baseline, case: caseId },
   });
   // A suite that supplies its own providers, such as the image judge or a real agent, keeps them in model mode.
   const suiteProviders = Boolean(suite.providers?.length);
