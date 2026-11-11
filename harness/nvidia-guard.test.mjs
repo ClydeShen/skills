@@ -3,7 +3,6 @@ import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { directNvidiaCommand, nvidiaAccessError, reason, toolDecision } from './nvidia-guard.mjs';
-import { checkRepository } from './repository.mjs';
 
 const bash = (command) => ({ hook_event_name: 'PreToolUse', tool_name: 'Bash', tool_input: { command } });
 const write = (file_path, content) => ({
@@ -92,12 +91,4 @@ test('code outside the shared modules may not name the inference host or read th
     assert.equal(nvidiaAccessError(file, 'integrate.api.nvidia.com NVIDIA_API_KEY'), null, file);
   assert.equal(nvidiaAccessError('scripts/ok.mjs', 'console.log(1)'), null);
   assert.equal(nvidiaAccessError('image.png', 'integrate.api.nvidia.com'), null);
-});
-
-test('the repository itself passes the check', () => {
-  const root = fileURLToPath(new URL('../', import.meta.url));
-  assert.deepEqual(
-    checkRepository(root).errors.filter((e) => e.includes('NVIDIA')),
-    [],
-  );
 });

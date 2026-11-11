@@ -136,7 +136,7 @@ test('boundary markers preserve exact artwork and scope without duplicating nati
 test('a boundary without an identity gets the text-only style with the same title place', () => {
   const cli = spawnSync(
     process.execPath,
-    [new URL('../candidate/architecture-diagram/scripts/find-icon.mjs', import.meta.url).pathname, '--boundary'],
+    [fileURLToPath(new URL('../candidate/architecture-diagram/scripts/find-icon.mjs', import.meta.url)), '--boundary'],
     {
       encoding: 'utf8',
     },
