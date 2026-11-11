@@ -6,7 +6,7 @@ Agent skills that you install into your own agent. One is released today: Archit
 
 ## Architecture Diagram
 
-Turns a text description of a system into an editable draw.io diagram. It uses official AWS, Azure, Google Cloud and Kubernetes icons, and also gives you PNG and SVG files for documents and wikis.
+Describe how your system works in plain text and get an editable architecture diagram you can bring to a design review.
 
 <img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/cross-cloud-private-api/diagram.png" alt="An architecture diagram drawn by the skill: Azure integration workloads reaching a private API Gateway in AWS through a VPN, a Transit Gateway and DNS forwarding" width="860">
 
