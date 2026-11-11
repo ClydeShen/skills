@@ -53,6 +53,8 @@ Test fresh installation, discovery, activation, resource loading and useful outp
 
 If the skill persists state, declare schemas and supported migrations. Test interrupted/concurrent writes, unsupported versions and recovery without deleting user data, as applicable. Restoring package files does not reverse state changes or external effects. Record an achievable recovery path, including manual steps or irreversible limits.
 
+Keep a snapshot's provenance verifiable after the change lands. A merge strategy that discards the commits a snapshot was built from, such as a squash merge, leaves its recorded source unreachable and breaks any check that rebuilds it; rebuild the snapshot from the merged commit, or choose a strategy that keeps the source. Before treating a missing platform audit as a result, confirm that the installation report reached the platform, because a client can drop a failed report silently.
+
 Keep unapproved artifacts outside default stable discovery. Use an opt-in staging ref, channel or archive when pre-publication services need remote access. Obtain owner approval for the exact artifact, target and known limits. Promote the same artifact without rebuilding it. Verify its published identity and installation. If smoke fails, halt promotion or restore the previous verified artifact. Record publication separately from successful post-publication acceptance; do not erase a failed release attempt.
 
 ### 4. Maintain, recover and retire

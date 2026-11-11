@@ -176,6 +176,23 @@ export function checkSkill(file, source) {
   return errors;
 }
 
+// A squash merge leaves the pull request's own commits out of the history that CI fetches, so a snapshot whose
+// source commit was on the pull request can no longer be rebuilt.
+export const snapshotSourceHint = (message) =>
+  /rev-parse|unknown revision|bad object|not a valid object/.test(message)
+    ? " The snapshot's source commit is not in this history. After a squash merge, regenerate the snapshot from the merge commit on main (docs/REPOSITORY-STRUCTURE.md#release-sequence)."
+    : '';
+
+// Words that mark a README as written before its release; a published package's README states the release.
+const unreleasedPatterns =
+  /INSTALL_INTERNAL_SKILLS|opt-in candidate|candidate (?:preview|trial)|stable release|before (?:an )?approved|not yet (?:released|published)|unreleased/i;
+export const unreleasedWording = (readme) => readme.match(unreleasedPatterns)?.[0] ?? null;
+
+// A file URL's pathname is not a file path on Windows ("/D:/a/..."), so a script that passes it on fails there.
+const urlPathname = /new URL\([^)]*import\.meta\.url\)\.pathname/;
+export const nonPortablePath = (source) =>
+  urlPathname.test(source) ? 'use fileURLToPath(new URL(...)) for a file path; URL.pathname is wrong on Windows' : null;
+
 export function checkRepository(root, files = repositoryFiles(root)) {
   const errors = [];
   const warnings = [];
@@ -214,6 +231,8 @@ export function checkRepository(root, files = repositoryFiles(root)) {
     )
       continue;
     const source = read(file);
+    const portable = file.endsWith('.mjs') && nonPortablePath(source);
+    if (portable) error(file, portable);
     const direct = nvidiaAccessError(file, source);
     if (direct) error(file, direct);
     if (source.includes('\r')) error(file, 'use LF line endings');
@@ -245,7 +264,10 @@ export function checkRepository(root, files = repositoryFiles(root)) {
       if (group.length !== 2 || !source || !snapshot) throw new Error('not one source/snapshot pair');
       verifySnapshot(root, path.join(root, snapshot.directory), source.directory);
     } catch (failure) {
-      error(group.at(-1).file, `duplicate authored name ${name}; unverified publication pair: ${failure.message}`);
+      error(
+        group.at(-1).file,
+        `duplicate authored name ${name}; unverified publication pair: ${failure.message}${snapshotSourceHint(failure.message)}`,
+      );
     }
   }
   for (const pkg of packages) {
@@ -253,6 +275,14 @@ export function checkRepository(root, files = repositoryFiles(root)) {
       const introduction = `${pkg.directory}/README.md`;
       if (!files.includes(introduction) || !read(introduction).trim())
         error(pkg.file, 'released skill requires its own nonempty first-use README.md');
+      else {
+        const unreleased = unreleasedWording(read(introduction));
+        if (unreleased)
+          error(
+            introduction,
+            `first-use README still describes the package as unreleased ("${unreleased}"); state the release and its install command`,
+          );
+      }
     }
     if (pkg.directory.startsWith('incubator/')) {
       const initiative = pkg.directory.split('/').slice(0, 2).join('/');

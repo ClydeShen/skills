@@ -49,7 +49,12 @@ The checker inventories tracked and non-ignored new files through Git; it does n
 - Candidate initiative artifacts, package-local Markdown references and literal `references/`, `scripts/`, `assets/` paths in inline code. Missing targets, wrong case, heading anchors, package escapes and authored symlinks fail.
 - Uppercase stems for established framework document roles at the root and in `docs/`, following the [filename convention](./DOCUMENT-FORMATS.md#framework-document-filenames). Ordinary content and tool-defined filenames retain their existing conventions.
 - Local Markdown links across maintained and historical documents, JSON/YAML parsing, LF/final newline, checklist schema and unique checklist IDs. Fenced example links are not treated as real navigation.
+- A released package's README states the release: it fails on words that mark a README as written for the candidate trial, such as `INSTALL_INTERNAL_SKILLS` or "stable release".
+- A snapshot whose source commit is not in the repository's history, with the repair to apply after a squash merge in the message.
+- Scripts that take a file path from `URL.pathname`, which is wrong on Windows.
 - Locked development-tool presence/provenance, byte-for-byte `.agents/skills/` → `.claude/skills/` equality and orphan projections. The root Claude adapter stays an import, not a second instruction source. Undeclared `AGENTS.override.md` files fail.
+
+CI runs the same tests on Linux, macOS and Windows, so write them to be portable. Build file paths with `fileURLToPath`, compare paths after normalizing separators, and assert timing against a fake clock or against times a function computed, not against when a real timer fired: a coarse timer fires early and a loaded machine fires late.
 
 It does not establish completeness of research, causal truth, appropriate activation, safety of arbitrary scripts or remote URLs, or actual filesystem behavior proposed by a model. It does not parse every possible plain-text resource mention or prove that an initiative's narrative status is correct. Review these semantically. Use the independent CLI, reference-validator, clean-install and behavioral checks in the [release contract](./REPOSITORY-STRUCTURE.md#installation-and-release-checks) before publication; `check` alone is not release approval.
 
@@ -128,11 +133,12 @@ A hosted workspace may ship Node.js 22 and a restricted network, so the gate fai
 
 Configure these in the host's environment settings; the script cannot:
 
-| Setting                                                           | Why                                                                                                                                                          |
-| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Environment variable `NODE_USE_ENV_PROXY=1`                       | Later `npm ci` or tool installs behind an egress proxy. The script sets it for its own `npm ci`.                                                             |
-| Network access to `nodejs.org` and the package registries         | Node.js download and `npm ci`. On a limited policy keep "Allow package managers" enabled.                                                                    |
-| Network access to `integrate.api.nvidia.com` and `NVIDIA_API_KEY` | Only for real-model evaluation (`npm run eval:nvidia`); the default gate and synthetic replay need neither. See [prompt evaluation](./prompt-evaluation.md). |
+| Setting                                                           | Why                                                                                                                                                                                                                                                                                                                                                     |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Environment variable `NODE_USE_ENV_PROXY=1`                       | Later `npm ci` or tool installs behind an egress proxy, and the skills CLI's install report to skills.sh, which the built-in `fetch` of Node otherwise sends past the proxy and drops silently. The script sets it for its own `npm ci`. A Claude Code session sets it for itself at start when a proxy is configured; other clients need the variable. |
+| Network access to `nodejs.org` and the package registries         | Node.js download and `npm ci`. On a limited policy keep "Allow package managers" enabled.                                                                                                                                                                                                                                                               |
+| Network access to `skills.sh` and `www.skills.sh`                 | Releasing a skill: the install report and reading the audit. See [the release sequence](./REPOSITORY-STRUCTURE.md#release-sequence). Observed on 2026-11-11.                                                                                                                                                                                            |
+| Network access to `integrate.api.nvidia.com` and `NVIDIA_API_KEY` | Only for real-model evaluation (`npm run eval:nvidia`); the default gate and synthetic replay need neither. See [prompt evaluation](./prompt-evaluation.md).                                                                                                                                                                                            |
 
 A change to network settings may apply only to new sessions. After setup, `npm run git:check` passes only on `main` or a `work/`, `claude/` or `codex/` task branch. Observed on 2026-11-02 in Claude cloud: image Node 22.23.4, `npm ci` and the full gate passed with Node 24.22.2, and a real NVIDIA request succeeded once the host was allowed. Record other hosts here when observed.
 
@@ -150,7 +156,7 @@ Project command hooks are not supported in every hosted/cloud orchestration path
 
 ### Claude Code
 
-Review `.claude/settings.json` and inspect `/hooks` in a trusted project. The adapter uses current documented exec-form `command`/`args` with `${CLAUDE_PROJECT_DIR}`, avoiding npm `.cmd` shims and shell quoting. Verify support in the installed version; no Claude executable was available in this cloud environment. See [official Claude hooks](https://code.claude.com/docs/en/hooks).
+Review `.claude/settings.json` and inspect `/hooks` in a trusted project. The session start hook also appends `NODE_USE_ENV_PROXY=1` to the file named by `CLAUDE_ENV_FILE` when a proxy is configured, so that later commands of the session use it. The adapter uses current documented exec-form `command`/`args` with `${CLAUDE_PROJECT_DIR}`, avoiding npm `.cmd` shims and shell quoting. Verify support in the installed version; no Claude executable was available in this cloud environment. See [official Claude hooks](https://code.claude.com/docs/en/hooks).
 
 Neither adapter installs a global hook or changes the user's managed policy. Client hook startup errors or unsupported configurations may fail open. We intentionally do not add broad auto-approve rules, pretend Read/Edit rules cover arbitrary shell IO, or claim identical OS sandboxing across native Windows, WSL, macOS and cloud.
 
