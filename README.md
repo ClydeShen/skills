@@ -1,5 +1,8 @@
 # Personal Agent Skills
 
+[![skills.sh installs](https://skills.sh/b/ClydeShen/skills)](https://skills.sh/ClydeShen/skills)
+[![Format: Agent Skills](https://img.shields.io/badge/format-Agent%20Skills-0ea5e9)](https://agentskills.io)
+
 **Good results shouldn't disappear with the chat.**
 
 Agent skills that you install into your own agent. One is released today: Architecture Diagram.
