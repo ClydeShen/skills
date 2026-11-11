@@ -205,8 +205,7 @@ The scripts start local programs: Git to fetch the pinned draw.io viewer once, a
 ## Good to know
 
 - **Check the picture.** A static check is not proof of architectural correctness. Inspect the first diagram against your source.
-- **Agents tried.** Every example and evaluation run here used Claude Code. The package installs through the skills CLI into other agents too, but it has not been tested on them.
-- **Codex rendering.** A Codex sandbox may be unable to render a PNG. You then receive the `.drawio` file and a link for viewing and export.
+- **Restricted environments.** If the environment cannot start a browser or reach the network, PNG export may be unavailable. You still receive the `.drawio` file and a link for viewing and export.
 - **License.** Original instructions and scripts use the [MIT license](./LICENSE). Third-party artwork retains its own terms in the [asset catalog](./assets/vendor-icons.json); this is not blanket MIT licensing of icons. Redistribution clearance and output attribution for some bundled artwork are not complete; the [third-party notices](./THIRD-PARTY-NOTICES.md) list what is cleared and what remains open.
 
 Something drawn wrongly, or a scenario it struggles with? Share the input, the first diagram, the agent and model, the installed revision and what you expected in [the feedback issue](https://github.com/ClydeShen/skills/issues/7).
