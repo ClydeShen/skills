@@ -21,10 +21,10 @@ Read from the top down. Each diamond is a decision: "yes" moves on, and "no" fol
 flowchart TB
     init(["<b>Init</b><br/>Identify the user task and intended benefit"])
     plan["<b>Plan</b><br/>Research and alternatives analysis<br/>Owner approves scope, success criteria and risks"]
-    draft["<b>Draft</b><br/>Author instructions and package-local resources<br/>Define eval cases, rubric and result path"]
+    draft["<b>Draft</b><br/>Author instructions and package-local resources<br/>Define evaluation cases, rubric and result path"]
     d1{"Static checks pass?"}
-    internal["<b>Internal</b><br/>Run evals: regression suite, clean-session agent runs<br/>Baseline comparison and human review"]
-    d2{"Eval evidence sufficient?"}
+    internal["<b>Internal</b><br/>Run evaluation: regression suite, clean-session agent runs<br/>Baseline comparison and human review"]
+    d2{"Evaluation evidence sufficient?"}
     public["<b>Public</b><br/>Opt-in trial with first-use guide<br/>Freeze source revision, file inventory and digest"]
     d3{"Trial feedback<br/>reproducible?"}
     accept["<b>Release acceptance</b><br/>Security, licensing, platform audit<br/>Clean-install, activation and output verification"]
@@ -45,7 +45,7 @@ flowchart TB
     d6 -- no --> undo
 
     d1 -. "no: remediate, rerun checks" .-> draft
-    d2 -. "no: remediate, re-run evals" .-> draft
+    d2 -. "no: remediate, re-run evaluation" .-> draft
     d3 -. "no: iterate on the candidate" .-> draft
     d4 -. "no: hold, remediate, revalidate" .-> public
     d5 -. "no: revise snapshot and evidence" .-> public
