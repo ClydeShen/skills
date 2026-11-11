@@ -207,6 +207,19 @@ When applying that optional preset, reconcile existing protection settings first
 
 A delivery agent with the owner's admin credentials can still change server settings. Stronger boundaries need a separate managed host policy, restricted credentials and independent server-side review. The harness provides stable feedback and reviewable contracts, not a security sandbox.
 
+## Delivery pitfalls
+
+Mistakes made while releasing the first skill, with what to do instead. Where a tool can catch one, it does; the rest are habits.
+
+- **Read an identifier, never type it from memory.** A pull request's head commit for `expectedHeadSha`, a digest, a source commit: read it from the pull request or the command that produced it. A value completed from a short form is a guess, and a guess that GitHub happens to accept is worse than one it refuses.
+- **Do not evade a guard.** The NVIDIA hook denies a shell command that names the inference host and a program that could connect. A refused command is a reason to use the proper tool, not to rebuild the command so that it passes: edit documents with the editing tool, and send model requests through `npm run eval:*`. A guard that is too strict is fixed in the guard, by the owner.
+- **Confirm that a check could have found something before repeating it.** An empty audit, an empty search or a 404 may mean that the question never reached the service. Prove that the report arrived, or that the request went through the proxy, before concluding that nothing is there, and before checking again.
+- **Read the provider's documentation before trusting an endpoint.** A legacy endpoint returned one partner of three and was taken for the whole result. Use the documented page, and say which source a result came from.
+- **Merge only a head that CI passed, and confirm the merge before cleaning up.** Pass the real head commit, check that the pull request shows as merged, and only then unsubscribe, delete branches or build on it.
+- **Land the package first, then release the snapshot.** A squash merge discards the commits a snapshot was staged from. See the [release sequence](./REPOSITORY-STRUCTURE.md#release-sequence).
+- **Run `npm run fix` before `npm run check`, and test portability.** CI runs on Linux, macOS and Windows; see the portable test guidance under [deterministic coverage](#deterministic-coverage).
+- **Say what a check could not verify.** A badge that cannot load in the sandbox, a hash that no algorithm reproduces and a binding that is inferred are stated as such in the pull request and the record.
+
 ## Maintenance and observed verification
 
 Change a rule in its owning standard, update the corresponding checker and add a negative regression case. Keep hook adapters thin and reuse commands in CI. Imported development tools are upstream dependencies: review the canonical tree and lock provenance, then explicitly synchronize the projection; the copy command refuses orphan deletions and symlinks. For a removal, review and delete the obsolete projection explicitly.

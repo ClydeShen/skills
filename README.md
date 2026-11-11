@@ -10,6 +10,15 @@ A diagram you can bring to a review. A technical draft that sounds like you. A u
 
 Describe how your system works. **Architecture Diagram** helps turn it into an editable draw.io diagram: follow a request, see the boundaries, and bring something concrete to the discussion.
 
+[![Released](https://img.shields.io/badge/skill-released-2ea44f)](./skills/architecture-diagram/README.md)
+[![Works with Claude Code and Codex](https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex-D97757)](./skills/architecture-diagram/README.md)
+[![Output: .drawio, PNG and SVG](https://img.shields.io/badge/output-.drawio%20%C2%B7%20PNG%20%C2%B7%20SVG-3b82f6)](./skills/architecture-diagram/README.md)
+[![AWS, Azure, Google Cloud, Kubernetes](https://img.shields.io/badge/icons-AWS%20%C2%B7%20Azure%20%C2%B7%20Google%20Cloud%20%C2%B7%20Kubernetes-232F3E)](./skills/architecture-diagram/README.md)
+
+<img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/cross-cloud-private-api/diagram.png" alt="An architecture diagram drawn by the skill: Azure integration workloads reaching a private API Gateway in AWS through a VPN, a Transit Gateway and DNS forwarding" width="860">
+
+<sub>Drawn by the skill from a text description, unedited. [More examples and the input behind each.](./skills/architecture-diagram/README.md)</sub>
+
 ```sh
 npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
 ```

@@ -83,7 +83,16 @@ Each released skill carries `README.md` beside `SKILL.md` (owner requirement, 20
 
 Lead with the problem it helps solve, who it is for and the useful outcome. Briefly cover what it can do, important limits or prerequisites, the correct installation command and how to start. When useful, include one short realistic input/example and the expected kind of output; label illustrative output honestly. Keep the tone inviting and concrete, without unsupported claims.
 
-Use [the package README scaffold](./templates/skill-readme-template.md) selectively. Keep examples concise, links package-local where needed, and installation instructions appropriate to candidate or release status. Do not copy runtime instructions, evaluation logs, internal task history or an initiative's folder inventory into it. Do not advertise a public release before the [release checks](./REPOSITORY-STRUCTURE.md#installation-and-release-checks), including skills.sh audit, are complete.
+Use [the package README scaffold](./templates/skill-readme-template.md) selectively. Keep examples concise, links package-local where needed, and installation instructions appropriate to candidate or release status. Do not copy runtime instructions, evaluation logs, internal task history or an initiative's folder inventory into it.
+
+A package README may be visually rich when the richness is true and checkable:
+
+- **Badges** state only facts that the package keeps true, such as its license, runtime and tool versions, supported agents, output formats and topic tags. They carry no install counts, ratings, audit results or other figures that change without a new release.
+- **Pictures** are real, unedited output of the skill, shown with the input that produced it and a line that says so. They live in the initiative's `examples/` folder, outside the package, so that installing the skill does not copy them into every project. The package README is a byte copy in its snapshot, so it refers to them by GitHub's raw URL on `main`, not by a path relative to the package. The repository check rejects such a URL whose file is not in the repository.
+- **Quotes** from a companion account are verbatim, not shortened or reworded.
+- Illustrative output is never presented as measured performance; scores stay in the evaluation record.
+
+Do not advertise a public release before the [release checks](./REPOSITORY-STRUCTURE.md#installation-and-release-checks), including skills.sh audit, are complete.
 
 ## Evaluation result semantics
 
