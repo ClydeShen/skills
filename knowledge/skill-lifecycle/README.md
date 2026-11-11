@@ -14,37 +14,9 @@ The [skills.sh adapter](./adapters/skills-sh.md) is an optional example, not a d
 
 ## The lifecycle at a glance
 
-```mermaid
-%%{init: {"theme": "base", "flowchart": {"curve": "basis", "nodeSpacing": 28, "rankSpacing": 36}, "themeVariables": {"fontFamily": "Arial, sans-serif", "fontSize": "15px", "lineColor": "#8292A5"}}}%%
-flowchart LR
-    init["<b>init</b>"] --> plan["<b>plan</b>"] --> draft["<b>draft</b>"] --> internal["<b>internal</b>"] --> public["<b>public</b>"] --> accept["<b>acceptance</b>"] --> approve["<b>owner<br/>approval</b>"] --> release["<b>release</b>"]
+![The lifecycle in five phases, with what the owner, agents and tools do in each. Frame: the owner agrees scope, success and risks; agents research the need. Author: agents write the package, cases and rubric; tools check format, links, lint, resources and secrets. Evaluate: agents run shared regressions and compare with the baseline; tools run deterministic checks; the owner judges the outputs. Trial: agents collect reproducible feedback; tools check installation; the owner opens the trial. Release: agents prove security, rights, audit and clean install; tools verify the snapshot digest and run the smoke check; the owner approves the exact snapshot. Weak evidence or feedback returns to Author, a failed check or declined approval holds at Trial, and after release a next revision or hotfix starts again at Author.](./lifecycle.svg)
 
-    classDef person fill:#F5F3FF,stroke:#8B7BC0,color:#3F2D66
-    classDef tool fill:#EFF6FF,stroke:#60A5FA,color:#1E3A5F
-    classDef evidence fill:#FFFBEB,stroke:#D6A93C,color:#59451D
-    classDef done fill:#ECFDF5,stroke:#34A56F,color:#14532D
-    class init,plan,approve person
-    class draft tool
-    class internal,public,accept evidence
-    class release done
-```
-
-Colour shows who decides: purple a person, blue tools, amber evidence that a person reads, green the published release. Each step needs its evidence before the next:
-
-| Step           | To advance                                                                                              | Decided by            | If it fails                                                      |
-| -------------- | ------------------------------------------------------------------------------------------------------- | --------------------- | ---------------------------------------------------------------- |
-| `init`         | The user, task and expected benefit are named, and a simpler alternative is compared                    | The owner             | Drop the idea or keep it recorded                                |
-| `plan`         | The owner agrees scope, non-goals, observable success, capabilities and risks                           | The owner             | Keep researching                                                 |
-| `draft`        | Format, links, lint, resources and secret checks pass; runnable cases, a rubric and a result path exist | Tools                 | Stay in `draft`; repair and rerun the checks                     |
-| `internal`     | Shared regressions and a baseline comparison are run, and a person inspects the outputs                 | Evidence and a person | Weak or inconclusive evidence returns to `draft`                 |
-| `public`       | A trial install works with a first-use guide; feedback is reproducible and tied to a version            | Evidence              | Feedback returns to `draft`                                      |
-| acceptance     | Security, rights, platform audit, clean install, activation and useful output are checked               | Evidence              | A failed or missing check holds at `public` until repaired       |
-| owner approval | The owner approves this exact snapshot, its targets and its known limits                                | The owner             | Declined: return to `public` and revise the snapshot             |
-| `release`      | The approved bytes are promoted unchanged and a smoke check passes after publication                    | Tools and the owner   | Failed smoke: restore the previous verified artifact or withdraw |
-
-**Tools check correctness. Agents produce evidence. The owner decides what ships.** Missing required evidence blocks progress. Changed content reopens the affected checks; an audit or approval for different bytes does not carry over. These are required controls, not a claim that every gate is automated; each project's harness decides what it automates.
-
-After release, an improvement leaves the published version intact and starts again at `draft`. A hotfix starts from its recorded source, passes the same applicable gates and is forward-ported to ongoing work. Only the owner changes an accepted baseline.
+**Tools check correctness. Agents produce evidence. The owner decides what ships.** Missing required evidence blocks progress. Changed content reopens the affected checks; an audit or approval for different bytes does not carry over. These are required controls, not a claim that every gate is automated; each project's harness decides what it automates. The phases map to the SOP stages `init` and `plan` (Frame), `draft` (Author), `internal` (Evaluate), `public` (Trial) and `release` after acceptance and approval (Release); [the SOP](./sop.md#stages-and-gates) defines each stage and its entry basis. Only the owner changes an accepted baseline.
 
 ## Scope and limits
 
