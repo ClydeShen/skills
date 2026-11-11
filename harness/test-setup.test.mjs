@@ -1,10 +1,9 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import test from 'node:test';
-import { fileURLToPath } from 'node:url';
 
 test('the test setup removes the variables that Git exports to a hook', () => {
-  const setup = fileURLToPath(new URL('./test-setup.mjs', import.meta.url));
+  const setup = new URL('./test-setup.mjs', import.meta.url).href;
   const out = execFileSync(
     process.execPath,
     [
