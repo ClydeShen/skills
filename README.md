@@ -138,4 +138,4 @@ Want to use the same approach for your own skills? Borrow the [lifecycle playboo
 
 ## Contribute
 
-Try a skill and tell us what happened: your input, the first result and what you wished it had done differently. Each skill's page has a feedback link. For repository changes, start with [AGENTS.md](./AGENTS.md) and the [engineering setup](./docs/HARNESS.md).
+Try a skill and tell us what happened: your input, the first result and what you wished it had done differently. Each skill's page has a feedback link. For repository changes, start with [AGENTS.md](./AGENTS.md) and the [delivery harness](./docs/HARNESS.md).
