@@ -2,12 +2,12 @@
 
 # Architecture Diagram
 
-**Describe your system in plain text. Get an editable architecture diagram.**
+**Describe your system in plain text. Get an editable architecture diagram with real cloud icons.**
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-2ea44f)](./LICENSE)
 [![Node.js 24](https://img.shields.io/badge/node-24-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![draw.io 32.6.1](https://img.shields.io/badge/draw.io-32.6.1-F08705?logo=diagramsdotnet&logoColor=white)](https://www.drawio.com/)
-[![Works with Claude Code and Codex](https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex-D97757)](#install)
+[![Agents: any skills.sh agent](https://img.shields.io/badge/agents-any%20skills.sh%20agent-D97757)](#install)
 [![Output: .drawio, PNG and SVG](https://img.shields.io/badge/output-.drawio%20%C2%B7%20PNG%20%C2%B7%20SVG-3b82f6)](#what-you-get)
 [![Icons: AWS, Azure, Google Cloud, Kubernetes](https://img.shields.io/badge/icons-AWS%20%C2%B7%20Azure%20%C2%B7%20Google%20Cloud%20%C2%B7%20Kubernetes-232F3E)](#why-use-it)
 [![skills.sh](https://img.shields.io/badge/skills.sh-architecture--diagram-000000)](https://www.skills.sh/clydeshen/skills/architecture-diagram)
@@ -21,9 +21,9 @@
 ![Architecture diagrams](https://img.shields.io/badge/-architecture%20diagrams-1f2937?style=flat-square)
 ![Agent skill](https://img.shields.io/badge/-agent%20skill-0ea5e9?style=flat-square)
 
-<img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/aws-support-assistant/diagram.png" alt="An architecture diagram of a support assistant on AWS, drawn by the skill: Cloudflare and a load balancer in front of an EKS cluster inside a Region boundary, with Bedrock, Pinecone, Salesforce, Langfuse, Grafana, GitHub Actions and Terraform around it" width="860">
+<img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/aws-order-platform/diagram.png" alt="An architecture diagram of an order and analytics platform on AWS, drawn by the skill: CloudFront, API Gateway and Lambda functions inside a Region boundary, with DynamoDB, SQS, EventBridge, Step Functions, SNS, OpenSearch, Bedrock, Kinesis, Glue, Athena, Secrets Manager, KMS, CloudWatch, X-Ray, CodePipeline and CodeBuild, each with its official icon" width="900">
 
-<sub>Drawn by this skill from the short description under [See it work](#see-it-work). Unedited output of a clean agent session.</sub>
+<sub>Drawn by this skill from the description under [See it work](#see-it-work). Unedited output of a clean agent session.</sub>
 
 [Install](#install) · [See it work](#see-it-work) · [Examples](#examples) · [What it checks](#what-it-checks) · [FAQ](#faq)
 
@@ -45,49 +45,60 @@ You know how the system works. Everyone else has to picture it. This skill turns
 
 ## See it work
 
-**You write** (the whole description behind the picture above):
+**You write** a description of how the system behaves. This is the whole input behind the picture above:
 
-> Customers open the support site at `help.example.com`. Cloudflare proxies the site and forwards requests to an Application Load Balancer in AWS region `us-east-1`.
->
-> The load balancer sends requests to an assistant service that runs on an Amazon EKS cluster. The assistant is a LangGraph agent. For each question it:
->
-> 1. retrieves related help articles from a Pinecone index;
-> 2. calls Anthropic Claude through Amazon Bedrock to write the answer;
-> 3. looks up the customer's open cases through an MCP server that also runs on the EKS cluster and reads from Salesforce.
->
-> Every agent run is traced to Langfuse Cloud. The EKS cluster's metrics go to Grafana Cloud.
->
-> Help articles are maintained in a GitHub repository. A GitHub Actions workflow embeds changed articles with OpenAI's embeddings API and writes them to the Pinecone index. Terraform, run from the same workflow, manages the AWS resources.
+<details open>
+<summary><strong>Order and analytics platform on AWS</strong> (input, verbatim)</summary>
 
-**You get** four files: `diagram.drawio`, `diagram.png`, `diagram.svg` and `agent-report.md`. The report is where the skill says what it assumed, for example:
+> Shoppers load a web app that is stored in Amazon S3 and served through Amazon CloudFront. AWS WAF protects CloudFront, Amazon Route 53 resolves the site name, and shoppers sign in with Amazon Cognito.
+>
+> The web app calls Amazon API Gateway in region `eu-west-1`. API Gateway checks the Cognito token and invokes AWS Lambda functions:
+>
+> 1. The orders function writes the order to Amazon DynamoDB and puts a message on an Amazon SQS queue.
+> 2. The fulfilment function reads the queue, reads stock levels from Amazon Aurora and publishes an `OrderShipped` event to Amazon EventBridge.
+> 3. EventBridge starts an AWS Step Functions workflow that sends a notification through Amazon SNS to the shopper and to operators.
+>
+> The Lambda functions cache product lookups in Amazon ElastiCache for Redis. Amazon OpenSearch Service holds the product search index, which the catalog function queries. A recommendations function calls Amazon Bedrock.
+>
+> The web app sends clickstream events to Amazon Kinesis Data Streams. A Lambda function enriches them and writes them to an S3 data lake. AWS Glue catalogs the lake and Amazon Athena queries it.
+>
+> The Lambda functions read their secrets from AWS Secrets Manager, which uses AWS KMS keys. Amazon CloudWatch collects their logs and metrics, and AWS X-Ray traces their requests.
+>
+> AWS CodePipeline and AWS CodeBuild build and deploy the Lambda functions.
 
-> - Amazon Bedrock is drawn inside the us-east-1 Region (regional service, same Region as its caller). The source does not name its Region.
-> - Terraform and Grafana Cloud have no catalog icon, so they are plain labelled boxes (Grafana lookup only offers Prometheus).
-> - Several third-party SaaS dependencies (Pinecone, Salesforce, Langfuse, Grafana) are outside AWS; their connectivity (public internet vs private link) is not stated.
+</details>
 
-Open [the example folder](https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/examples/aws-support-assistant) to see the input, the editable file and the full report.
+**You get** four files: `diagram.drawio`, `diagram.png`, `diagram.svg` and `agent-report.md`. The report is where the skill says what it assumed. Two lines from this run, verbatim:
+
+> - **Shoppers appears twice** (origin and notification recipient) to avoid a return line across the whole diagram. Both are the same actor.
+> - All icons are exact AWS catalog matches. Amazon S3 has no service icon in the catalog, only the Bucket resource icon, so the two S3 elements use it, with captions "S3 web app" and "S3 data lake".
+
+[Open the example folder](https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/examples/aws-order-platform) for the input, the editable file and the full report.
 
 ## Examples
 
-Both examples are unedited output of clean agent sessions: only this package and the scenario, nothing else. Each folder holds the scenario, `diagram.drawio`, PNG, SVG and the companion account.
+Every example is unedited output of a clean agent session: only this package and the scenario, nothing else. Each scenario was run more than once and the denser result is shown, so these pictures are the skill at its better end, not an average. Each folder holds the scenario, `diagram.drawio`, PNG, SVG and the companion account.
 
-### Document Q&A on Azure
+### Knowledge and data platform on Azure
 
-A chat app, a search index, a model, a database, a function that indexes uploads, secrets, telemetry and a deployment pipeline.
+A chat app with search, a model, caches and databases; microservices on AKS; document uploads; a telemetry pipeline into a data lake and machine learning; secrets, monitoring and a deployment pipeline.
 
-<img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/azure-document-qa/diagram.png" alt="An Azure architecture diagram: a chat web app calling AI Search, Azure OpenAI and Cosmos DB, a function that indexes uploaded documents, Key Vault, Application Insights and a deployment pipeline" width="860">
+<img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/azure-knowledge-platform/diagram.png" alt="An Azure architecture diagram: Employees, Front Door and API Management in front of a chat front end, AKS microservices and Azure Functions, with AI Search, Azure OpenAI, Cosmos DB, Redis, SQL, Service Bus and Blob Storage, a telemetry lane from Event Hubs through Stream Analytics and Data Lake Storage to Machine Learning, and Key Vault, Application Insights, Azure Monitor, Log Analytics, Container Registry and Azure DevOps" width="900">
 
-- The Microsoft Azure boundary carries the Azure mark, and the single region is named in its title.
-- Steps the source numbers (search, answer, store) are numbered on their connectors.
-- Dashed lines separate deployment, secrets and telemetry from the request path.
+- The Microsoft Azure boundary carries the Azure mark and the region sits in a boundary of its own.
+- The three backends form one group, so one connector says that all three use secrets, telemetry and deployment.
+- Steps the source numbers (chat, microservices, uploads) are numbered on their connectors.
+- Where the catalog has no exact match, the skill says so. From its report:
 
-[Input, editable file and report](https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/examples/azure-document-qa)
+> - **Azure Data Lake Storage:** the catalog's only match is "Data Lake Storage Gen1" (a retired product). Gen2 normally uses the Storage Accounts icon, which is also used for Blob Storage. I used the Gen1 icon for the data lake to keep it distinct, and the caption says "Data Lake Storage".
+
+[Input, editable file and report](https://github.com/ClydeShen/skills/tree/main/incubator/architecture-diagram/examples/azure-knowledge-platform)
 
 ### Private access from Azure to AWS
 
 Function Apps in three Azure environments reach private API Gateways in AWS through a VPN, a Transit Gateway, DNS forwarding and a firewall inspection VPC.
 
-<img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/cross-cloud-private-api/diagram.png" alt="A cross-cloud architecture diagram: Azure spoke, hub and DNS VNets connected by a site-to-site VPN and a Transit Gateway to AWS ingress, inspection and egress VPCs and workload accounts" width="860">
+<img src="https://raw.githubusercontent.com/ClydeShen/skills/main/incubator/architecture-diagram/examples/cross-cloud-private-api/diagram.png" alt="A cross-cloud architecture diagram: Azure spoke, hub and DNS VNets connected by a site-to-site VPN and a Transit Gateway to AWS ingress, inspection and egress VPCs and workload accounts" width="900">
 
 - The DNS path (dashed) and the API path (solid) run side by side without sharing a line.
 - The three Azure environments and the three AWS workload accounts are drawn once, with a count.
@@ -122,27 +133,31 @@ Checks catch what can mislead a reader; they do not prove the architecture is ri
 
 ## Install
 
-Use Claude Code or Codex with file access and Node.js 24. Install the skill in your project:
-
-<details open>
-<summary><strong>Codex</strong></summary>
+The skill is a folder of instructions and scripts in the open Agent Skills format, so it installs into any agent that the [skills CLI](https://www.npmjs.com/package/skills) supports. Run this in your project and choose your agent when asked:
 
 ```sh
-npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram
 ```
 
-</details>
-
-<details>
-<summary><strong>Claude Code</strong></summary>
+To skip the question, name the agent. The ids below are examples; the CLI lists the full set:
 
 ```sh
 npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent claude-code --copy --yes
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent cursor --copy --yes
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent github-copilot --copy --yes
+npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent gemini-cli --copy --yes
 ```
 
-</details>
+What the skill needs from an agent: it reads `SKILL.md`, writes files into your project and runs Node.js 24 scripts. What has been tried:
 
-The command copies the package into the project without automatic updates; run it again to update. Start a fresh client session afterwards and confirm that `architecture-diagram` appears in the skill list. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. Without those you still get the editable file and a browser link for viewing and export.
+| Agent                         | Status                                                                                                              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Claude Code                   | Used for every example and every evaluation run in this repository.                                                 |
+| Codex                         | The CLI installs the skill there. A Codex sandbox may be unable to render a PNG; see [Good to know](#good-to-know). |
+| Any other agent the CLI lists | The CLI installs the same files. Not tested here; it should work wherever the agent meets the needs above.          |
+
+The command copies the package into the project without automatic updates; run it again to update. Start a fresh agent session afterwards and confirm that `architecture-diagram` appears in its skill list. PNG export uses draw.io Desktop, or Git and Chromium or Chrome with network access on first use. Without those you still get the editable file and a browser link for viewing and export.
 
 ## Try it
 
@@ -211,4 +226,4 @@ The scripts start local programs: Git to fetch the pinned draw.io viewer once, a
 - **Codex rendering.** A Codex sandbox may be unable to render a PNG. You then receive the `.drawio` file and a link for viewing and export.
 - **License.** Original instructions and scripts use the [MIT license](./LICENSE). Third-party artwork retains its own terms in the [asset catalog](./assets/vendor-icons.json); this is not blanket MIT licensing of icons. Redistribution clearance and output attribution for some bundled artwork are not complete; the [third-party notices](./THIRD-PARTY-NOTICES.md) list what is cleared and what remains open.
 
-Something drawn wrongly, or a scenario it struggles with? Share the input, the first diagram, the client and model, the installed revision and what you expected in [the feedback issue](https://github.com/ClydeShen/skills/issues/7).
+Something drawn wrongly, or a scenario it struggles with? Share the input, the first diagram, the agent and model, the installed revision and what you expected in [the feedback issue](https://github.com/ClydeShen/skills/issues/7).
