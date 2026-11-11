@@ -2,7 +2,7 @@
   "schema_version": 1,
   "skill": "architecture-diagram",
   "source": {
-    "commit": "71ca85da770b1307bbd6f9182d1c06e030ce859b",
+    "commit": "fd453ea34a46b250c0e70a53969f7f95eac1b2fe",
     "directory": "incubator/architecture-diagram/candidate/architecture-diagram"
   },
   "transformations": [
