@@ -7,7 +7,8 @@ import { createSuite, gradeScenario, inputOf, readScenarios, scoreOf, summarize 
 test('scenario cases read their source, baseline scores and reviewer prompt', () => {
   const config = readScenarios('architecture-diagram');
   assert.equal(new Set(config.cases.map((c) => c.id)).size, config.cases.length);
-  assert.ok(config.cases.every((c) => c.input.trim() && c.baseline?.length));
+  assert.ok(config.cases.every((c) => c.input.trim()));
+  assert.ok(config.cases.filter((c) => !c.optIn).every((c) => c.baseline?.length));
   assert.match(config.reviewPrompt, /SCORE:/);
   assert.equal(config.tolerance, 0.5);
   // A quoted case gets only the source's block quote, not the expected findings beside it.
@@ -90,4 +91,18 @@ test('suite options are validated, and synthetic replay grades and summarizes wi
   assert.equal(run.status, 0, run.stdout + run.stderr);
   assert.match(run.stdout, /4\/4 checks passed/);
   assert.match(run.stdout, /azure-document-qa: 7 \(mean 7\.00\); baseline 7\.5 \(mean 7\.50\)/);
+});
+
+test('an opt-in case such as a README example runs only when named, and never joins a regression', async () => {
+  const optIn = readScenarios('architecture-diagram').cases.filter((c) => c.optIn);
+  assert.ok(optIn.length >= 1);
+  assert.ok(optIn.every((c) => c.baseline === null));
+  const ids = async (options) =>
+    (await createSuite({ mode: 'fixture', options: { skill: 'architecture-diagram', ...options } })).tests.map(
+      (t) => t.description,
+    );
+  const regression = await ids({});
+  for (const c of optIn) assert.ok(!regression.includes(c.id), c.id);
+  assert.equal(regression.length, 4);
+  assert.deepEqual(await ids({ case: optIn[0].id }), [...regression, optIn[0].id]);
 });

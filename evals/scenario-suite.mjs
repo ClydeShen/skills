@@ -26,7 +26,7 @@ export function readScenarios(skill) {
     if (!input.trim()) throw new Error(`No input in ${c.source}.`);
     const scores = c.baseline ? baseline?.scenarios?.[c.baseline]?.scores : undefined;
     if (c.baseline && !scores) throw new Error(`No baseline scores for ${c.id}.`);
-    return { id: c.id, input, baseline: scores ?? null };
+    return { id: c.id, input, baseline: scores ?? null, optIn: c.optIn === true };
   });
   return {
     ...config,
@@ -171,7 +171,9 @@ export async function createSuite({ mode, env = {}, options = {} }) {
   if (!['claude', 'codex'].includes(agent)) throw new Error('Agent must be claude or codex.');
   const item = packages().find(({ name }) => name === skill);
   if (!item) throw new Error(`Unknown skill: ${skill}.`);
-  const config = readScenarios(skill);
+  const all = readScenarios(skill);
+  // A case marked optIn, such as an example for a README, runs only when named with --case; it never joins a regression.
+  const config = { ...all, cases: all.cases.filter((c) => !c.optIn || options.case === c.id) };
   const tests = config.cases.map((c) => ({
     description: c.id,
     options: { disableVarExpansion: true },
