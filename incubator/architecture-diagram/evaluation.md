@@ -56,12 +56,20 @@ Trigger check: `npm run eval:trigger -- --skill architecture-diagram --agent cla
 
 ### skills.sh audit
 
-Pending. The audit appears only after the first installation from the published repository. After this revision merges to `main`, install it once with `npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram`, read the audit and record its URL, date and verdict here. A missing or inconclusive result stays pending. An adverse finding is fixed in a new revision or the snapshot is withdrawn.
+Read on 2026-11-11 from [the skill's page](https://www.skills.sh/clydeshen/skills/architecture-diagram) and the audit endpoint `https://www.skills.sh/tele/audit?source=clydeshen%2Fskills&skills=architecture-diagram`, after an installation of the published repository whose report reached skills.sh.
+
+| Partner             | Result                                          |
+| ------------------- | ----------------------------------------------- |
+| Snyk                | Pass; risk `low`; analyzed 2026-11-11T06:28:36Z |
+| Gen Agent Trust Hub | Not shown yet                                   |
+| Socket              | Not shown yet                                   |
+
+Status: **partial**. One of three partners has reported, with no finding. The page lists no revision or digest, and the install report carries only the repository and skill names, so the verdict is for what skills.sh read from the repository, not for a named snapshot. The package files in `skills/architecture-diagram/` have not changed since the snapshot, so the Snyk result applies to those bytes, but that rests on this reasoning, not on the provider's record. The remaining partners are recorded here when they appear; a missing partner stays pending, and an adverse finding is fixed in a new revision or the snapshot is withdrawn.
 
 ## Remaining work
 
 1. Close the open artwork grants and output attribution, or authorize a further exclusion.
-2. Record the skills.sh audit.
+2. Record the Gen Agent Trust Hub and Socket verdicts when skills.sh shows them.
 3. The next revision, including PR #45's consumer icon libraries, needs its own regression against the same baseline.
 
 The historical reviewer was a model, not independent human approval. A person must inspect notation and image changes. Earlier trials are recoverable from Git history, for example `facc1f1`; they are not a new baseline or current-release evidence.
