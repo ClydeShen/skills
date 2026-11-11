@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
+import { sharedNvidiaLimiter } from './rate-limit.mjs';
 
 export const nvidiaDefaultModel = 'nvidia/nemotron-3.5-super-vl-120b-a12b';
 export const nvidiaApiBaseUrl = 'https://integrate.api.nvidia.com/v1';
@@ -165,6 +166,7 @@ export function judgeConfig(env) {
     temperature: 0.6,
     maxTokens,
     extraBody: passthrough,
+    limiter: sharedNvidiaLimiter(env),
   };
 }
 

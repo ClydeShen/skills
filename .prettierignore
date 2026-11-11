@@ -3,6 +3,8 @@
 !*.md
 !**/
 .agents/skills/
+# A published snapshot is verified byte for byte against its source; a formatter must not touch it.
+skills/
 .claude/skills/
 incubator/*/evals/*-20*-*-*/
 evals/.local/

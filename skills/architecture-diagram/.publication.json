@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "skill": "architecture-diagram",
+  "source": {
+    "commit": "71ca85da770b1307bbd6f9182d1c06e030ce859b",
+    "directory": "incubator/architecture-diagram/candidate/architecture-diagram"
+  },
+  "transformations": [
+    "remove-candidate-internal-marker-v1"
+  ],
+  "digest_method": "sha256-json-file-inventory-v1",
+  "digest": "4224ee3cda065cfa5cc676c2ef8a36f1a32b80cf3d0f93c98f2e40715113c218",
+  "files": [
+    {
+      "path": "LICENSE",
+      "size": 1066,
+      "sha256": "922c92b9d74021598a7ccc85c455580a1aed73b9a720b8c0a2ab59a012c7aa6b"
+    },
+    {
+      "path": "README.md",
+      "size": 2809,
+      "sha256": "9c5082382b155e004ca28322d1b9d1e130465729470ce751a137590fb78ed9f0"
+    },
+    {
+      "path": "SKILL.md",
+      "size": 8584,
+      "sha256": "2a96b1b6f374b289980ccc1330783260be8551aa3e38206daab005c431def92a"
+    },
+    {
+      "path": "THIRD-PARTY-NOTICES.md",
+      "size": 3192,
+      "sha256": "82b99ca1d6dd1def4e6e20640c053247dc2fd924a7d3570482504fcc5730e538"
+    },
+    {
+      "path": "assets/catalog.json",
+      "size": 855157,
+      "sha256": "d567841c18435af41a9ee8ce7de82783e222e91c8f76161c553adf9e3e141b77"
+    },
+    {
+      "path": "assets/licenses/a2a-Apache-2.0.txt",
+      "size": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "path": "assets/licenses/adk-Apache-2.0.txt",
+      "size": 11357,
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+    },
+    {
+      "path": "assets/licenses/thesvg-MIT.txt",
+      "size": 1067,
+      "sha256": "7a679e60d78db32455aea3b4613d2d3f3bec929edf8cbb608ccc40b37c663aed"
+    },
+    {
+      "path": "assets/vendor-icons.json",
+      "size": 223646,
+      "sha256": "3061787da505d4708c9265c7d46f984752d0f24ada58ea38ed9e359ad478b402"
+    },
+    {
+      "path": "references/cloud-conventions.md",
+      "size": 8217,
+      "sha256": "ca6614363884d1c157afaeac6519b55721ec2879d47da9a6517f10d18e6f1105"
+    },
+    {
+      "path": "references/composition.md",
+      "size": 12260,
+      "sha256": "2f0a8fd917c4e5cc9fe7974af8ef8664304c73f81336d7a1403a61f238d81ebf"
+    },
+    {
+      "path": "references/drawio.md",
+      "size": 7536,
+      "sha256": "34b42b165b64619508faf0c0da4d2f40dc5d36e907c3f2398ce1c8e9d93786d9"
+    },
+    {
+      "path": "references/notation.md",
+      "size": 10980,
+      "sha256": "ad7b4de27d0d677d267111737cfa26119fc5df2eee18429ac974fce2b7553cdf"
+    },
+    {
+      "path": "references/relationships.md",
+      "size": 8056,
+      "sha256": "1f59e0989999304b5a02427fcfadc80e0060ecea28bea3fe76d5de7acaa2af0c"
+    },
+    {
+      "path": "scripts/catalog.mjs",
+      "size": 182,
+      "sha256": "3b47cbaa82b216d7718ab0b72caac4adae9eedc673debf29cd3cedf75edc0d7e"
+    },
+    {
+      "path": "scripts/check-colors.mjs",
+      "size": 1829,
+      "sha256": "3d3f050673f2c567f29f1db4cb295a3ebd12230ab8907670dd535005364dce45"
+    },
+    {
+      "path": "scripts/check-layout.mjs",
+      "size": 33908,
+      "sha256": "7d0d43626cfde2f9071b03ee7c0701b5be3e41aa2f9a12bf343c78b523a82fe5"
+    },
+    {
+      "path": "scripts/check-steps.mjs",
+      "size": 2524,
+      "sha256": "bd511c2bdfcbb5c5df923437bbe258cbf0bb23e8a626f36f064fa4993bd35733"
+    },
+    {
+      "path": "scripts/check-text.mjs",
+      "size": 2447,
+      "sha256": "cc57e3760067b52dbd64d0feba8ffe301fd2de51f093dd5f22c6947952fbaa13"
+    },
+    {
+      "path": "scripts/diagram.mjs",
+      "size": 6879,
+      "sha256": "5da6c406eaa0578aba9d1c4d703bf2605ed3c1426fad77e70f7f7b317c3d680e"
+    },
+    {
+      "path": "scripts/drawio-format.mjs",
+      "size": 1066,
+      "sha256": "849fbd2d520082099ba43bc9a886b36825eba9a336c47ae2587ca1c3ead67fcf"
+    },
+    {
+      "path": "scripts/finalize.mjs",
+      "size": 1214,
+      "sha256": "9c09424da82f5b2d316c830d7baddad94629b8869a9501a4578e466fe8150dc7"
+    },
+    {
+      "path": "scripts/find-icon.mjs",
+      "size": 3479,
+      "sha256": "b7ab6e141149156c42bc5f0a148969122a49eb6b352d89156d5cf6c372492b35"
+    },
+    {
+      "path": "scripts/icons.mjs",
+      "size": 5887,
+      "sha256": "5a58e3b08789c4b2bf8f270ca6b06f93480988b4903d9344e10b2c3693f9baa6"
+    },
+    {
+      "path": "scripts/render-inputs.mjs",
+      "size": 2137,
+      "sha256": "d80f324cca8551bcc8c3806ec68592ccdcedb30fb1b349fa52e4308287a9cfa1"
+    },
+    {
+      "path": "scripts/render.mjs",
+      "size": 13302,
+      "sha256": "8c5637a3022599ec1a69d5d43232cd36603d1b1fb8f699e320ecb1791da3742c"
+    },
+    {
+      "path": "scripts/routes.mjs",
+      "size": 7355,
+      "sha256": "2f8982fe933bf550d170ec9045a1d0d5b691ef208f7135b048d7be7cf19ecb2b"
+    }
+  ]
+}

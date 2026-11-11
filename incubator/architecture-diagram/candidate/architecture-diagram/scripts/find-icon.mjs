@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { boundaryPlacement, FALLBACK, iconEntries, iconPlacement, loadVendorIcons } from './icons.mjs';
+import { boundaryPlacement, FALLBACK, iconEntries, iconPlacement, loadVendorIcons, PLAIN_BOUNDARY } from './icons.mjs';
 
 export function findIcons(catalog, { vendor, title, id }) {
   if (!vendor || Boolean(title) === Boolean(id)) throw new Error('Specify vendor and exactly one of title or id.');
@@ -8,7 +8,7 @@ export function findIcons(catalog, { vendor, title, id }) {
 }
 
 const usage =
-  'Usage: node scripts/find-icon.mjs --vendor <vendor> (--title <exact-title> | --id <exact-id>) [--boundary]\n       node scripts/find-icon.mjs [--vendor <vendor>] --list';
+  'Usage: node scripts/find-icon.mjs --vendor <vendor> (--title <exact-title> | --id <exact-id>) [--boundary]\n       node scripts/find-icon.mjs --boundary\n       node scripts/find-icon.mjs [--vendor <vendor>] --list';
 
 if (
   process.argv[1] &&
@@ -26,6 +26,12 @@ if (
       const key = args[i].slice(2);
       if (!['--vendor', '--title', '--id'].includes(args[i]) || !args[i + 1] || options[key]) throw new Error(usage);
       options[key] = args[++i];
+    }
+    if (options.boundary && !options.vendor && !options.title && !options.id && !options.list) {
+      console.log(
+        JSON.stringify({ boundary: PLAIN_BOUNDARY, decision: 'No identity: use this text-only boundary.' }, null, 2),
+      );
+      process.exit();
     }
     const catalog = JSON.parse(readFileSync(new URL('../assets/catalog.json', import.meta.url), 'utf8'));
     const entries = iconEntries(catalog, loadVendorIcons()).filter((e) => e.usable);

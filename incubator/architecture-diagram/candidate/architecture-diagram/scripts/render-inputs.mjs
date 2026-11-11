@@ -1,5 +1,5 @@
 import { deflateRawSync } from 'node:zlib';
-import { styleMap } from './catalog.mjs';
+import { styleOf } from './diagram.mjs';
 import { checkEmbeddedIcons, sha256 } from './icons.mjs';
 
 // draw.io stores user-object attributes on cell.value, not always on mxCell.
@@ -29,7 +29,7 @@ export function referencedAssets(source, catalog, icons = { entries: [] }) {
   const allowed = new Set(
     catalog.entries
       .filter((e) => e.usable)
-      .map((e) => styleMap(e.style).image)
+      .map((e) => styleOf(e.style).image)
       .filter(Boolean),
   );
   const embedded = new Set(icons.entries.map((e) => e.sha256));

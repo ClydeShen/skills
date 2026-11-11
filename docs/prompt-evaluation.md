@@ -40,6 +40,10 @@ The NVIDIA catalog review on 2026-10-25 selected `nvidia/nemotron-3.5-super-vl-1
 
 Defaults are `reasoning_effort: none`, `stream: false` and a 4096-output-token limit so reasoning does not crowd out short JSON answers. Temperature 1 and top-p 0.95 follow the model documentation; parameters are recorded with results. Set `NVIDIA_REASONING_EFFORT` to `low` or `high` to enable reasoning, with a default limit of 16384. Override the limit with `EVAL_MAX_TOKENS`.
 
+The trial endpoint answers HTTP 429 above about 40 requests per minute and to a quick burst. Every request to it, from any skill, any suite and any process on the machine, therefore takes its start time from one shared schedule in `evals/.local/nvidia-rate.json` (guarded by a lock file next to it), at least `60000 / NVIDIA_RPM` milliseconds after the previous one. The runner applies it to Promptfoo calls through `evals/rate-limit.mjs`, and the image judge takes every attempt, retries included, through the same schedule. `NVIDIA_RPM` defaults to 36 and can only lower the rate: the largest accepted value is 40, the endpoint's limit. A 429 is retried after the larger of its `Retry-After` header and a 2, 4 and 8 second backoff. A cached response takes a place in the schedule too, because it cannot be told from a request before the call. See the [rate-limit research](../research/harness/prompt-evaluation/0001-nvidia-trial-limit-is-about-forty-requests-per-minute.md) for the evidence and its limits.
+
+Never call the NVIDIA API directly, from a shell command or a script of your own: that spends the same rate limit outside the schedule. Use `npm run eval:nvidia`, `npm run eval:model` or another `npm run eval:*` command. A `PreToolUse` hook for Claude Code and Codex (`harness/nvidia-guard.mjs`) denies shell commands that connect to the inference host and writes of scripts that name it, and the repository check fails on code outside the shared modules that names the host or reads `NVIDIA_API_KEY`. The schedule is shared by processes on one machine. Separate cloud sessions have separate filesystems and do not share it, so sessions that use one key at the same time can still exceed the limit; the default rate leaves four requests per minute of margin for that.
+
 Set `NVIDIA_MODEL` to select another model, such as `nvidia/nemotron-3.5-lightning-30b-a3b`, also listed with a free endpoint at that review. Switching models does not automatically send Super-specific reasoning parameters; check the selected model's supported parameters. The Super endpoint was early access. Trial eligibility, limits and availability depend on the account and current NVIDIA service. Failures never automatically switch to another model or a paid endpoint.
 
 `npm run eval:model` automatically selects NVIDIA only when no generic endpoint is configured and `NVIDIA_API_KEY` is available. Explicit `eval:nvidia` always uses NVIDIA's fixed address and key; it never forwards that key to `EVAL_API_BASE_URL`. Environment variables and `.env.evaluation` work across target platforms.
@@ -64,7 +68,7 @@ Run deterministic checks and targeted Promptfoo regressions before requesting an
 
 Fixture runs, `--repeat` greater than one and suites that supply providers (including agents and image/tool suites) always bypass response caching. A cached answer cannot recreate generated files or count as an independent sample. Cache reuse does not establish a new live pass, and cached latency/cost is not fresh execution performance. Keep model/agent changes separate from prompt changes when comparing a baseline.
 
-Clean scenario evaluation is agent-neutral: isolate the selected client's settings, memory and global skills, provide only the package and scenario, and give the reviewer only the scenario and outputs. Existing trigger checks have the isolation limits described below; they are not yet the clean scenario runner in the handoff. The historical Architecture Diagram baseline used Claude Code.
+Clean scenario evaluation is agent-neutral: isolate the selected client's settings, memory and global skills, provide only the package and scenario, and give the reviewer only the scenario and outputs. [Clean scenario runs](#clean-scenario-runs) do this through Promptfoo. The historical Architecture Diagram baseline used Claude Code.
 
 ## Image judge
 
@@ -97,6 +101,22 @@ npm run eval:trigger -- --skill meta-thinking --repeat 3 --baseline main
 Each initiative keeps its cases in `incubator/<initiative>/evals/trigger.json`, with at least one near miss the skill must leave alone. `--baseline <git-ref>` adds the skill at that ref as a second arm. The run prints passes, mean cost and mean time per arm, and the report records skill calls for each run.
 
 Limits: Promptfoo infers Codex skill use from `SKILL.md` reads, so spot check the records. Agents run on the host, in a temporary project with read-only tools, not in a container. Claude loads project settings only; Codex still reads your own `CODEX_HOME`, so your global skills can influence it. These checks have only run as synthetic replay so far.
+
+## Clean scenario runs
+
+A scenario run gives an agent one source and an unchanged prompt, then gives a separate reviewer only what it may see. It is how a package change is compared with its baseline.
+
+```text
+npm run eval:agents:setup
+npm run eval:scenario -- --skill architecture-diagram --agent claude --repeat 2
+npm run eval:scenario -- --skill architecture-diagram --case azure-document-qa
+```
+
+Each initiative declares its runs in `incubator/<initiative>/evals/scenarios.json`: the fixed prompt, the file the source is written to, commands to run after generation, what the reviewer sees, its prompt and score pattern, the baseline file and the cases. A case reads its source whole, or only its block quote when the file also holds expected findings.
+
+Every run starts in a new folder under `evals/.local/scenario-<skill>-*/`, with the working package in the client's project skill location and the source as its only other file. The agent may write files and run the package's scripts there. The reviewer runs in another new folder that holds only the listed files, with read-only tools and no skill. Claude loads project settings only, so no user memory, settings or global skills reach either session; Codex still reads your own `CODEX_HOME`. Both use your existing login and quota.
+
+A run passes when the reviewer gives a score. The run prints each case's scores beside its baseline scores and marks a mean below the baseline minus its tolerance. The owner judges the comparison; no score merges or blocks a change by itself. The report records each run's folder, the result line of each after-command and the reviewed files; the folder also keeps their full output. Promptfoo's cache is off for these runs.
 
 ## Adding suites
 

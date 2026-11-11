@@ -17,6 +17,7 @@ import {
   ICON_SIZE,
   iconPlacement,
   loadVendorIcons,
+  PLAIN_BOUNDARY,
   sha256,
   WIDE_HEIGHT,
 } from '../candidate/architecture-diagram/scripts/icons.mjs';
@@ -130,6 +131,19 @@ test('boundary markers preserve exact artwork and scope without duplicating nati
   );
   assert.equal(cli.status, 0, cli.stderr);
   assert.deepEqual(JSON.parse(cli.stdout).matches[0].boundary, boundary);
+});
+
+test('a boundary without an identity gets the text-only style with the same title place', () => {
+  const cli = spawnSync(
+    process.execPath,
+    [fileURLToPath(new URL('../candidate/architecture-diagram/scripts/find-icon.mjs', import.meta.url)), '--boundary'],
+    {
+      encoding: 'utf8',
+    },
+  );
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.deepEqual(JSON.parse(cli.stdout).boundary, PLAIN_BOUNDARY);
+  assert.equal(PLAIN_BOUNDARY.marker, null);
 });
 
 test('all three cloud providers have exact boundary identities and portable marker rendering', () => {

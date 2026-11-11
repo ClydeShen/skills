@@ -5,9 +5,10 @@ import { fileURLToPath } from 'node:url';
 import { createContext, runInContext } from 'node:vm';
 import { inflateRawSync } from 'node:zlib';
 
-import { styleMap, upstreamCommit, upstreamVersion } from '../candidate/architecture-diagram/scripts/catalog.mjs';
+import { upstreamCommit, upstreamVersion } from '../candidate/architecture-diagram/scripts/catalog.mjs';
+import { styleOf } from '../candidate/architecture-diagram/scripts/diagram.mjs';
 
-export { styleMap, upstreamCommit, upstreamVersion };
+export { styleOf, upstreamCommit, upstreamVersion };
 
 const digest = (text) => createHash('sha256').update(text).digest('hex');
 
@@ -75,7 +76,7 @@ export function buildCatalog(checkout) {
         return () => {};
       },
       createVertexTemplateEntry(style, width, height, label, title) {
-        const properties = styleMap(style);
+        const properties = styleOf(style);
         const problems = [];
         for (const key of ['shape', 'resIcon', 'grIcon']) {
           const ref = properties[key];

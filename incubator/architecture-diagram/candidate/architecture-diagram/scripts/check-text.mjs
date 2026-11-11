@@ -2,7 +2,7 @@ import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 // Connectors show direction and relationship, so visible text must not imitate them.
-// Doubts about the source belong in the companion record, not on the diagram.
+// Doubts about the source belong in the companion account, not on the diagram.
 const forbidden = /[·•‣⁃∙⋅←-⇿➔-➾⟰-⟿⤀-⥿⬀-⬑]|\p{Extended_Pictographic}|<-+>?|-+>|=+>/u;
 
 const sourceCommentary =
@@ -59,7 +59,7 @@ if (
     for (const { symbol, text } of found) console.error(`Found "${symbol}" in: ${text}`);
     if (found.length)
       console.error(
-        'Do not reword these. Remove what the drawing already says, fix a wrong or missing part of the drawing, or move a source doubt to the companion record.',
+        'Do not reword these. Remove what the drawing already says, fix a wrong or missing part of the drawing, or move a source doubt to the companion account.',
       );
     else console.log('Visible text has no connector imitation, separator symbols or source commentary.');
     process.exitCode = found.length ? 1 : 0;

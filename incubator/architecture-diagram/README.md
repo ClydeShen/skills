@@ -4,7 +4,7 @@ Turn architecture requirements into an editable draw.io diagram that makes compo
 
 The skill is designed to preserve architectural meaning through layout: boundaries show real membership, arrows show directed relationships, and labels sit with the elements they explain. Consequential gaps and contradictions are raised before drawing.
 
-Stage: **public**. Updated: 2026-11-05. Basis: verified candidate installation and the trial guide below, under the owner's lifecycle definitions. This is an experimental candidate; installed-client effectiveness remains unverified. The owner set the package at `f7b7537` as the evaluation baseline on 2026-11-05; no change may lower the output quality below it, as the [baseline](./evals/baseline/README.md) defines.
+Stage: **release**. Updated: 2026-11-10. Published revision: [`skills/architecture-diagram/`](../../skills/architecture-diagram/README.md), a snapshot of source commit `71ca85da770b1307bbd6f9182d1c06e030ce859b` with digest `4224ee3cda065cfa5cc676c2ef8a36f1a32b80cf3d0f93c98f2e40715113c218`. Install it with `npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram --agent codex --copy --yes`. The skills.sh audit of this revision is recorded in the [evaluation record](./evaluation.md#release-record). The next revision, including PR #45's consumer icon libraries, starts again at `internal`. The owner set the package at `f7b7537` as the evaluation baseline on 2026-11-05; no change may lower the output quality below it, as the [baseline](./evals/baseline/README.md) defines.
 
 ## What you get
 
@@ -13,6 +13,8 @@ One editable `.drawio` architecture diagram and its PNG for documents, Markdown 
 Start with a specific interaction, such as a sign-in flow or a request crossing cloud and on-premises boundaries. Code/IaC input, and automatic redraw are outside current scope. Static export is the core goal; an interactive HTML and SVG version may follow.
 
 ## Quick start: install and test the candidate
+
+This section installs the authoring source of the next revision. To use the published skill, run the command in the stage line above.
 
 Use Codex or Claude Code with file access and Node.js 24. Nothing else is required: draw.io Desktop gives the best PNG, Git and Chromium or Chrome also produce one, and otherwise you get the `.drawio` and a browser link to view and export it. The candidate targets draw.io 32.6.1. Use your normal client authentication; no separate evaluation API key or authoring-repository checkout is needed.
 

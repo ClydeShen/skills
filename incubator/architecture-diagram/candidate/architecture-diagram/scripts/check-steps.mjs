@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { readDiagram } from './check-layout.mjs';
+import { readDiagram } from './diagram.mjs';
 
 // A source orders steps with a top-level numbered list ("1. ...") or inline markers ("(1) ...").
 // Nested list items refine a step and are not steps of their own.

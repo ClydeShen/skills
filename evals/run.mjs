@@ -2,7 +2,8 @@ import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { armSummary, digest, evaluationCache, modelProvider, parseArgs } from './lib.mjs';
+import { armSummary, digest, evaluationCache, modelProvider, nvidiaApiBaseUrl, parseArgs } from './lib.mjs';
+import { isNvidiaProvider, limitedProvider, requestsPerMinute, sharedNvidiaLimiter } from './rate-limit.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const local = resolve(root, 'evals/.local');
@@ -26,7 +27,12 @@ async function main() {
   process.env.PROMPTFOO_DISABLE_UPDATE = '1';
   process.env.PROMPTFOO_CONFIG_DIR = resolve(local, 'promptfoo');
   const { createSuite } = await import(pathToFileURL(resolve(root, suitePath)).href);
-  const suite = await createSuite({ mode, env: process.env, options: { skill, agent, baseline } });
+  // A suite may add a summary of its results, printed after the run; Promptfoo does not receive it.
+  const { summary: summarize, ...suite } = await createSuite({
+    mode,
+    env: process.env,
+    options: { skill, agent, baseline },
+  });
   // A suite that supplies its own providers, such as the image judge or a real agent, keeps them in model mode.
   const suiteProviders = Boolean(suite.providers?.length);
   const useCache = evaluationCache({ mode, repeat, cache, suiteProviders });
@@ -37,10 +43,18 @@ async function main() {
     if (!suite.tests.length) throw new Error('No test matches the requested case ID.');
   }
   const { default: promptfoo } = await import('promptfoo');
+  // Every request to the NVIDIA endpoint takes its start time from the schedule shared by all processes.
+  const nvidia = isNvidiaProvider(provider, nvidiaApiBaseUrl);
+  const limited = nvidia
+    ? limitedProvider(
+        await promptfoo.loadApiProvider(provider.id, { options: { config: provider.config } }),
+        sharedNvidiaLimiter(process.env),
+      )
+    : null;
   const record = await promptfoo.evaluate(
     {
       ...suite,
-      ...(provider && !suiteProviders ? { providers: [provider] } : {}),
+      ...(provider && !suiteProviders ? { providers: [limited ?? provider] } : {}),
       writeLatestResults: false,
       sharing: false,
     },
@@ -77,6 +91,7 @@ async function main() {
             top_p: provider.config.top_p,
             max_tokens: provider.config.max_tokens,
             reasoning_effort: provider.config.passthrough?.reasoning_effort,
+            requests_per_minute: nvidia ? requestsPerMinute(process.env) : undefined,
           }
         : null,
     stats: summary.stats,
@@ -84,6 +99,7 @@ async function main() {
       case_id: r.vars?.case_id,
       provider_label: r.provider?.label,
       skill_calls: r.response?.metadata?.skillCalls,
+      details: r.response?.metadata?.details,
       cost: r.cost,
       latency_ms: r.latencyMs,
       token_usage: r.tokenUsage ?? r.response?.tokenUsage,
@@ -106,6 +122,7 @@ async function main() {
     `\n${report.scope}\n${report.results.length - failures}/${report.results.length} checks passed.\nReport: ${file}`,
   );
   if (suiteProviders && mode === 'model') console.log(armSummary(report.results));
+  if (summarize) console.log(summarize(report.results));
   process.exitCode = failures ? 1 : 0;
 }
 

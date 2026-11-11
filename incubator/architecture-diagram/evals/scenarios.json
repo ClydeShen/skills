@@ -1,0 +1,25 @@
+{
+  "prompt": "Use the architecture-diagram skill to create diagram.drawio from scenario.md. Write your companion account to agent-report.md.",
+  "input_file": "scenario.md",
+  "after": [
+    ["node", "{package}/scripts/render.mjs", "diagram.drawio"],
+    ["node", "{package}/scripts/check-layout.mjs", "diagram.drawio"]
+  ],
+  "review": {
+    "prompt": "baseline/review-prompt.md",
+    "files": { "scenario.md": "scenario.md", "images/": ".png" },
+    "score": "SCORE:\\s*([0-9.]+)\\s*$"
+  },
+  "baseline": "baseline/baseline.json",
+  "cases": [
+    { "id": "aws-support-assistant", "source": "scenarios/a.md", "baseline": "a" },
+    { "id": "azure-document-qa", "source": "scenarios/b.md", "baseline": "b" },
+    {
+      "id": "cross-cloud-private-api",
+      "source": "scenarios/02.md",
+      "input": "quoted",
+      "baseline": "02"
+    },
+    { "id": "aws-online-store", "source": "scenarios/c.md", "baseline": "c" }
+  ]
+}

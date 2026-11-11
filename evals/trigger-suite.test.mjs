@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
 import { packages } from '../harness/skill-quality.mjs';
+import { agentProvider } from './agents.mjs';
 import { armSummary } from './lib.mjs';
-import { agentProvider, createSuite, readTriggerCases } from './trigger-suite.mjs';
+import { createSuite, readTriggerCases } from './trigger-suite.mjs';
 
 const skills = packages().map(({ name }) => name);
 

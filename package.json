@@ -19,13 +19,14 @@
     "skill:publication": "node harness/publication.mjs",
     "skill:reference": "node harness/reference-validator.mjs",
     "security:scan": "node harness/skill-security.mjs",
-    "test": "node --test harness/*.test.mjs evals/harness.test.mjs evals/vision-judge.test.mjs evals/trigger-suite.test.mjs incubator/*/evals/*.test.mjs",
+    "test": "node --test harness/*.test.mjs evals/harness.test.mjs evals/vision-judge.test.mjs evals/rate-limit.test.mjs evals/trigger-suite.test.mjs evals/scenario-suite.test.mjs incubator/*/evals/*.test.mjs",
     "test:transport": "node --test evals/provider.test.mjs",
     "eval": "node evals/run.mjs",
     "eval:model": "node evals/run.mjs --mode model",
     "eval:nvidia": "node evals/run.mjs --mode model --provider nvidia",
     "prepare": "node harness/prepare.mjs",
     "eval:agents:setup": "npm install --no-save --no-audit --no-fund @anthropic-ai/claude-agent-sdk@0.3.296 @openai/codex-sdk@0.156.1",
+    "eval:scenario": "node evals/run.mjs --mode model --suite evals/scenario-suite.mjs",
     "eval:trigger": "node evals/run.mjs --mode model --suite evals/trigger-suite.mjs"
   },
   "devDependencies": {

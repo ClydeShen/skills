@@ -23,6 +23,19 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/harness/nvidia-guard.mjs"],
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

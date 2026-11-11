@@ -6,6 +6,7 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import GithubSlugger from 'github-slugger';
 import MarkdownIt from 'markdown-it';
 import { parse as parseYaml } from 'yaml';
+import { nvidiaAccessError } from './nvidia-guard.mjs';
 import { verifySnapshot } from './publication.mjs';
 
 export const repositoryRoot = fileURLToPath(new URL('../', import.meta.url));
@@ -213,6 +214,8 @@ export function checkRepository(root, files = repositoryFiles(root)) {
     )
       continue;
     const source = read(file);
+    const direct = nvidiaAccessError(file, source);
+    if (direct) error(file, direct);
     if (source.includes('\r')) error(file, 'use LF line endings');
     if (!source.endsWith('\n')) error(file, 'missing final newline');
     try {

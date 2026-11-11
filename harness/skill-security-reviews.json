@@ -8,6 +8,14 @@
       "rule_id": "COMMAND_INJECTION_JS_CHILD_PROCESS",
       "reviewed_on": "2026-11-06",
       "reason": "Author review: this signature flags the child_process import and two spawnSync calls without tracing shell use. The renderer invokes Git, draw.io Desktop and Chromium using executable-plus-argument arrays, never a shell or diagram-supplied executable. DIAGRAM_BROWSER, DRAWIO_CLI, DRAWIO_CHECKOUT and PATH are trusted operator configuration, not untrusted request data. This is a false positive for shell command injection, not a general safety certification. Preserve the findings as INFO; require re-review if the file bytes or scanner version change."
+    },
+    {
+      "package": "skills/architecture-diagram",
+      "file": "scripts/render.mjs",
+      "sha256": "8c5637a3022599ec1a69d5d43232cd36603d1b1fb8f699e320ecb1791da3742c",
+      "rule_id": "COMMAND_INJECTION_JS_CHILD_PROCESS",
+      "reviewed_on": "2026-11-10",
+      "reason": "Published snapshot of the package reviewed at incubator/architecture-diagram/candidate/architecture-diagram on 2026-11-06. scripts/render.mjs is byte-identical to the reviewed file (same SHA-256), so the same author review applies. Author review: this signature flags the child_process import and two spawnSync calls without tracing shell use. The renderer invokes Git, draw.io Desktop and Chromium using executable-plus-argument arrays, never a shell or diagram-supplied executable. DIAGRAM_BROWSER, DRAWIO_CLI, DRAWIO_CHECKOUT and PATH are trusted operator configuration, not untrusted request data. This is a false positive for shell command injection, not a general safety certification. Preserve the findings as INFO; require re-review if the file bytes or scanner version change."
     }
   ]
 }

@@ -62,7 +62,7 @@ After every edit, run these from the package directory:
 
 The layout check estimates where text and routes fall. It reports what can mislead a reader, such as collisions, crossings, detours, shared segments, unexplained line styles and inconsistencies between pages. Each report names the elements involved.
 
-The reports are symptoms of the composition, not the goal. Fix the cause: place elements by role, lane and true boundary, and order ports so that connectors do not cross. Never clear a report by deleting, merging or relabelling an element, moving it out of its boundary, rewording, moving a label away from its line, or bending a connector around text. When only a change of meaning would clear a report, keep the report and name it in the companion account. An empty report does not prove that the diagram reads well.
+The reports are symptoms of the composition, not the goal. Fix the cause: place elements by role, lane and true boundary, and order ports so that connectors do not cross. Never clear a report by deleting, merging or relabelling an element, moving it out of its boundary, rewording, moving a label away from its line, or bending a connector around text. Fix every `Error` before you deliver: each one has a fix that keeps the meaning, such as swapping two ports, moving an element or splitting the view. Never leave an error as a remaining item. When only a change of meaning would clear a `Check`, keep it and name it in the companion account. An empty report does not prove that the diagram reads well.
 
 ## Inspect the image
 

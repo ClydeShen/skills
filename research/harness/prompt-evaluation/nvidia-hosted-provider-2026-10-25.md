@@ -10,12 +10,12 @@ Translation and source recheck: 2026-10-25. The Super 3.5 hosted schema, Super a
 
 ## Overview
 
-| Question                                   | Recommendation                                       | Evidence and limits                                                                        | Confidence |
-| ------------------------------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------ | ---------- |
-| Default model                              | Nemotron 3.5 Super VL, with an override              | Catalog availability and API documentation; no service test                                | Medium, J1 |
-| Disable reasoning and request concise JSON | `reasoning_effort: none` and a bounded output budget | Explicitly supported by the POST schema; actual endpoint behavior still governs            | Medium, J2 |
-| Is permanent free access guaranteed?       | Treat it as a limited trial service                  | Official terms allow limits and termination; account-specific quota is unknown             | High, J3   |
-| Can older recommendations still be used?   | Check current catalog availability first             | Qwen3.5-397B and Nemotron3 Super free endpoints are marked deprecated on the research date | Medium, J4 |
+| Question                                   | Recommendation                                       | Evidence and limits                                                                                                                                                                           | Confidence |
+| ------------------------------------------ | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Default model                              | Nemotron 3.5 Super VL, with an override              | Catalog availability and API documentation; no service test                                                                                                                                   | Medium, J1 |
+| Disable reasoning and request concise JSON | `reasoning_effort: none` and a bounded output budget | Explicitly supported by the POST schema; actual endpoint behavior still governs                                                                                                               | Medium, J2 |
+| Is permanent free access guaranteed?       | Treat it as a limited trial service                  | Official terms allow limits and termination; account-specific quota is unknown; the request rate is in [the rate-limit note](./0001-nvidia-trial-limit-is-about-forty-requests-per-minute.md) | High, J3   |
+| Can older recommendations still be used?   | Check current catalog availability first             | Qwen3.5-397B and Nemotron3 Super free endpoints are marked deprecated on the research date                                                                                                    | Medium, J4 |
 
 ## 1. Select against the catalog on the research date
 
