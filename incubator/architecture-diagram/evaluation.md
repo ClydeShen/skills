@@ -56,12 +56,24 @@ Trigger check: `npm run eval:trigger -- --skill architecture-diagram --agent cla
 
 ### skills.sh audit
 
-Pending. The audit appears only after the first installation from the published repository. After this revision merges to `main`, install it once with `npx --yes skills@1.7.4 add ClydeShen/skills --skill architecture-diagram`, read the audit and record its URL, date and verdict here. A missing or inconclusive result stays pending. An adverse finding is fixed in a new revision or the snapshot is withdrawn.
+Read on 2026-11-11 from [the skill's page](https://www.skills.sh/clydeshen/skills/architecture-diagram) and the partner pages under its `/security/` path, after an installation of the published repository whose report reached skills.sh. [The skills.sh API documentation](https://www.skills.sh/docs/api) says audits are generated automatically after a skill is installed for the first time, with a delay of a few minutes.
+
+| Partner             | Result                               | Analyzed (UTC)   |
+| ------------------- | ------------------------------------ | ---------------- |
+| Gen Agent Trust Hub | Pass; risk `SAFE`                    | 2026-11-11 06:28 |
+| Socket              | Pass                                 | 2026-11-11 06:29 |
+| Snyk                | Pass; risk `LOW`; no issues detected | 2026-11-11 06:28 |
+
+Status: **all three partners pass, with no adverse finding**.
+
+- Gen Agent Trust Hub lists four informational categories that describe documented behavior: `COMMAND_EXECUTION` (Node `spawn` and `execFileSync` without a shell, for Git and Chromium), `EXTERNAL_DOWNLOADS` (the first run clones the pinned draw.io viewer from GitHub), `INDIRECT_PROMPT_INJECTION` (user scenarios are untrusted input, checked by `check-text.mjs` and `check-layout.mjs`) and `DYNAMIC_EXECUTION` (a headless browser renders the diagram, served locally with name resolution limited to `127.0.0.1`). It notes that rendering runs Chromium with its sandbox disabled (`--no-sandbox`); that is a candidate for the next revision.
+- **Binding to the snapshot is inferred, not recorded by the provider.** An audit entry has a timestamp and no revision or digest, and the install report names only the repository and skill. The audits ran after the last commit to `skills/architecture-diagram/` (`651266e`, 2026-11-11 02:42 UTC), so they cover the current folder if skills.sh read the default branch when it audited. Socket's page shows a package hash (`4ddcd775ccd2fc91cca690347c24be9ebf5f188a9927befd45e7b4c4a30deac3`) that the CLI's folder-hash algorithm does not reproduce for this folder under any of 55 variants tried, so it is not used as evidence.
+- The legacy endpoint `https://www.skills.sh/tele/audit?source=clydeshen%2Fskills&skills=architecture-diagram` returned only the Snyk entry. It is not a complete record: read the skill page or the partner pages.
 
 ## Remaining work
 
 1. Close the open artwork grants and output attribution, or authorize a further exclusion.
-2. Record the skills.sh audit.
+2. Re-read the audit after each new revision and after any change to the published folder.
 3. The next revision, including PR #45's consumer icon libraries, needs its own regression against the same baseline.
 
 The historical reviewer was a model, not independent human approval. A person must inspect notation and image changes. Earlier trials are recoverable from Git history, for example `facc1f1`; they are not a new baseline or current-release evidence.
