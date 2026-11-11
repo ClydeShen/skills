@@ -34,7 +34,7 @@ When creating, reviewing or revising a skill, use [the skill design principles](
 
 Before changing skill layout, validation, installation, or release behavior, verify time-sensitive claims against current official sources.
 
-Follow the [portable lifecycle SOP](knowledge/skill-lifecycle/sop.md), its [local project profile](docs/HARNESS.md#skill-maintenance), [candidate and release rules](docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) and [package format](docs/DOCUMENT-FORMATS.md#skill-package-format). Maintain one authoring source in the incubator; published packages are verified snapshots, not independently edited sources.
+Follow the [portable lifecycle SOP](knowledge/skill-lifecycle/sop.md), its [local project profile](docs/HARNESS.md#skill-maintenance), [candidate and release rules](docs/REPOSITORY-STRUCTURE.md#candidate-and-release-lifecycle) and [package format](docs/DOCUMENT-FORMATS.md#skill-package-format). Maintain one authoring source in the incubator; published packages are verified snapshots, not independently edited sources. Release in the order of the [release sequence](docs/REPOSITORY-STRUCTURE.md#release-sequence): a squash merge of a snapshot needs a follow-up rebuild from the merge commit, and the install report needs the proxy setting.
 
 Use the same package best practices during incubation and after release. Keep runtime files relocatable and authoring support outside the package. Consolidate fixes, retain regression evidence and isolate hotfixes from unfinished work. Authoring changes do not publish automatically; never bypass missing snapshot/provenance checks to create a release.
 

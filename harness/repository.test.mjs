@@ -12,9 +12,12 @@ import {
   exactPathExists,
   frameworkFilenameError,
   markdownTargets,
+  nonPortablePath,
   repositoryFiles,
   repositoryRoot,
   researchNameError,
+  snapshotSourceHint,
+  unreleasedWording,
 } from './repository.mjs';
 import { stopDecision } from './stop-hook.mjs';
 
@@ -367,4 +370,48 @@ test('research notes are numbered with a slug that states the finding, and the o
     'research/diagrams/architecture-diagram/legend.md',
   ])
     assert.match(researchNameError(file), /NNNN-<slug>/, file);
+});
+
+test("a released skill's README states the release, not the unreleased candidate", (t) => {
+  const published = skill.replace('name: example', 'name: published').replace('metadata:\n  internal: true\n', '');
+  const readme = (body) => ({
+    'skills/published/SKILL.md': published,
+    'skills/published/README.md': `# Published\n\n${body}\n`,
+  });
+  for (const body of [
+    'Before an approved stable release, install the opt-in candidate in a disposable project.',
+    'Run INSTALL_INTERNAL_SKILLS=1 npx skills add the-candidate-path.',
+    'This is a candidate preview, not a stable release.',
+    'The skill is not yet published.',
+  ]) {
+    const errors = fixture(t, readme(body)).check().errors;
+    assert.ok(
+      errors.some((e) => e.includes('still describes the package as unreleased')),
+      body,
+    );
+  }
+  const released = fixture(t, readme('Install it with `npx skills add owner/repo --skill published`.'));
+  assert.deepEqual(released.check().errors, []);
+  assert.equal(unreleasedWording('Install with npx skills add owner/repo.'), null);
+  assert.equal(unreleasedWording('An UNRELEASED draft'), 'UNRELEASED');
+});
+
+test('a snapshot whose source commit is missing says how to rebuild it after a squash merge', () => {
+  const missing =
+    'Command failed: git rev-parse --verify 71ca85da770b1307bbd6f9182d1c06e030ce859b^{commit}\nfatal: Needed a single revision';
+  assert.match(snapshotSourceHint(missing), /regenerate the snapshot from the merge commit on main/);
+  assert.match(snapshotSourceHint(missing), /REPOSITORY-STRUCTURE\.md#release-sequence/);
+  assert.equal(snapshotSourceHint('Snapshot content differs from its source manifest.'), '');
+});
+
+test('a script cannot pass a file URL pathname as a file path', (t) => {
+  // The samples are built here so that this file does not contain the pattern it tests.
+  const pathnameOf = (args) => `new URL(${args}).pathname`;
+  const here = "'./x.mjs', import.meta.url";
+  assert.match(nonPortablePath(`spawn(node, [${pathnameOf(here)}])`), /fileURLToPath/);
+  assert.match(nonPortablePath(`const p = ${pathnameOf("'../a/b.mjs', import.meta.url")};`), /Windows/);
+  assert.equal(nonPortablePath(`fileURLToPath(new URL(${here}))`), null);
+  assert.equal(nonPortablePath(`const origin = url.origin + ${pathnameOf("'https://a.b/c'")};`), null);
+  const bad = fixture(t, { 'scripts/run.mjs': `export const file = ${pathnameOf(here)};\n` });
+  assert.ok(bad.check().errors.some((e) => e.startsWith('scripts/run.mjs') && e.includes('fileURLToPath')));
 });
