@@ -14,10 +14,10 @@ The [skills.sh adapter](./adapters/skills-sh.md) is an optional example, not a d
 
 ## The lifecycle at a glance
 
-Read from the top down. Each diamond is a decision: "yes" moves on, and "no" follows a dashed pill to the stage where the work goes back. Purple is decided by a person, blue by tools, amber by evidence that a person reads, and green is the published release.
+Read from the top down. Each diamond is a decision: "yes" moves on, and "no" follows a dashed line back to the stage where the work is redone. Purple is decided by a person, blue by tools, amber by evidence that a person reads, and green is the published release.
 
 ```mermaid
-%%{init: {"theme": "base", "fontFamily": "Arial, sans-serif", "flowchart": {"curve": "basis", "nodeSpacing": 24, "rankSpacing": 26, "htmlLabels": true, "padding": 10}, "themeVariables": {"fontSize": "14px", "lineColor": "#8292A5", "edgeLabelBackground": "#FFFFFF"}}}%%
+%%{init: {"theme": "base", "fontFamily": "Arial, sans-serif", "flowchart": {"curve": "basis", "nodeSpacing": 40, "rankSpacing": 38, "htmlLabels": true, "padding": 10}, "themeVariables": {"fontSize": "14px", "lineColor": "#8292A5", "edgeLabelBackground": "#FFFFFF"}}}%%
 flowchart TB
     init(["<b>Init</b><br/>Name a recurring task and its benefit"])
     plan["<b>Plan</b><br/>Research, compare simpler options<br/>Owner agrees scope and success"]
@@ -33,49 +33,38 @@ flowchart TB
     release["<b>Release</b><br/>Promote the approved bytes unchanged<br/>Smoke-check the published install"]
     d6{"Smoke passes?"}
     live(["<b>Published</b><br/>The version stays intact"])
-
-    a1(["↩ <b>Draft</b><br/>repair, rerun the checks"])
-    a2(["↩ <b>Draft</b><br/>repair and retest"])
-    a3(["↩ <b>Draft</b><br/>improve the candidate"])
-    a4(["↩ <b>Public</b><br/>hold, repair, revalidate"])
-    a5(["↩ <b>Public</b><br/>revise snapshot and evidence"])
-    a6(["<b>Restore</b> the previous verified version<br/>or withdraw a failed first release"])
-    a7(["↻ <b>Draft</b><br/>next revision or hotfix"])
+    undo(["<b>Restore</b> the previous verified version<br/>or withdraw a failed first release"])
 
     init --> plan --> draft --> d1
-    d1 -- yes --> internal
-    d1 -- no --> a1
-    internal --> d2
-    d2 -- yes --> public
-    d2 -- no --> a2
-    public --> d3
-    d3 -- yes --> accept
-    d3 -- no --> a3
-    accept --> d4
+    d1 -- yes --> internal --> d2
+    d2 -- yes --> public --> d3
+    d3 -- yes --> accept --> d4
     d4 -- yes --> d5
-    d4 -- no --> a4
-    d5 -- yes --> release
-    d5 -- no --> a5
-    release --> d6
+    d5 -- yes --> release --> d6
     d6 -- yes --> live
-    d6 -- no --> a6
-    live --> a7
+    d6 -- no --> undo
+
+    d1 -. "no: repair, rerun" .-> draft
+    d2 -. "no: repair, retest" .-> draft
+    d3 -. "no: improve the candidate" .-> draft
+    d4 -. "no: hold, repair, revalidate" .-> public
+    d5 -. "no: revise snapshot and evidence" .-> public
+    live -. "next revision or hotfix" .-> draft
 
     classDef person fill:#F5F3FF,stroke:#8B7BC0,color:#3F2D66
     classDef tool fill:#EFF6FF,stroke:#60A5FA,color:#1E3A5F
     classDef evidence fill:#FFFBEB,stroke:#D6A93C,color:#59451D
     classDef stable fill:#ECFDF5,stroke:#34A56F,color:#14532D
-    classDef back fill:#FFFFFF,stroke:#94A3B8,color:#334155,stroke-dasharray:4 3
     classDef fail fill:#FEF2F2,stroke:#E08A8A,color:#7F1D1D
     class init,plan,d5 person
     class draft,d1 tool
     class internal,public,accept,d2,d3,d4 evidence
     class release,d6,live stable
-    class a1,a2,a3,a4,a5,a7 back
-    class a6 fail
+    class undo fail
+    linkStyle 14,15,16,17,18,19 stroke:#64748B,stroke-width:1.6px,stroke-dasharray:5 4
 ```
 
-**Tools check correctness. Agents produce evidence. The owner decides what ships.** The dashed pills name return and recovery actions, not extra lifecycle stages. Missing required evidence blocks progress. Changed content reopens affected checks; an audit or approval for different bytes does not carry over.
+**Tools check correctness. Agents produce evidence. The owner decides what ships.** The dashed lines name return actions, and the red end names recovery; neither is an extra lifecycle stage. Missing required evidence blocks progress. Changed content reopens affected checks; an audit or approval for different bytes does not carry over.
 
 These are required controls, not a claim that every gate is automated; each project's harness decides what it automates. Entering `internal` means evaluation is runnable; entering `public` means a candidate can be tried, not that it has passed release acceptance.
 
