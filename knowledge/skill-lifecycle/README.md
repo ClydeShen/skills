@@ -14,71 +14,65 @@ The [skills.sh adapter](./adapters/skills-sh.md) is an optional example, not a d
 
 ## The lifecycle at a glance
 
-Read from the bottom up: each gate asks for evidence before the next step.
+Read from the bottom up: each gate asks for evidence before the next step. Purple cards are decided by a person, blue by tools, amber by evidence that a person reads, and green is the published release. The cards on the right say where a failure goes.
 
 ```mermaid
-%%{init: {"theme": "base", "block": {"padding": 32}, "fontFamily": "Arial, sans-serif", "themeVariables": {"fontSize": "15px", "lineColor": "#8292A5", "edgeLabelBackground": "#FFFFFF"}}}%%
+%%{init: {"theme": "base", "block": {"padding": 28}, "fontFamily": "Arial, sans-serif", "themeVariables": {"fontSize": "15px", "lineColor": "#8292A5", "edgeLabelBackground": "#FFFFFF"}}}%%
 block-beta
     columns 3
 
-    releaseVersion["Release
-    Promote approved bytes without rebuilding
-    Verify published identity and post-publication install smoke
-    Preserve version identity and the recovery path"]:2
-    maintenance["Recover or improve
-    Failed smoke: restore or withdraw
-    Next revision returns to Draft
-    Hotfix released source and forward-port"]
+    release["<b>Release</b>
+    Promote the approved bytes unchanged
+    Smoke-check the published install"]:2
+    recover["<b>If smoke fails</b>
+    Restore the previous version or withdraw
+    A next revision or hotfix restarts at Draft"]
 
-    approval["Owner approval
-    Approve this exact snapshot, its targets and known limits
-    Scores and CI do not approve a release"]:2
-    declined["Approval declined
+    approval["<b>Owner approval</b>
+    Approve this exact snapshot, its targets and its limits
+    Scores and CI never approve a release"]:2
+    declined["<b>If declined</b>
     Return to Public
-    Revise snapshot and evidence"]
+    Revise the snapshot and evidence"]
 
-    acceptance["Release acceptance
-    Security, dependencies and third-party rights
-    Matching platform audit verdict
-    Clean install, activation, resources and useful output
-    Supported targets, updates and applicable recovery"]:2
-    hold["Failed or missing checks
+    acceptance["<b>Release acceptance</b>
+    Security, rights and the platform audit
+    Clean install, activation and useful output"]:2
+    hold["<b>If a check fails or is missing</b>
     Hold at Public
-    Repair and revalidate"]
+    Repair, then revalidate"]
 
-    publicTrial["Public
-    Offer an opt-in candidate with a first-use guide
-    Collect reproducible feedback tied to a version
-    Freeze source revision, file inventory and digest"]:2
-    feedback["Trial feedback
+    publicTrial["<b>Public</b>
+    Offer an opt-in trial with a first-use guide
+    Collect reproducible feedback by version
+    Freeze the source revision and digest"]:2
+    feedback["<b>After trial feedback</b>
     Return to Draft
     Improve the candidate"]
 
-    internal["Internal
-    Promptfoo first, then authorized fresh agent runs
-    Calibrate graders and inspect actual outputs
-    Baseline, no-skill, held-out and trigger comparisons
-    Human review and verified trial installation"]:2
-    retest["Weak or inconclusive evidence
+    internal["<b>Internal</b>
+    Run shared regressions, then fresh agent runs
+    Compare with the baseline and inspect outputs
+    A person reviews the results"]:2
+    retest["<b>If evidence is weak</b>
     Return to Draft
     Repair and retest"]
 
-    draft["Draft
-    Focused instructions and package-local resources
-    Tool gate: format, links, lint, resources and secrets
-    Runnable evaluation cases, rubric and result path"]:2
-    repair["Package or test failure
+    draft["<b>Draft</b>
+    Write focused instructions and local resources
+    Tools check format, links, lint, resources, secrets
+    Prepare runnable cases, rubric and result path"]:2
+    repair["<b>If a check fails</b>
     Stay in Draft
-    Repair and rerun checks"]
+    Repair and rerun the checks"]
 
-    plan["Plan
-    Research the need and compare simpler alternatives
-    Owner agrees scope, success and supported targets
-    Declare capabilities and data boundaries"]:2
+    plan["<b>Plan</b>
+    Research the need and compare simpler options
+    The owner agrees scope, success and targets"]:2
     space
 
-    idea["Init
-    Identify a recurring user task and its intended benefit"]:2
+    idea["<b>Init</b>
+    Name a recurring task and its benefit"]:2
     space
 
     idea --> plan
@@ -87,27 +81,25 @@ block-beta
     internal --> publicTrial
     publicTrial --> acceptance
     acceptance --> approval
-    approval --> releaseVersion
+    approval --> release
 
-    releaseVersion --> maintenance
+    release --> recover
     approval --> declined
     acceptance --> hold
     publicTrial --> feedback
     internal --> retest
     draft --> repair
 
-    classDef stage fill:#F8FAFC,stroke:#CBD5E1,color:#243247
-    classDef tool fill:#EFF6FF,stroke:#93B4D7,color:#1E3A5F
-    classDef evidence fill:#FFFBEB,stroke:#D6BC78,color:#59451D
-    classDef human fill:#F5F3FF,stroke:#B6A5D2,color:#493568
-    classDef stable fill:#ECFDF5,stroke:#86BDA5,color:#20543D
-    classDef returnPath fill:#FFFFFF,stroke:#CBD5E1,color:#475569
-    class idea,publicTrial stage
+    classDef person fill:#F5F3FF,stroke:#8B7BC0,color:#3F2D66
+    classDef tool fill:#EFF6FF,stroke:#60A5FA,color:#1E3A5F
+    classDef evidence fill:#FFFBEB,stroke:#D6A93C,color:#59451D
+    classDef stable fill:#ECFDF5,stroke:#34A56F,color:#14532D
+    classDef back fill:#FFFFFF,stroke:#CBD5E1,color:#475569
+    class idea,plan,approval person
     class draft tool
-    class internal,acceptance evidence
-    class plan,approval human
-    class releaseVersion stable
-    class maintenance,declined,hold,feedback,retest,repair returnPath
+    class internal,publicTrial,acceptance evidence
+    class release stable
+    class recover,declined,hold,feedback,retest,repair back
 ```
 
 **Tools check correctness. Agents produce evidence. The owner decides what ships.** Read upward for progress; the right-hand cards name return and recovery actions, not extra lifecycle stages. Missing required evidence blocks progress. Changed content reopens affected checks; an audit or approval for different bytes does not carry over.
