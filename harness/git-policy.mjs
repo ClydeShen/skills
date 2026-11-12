@@ -79,7 +79,7 @@ export function checkPush(input, cwd = root) {
         throw new Error('Push only work/, claude/ or codex/<topic> branches; main updates require a pull request.');
       if (!zero(localOid) && localRef !== remoteRef) throw new Error('Local and remote task branch names must match.');
       if (!zero(localOid) && remoteRef !== `refs/heads/${git(cwd, ['symbolic-ref', '--short', 'HEAD'])}`) {
-        throw new Error('Check out the task branch before pushing it so the gate checks the pushed work.');
+        throw new Error('Check out the task branch before pushing it so the shared check runs on the pushed work.');
       }
       if (!zero(localOid) && !zero(remoteOid)) {
         const r = spawnSync('git', ['merge-base', '--is-ancestor', remoteOid, localOid], { cwd, timeout: 15_000 });

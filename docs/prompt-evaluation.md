@@ -14,7 +14,7 @@ npm test
 npm run eval
 ```
 
-`npm test` checks the shared harness, grading logic and fixture isolation. `npm run eval` sends synthetic answers through Promptfoo to check rendering, assertions and reports; it neither calls models nor loads `.env.evaluation`. Initial installation needs network access; basic checks then need no model API or credentials. Use `npm run check` for the full repository gate; see the [delivery harness](./HARNESS.md).
+`npm test` checks the shared harness, grading logic and fixture isolation. `npm run eval` sends synthetic answers through Promptfoo to check rendering, assertions and reports; it neither calls models nor loads `.env.evaluation`. Initial installation needs network access; basic checks then need no model API or credentials. Use `npm run check` for the shared check; see the [delivery harness](./HARNESS.md).
 
 `npm run test:transport` separately checks HTTP transport against a temporary loopback service, not a real model. Restricted hosts must permit local socket binding; basic checks do not require this permission.
 
@@ -90,7 +90,7 @@ Fixture mode sends authored synthetic answers through the grading pipeline. All 
 
 ## Skill trigger and version comparison
 
-Real-agent checks run Claude Code and Codex through Promptfoo's agent providers and use `skill-used` and `not-skill-used`. They use your existing Claude Code and Codex login when no API key is set, consume its quota, and never run from hooks or the default gate.
+Real-agent checks run Claude Code and Codex through Promptfoo's agent providers and use `skill-used` and `not-skill-used`. They use your existing Claude Code and Codex login when no API key is set, consume its quota, and never run from hooks or the shared check.
 
 ```text
 npm run eval:agents:setup

@@ -15,7 +15,7 @@ Record this once in the adopting project's harness instructions:
 - Data/secret handling, network and credential boundaries; external-service cost/consent policy.
 - Baseline owner; feedback/support route; post-publication smoke and review cadence.
 
-Name each control as `implemented`, `manual` or `planned`. A command entry needs a real, verified invocation. A manual control needs a responsible person and repeatable procedure. Planned controls do not satisfy gates.
+Name each control as `implemented`, `manual` or `planned`. A command entry needs a real, verified invocation. A manual control needs a responsible person and repeatable procedure. Planned controls do not satisfy stage gates.
 
 ## Skill brief
 

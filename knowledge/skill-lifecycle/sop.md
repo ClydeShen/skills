@@ -12,7 +12,7 @@ Use [records](./records.md) for the brief, project profile and evidence. Use [ch
 
 ## Stages and gates
 
-Stages describe maturity, not passing scores. Record outcomes separately. Rework can return a successor to `draft` or `internal` without withdrawing a published version.
+Stages describe maturity, not passing scores. A stage gate is the evidence a skill needs before it advances to the next stage. Record outcomes separately. Rework can return a successor to `draft` or `internal` without withdrawing a published version.
 
 | Stage      | Meaning and entry basis                                               | Required work before advancing                                                                         |
 | ---------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -61,7 +61,7 @@ Keep unapproved artifacts outside default stable discovery. Use an opt-in stagin
 
 Triage feedback with installed revision, client/model, sanitized reproduction and expected behavior. Fix the owning layer. Make a focused source change, add a regression and compare before publication. Interpret version increments against a declared compatibility contract; a one-line prompt change can break behavior.
 
-For a hotfix, start from the affected release's recorded source. Isolate the minimal correction from unfinished work. Verify and publish it through the same applicable gates. Forward-port the correction to ongoing authoring work. Any emergency exception needs explicit owner approval, scope, compensating controls and follow-up; agents cannot silently waive gates.
+For a hotfix, start from the affected release's recorded source. Isolate the minimal correction from unfinished work. Verify and publish it through the same applicable stage gates. Forward-port the correction to ongoing authoring work. Any emergency exception needs explicit owner approval, scope, compensating controls and follow-up; agents cannot silently waive stage gates.
 
 Recover only the affected skill through a reviewable change. Preserve published versions and history. Restore compatible state separately when needed. Explain how users update, pin or restore a version; deleting a release cannot recall installed copies.
 
@@ -69,4 +69,4 @@ After publication, run the smoke check and watch the agreed feedback route. Reco
 
 ## Gate results
 
-Mechanical gates need tool output. Evidence gates need inspectable results. Human gates need a named owner's decision. Checklists use `todo`, `pass`, `fail`, `inconclusive` or conditional `not-applicable` with a reason. Missing required evidence is never `pass` or `not-applicable`. Revalidate affected checks whenever their target changes. See [the reference stack](./reference-stack.md) for automation boundaries.
+Mechanical stage gates need tool output. Evidence stage gates need inspectable results. Human stage gates need a named owner's decision. Checklists use `todo`, `pass`, `fail`, `inconclusive` or conditional `not-applicable` with a reason. Missing required evidence is never `pass` or `not-applicable`. Revalidate affected checks whenever their target changes. See [the reference stack](./reference-stack.md) for automation boundaries.
