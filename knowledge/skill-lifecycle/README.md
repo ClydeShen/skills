@@ -66,13 +66,13 @@ flowchart TB
 
 **Tools check correctness. Agents produce evidence. The owner decides what ships.** The dashed lines name return actions, and the red end names recovery; neither is an extra lifecycle stage. Missing required evidence blocks progress. Changed content reopens affected checks; an audit or approval for different bytes does not carry over.
 
-These are required controls, not a claim that every gate is automated; each project's harness decides what it automates. Entering `internal` means evaluation is runnable; entering `public` means a candidate can be tried, not that it has passed release acceptance.
+These are required controls, not a claim that every stage gate is automated; each project's harness decides what it automates. Entering `internal` means evaluation is runnable; entering `public` means a candidate can be tried, not that it has passed release acceptance.
 
-After release, improvements leave the published version intact and restart at Draft. A hotfix starts from its recorded source, passes the same applicable gates and is forward-ported to ongoing work. Failed delivery restores the previous verified package or withdraws a failed first release; state recovery is separate where relevant. Only the owner changes an accepted baseline.
+After release, improvements leave the published version intact and restart at Draft. A hotfix starts from its recorded source, passes the same applicable stage gates and is forward-ported to ongoing work. Failed delivery restores the previous verified package or withdraws a failed first release; state recovery is separate where relevant. Only the owner changes an accepted baseline.
 
 ## Scope and limits
 
-This is a proposed reusable standard adopted for its originating project's process on 2026-11-06 by the owner. It is not an industry certification. End-to-end publication, recovery and use in a second repository remain unverified. A receiving owner must approve its local profile; copying files does not implement gates.
+This is a proposed reusable standard adopted for its originating project's process on 2026-11-06 by the owner. It is not an industry certification. End-to-end publication, recovery and use in a second repository remain unverified. A receiving owner must approve its local profile; copying files does not implement stage gates.
 
 The schema checks record structure, not evidence truth, security or skill effectiveness. Tool implementations and their actual enforcement belong to each project's harness. Keep this folder self-contained; runtime skill packages must not require it.
 

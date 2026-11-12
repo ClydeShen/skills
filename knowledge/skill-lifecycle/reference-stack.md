@@ -13,7 +13,7 @@ Choose tools by responsibility, not brand. Pin tested versions in the adopting p
 | Consumer execution            | Isolated agent client sessions and disposable workspaces                    | Behavior changes and actual snapshot acceptance                              | Verify resolved model/tool state; observe effects                |
 | Automation runner             | Local hooks, CI, scripts                                                    | Fast local feedback and reproducible PR checks                               | Hooks are bypassable; model calls need explicit cost/data policy |
 | Publication adapter           | Git/archive export, registry API, optional skills.sh CLI                    | Stage, inspect, promote, install, update and restore one identified artifact | Never infer audit approval from install success                  |
-| Record validation             | YAML/JSON + JSON Schema validator                                           | Checklist changes and gate review                                            | Valid structure cannot prove evidence or human approval          |
+| Record validation             | YAML/JSON + JSON Schema validator                                           | Checklist changes and stage gate review                                      | Valid structure cannot prove evidence or human approval          |
 
 ## Minimal setup
 
@@ -27,7 +27,7 @@ Every adapter must explain how to select immutable input, stage without stable e
 
 For plain Git or archive delivery, an isolated staged ref/archive plus a recorded manifest and digest can provide the artifact boundary. Test the actual consumer extraction/discovery path. Promote a verified ref or identical archive only after approval. A registry needs equivalent content identity, channel and recovery behavior. Neither requires skills.sh specifically.
 
-If a target cannot preserve identity across packaging or promotion, verify its transformation and bind acceptance to the resulting artifact. If a required audit cannot identify that artifact, keep publication blocked and resolve the adapter or obtain an explicit owner policy decision. Do not change targets silently to bypass a failed gate.
+If a target cannot preserve identity across packaging or promotion, verify its transformation and bind acceptance to the resulting artifact. If a required audit cannot identify that artifact, keep publication blocked and resolve the adapter or obtain an explicit owner policy decision. Do not change targets silently to bypass a failed stage gate.
 
 ## Cost and data controls
 
