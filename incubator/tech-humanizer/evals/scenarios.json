@@ -1,0 +1,20 @@
+{
+  "prompt": "Use the tech-humanizer skill on the request in scenario.md. Write only the resulting text to output.md.",
+  "input_file": "scenario.md",
+  "review": {
+    "prompt": "baseline/review-prompt.md",
+    "files": {
+      "scenario.md": "scenario.md",
+      "output.md": "output.md"
+    },
+    "score": "SCORE:\\s*([0-9.]+)\\s*$"
+  },
+  "cases": [
+    { "id": "design-doc", "source": "scenarios/01-design-doc.md", "input": "quoted" },
+    { "id": "runbook-clean", "source": "scenarios/02-runbook-steps.md", "input": "quoted" },
+    { "id": "client-email", "source": "scenarios/03-client-email-incident.md", "input": "quoted" },
+    { "id": "team-email", "source": "scenarios/04-internal-email-request.md", "input": "quoted" },
+    { "id": "chat-message", "source": "scenarios/05-team-message-status.md", "input": "quoted" },
+    { "id": "pr-description", "source": "scenarios/06-pr-description.md", "input": "quoted" }
+  ]
+}
